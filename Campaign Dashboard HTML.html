@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Rurik Stormhammer — Campaign Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #0e0f14;
+  color: #c8c8d0;
+  font-family: 'Inter', system-ui, sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Header ── */
+#header {
+  background: #141414;
+  border-bottom: 1px solid #2a2a2a;
+  padding: 5px 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+#header .htitle { color: #ffd700; font-weight: bold; font-size: 13px; letter-spacing: 2px; }
+#header .hday   { color: #666; font-size: 12px; }
+#header .hbread { margin-left: auto; color: #555; }
+#header .hbread .crumb { cursor: pointer; color: #666; }
+#header .hbread .crumb:hover { color: #ffd700; }
+#header .hbread .crumb.active { color: #aaa; cursor: default; }
+#header .back-btn {
+  background: none; border: 1px solid #2a2a2a; color: #555;
+  padding: 1px 8px; cursor: pointer; font-family: 'Courier New', monospace;
+  font-size: 10px; margin-left: 10px;
+}
+#header .back-btn:hover { color: #aaa; border-color: #444; }
+
+/* ── Tab bar ── */
+#tab-bar {
+  background: #0f0f0f;
+  border-bottom: 1px solid #222;
+  display: flex;
+  flex-shrink: 0;
+  gap: 0;
+}
+.tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #444;
+  padding: 6px 18px;
+  cursor: pointer;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: color 0.15s, border-color 0.15s;
+}
+.tab-btn:hover { color: #888; }
+.tab-btn.active { color: #ffd700; border-bottom-color: #ffd700; }
+
+/* ── Content area ── */
+#content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.tab-panel { display: none; flex: 1; overflow: hidden; flex-direction: column; }
+.tab-panel.active { display: flex; }
+
+/* ══════════════════════ MAP TAB ══════════════════════ */
+#tab-map {
+  flex-direction: column;
+}
+#main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+#map-wrap {
+  flex: 1;
+  overflow: auto;
+  padding: 12px;
+  background: #111;
+}
+#map-grid { display: inline-block; line-height: 1; }
+.mrow { display: flex; }
+.tile {
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; cursor: default; position: relative;
+  transition: outline 0.1s;
+}
+.tile.loc { cursor: pointer; }
+.tile.loc:hover { outline: 1px solid #ffd700; z-index: 10; }
+.tile.selected { outline: 2px solid #ffd700; z-index: 11; }
+.tile.player-here::after {
+  content: '';
+  position: absolute;
+  bottom: 1px; right: 1px;
+  width: 4px; height: 4px;
+  background: #ffd700;
+  border-radius: 50%;
+}
+
+/* ── Info panel ── */
+#panel {
+  width: 240px;
+  background: #121212;
+  border-left: 1px solid #222;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.panel-hdr {
+  background: #1a1a1a;
+  padding: 6px 10px;
+  border-bottom: 1px solid #222;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #555;
+}
+#info-body {
+  padding: 10px;
+  overflow-y: auto;
+  flex: 1;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.iname  { color: #ffd700; font-size: 14px; font-weight: bold; margin-bottom: 4px; }
+.ibadge {
+  display: inline-block; font-size: 11px; letter-spacing: 1px;
+  padding: 2px 9px; border-radius: 2px; margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.s-safe     { background: rgba(74,222,128,.1); color: #4ade80; border: 1px solid rgba(74,222,128,.25); }
+.s-fortified{ background: rgba(130,100,255,.1); color: #a080ff; border: 1px solid rgba(130,100,255,.25); }
+.s-threat   { background: rgba(250,204,21,.1);  color: #facc15; border: 1px solid rgba(250,204,21,.25); }
+.s-hostile  { background: rgba(248,113,113,.2); color: #f87171; border: 1px solid rgba(248,113,113,.4); }
+.s-unknown  { background: rgba(150,150,150,.1); color: #888;    border: 1px solid rgba(150,150,150,.25); }
+.isect { margin-top: 9px; }
+.isect-title {
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  color: #444; border-bottom: 1px solid #1e1e1e; padding-bottom: 2px; margin-bottom: 4px;
+}
+.q-item { color: #c9a227; font-size: 12px; padding: 2px 0; }
+.q-item::before { content: '◆ '; color: #6b5000; }
+.n-item { color: #8aaacc; font-size: 12px; padding: 2px 0; }
+.n-item::before { content: '@ '; color: #3a5a78; }
+.inote { color: #777; font-size: 12px; font-style: italic; margin-top: 6px; line-height: 1.5; }
+.zoom-btn {
+  display: block; width: 100%; margin-top: 10px;
+  background: #1a2a1a; border: 1px solid #2a3a2a; color: #4ade80;
+  padding: 6px 10px; cursor: pointer; font-family: 'Courier New', monospace;
+  font-size: 12px; text-align: left;
+}
+.zoom-btn:hover { background: #223022; }
+.idle-note { color: #666; font-size: 12px; font-style: italic; margin-top: 6px; }
+
+/* ── Tracker ── */
+#tracker {
+  border-top: 1px solid #1e1e1e;
+  padding: 10px 12px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.tr-row { display: flex; justify-content: space-between; font-size: 12px; }
+.tr-lbl { color: #444; }
+.tr-val { color: #888; }
+.tr-val.warn { color: #facc15; }
+.tr-val.danger { color: #f87171; }
+.bar { height: 4px; background: #1a1a1a; border: 1px solid #222; margin-top: 1px; }
+.bar-fill { height: 100%; transition: width .3s; }
+
+/* ── Legend ── */
+#legend {
+  background: #0e0e0e;
+  border-top: 1px solid #1e1e1e;
+  padding: 6px 12px;
+  display: flex; flex-wrap: wrap; gap: 6px 16px;
+  font-size: 12px; align-items: center; flex-shrink: 0;
+}
+.leg-lbl { color: #333; letter-spacing: 2px; margin-right: 2px; font-size: 11px; }
+.leg-item { display: flex; align-items: center; gap: 4px; color: #555; }
+.leg-sw {
+  width: 16px; height: 16px;
+  display: flex; align-items: center; justify-content: center; font-size: 11px;
+}
+
+/* ══════════════════════ SHARED PANEL STYLES ══════════════════════ */
+.scroll-panel {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 28px;
+}
+.sec-title {
+  color: #ffd700;
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #1e1e1e;
+  padding-bottom: 4px;
+  margin-bottom: 14px;
+  margin-top: 24px;
+}
+.sec-title:first-child { margin-top: 0; }
+
+/* ══════════════════════ CHARACTER TAB ══════════════════════ */
+#tab-character .scroll-panel {
+  max-width: 860px;
+}
+.char-identity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 18px;
+}
+.char-name { color: #ffd700; font-size: 20px; font-weight: bold; letter-spacing: 1px; }
+.char-sub  { color: #999; font-size: 13px; }
+.char-desc { color: #888; font-size: 13px; font-style: italic; margin-top: 4px; line-height: 1.6; }
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.stat-box {
+  background: #141414;
+  border: 1px solid #1e1e1e;
+  padding: 8px 4px;
+  text-align: center;
+}
+.stat-label { color: #444; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; }
+.stat-score { color: #ffd700; font-size: 22px; font-weight: bold; }
+.stat-mod   { color: #666; font-size: 11px; margin-top: 2px; }
+
+.vitals-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.vital-box {
+  background: #141414;
+  border: 1px solid #1e1e1e;
+  padding: 8px 16px;
+  text-align: center;
+  flex: 1;
+}
+.vital-label { color: #444; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; }
+.vital-value { color: #c0c0c0; font-size: 18px; font-weight: bold; margin-top: 3px; }
+.vital-value.green { color: #4ade80; }
+.vital-value.warn  { color: #facc15; }
+.vital-value.danger{ color: #f87171; }
+
+.hp-bar-wrap { margin-top: 4px; }
+.hp-bar { height: 3px; background: #1a1a1a; border: 1px solid #222; }
+.hp-bar-fill { height: 100%; background: #4ade80; transition: width .3s; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+.saves-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.save-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  padding: 3px 0;
+  border-bottom: 1px solid #141414;
+}
+.save-stat { color: #666; }
+.save-mod  { color: #aaa; }
+.save-mod.prof { color: #a080ff; }
+
+.slot-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+.spell-slot {
+  width: 26px; height: 26px;
+  border: 1px solid #2a4a2a;
+  border-radius: 2px;
+  background: #0d1e0d;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  color: #4ade80;
+}
+.spell-slot.used {
+  background: #1a0808;
+  border-color: #3a1a1a;
+  color: #333;
+}
+.spell-slot-lbl { color: #444; font-size: 11px; margin-top: 6px; }
+
+.spell-list { display: flex; flex-direction: column; gap: 3px; }
+.spell-item {
+  font-size: 12px;
+  padding: 3px 6px;
+  border-left: 2px solid #222;
+  color: #8aaacc;
+}
+.spell-item.cantrip { border-left-color: #2a3a5a; color: #6080a0; }
+.spell-item.always  { border-left-color: #2a4a3a; color: #60a080; }
+.spell-item.spell   { border-left-color: #3a2a5a; color: #9070cc; }
+.spell-tag { color: #333; font-size: 10px; margin-right: 4px; }
+
+.equip-list { display: flex; flex-direction: column; gap: 4px; }
+.equip-item { font-size: 12px; color: #888; padding: 2px 0; }
+.equip-item::before { content: '— '; color: #333; }
+
+.trait-list { display: flex; flex-direction: column; gap: 6px; }
+.trait-item {
+  font-size: 12px;
+  color: #888;
+  line-height: 1.5;
+  padding-left: 10px;
+  border-left: 2px solid #222;
+}
+
+/* ══════════════════════ QUESTS TAB ══════════════════════ */
+.quest-card {
+  background: #111;
+  border: 1px solid #1e1e1e;
+  margin-bottom: 14px;
+  padding: 14px 16px;
+}
+.quest-card.critical { border-left: 3px solid #f87171; }
+.quest-card.high     { border-left: 3px solid #facc15; }
+.quest-card.medium   { border-left: 3px solid #4ade80; }
+.quest-card.done     { border-left: 3px solid #333; opacity: 0.5; }
+
+.quest-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.quest-name   { color: #ffd700; font-size: 14px; font-weight: bold; }
+.quest-badge  {
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 2px;
+}
+.ub-critical{ background: rgba(248,113,113,.1); color: #f87171; border: 1px solid rgba(248,113,113,.3); }
+.ub-high    { background: rgba(250,204,21,.1);  color: #facc15; border: 1px solid rgba(250,204,21,.3); }
+.ub-medium  { background: rgba(74,222,128,.1);  color: #4ade80; border: 1px solid rgba(74,222,128,.3); }
+.ub-done    { background: rgba(150,150,150,.1); color: #555;    border: 1px solid rgba(150,150,150,.2); }
+
+.quest-desc { color: #888; font-size: 13px; margin-bottom: 10px; line-height: 1.5; }
+.quest-obj  { display: flex; flex-direction: column; gap: 4px; }
+.obj-item   { font-size: 12px; color: #888; display: flex; gap: 8px; align-items: flex-start; }
+.obj-item.done { color: #333; }
+.obj-check  { color: #333; flex-shrink: 0; }
+.obj-check.done { color: #4ade80; }
+.quest-leads { margin-top: 8px; font-size: 12px; color: #666; font-style: italic; }
+
+/* ══════════════════════ EVENTS TAB ══════════════════════ */
+.timeline {
+  position: relative;
+  padding-left: 32px;
+  max-width: 700px;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px; top: 0; bottom: 0;
+  width: 1px;
+  background: #1e1e1e;
+}
+.event-entry {
+  position: relative;
+  margin-bottom: 20px;
+}
+.event-dot {
+  position: absolute;
+  left: -28px; top: 4px;
+  width: 8px; height: 8px;
+  border: 1px solid #333;
+  border-radius: 50%;
+  background: #1a1a1a;
+}
+.event-dot.major { border-color: #ffd700; background: #2a2000; }
+.event-dot.threat{ border-color: #f87171; background: #200808; }
+.event-dot.good  { border-color: #4ade80; background: #082008; }
+.event-day   { color: #666; font-size: 10px; letter-spacing: 2px; margin-bottom: 2px; }
+.event-title { color: #aaa; font-size: 13px; margin-bottom: 3px; }
+.event-detail{ color: #888; font-size: 13px; line-height: 1.5; }
+
+/* ══════════════════════ NPC TAB ══════════════════════ */
+.npc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 10px;
+}
+.npc-card {
+  background: #111;
+  border: 1px solid #1e1e1e;
+  padding: 12px 14px;
+}
+.npc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.npc-name { color: #c0c0c0; font-size: 13px; font-weight: bold; }
+.disp-badge {
+  font-size: 9px; letter-spacing: 1px; text-transform: uppercase;
+  padding: 1px 7px; border-radius: 2px;
+}
+.d-ally      { color: #4ade80; border: 1px solid rgba(74,222,128,.3); background: rgba(74,222,128,.08); }
+.d-neutral   { color: #888;    border: 1px solid rgba(150,150,150,.2); background: rgba(150,150,150,.05); }
+.d-hostile   { color: #f87171; border: 1px solid rgba(248,113,113,.3); background: rgba(248,113,113,.08); }
+.d-unknown   { color: #555;    border: 1px solid #222; background: rgba(0,0,0,.3); }
+.d-recovering{ color: #facc15; border: 1px solid rgba(250,204,21,.3); background: rgba(250,204,21,.08); }
+.npc-role    { color: #888; font-size: 12px; margin-bottom: 6px; }
+.npc-loc     { color: #888; font-size: 12px; margin-bottom: 6px; }
+.npc-loc::before { content: '📍 '; font-size: 10px; }
+.npc-notes   { color: #888; font-size: 12px; line-height: 1.5; font-style: italic; }
+</style>
+</head>
+<body>
+
+<!-- ══════ HEADER ══════ -->
+<div id="header">
+  <div class="htitle">◈ RURIK STORMHAMMER</div>
+  <div class="hday" id="hday">Day 4 — Morning</div>
+  <div class="hbread" id="hbread"></div>
+</div>
+
+<!-- ══════ TABS ══════ -->
+<div id="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('map')">Map</button>
+  <button class="tab-btn" onclick="switchTab('character')">Character</button>
+  <button class="tab-btn" onclick="switchTab('quests')">Quests</button>
+  <button class="tab-btn" onclick="switchTab('events')">Events</button>
+  <button class="tab-btn" onclick="switchTab('npcs')">NPCs</button>
+</div>
+
+<!-- ══════ CONTENT ══════ -->
+<div id="content">
+
+  <!-- ── MAP ── -->
+  <div id="tab-map" class="tab-panel active">
+    <div id="main">
+      <div id="map-wrap"><div id="map-grid"></div></div>
+      <div id="panel">
+        <div class="panel-hdr">Location</div>
+        <div id="info-body">
+          <div class="idle-note">Click a marked location for details.</div>
+        </div>
+        <div id="tracker">
+          <div class="tr-row"><span class="tr-lbl">SEAL INTEGRITY</span><span class="tr-val danger" id="tr-seal">70%</span></div>
+          <div class="bar"><div class="bar-fill" id="seal-bar" style="width:70%;background:linear-gradient(to right,#4ade80,#facc15,#f87171)"></div></div>
+          <div class="tr-row"><span class="tr-lbl">DAYS REMAINING</span><span class="tr-val warn" id="tr-days">10–14</span></div>
+          <div class="tr-row"><span class="tr-lbl">HARPERS ETA</span><span class="tr-val" id="tr-harpers">~6 days</span></div>
+          <div class="tr-row"><span class="tr-lbl">ORDER ETA</span><span class="tr-val" id="tr-order">Unknown</span></div>
+        </div>
+      </div>
+    </div>
+    <div id="legend"></div>
+  </div>
+
+  <!-- ── CHARACTER ── -->
+  <div id="tab-character" class="tab-panel">
+    <div class="scroll-panel">
+      <div class="char-identity">
+        <div class="char-name">Rurik Stormhammer</div>
+        <div class="char-sub">Mountain Dwarf · Cleric (Storm Domain) · <span style="color:#ffd700">Level 3</span> · Guild Artisan · Talos · <span style="color:#c9a227">Bearer of the Seal</span></div>
+        <div class="char-desc">~4'8", broad and scarred. Dark crimson hair and beard braided with silver wire and iron rings. Storm-grey eyes. Static electricity crackles around him in moments of tension.</div>
+      </div>
+
+      <div class="sec-title">Ability Scores</div>
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="stat-label">STR</div>
+          <div class="stat-score">14</div>
+          <div class="stat-mod">+2</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">DEX</div>
+          <div class="stat-score">8</div>
+          <div class="stat-mod">−1</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">CON</div>
+          <div class="stat-score">16</div>
+          <div class="stat-mod">+3</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">INT</div>
+          <div class="stat-score">10</div>
+          <div class="stat-mod">+0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">WIS</div>
+          <div class="stat-score">16</div>
+          <div class="stat-mod">+3</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">CHA</div>
+          <div class="stat-score">10</div>
+          <div class="stat-mod">+0</div>
+        </div>
+      </div>
+
+      <div class="vitals-row">
+        <div class="vital-box">
+          <div class="vital-label">HP</div>
+          <div class="vital-value green" id="char-hp">27 / 27</div>
+          <div class="hp-bar-wrap"><div class="hp-bar"><div class="hp-bar-fill" id="char-hp-bar" style="width:100%"></div></div></div>
+        </div>
+        <div class="vital-box">
+          <div class="vital-label">AC</div>
+          <div class="vital-value">16</div>
+        </div>
+        <div class="vital-box">
+          <div class="vital-label">Initiative</div>
+          <div class="vital-value">−1</div>
+        </div>
+        <div class="vital-box">
+          <div class="vital-label">Speed</div>
+          <div class="vital-value">25 ft</div>
+        </div>
+        <div class="vital-box">
+          <div class="vital-label">Prof. Bonus</div>
+          <div class="vital-value">+2</div>
+        </div>
+        <div class="vital-box">
+          <div class="vital-label">Passive Perc.</div>
+          <div class="vital-value">13</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <div class="sec-title">Saving Throws</div>
+          <div class="saves-grid">
+            <div class="save-row"><span class="save-stat">Strength</span><span class="save-mod">+2</span></div>
+            <div class="save-row"><span class="save-stat">Dexterity</span><span class="save-mod">−1</span></div>
+            <div class="save-row"><span class="save-stat">Constitution</span><span class="save-mod">+3</span></div>
+            <div class="save-row"><span class="save-stat">Intelligence</span><span class="save-mod">+0</span></div>
+            <div class="save-row"><span class="save-stat">Wisdom</span><span class="save-mod prof">+5 ◆</span></div>
+            <div class="save-row"><span class="save-stat">Charisma</span><span class="save-mod prof">+2 ◆</span></div>
+          </div>
+
+          <div class="sec-title">Equipment</div>
+          <div class="equip-list">
+            <div class="equip-item">Warhammer (1d8 bludgeoning)</div>
+            <div class="equip-item">Chain Mail (AC 16, no Stealth)</div>
+            <div class="equip-item">Shield with storm cloud motif (+2 AC)</div>
+            <div class="equip-item">Holy Symbol of Talos</div>
+            <div class="equip-item">Guild Papers (Guild Artisan)</div>
+            <div class="equip-item">Artisan's Tools</div>
+            <div class="equip-item">Backpack, rations, torches, rope</div>
+          </div>
+
+          <div class="sec-title">Traits &amp; Features</div>
+          <div class="trait-list">
+            <div class="trait-item">Darkvision 60 ft (Mountain Dwarf)</div>
+            <div class="trait-item">Dwarven Resilience — Advantage on saves vs. poison</div>
+            <div class="trait-item">Stonecunning — Proficiency ×2 on History checks re: stonework</div>
+            <div class="trait-item">Divine Domain: Storm — Thunderwave &amp; Fog Cloud always prepared</div>
+            <div class="trait-item">Spellcasting (Wisdom, DC 13, +5 to hit)</div>
+            <div class="trait-item">Channel Divinity (1/rest) — Turn Undead or Destructive Wrath (maximize lightning/thunder damage)</div>
+            <div class="trait-item" style="color:#c9a227">★ Bearer of the Seal — Rurik stood at the center of the binding ritual as THE anchor. He bore the Witness's full fury and held. He is permanently connected to the seal — a second heartbeat, deep beneath the mountain. The Stormfather's presence is now constant. This bond will never fade.</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="sec-title">Spell Slots</div>
+          <div class="spell-slot-lbl">Level 1</div>
+          <div class="slot-row" id="slot-row-1">
+            <div class="spell-slot">I</div>
+            <div class="spell-slot">I</div>
+            <div class="spell-slot">I</div>
+            <div class="spell-slot">I</div>
+          </div>
+          <div class="spell-slot-lbl">Level 2</div>
+          <div class="slot-row" id="slot-row-2">
+            <div class="spell-slot">II</div>
+            <div class="spell-slot">II</div>
+          </div>
+
+          <div class="sec-title">Spells</div>
+          <div class="spell-list">
+            <div style="color:#333;font-size:10px;letter-spacing:2px;margin-bottom:4px">CANTRIPS</div>
+            <div class="spell-item cantrip"><span class="spell-tag">ATK</span>Sacred Flame (DEX save, 1d8 radiant)</div>
+            <div class="spell-item cantrip"><span class="spell-tag">UTL</span>Guidance (+1d4 to ability check)</div>
+            <div class="spell-item cantrip"><span class="spell-tag">UTL</span>Thaumaturgy (minor magical effects)</div>
+            <div style="color:#333;font-size:10px;letter-spacing:2px;margin-bottom:4px;margin-top:8px">ALWAYS PREPARED — 1st (Domain)</div>
+            <div class="spell-item always"><span class="spell-tag">ATK</span>Thunderwave (CON save, 2d8 thunder, push 10 ft)</div>
+            <div class="spell-item always"><span class="spell-tag">UTL</span>Fog Cloud (20 ft radius, heavily obscured)</div>
+            <div style="color:#333;font-size:10px;letter-spacing:2px;margin-bottom:4px;margin-top:8px">ALWAYS PREPARED — 2nd (Domain)</div>
+            <div class="spell-item always"><span class="spell-tag">ATK</span>Gust of Wind (STR save, push 15 ft, difficult terrain)</div>
+            <div class="spell-item always"><span class="spell-tag">ATK</span>Shatter (CON save, 3d8 thunder, 10 ft radius)</div>
+            <div style="color:#333;font-size:10px;letter-spacing:2px;margin-bottom:4px;margin-top:8px">PREPARED — 1st</div>
+            <div class="spell-item spell"><span class="spell-tag">ATK</span>Guiding Bolt (+5, 4d6 radiant, next attacker has adv.)</div>
+            <div class="spell-item spell"><span class="spell-tag">ATK</span>Inflict Wounds (+5, 3d10 necrotic, melee)</div>
+            <div class="spell-item spell"><span class="spell-tag">HEL</span>Healing Word (bonus action, 1d4+3 HP)</div>
+            <div class="spell-item spell"><span class="spell-tag">DEF</span>Sanctuary (creature must make WIS save to attack target)</div>
+            <div class="spell-item spell"><span class="spell-tag">DEF</span>Shield of Faith (bonus action, +2 AC, concentration)</div>
+            <div style="color:#333;font-size:10px;letter-spacing:2px;margin-bottom:4px;margin-top:8px">PREPARED — 2nd</div>
+            <div class="spell-item spell"><span class="spell-tag">ATK</span>Spiritual Weapon (bonus action cast, bonus action attack, no concentration)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── QUESTS ── -->
+  <div id="tab-quests" class="tab-panel">
+    <div class="scroll-panel" style="max-width:760px">
+
+      <div class="sec-title">Active Quests</div>
+
+      <div class="quest-card critical">
+        <div class="quest-header">
+          <div class="quest-name">Hunt the Mind Flayer</div>
+          <div class="quest-badge ub-critical">Critical</div>
+        </div>
+        <div class="quest-desc">The Mind Flayer — the Witness's servant — is still at large. Cut off from its master's power now that the seal is reinforced, its thralls are weakening. Its breeding army is buried. But it is still out there, still dangerous, and it knows what Rurik did.</div>
+        <div class="quest-obj">
+          <div class="obj-item done"><span class="obj-check done">✓</span><span>Discover the breeding chamber — 7 ceremorphosis pods inside Wave Echo Cave</span></div>
+          <div class="obj-item done"><span class="obj-check done">✓</span><span>Destroy the breeding chamber (Shatter + collapse)</span></div>
+          <div class="obj-item"><span class="obj-check">○</span><span>Locate the Mind Flayer — last seen near Wave Echo Cave, now at large</span></div>
+          <div class="obj-item"><span class="obj-check">○</span><span>Eliminate or drive off the Mind Flayer before it rebuilds</span></div>
+          <div class="obj-item"><span class="obj-check">○</span><span>Investigate Tresendar Manor cellars — possible tunnel connection</span></div>
+        </div>
+        <div class="quest-leads">Leads: Qelline (intel network) · Tresendar Manor cellars · Weakening thralls may reveal its location</div>
+      </div>
+
+      <div class="quest-card high">
+        <div class="quest-header">
+          <div class="quest-name">Neutralize the Redbrands</div>
+          <div class="quest-badge ub-high">High</div>
+        </div>
+        <div class="quest-desc">The Redbrands control Tresendar Manor and are terrorizing Phandalin. Silga, their half-elf field commander, is brutal and still at large with full command since Glasstaff's departure. Harpers arrive in ~2 days.</div>
+        <div class="quest-obj">
+          <div class="obj-item done"><span class="obj-check done">✓</span><span>Identify Glasstaff (Iarno Albrek) as Redbrand leader — now freed and allied</span></div>
+          <div class="obj-item"><span class="obj-check">○</span><span>Locate and neutralize Silga (capture or kill)</span></div>
+          <div class="obj-item"><span class="obj-check">○</span><span>Clear or assault Tresendar Manor</span></div>
+          <div class="obj-item"><span class="obj-check">○</span><span>Coordinate with arriving Harpers for town liberation</span></div>
+        </div>
+        <div class="quest-leads">Leads: Sildar Hallwinter · Iarno Albrek · Qelline (intel) · Harpers ETA ~2 days</div>
+      </div>
+
+      <div class="quest-card medium">
+        <div class="quest-header">
+          <div class="quest-name">Manage Civilian Safety</div>
+          <div class="quest-badge ub-medium">Medium</div>
+        </div>
+        <div class="quest-desc">Redbrands still grip Phandalin. The immediate Witness threat is resolved but the town needs liberating. Harpers arriving soon changes the calculus — hold and coordinate, or strike now?</div>
+        <div class="quest-obj">
+          <div class="obj-item"><span class="obj-check">○</span><span>Decide: strike Redbrands now or wait for Harpers (~2 days)</span></div>
+          <div class="obj-item"><span class="obj-check">○</span><span>Coordinate with Toblen Stonehill and Elmar Barthen on civilian safety</span></div>
+          <div class="obj-item"><span class="obj-check">○</span><span>Establish evacuation route if needed (South Road toward Baldur's Gate)</span></div>
+        </div>
+        <div class="quest-leads">Leads: Toblen Stonehill · Elmar Barthen · Qelline · Harpers arriving ~Day 9</div>
+      </div>
+
+      <div class="sec-title">Completed Quests</div>
+
+      <div class="quest-card done">
+        <div class="quest-header">
+          <div class="quest-name">Stop the Witness</div>
+          <div class="quest-badge ub-done">Complete</div>
+        </div>
+        <div class="quest-desc">An ancient godlike entity imprisoned 400 years ago. The seal was failing — Rurik performed the binding ritual as the Bearer of the Seal, containing the Witness for years or decades.</div>
+        <div class="quest-obj">
+          <div class="obj-item done"><span class="obj-check done">✓</span><span>Locate Wave Echo Cave and investigate the seal</span></div>
+          <div class="obj-item done"><span class="obj-check done">✓</span><span>Retrieve and secure the five artifacts</span></div>
+          <div class="obj-item done"><span class="obj-check done">✓</span><span>Alert the Harpers and Order of the Gauntlet</span></div>
+          <div class="obj-item done"><span class="obj-check done">✓</span><span>Decrypt the binding ritual — all pages unlocked</span></div>
+          <div class="obj-item done"><span class="obj-check done">✓</span><span>Perform the Binding Ritual — Rurik as anchor, four voices in the ring</span></div>
+          <div class="obj-item done"><span class="obj-check done">✓</span><span>Destroy the breeding chamber — 7 pods obliterated, passage collapsed</span></div>
+        </div>
+        <div class="quest-leads">Rurik is the Bearer of the Seal — a permanent bond with the ancient imprisonment beneath Wave Echo Cave.</div>
+      </div>
+
+      <div class="quest-card done">
+        <div class="quest-header">
+          <div class="quest-name">Decrypt the Mysterious Book</div>
+          <div class="quest-badge ub-done">Complete</div>
+        </div>
+        <div class="quest-desc">The binding ritual book, fully decrypted by Iarno and the Stormfather's intervention. Used to perform the binding ritual on Day 6. Book remains in shrine catacombs.</div>
+        <div class="quest-obj">
+          <div class="obj-item done"><span class="obj-check done">✓</span><span>Retrieve the book from Wave Echo Cave</span></div>
+          <div class="obj-item done"><span class="obj-check done">✓</span><span>Decrypt pages 11–25 (Stormfather channeled through Rurik)</span></div>
+          <div class="obj-item done"><span class="obj-check done">✓</span><span>Decrypt binding ritual sections (Iarno completed pages 21–25)</span></div>
+          <div class="obj-item done"><span class="obj-check done">✓</span><span>Binding ritual performed — seal reinforced, Witness contained</span></div>
+        </div>
+        <div class="quest-leads">Book remains in shrine catacombs. Contents fully known.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── EVENTS ── -->
+  <div id="tab-events" class="tab-panel">
+    <div class="scroll-panel">
+      <div class="sec-title">Campaign Timeline</div>
+      <div class="timeline">
+
+        <div class="event-entry">
+          <div class="event-dot major"></div>
+          <div class="event-day">DAY 1</div>
+          <div class="event-title">Arrival in Phandalin</div>
+          <div class="event-detail">Rurik arrives via the Triboar Trail. Makes contact with Toblen Stonehill at the Stonehill Inn. First glimpse of Redbrand presence in town — locals intimidated and silent.</div>
+        </div>
+
+        <div class="event-entry">
+          <div class="event-dot threat"></div>
+          <div class="event-day">DAY 1</div>
+          <div class="event-title">Redbrand Confrontation</div>
+          <div class="event-detail">Redbrands openly threatening civilians. Silga identified as field commander — half-elf, brutal, feared. Redbrand base traced to Tresendar Manor.</div>
+        </div>
+
+        <div class="event-entry">
+          <div class="event-dot good"></div>
+          <div class="event-day">DAY 1–2</div>
+          <div class="event-title">Sister Garaele &amp; the Harper Warning</div>
+          <div class="event-detail">Sister Garaele reveals her Harper affiliation and shares intelligence: something ancient is stirring beneath Wave Echo Cave. She shows Rurik a Harper cipher describing a "Witness" sealed 400 years ago.</div>
+        </div>
+
+        <div class="event-entry">
+          <div class="event-dot major"></div>
+          <div class="event-day">DAY 2–3</div>
+          <div class="event-title">Wave Echo Cave Expedition</div>
+          <div class="event-detail">Rurik and company descend into Wave Echo Cave. Encounter evidence of the Mind Flayer's thrall network. Discover the Seal Chamber — a 15-foot circular seal with spreading cracks, the symbol of a watching eye at its center. The Witness is aware and pressing.</div>
+        </div>
+
+        <div class="event-entry">
+          <div class="event-dot good"></div>
+          <div class="event-day">DAY 3</div>
+          <div class="event-title">Artifacts Retrieved</div>
+          <div class="event-detail">All five artifacts recovered from their pedestals in Wave Echo Cave: crystal sphere, stone tablet (seal schematic), staff with pulsing gem (divine conduit), ceremonial dagger, mysterious encrypted book. Party withdraws before the Mind Flayer returns.</div>
+        </div>
+
+        <div class="event-entry">
+          <div class="event-dot good"></div>
+          <div class="event-day">DAY 3</div>
+          <div class="event-title">Glasstaff Unmasked — Iarno Freed</div>
+          <div class="event-detail">Iarno Albrek, the Redbrand wizard known as Glasstaff, was identified and brought in. Now recovering at the shrine, pale and silent. Former enemy, current uncertain asset.</div>
+        </div>
+
+        <div class="event-entry">
+          <div class="event-dot major"></div>
+          <div class="event-day">DAY 3 — Evening</div>
+          <div class="event-title">Party Assembles at the Shrine</div>
+          <div class="event-detail">Full party consolidates at the Shrine of Luck. Artifacts locked in the blessed catacombs. Harpers and Order of the Gauntlet alerted — ETA approximately 6 days. Qelline arrives with additional intel. Four former thrall prisoners recovered and present.</div>
+        </div>
+
+        <div class="event-entry">
+          <div class="event-dot good"></div>
+          <div class="event-day">DAY 4 — Morning</div>
+          <div class="event-title">Sister Garaele's Vision</div>
+          <div class="event-detail">Garaele recounts a vision from Selûne: the seal was breathing, the book glowed, and a binding ritual appeared — not to reinforce the seal, but to redirect the Witness inward. She warns true time remaining may be only 4–5 days, not 10–14. Silga's face appeared in the vision, suggesting the Mind Flayer has warned her.</div>
+        </div>
+
+        <div class="event-entry">
+          <div class="event-dot major"></div>
+          <div class="event-day">DAY 4 — Morning</div>
+          <div class="event-title">The Stormfather Speaks — Book Unlocked</div>
+          <div class="event-detail">Rurik places the book on the altar and prays. The Stormfather channels through him — stormlight erupts across the shrine, ancient words flow from Rurik's mouth unbidden. The magical cipher on pages 11–25 dissolves under divine will. The binding ritual structure is revealed: five voices, five elements, one anchor bound eternally to the seal. Rurik immediately volunteers to be the anchor.</div>
+        </div>
+
+        <div class="event-entry">
+          <div class="event-dot good"></div>
+          <div class="event-day">DAY 4 — Morning</div>
+          <div class="event-title">Five Voices Committed</div>
+          <div class="event-detail">Sildar, Gundren, Toblen, and Iarno each volunteer for the binding ritual without being asked. Rurik refuses to command any of them — all five step forward freely. The ritual requires all five at dawn at Wave Echo Cave's Seal Chamber.</div>
+        </div>
+
+        <div class="event-entry">
+          <div class="event-dot threat"></div>
+          <div class="event-day">DAY 4 — Afternoon</div>
+          <div class="event-title">Silga Raids the Shrine</div>
+          <div class="event-detail">A large Redbrand force — 10–12 soldiers led by Silga herself — assaults the Shrine of Luck. The party escapes through the catacombs beneath the altar with all five artifacts and all personnel intact. Silga breaches the shrine moments after they descend. She now knows they escaped and will search the roads.</div>
+        </div>
+
+        <div class="event-entry">
+          <div class="event-dot good"></div>
+          <div class="event-day">DAY 4 — Evening</div>
+          <div class="event-title">Regrouped at Old Marta's Cabin</div>
+          <div class="event-detail">The full party reaches Old Marta's cabin safely. Marta confirms the binding ritual's history. Iarno begins decrypting the final pages (21–25). The ritual must be performed at Wave Echo Cave.</div>
+        </div>
+
+        <div class="event-entry">
+          <div class="event-dot major"></div>
+          <div class="event-day">DAY 5</div>
+          <div class="event-title">Scouting Missions</div>
+          <div class="event-detail">Rurik, Sildar, and Qelline scout the Harper waystone — confirmed safe and unknown to Redbrands. Rurik and Borik scout Wave Echo Cave — find 3 Redbrand scouts on the ridge, growing to 5 by evening. Silga is building a kill zone at the main approach.</div>
+        </div>
+
+        <div class="event-entry">
+          <div class="event-dot threat"></div>
+          <div class="event-day">DAY 6 — Morning</div>
+          <div class="event-title">The Miners' Passage — Breeding Chamber Discovered</div>
+          <div class="event-detail">Party uses Gundren's miners' back entrance to bypass Silga's 5 scouts. Deep in the cave, they find a hidden chamber: 7 ceremorphosis pods, the Mind Flayer's illithid breeding army. Decision made — preserve the staff's power for the ritual. The pods will be dealt with on the way out.</div>
+        </div>
+
+        <div class="event-entry">
+          <div class="event-dot major"></div>
+          <div class="event-day">DAY 6 — The Ritual</div>
+          <div class="event-title">The Binding Ritual — Rurik Becomes the Bearer of the Seal</div>
+          <div class="event-detail">In the Seal Chamber, the obsidian seal cracked and failing from Mind Flayer corruption. Sister Garaele, Sildar, Gundren, and Iarno form the ring at the four cardinal points. Rurik stands at the center — the anchor. The Witness surges with everything it has. Rurik holds. The Stormfather stands behind him. The seal closes. Whole. Glowing steady. The Witness is CONTAINED. Rurik levels to Level 3 — Bearer of the Seal.</div>
+        </div>
+
+        <div class="event-entry">
+          <div class="event-dot good"></div>
+          <div class="event-day">DAY 6 — After the Ritual</div>
+          <div class="event-title">Breeding Chamber Destroyed</div>
+          <div class="event-detail">On the way out, Rurik casts Shatter into the breeding chamber — 15 points of thunder damage obliterates all 7 pods. The passage collapses under 100+ tons of rock, burying the Mind Flayer's army entirely. The party escapes through the miners' passage as the cave settles.</div>
+        </div>
+
+        <div class="event-entry">
+          <div class="event-dot good"></div>
+          <div class="event-day">DAY 6 — Evening</div>
+          <div class="event-title">Return to Marta's Cabin — Long Rest</div>
+          <div class="event-detail">Party returns to Marta's cabin. Rurik briefs Marta on the ritual. All allies present. Long rest completed. The connection to the Seal is constant — Rurik feels it like a second heartbeat. The Stormfather's presence is brighter than it has ever been.</div>
+        </div>
+
+        <div class="event-entry">
+          <div class="event-dot major"></div>
+          <div class="event-day">DAY 7 — Morning (NOW)</div>
+          <div class="event-title">Day 7 Begins — Planning the Next Move</div>
+          <div class="event-detail">Full party at Marta's cabin. Spell slots restored. Harpers ~2 days out. Silga still commands the Redbrands in Phandalin. The Mind Flayer is at large, cut off from the Witness. The next fight is above ground.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── NPCS ── -->
+  <div id="tab-npcs" class="tab-panel">
+    <div class="scroll-panel">
+
+      <div class="sec-title">Allies</div>
+      <div class="npc-grid">
+
+        <div class="npc-card">
+          <div class="npc-header">
+            <div class="npc-name">Sister Garaele</div>
+            <div class="disp-badge d-ally">Ally</div>
+          </div>
+          <div class="npc-role">Shrine Keeper · Harper Agent</div>
+          <div class="npc-loc">Old Marta's Cabin</div>
+          <div class="npc-notes">Ritual complete — exhausted but joyful. Staff spent, needs time to recharge. Wept when the seal closed. Confirmed Rurik as Bearer of the Seal. Recovering at Marta's cabin.</div>
+        </div>
+
+        <div class="npc-card">
+          <div class="npc-header">
+            <div class="npc-name">Sildar Hallwinter</div>
+            <div class="disp-badge d-ally">Ally</div>
+          </div>
+          <div class="npc-role">Retired Soldier · Lord's Alliance · Ritual Voice #2</div>
+          <div class="npc-loc">Old Marta's Cabin</div>
+          <div class="npc-notes">Volunteered immediately for the binding ritual. Combat capable — on watch rotation at the cabin. Escaped the shrine with the party during Silga's raid.</div>
+        </div>
+
+        <div class="npc-card">
+          <div class="npc-header">
+            <div class="npc-name">Gundren Rockseeker</div>
+            <div class="disp-badge d-ally">Ally</div>
+          </div>
+          <div class="npc-role">Dwarf Merchant · Wave Echo Cave claimant · Ritual Voice #3</div>
+          <div class="npc-loc">Old Marta's Cabin</div>
+          <div class="npc-notes">Volunteered for the binding ritual. Wave Echo Cave is his claim — he insists he must be part of sealing it. Shaken but resolute. Escaped with the party.</div>
+        </div>
+
+        <div class="npc-card">
+          <div class="npc-header">
+            <div class="npc-name">Toblen Stonehill</div>
+            <div class="disp-badge d-ally">Ally</div>
+          </div>
+          <div class="npc-role">Innkeeper · Ritual Voice #4</div>
+          <div class="npc-loc">Old Marta's Cabin</div>
+          <div class="npc-notes">Volunteered for the binding ritual — his town, his people. Helping settle the four recovered prisoners at the cabin. Steady under pressure.</div>
+        </div>
+
+        <div class="npc-card">
+          <div class="npc-header">
+            <div class="npc-name">Elmar Barthen</div>
+            <div class="disp-badge d-ally">Ally</div>
+          </div>
+          <div class="npc-role">Merchant · Barthen's Provisions</div>
+          <div class="npc-loc">Barthen's Provisions, Phandalin</div>
+          <div class="npc-notes">Rurik's merchant contact. Cooperative and well-supplied. Can assist with evacuation provisions. Knows the trade roads south.</div>
+        </div>
+
+        <div class="npc-card">
+          <div class="npc-header">
+            <div class="npc-name">Borik Stonehammer</div>
+            <div class="disp-badge d-ally">Ally</div>
+          </div>
+          <div class="npc-role">Dwarf Local · Guard</div>
+          <div class="npc-loc">Old Marta's Cabin</div>
+          <div class="npc-notes">Steady and reliable. On perimeter watch at the cabin. Not part of the ritual five but committed to protecting those who are.</div>
+        </div>
+
+        <div class="npc-card">
+          <div class="npc-header">
+            <div class="npc-name">Qelline</div>
+            <div class="disp-badge d-ally">Ally</div>
+          </div>
+          <div class="npc-role">Intel contact · Halfling farmer</div>
+
+          <div class="npc-loc">Old Marta's Cabin</div>
+          <div class="npc-notes">Reviewing intelligence notes. Reliable source on Redbrand movements and road conditions. Will have updated intel on Silga's patrols when Rurik is ready to plan.</div>
+        </div>
+
+        <div class="npc-card">
+          <div class="npc-header">
+            <div class="npc-name">Linene Graywind</div>
+            <div class="disp-badge d-ally">Ally</div>
+          </div>
+          <div class="npc-role">Merchant · Lionshield Coster</div>
+          <div class="npc-loc">Lionshield Coster, Phandalin</div>
+          <div class="npc-notes">Weapons and armor trader. Actively opposed to the Redbrands. Potential supply source for the party or for arming civilians.</div>
+        </div>
+
+        <div class="npc-card">
+          <div class="npc-header">
+            <div class="npc-name">Old Marta</div>
+            <div class="disp-badge d-ally">Ally</div>
+          </div>
+          <div class="npc-role">40-year Seal Guardian · Host</div>
+          <div class="npc-loc">Old Marta's Cabin (party sheltering here)</div>
+          <div class="npc-notes">Hosting the full party. Confirmed the binding ritual's history — some anchors broke, some endured. Warned that the Witness has already begun to recognize Rurik. Her journals contain 40 years of seal degradation records — key reference for the ritual.</div>
+        </div>
+
+      </div>
+
+      <div class="sec-title" style="margin-top:28px">Neutral / Uncertain</div>
+      <div class="npc-grid">
+
+        <div class="npc-card">
+          <div class="npc-header">
+            <div class="npc-name">Iarno Albrek</div>
+            <div class="disp-badge d-recovering">Recovering</div>
+          </div>
+          <div class="npc-role">Former Glasstaff · Ritual Voice #5 · Cipher Expert</div>
+          <div class="npc-loc">Old Marta's Cabin</div>
+          <div class="npc-notes">Volunteered for the ritual — owes a debt to the seal. Currently decrypting pages 21–25 of the binding book. Cracked the outer cipher; the final sections require another day of work. Steadier now than he was at the shrine.</div>
+        </div>
+
+        <div class="npc-card">
+          <div class="npc-header">
+            <div class="npc-name">Harbin Wester</div>
+            <div class="disp-badge d-neutral">Neutral</div>
+          </div>
+          <div class="npc-role">Townmaster of Phandalin</div>
+          <div class="npc-loc">Townmaster's Hall, Phandalin</div>
+          <div class="npc-notes">Officially neutral. Too afraid to act against the Redbrands. Not an obstacle but not an ally — he will follow whoever holds power in the town.</div>
+        </div>
+
+      </div>
+
+      <div class="sec-title" style="margin-top:28px">Threats</div>
+      <div class="npc-grid">
+
+        <div class="npc-card">
+          <div class="npc-header">
+            <div class="npc-name">Silga</div>
+            <div class="disp-badge d-hostile">Hostile</div>
+          </div>
+          <div class="npc-role">Redbrand Field Commander</div>
+          <div class="npc-loc">Phandalin — actively hunting</div>
+          <div class="npc-notes">Personally led the raid on the Shrine of Luck. Breached the shrine moments after the party escaped. Now knows they fled with the artifacts. Actively searching roads and forest. Dangerous and motivated — do not underestimate her.</div>
+        </div>
+
+        <div class="npc-card">
+          <div class="npc-header">
+            <div class="npc-name">The Mind Flayer</div>
+            <div class="disp-badge d-hostile">Hostile</div>
+          </div>
+          <div class="npc-role">Illithid · Witness Servant</div>
+          <div class="npc-loc">Unknown — at large</div>
+          <div class="npc-notes">Witness's servant, now cut off from its master's power. Breeding army buried and destroyed. Thralls are weakening. Location unknown — at large somewhere near Phandalin. Still highly dangerous. Must be hunted down before it rebuilds.</div>
+        </div>
+
+        <div class="npc-card">
+          <div class="npc-header">
+            <div class="npc-name">The Witness</div>
+            <div class="disp-badge d-recovering">Contained</div>
+          </div>
+          <div class="npc-role">Ancient imprisoned entity</div>
+          <div class="npc-loc">Seal Chamber, Wave Echo Cave</div>
+          <div class="npc-notes">Pure knowledge, hunger, and awareness. Imprisoned 400 years ago. Seal reinforced by Rurik's binding ritual — stable for years or decades. Still aware. Still watches. Rurik feels its presence constantly as the Bearer of the Seal. CONTAINED — not a threat for now.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div><!-- end #content -->
+
+<script>
+'use strict';
+
+// ══════════════════════════════════════════════════════
+//  WORLD STATE  — update this between sessions
+// ══════════════════════════════════════════════════════
+const W = {
+  day: 7, time: 'Morning',
+  sealPct: 100,
+  daysRemaining: 'Stable — years',
+  harpersEta: '~2 days',
+  orderEta: 'Unknown',
+  playerLocation: 'marta',
+  currentMap: 'campaign',
+  charHpCurrent: 27,
+  charHpMax: 27,
+  charLevel: 3,
+  spellSlots1Used: 0,
+  spellSlots1Max: 4,
+  spellSlots2Used: 0,
+  spellSlots2Max: 2,
+};
+
+// ══════════════════════════════════════════════════════
+//  TILE DEFINITIONS
+// ══════════════════════════════════════════════════════
+const T = {
+  'f': { char:'♣', fg:'#2a5c2a', bg:'#0b160b', label:'Forest' },
+  'F': { char:'♠', fg:'#1a3c1a', bg:'#080e08', label:'Dense Forest' },
+  'g': { char:'·', fg:'#3a5020', bg:'#111808', label:'Grassland' },
+  '~': { char:'·', fg:'#2a4018', bg:'#0e1406', label:'Open Field' },
+  'r': { char:'─', fg:'#7a6040', bg:'#241c10', label:'Road/Path' },
+  'm': { char:'▲', fg:'#505050', bg:'#181818', label:'Mountain' },
+  'M': { char:'█', fg:'#383838', bg:'#101010', label:'High Peak' },
+  'c': { char:'⊙', fg:'#b05010', bg:'#280e00', label:'Cave' },
+  'w': { char:'≈', fg:'#2060a0', bg:'#081520', label:'Water' },
+  'p': { char:'·', fg:'#5a4a3a', bg:'#1a1208', label:'Town Ground' },
+  ' ': { char:' ', fg:'#111',   bg:'#0d0d0d', label:null },
+};
+
+// ══════════════════════════════════════════════════════
+//  LOCATIONS
+// ══════════════════════════════════════════════════════
+const LOCS = {
+  campaign: [
+    { id:'phandalin', x:16, y:8, char:'P', fg:'#d4af37', bg:'#2a1c06',
+      name:'Phandalin', status:'threat', zoomTo:'phandalin',
+      quests:['Neutralize the Redbrands','Hunt the Mind Flayer'],
+      npcs:['Silga (hostile — Redbrand commander)','Civilians','Toblen Stonehill'],
+      note:'Redbrands still control the town. Silga has full command. Harpers ~2 days out.' },
+    { id:'shrine', x:18, y:9, char:'†', fg:'#a080ff', bg:'#180a2a',
+      name:'Shrine of Luck (Selûne)', status:'fortified', zoomTo:'phandalin',
+      quests:[],
+      npcs:[],
+      note:'Artifacts remain in blessed catacombs. Party moved to Marta\'s cabin. Staff recharging.' },
+    { id:'manor', x:20, y:10, char:'!', fg:'#ff4444', bg:'#280808',
+      name:'Tresendar Manor', status:'hostile', zoomTo:null,
+      quests:['Neutralize the Redbrands'],
+      npcs:['Silga (field commander)','Redbrand thugs'],
+      note:'Redbrand HQ. Silga in full command. Cellar tunnels unexplored.' },
+    { id:'wave_echo', x:34, y:3, char:'C', fg:'#4ade80', bg:'#081408',
+      name:'Wave Echo Cave', status:'safe', zoomTo:'wave_echo',
+      quests:[],
+      npcs:['The Witness (CONTAINED — bound)'],
+      note:'Seal reinforced. Stable for years or decades. Breeding chamber collapsed and buried. Miners\' passage intact.' },
+    { id:'marta', x:10, y:5, char:'Ω', fg:'#70b070', bg:'#081408',
+      name:"Old Marta's Cabin", status:'safe', zoomTo:null,
+      quests:[],
+      npcs:['Rurik (YOU)','Old Marta','Sister Garaele','Sildar Hallwinter','Gundren Rockseeker','Iarno Albrek','Toblen Stonehill','Borik Stonehammer','Qelline','4 recovering former-thralls'],
+      note:'Full party regrouped here. Long rest complete. Day 7 Morning. Planning next move.' },
+    { id:'south_road', x:20, y:18, char:'↓', fg:'#605040', bg:'#1a1208',
+      name:"South Road (Triboar Trail → Baldur's Gate)", status:'unknown', zoomTo:null,
+      quests:['Manage Civilian Safety'], npcs:[],
+      note:'Potential civilian evacuation route. Road south toward Baldur\'s Gate.' },
+  ],
+  phandalin: [
+    { id:'shrine_t', x:26, y:9, char:'†', fg:'#a080ff', bg:'#180a2a',
+      name:'Shrine of Luck', status:'fortified', zoomTo:null,
+      quests:[],
+      npcs:[],
+      note:'Artifacts in blessed catacombs. Party has moved to Marta\'s cabin. Staff recharging.' },
+    { id:'manor_t', x:28, y:14, char:'!', fg:'#ff4444', bg:'#280808',
+      name:'Tresendar Manor', status:'hostile', zoomTo:null,
+      quests:['Neutralize the Redbrands'],
+      npcs:['Silga (commander)','Redbrand thugs (~8–12 active)'],
+      note:'Increased patrols. Silga brutalizing civilians. Cellars connect to deeper tunnels.' },
+    { id:'inn_t', x:8, y:2, char:'I', fg:'#c0a050', bg:'#241a06',
+      name:'Stonehill Inn', status:'safe', zoomTo:null,
+      quests:[], npcs:['Toblen Stonehill (ally)'],
+      note:'Local gossip hub. One of few Redbrand-free spaces in town.' },
+    { id:'provisions_t', x:18, y:2, char:'B', fg:'#a08040', bg:'#1e1606',
+      name:"Barthen's Provisions", status:'safe', zoomTo:null,
+      quests:[], npcs:["Elmar Barthen (merchant — Rurik contact)"],
+      note:'Supplies and general goods. Elmar is cooperative.' },
+    { id:'townmaster_t', x:22, y:6, char:'H', fg:'#7080b0', bg:'#0a0c18',
+      name:"Townmaster's Hall", status:'unknown', zoomTo:null,
+      quests:[], npcs:['Harbin Wester (cowardly, passive)'],
+      note:'Officially neutral. Townmaster too afraid to act.' },
+    { id:'lionshield_t', x:8, y:7, char:'L', fg:'#4090d0', bg:'#081428',
+      name:'Lionshield Coster', status:'safe', zoomTo:null,
+      quests:[], npcs:['Linene Graywind (merchant)'],
+      note:'Weapons and armor trader. Opposed to Redbrands. Potential supply source.' },
+  ],
+  wave_echo: [
+    { id:'cave_entrance_wec', x:10, y:2, char:'▼', fg:'#888', bg:'#141414',
+      name:'Cave Entrance (Miners\' Passage)', status:'safe', zoomTo:null,
+      quests:[], npcs:[],
+      note:'Miners\' back entrance used to bypass Redbrand scouts on Day 6. Passage intact and clear.' },
+    { id:'seal_chamber', x:22, y:14, char:'◈', fg:'#60a0ff', bg:'#00082a',
+      name:'The Seal Chamber', status:'safe', zoomTo:null,
+      quests:[],
+      npcs:['The Witness (CONTAINED — bound beneath)'],
+      note:'The obsidian seal is whole, glowing steady. Ritual complete. Rurik is the Bearer — permanently connected to this seal.' },
+    { id:'artifact_alcove', x:24, y:12, char:'□', fg:'#888', bg:'#181818',
+      name:'Artifact Alcove', status:'safe', zoomTo:null,
+      quests:[], npcs:[],
+      note:'Empty. Artifacts secured in shrine catacombs.' },
+    { id:'breeding_chamber', x:14, y:6, char:'✖', fg:'#444', bg:'#0a0808',
+      name:'Breeding Chamber (Collapsed)', status:'safe', zoomTo:null,
+      quests:[], npcs:[],
+      note:'7 ceremorphosis pods destroyed by Shatter. Passage collapsed under 100+ tons of rock. The Mind Flayer\'s army is buried.' },
+  ],
+};
+
+// ══════════════════════════════════════════════════════
+//  MAP GRIDS
+// ══════════════════════════════════════════════════════
+const GRIDS = {
+  campaign: {
+    tileW: 24, tileH: 24,
+    rows: [
+      'ffffffffffffffffffffffffffffffmmmmmmmmmffffff',
+      'ffffffffffffffffffffffffffffmmmmmmmmmmmffffff',
+      'fffffffffffffffffffffffffffmmmmmmmmmmmmffffff',
+      'ffffffffffffffffffffffffffmmmmmmmmmmmmmffffff',
+      'fffffffffffffffffffffffffmmmmmmmmmmmmmfffffff',
+      'ffffffffff ffffffffffffff mmmmmmmmmmmmfffffff',
+      'ffffffffff.fffffffffffff  mmmmmmmmmmmmfffffff',
+      'ffffffffff.fffffffffffff  mmmmmmmmmmmffffffff',
+      'fffffffffff..fffpppppffffffffffffffffffff     ',
+      'fffffffffff...ffpppppffffffffffffffffffff     ',
+      'fffffffffff....fpppppffffffffffffffffffff     ',
+      'fffffffffff.....rrrrrrrrrrrrrffffffffffff     ',
+      'ggggggggggrrrrrrrrrrrrrrrrrrrggggggggggg     ',
+      'ggggggggggrrrrrrrrrrrrrrrrrrrggggggggggg     ',
+      'ggggggggggrrrrrrrrrrrrrrrrrrrggggggggggg     ',
+      'ggggggggggrrrrrrrrrrrrrrrrrrrggggggggggg     ',
+      '~~~~~~~~~~rrrrrrrrrrrrrrrrrrr~~~~~~~~~~~~~   ',
+      '~~~~~~~~~~rrrrrrrrrrrrrrrrrrr~~~~~~~~~~~~~   ',
+      '~~~~~~~~~~rrrrrrrrrrrrrrrrrrr~~~~~~~~~~~~~   ',
+      '~~~~~~~~~~rrrrrrrrrrrrrrrrrrr~~~~~~~~~~~~~   ',
+    ],
+  },
+  phandalin: {
+    tileW: 28, tileH: 28,
+    rows: [
+      'gggggggggggggggggggggggggggggggggggg',
+      'ggggg   ggggggg   ggggggg   gggggggg',
+      'ggggg   ggggggg   ggggggg   gggggggg',
+      'ggggg   ggggggg   ggggggg   gggggggg',
+      'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr',
+      'ggggggggrrrrrrggggggggggrrrrrrgggggg',
+      'ggggg   rrrrrrgg   gggg   ggggggggg',
+      'ggggg   rrrrrrgg   gggg   ggggggggg',
+      'ggggg   rrrrrrgg   gggg   ggggggggg',
+      'ggggg   rrrrrrgg   gggg   ggg   ggg',
+      'ggggg   rrrrrrgg   gggg   ggg   ggg',
+      'ggggggggrrrrrrgggggggggggggggggggggg',
+      'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr',
+      'ggggggggrrrrrrggggggggggggg   gggggg',
+      'ggggg   rrrrrrggggggggggggg   gggggg',
+      'ggggg   rrrrrrggggggggggggg   gggggg',
+      'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr',
+      'gggggggggggggggggggggggggggggggggggg',
+      'gggggggggggggggggggggggggggggggggggg',
+      'gggggggggggggggggggggggggggggggggggg',
+    ],
+  },
+  wave_echo: {
+    tileW: 28, tileH: 28,
+    rows: [
+      'MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM',
+      'MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM',
+      'MM        MMMMMMMMMMMMMMMMMMMMMM',
+      'MM        MMMMMMMMMMMMMMMMMMMMMM',
+      'MM        MM   MMMMMMMMMMMMMMMMM',
+      'MM        MM   MMMMMMMMMMMMMMMMM',
+      'MMMMM  MMMM    MMMMMMMMMMMMMMMMM',
+      'MMMMM  MMMM    MMMMMMMMMMMMMMMMM',
+      'MMMMM  MMMM    MMMMMMMM  MMMMMMM',
+      'MMMMM  MMMMMM  MMMMMMMM  MMMMMMM',
+      'MMMMM  MMMMMM  MMMMMMMM  MMMMMMM',
+      'MMMMM          MMMMMMMM  MMMMMMM',
+      'MMMMM          MMMMMMMM  MMMMMMM',
+      'MMMMM          MM         MMMMMM',
+      'MMMMM          MM         MMMMMM',
+      'MMMMMMMMMMMMMMMM          MMMMMM',
+      'MMMMMMMMMMMMMMMM          MMMMMM',
+      'MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM',
+    ],
+  },
+};
+
+// ══════════════════════════════════════════════════════
+//  TAB SWITCHING
+// ══════════════════════════════════════════════════════
+function switchTab(id) {
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    const ids = ['map','character','quests','events','npcs'];
+    b.classList.toggle('active', ids[i] === id);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => {
+    p.classList.toggle('active', p.id === 'tab-' + id);
+  });
+  const breadEl = document.getElementById('hbread');
+  if (id !== 'map') { breadEl.innerHTML = ''; }
+  else { updateBreadcrumb(); }
+}
+
+// ══════════════════════════════════════════════════════
+//  MAP RENDERER
+// ══════════════════════════════════════════════════════
+let mapStack = [];
+let curMapId = W.currentMap;
+
+function locKey(x, y) { return `${x},${y}`; }
+function getStatusClass(s) {
+  return { safe:'s-safe', fortified:'s-fortified', threat:'s-threat', hostile:'s-hostile', unknown:'s-unknown' }[s] || 's-unknown';
+}
+function getStatusLabel(s) {
+  return { safe:'✓ Safe', fortified:'⊞ Fortified', threat:'⚠ Threat', hostile:'✖ Hostile', unknown:'? Unknown' }[s] || s;
+}
+const MAP_LABELS = { campaign:'Campaign', phandalin:'Phandalin', wave_echo:'Wave Echo Cave' };
+
+function renderMap(mapId) {
+  curMapId = mapId;
+  const grid = GRIDS[mapId];
+  const locs  = LOCS[mapId] || [];
+  if (!grid) return;
+  const locMap = {};
+  for (const loc of locs) locMap[locKey(loc.x, loc.y)] = loc;
+  const container = document.getElementById('map-grid');
+  container.innerHTML = '';
+  for (let y = 0; y < grid.rows.length; y++) {
+    const rowEl = document.createElement('div');
+    rowEl.className = 'mrow';
+    const row = grid.rows[y];
+    for (let x = 0; x < row.length; x++) {
+      const ch   = row[x];
+      const tdef = T[ch] || T[' '];
+      const loc  = locMap[locKey(x, y)];
+      const el   = document.createElement('div');
+      el.className = 'tile' + (loc ? ' loc' : '');
+      el.style.width  = grid.tileW + 'px';
+      el.style.height = grid.tileH + 'px';
+      el.style.fontSize = Math.max(8, grid.tileW - 7) + 'px';
+      el.style.background = loc ? loc.bg  : tdef.bg;
+      el.style.color      = loc ? loc.fg  : tdef.fg;
+      el.textContent      = loc ? loc.char : tdef.char;
+      if (loc) {
+        el.title = loc.name;
+        if (loc.id === W.playerLocation) el.classList.add('player-here');
+        el.addEventListener('click', (e) => { showInfo(loc, el); e.stopPropagation(); });
+      }
+      rowEl.appendChild(el);
+    }
+    container.appendChild(rowEl);
+  }
+  updateBreadcrumb();
+  buildLegend(grid, locs);
+  document.getElementById('info-body').innerHTML = '<div class="idle-note">Click a marked location for details.</div>';
+}
+
+function showInfo(loc, el) {
+  document.querySelectorAll('.tile.selected').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  let html = `<div class="iname">${loc.name}</div>`;
+  html += `<span class="ibadge ${getStatusClass(loc.status)}">${getStatusLabel(loc.status)}</span>`;
+  if (loc.quests?.length) {
+    html += `<div class="isect"><div class="isect-title">Quests</div>${loc.quests.map(q=>`<div class="q-item">${q}</div>`).join('')}</div>`;
+  }
+  if (loc.npcs?.length) {
+    html += `<div class="isect"><div class="isect-title">Present</div>${loc.npcs.map(n=>`<div class="n-item">${n}</div>`).join('')}</div>`;
+  }
+  if (loc.note) html += `<div class="inote">${loc.note}</div>`;
+  if (loc.zoomTo) html += `<button class="zoom-btn" onclick="zoomIn('${loc.zoomTo}')">[ Zoom In → ]</button>`;
+  document.getElementById('info-body').innerHTML = html;
+}
+
+function zoomIn(mapId) { mapStack.push(curMapId); renderMap(mapId); }
+function zoomOut() { if (!mapStack.length) return; renderMap(mapStack.pop()); }
+
+function updateBreadcrumb() {
+  const all = [...mapStack, curMapId];
+  const bar = document.getElementById('hbread');
+  let html = all.map((id, i) => {
+    const lbl = MAP_LABELS[id] || id;
+    const isLast = i === all.length - 1;
+    const sep = i > 0 ? '<span style="color:#2a2a2a;margin:0 4px">›</span>' : '';
+    if (isLast) return `${sep}<span class="crumb active">${lbl}</span>`;
+    return `${sep}<span class="crumb" onclick="jumpTo(${i})">${lbl}</span>`;
+  }).join('');
+  if (mapStack.length) html += `<button class="back-btn" onclick="zoomOut()">← back</button>`;
+  bar.innerHTML = html;
+}
+
+function jumpTo(idx) {
+  const target = mapStack[idx];
+  mapStack = mapStack.slice(0, idx);
+  renderMap(target);
+}
+
+function buildLegend(grid, locs) {
+  const used = new Set();
+  for (const row of grid.rows) for (const ch of row) used.add(ch);
+  const leg = document.getElementById('legend');
+  leg.innerHTML = '<span class="leg-lbl">TERRAIN:</span>';
+  for (const [code, def] of Object.entries(T)) {
+    if (!used.has(code) || !def.label) continue;
+    const div = document.createElement('div');
+    div.className = 'leg-item';
+    div.innerHTML = `<div class="leg-sw" style="background:${def.bg};color:${def.fg}">${def.char}</div>${def.label}`;
+    leg.appendChild(div);
+  }
+  if (locs.length) {
+    const sep = document.createElement('span');
+    sep.style.color = '#222'; sep.textContent = '|';
+    leg.appendChild(sep);
+    const lbl = document.createElement('span');
+    lbl.className = 'leg-lbl'; lbl.textContent = 'STATUS:';
+    leg.appendChild(lbl);
+    const statuses = [
+      {fg:'#4ade80',label:'Safe'},{fg:'#a080ff',label:'Fortified'},
+      {fg:'#facc15',label:'Threat'},{fg:'#f87171',label:'Hostile'},{fg:'#666',label:'Unknown'},
+    ];
+    for (const s of statuses) {
+      const div = document.createElement('div');
+      div.className = 'leg-item';
+      div.innerHTML = `<div class="leg-sw" style="color:${s.fg}">■</div>${s.label}`;
+      leg.appendChild(div);
+    }
+  }
+}
+
+// ── Spell slot UI ──
+function updateSpellSlots() {
+  const row1 = document.getElementById('slot-row-1');
+  if (row1) {
+    row1.innerHTML = '';
+    for (let i = 0; i < (W.spellSlots1Max || 4); i++) {
+      const el = document.createElement('div');
+      el.className = 'spell-slot' + (i < W.spellSlots1Used ? ' used' : '');
+      el.textContent = i < W.spellSlots1Used ? '·' : 'I';
+      row1.appendChild(el);
+    }
+  }
+  const row2 = document.getElementById('slot-row-2');
+  if (row2) {
+    row2.innerHTML = '';
+    for (let i = 0; i < (W.spellSlots2Max || 2); i++) {
+      const el = document.createElement('div');
+      el.className = 'spell-slot' + (i < W.spellSlots2Used ? ' used' : '');
+      el.textContent = i < W.spellSlots2Used ? '·' : 'II';
+      row2.appendChild(el);
+    }
+  }
+}
+
+// ── HP UI ──
+function updateHP() {
+  const pct = Math.max(0, (W.charHpCurrent / W.charHpMax) * 100);
+  const el = document.getElementById('char-hp');
+  const bar = document.getElementById('char-hp-bar');
+  if (el) el.textContent = `${W.charHpCurrent} / ${W.charHpMax}`;
+  if (bar) bar.style.width = pct + '%';
+  if (el) {
+    el.className = 'vital-value';
+    if (pct > 50) el.classList.add('green');
+    else if (pct > 25) el.classList.add('warn');
+    else el.classList.add('danger');
+  }
+}
+
+// ── Init ──
+document.getElementById('hday').textContent = `Day ${W.day} — ${W.time}`;
+document.getElementById('tr-seal').textContent = `${W.sealPct}%`;
+document.getElementById('seal-bar').style.width = `${W.sealPct}%`;
+document.getElementById('tr-days').textContent = W.daysRemaining;
+document.getElementById('tr-harpers').textContent = W.harpersEta;
+document.getElementById('tr-order').textContent = W.orderEta;
+updateHP();
+updateSpellSlots();
+renderMap(W.currentMap);
+</script>
+</body>
+</html>
