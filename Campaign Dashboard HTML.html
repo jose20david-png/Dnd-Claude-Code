@@ -322,7 +322,9 @@ body {
 
 /* ══════════════════════ NPC TAB ══════════════════════ */
 .npc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
-.npc-card { background: #111; border: 1px solid #1e1e1e; padding: 12px 14px; }
+.npc-card { background: #111; border: 1px solid #1e1e1e; padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start; }
+.npc-portrait { display: block; width: 72px; height: 90px; image-rendering: pixelated; image-rendering: crisp-edges; flex-shrink: 0; border: 1px solid #222; background: #080808; }
+.npc-content { flex: 1; min-width: 0; }
 .npc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
 .npc-name { color: #c0c0c0; font-size: 13px; font-weight: bold; }
 .disp-badge { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; padding: 1px 7px; border-radius: 2px; }
@@ -1391,6 +1393,160 @@ const CURSOR_LOC = makeCursor(`<svg xmlns="http://www.w3.org/2000/svg" width="24
   <polyline points="9,1.5 7,4.5 10,4.5 7,8" stroke="#8B5500" stroke-width="1" fill="none" stroke-linecap="round"/>
 </svg>`, 4, 4);
 
+// ══════════════════════════════════════════════════════
+//  NPC PORTRAITS
+// ══════════════════════════════════════════════════════
+function _npcPx(ctx) { return function(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(x,y,w,h);}; }
+
+const NPC_PORTRAITS = {
+  garaele(ctx) {
+    const p=_npcPx(ctx);
+    p(0,0,24,30,'#0d0820'); p(0,21,24,9,'#28203a'); p(4,16,16,7,'#322648');
+    p(9,14,6,4,'#b09070'); p(5,8,14,8,'#b09070');
+    p(5,5,14,5,'#402838'); p(8,5,4,3,'#908098');
+    p(8,11,2,2,'#7050a0'); p(14,11,2,2,'#7050a0');
+    p(10,13,2,1,'#a08060'); p(9,14,5,1,'#907070');
+    ctx.fillStyle='rgba(160,128,255,0.2)'; ctx.fillRect(4,21,6,5);
+  },
+  sildar(ctx) {
+    const p=_npcPx(ctx);
+    p(0,0,24,30,'#080d18'); p(0,21,24,9,'#1a2030'); p(3,16,18,7,'#222c3c');
+    p(9,14,6,4,'#a08060'); p(5,7,14,9,'#a08060');
+    p(5,5,14,4,'#686878'); p(5,8,2,5,'#8a7050'); p(17,8,2,5,'#8a7050');
+    p(8,10,2,2,'#4a6070'); p(14,10,2,2,'#4a6070');
+    p(9,14,6,1,'#8a6040'); p(12,22,6,4,'#1a3060');
+  },
+  gundren(ctx) {
+    const p=_npcPx(ctx);
+    p(0,0,24,30,'#100c08'); p(0,22,24,8,'#283018'); p(2,17,20,7,'#34401c');
+    p(4,14,16,9,'#6a4018'); p(6,17,12,8,'#5a3010');
+    p(8,14,2,2,'#808068'); p(14,14,2,2,'#808068');
+    p(5,7,14,9,'#9a7858'); p(5,5,14,4,'#5a3820');
+    p(8,10,2,2,'#604830'); p(14,10,2,2,'#604830');
+    p(10,13,4,1,'#8a6848');
+  },
+  toblen(ctx) {
+    const p=_npcPx(ctx);
+    p(0,0,24,30,'#100c08'); p(0,21,24,9,'#2a2010'); p(8,18,8,12,'#585848'); p(3,16,18,6,'#2e2410');
+    p(9,14,6,4,'#b09070'); p(6,7,12,9,'#b09070');
+    p(5,5,14,4,'#2a1808'); p(5,5,2,8,'#2a1808'); p(17,5,2,8,'#2a1808');
+    p(8,10,2,2,'#604830'); p(14,10,2,2,'#604830');
+    p(9,14,6,1,'#c09070');
+  },
+  borik(ctx) {
+    const p=_npcPx(ctx);
+    p(0,0,24,30,'#0c0c10'); p(0,21,24,9,'#20262a'); p(2,17,20,6,'#28303a');
+    p(5,14,14,9,'#161618'); p(7,16,10,8,'#101012');
+    p(5,7,14,9,'#9a7858'); p(5,5,14,4,'#140e14');
+    p(8,10,2,2,'#283040'); p(14,10,2,2,'#283040');
+    p(2,8,1,12,'#6a4820'); p(1,7,3,1,'#707860');
+  },
+  qelline(ctx) {
+    const p=_npcPx(ctx);
+    p(0,0,24,30,'#080f08'); p(0,21,24,9,'#1a2a14'); p(3,17,18,6,'#243820');
+    p(9,15,6,4,'#c09878'); p(6,8,12,9,'#c09878');
+    p(4,7,16,5,'#5a3818'); p(4,7,2,9,'#5a3818'); p(18,7,2,9,'#5a3818');
+    p(6,6,3,3,'#482e12'); p(15,6,3,3,'#482e12');
+    p(7,11,3,2,'#6b4020'); p(14,11,3,2,'#6b4020');
+    p(10,14,4,1,'#b08868'); p(9,15,6,1,'#a07860');
+  },
+  marta(ctx) {
+    const p=_npcPx(ctx);
+    p(0,0,24,30,'#10100c'); p(0,21,24,9,'#1a1810'); p(3,17,18,6,'#201e14');
+    p(9,15,6,4,'#a07858'); p(6,8,12,9,'#a07858');
+    p(4,5,16,5,'#d0c8c0'); p(4,5,2,11,'#c0b8b0'); p(18,5,2,11,'#c0b8b0');
+    p(7,13,2,1,'#806040'); p(15,13,2,1,'#806040');
+    p(8,10,2,2,'#6b5040'); p(14,10,2,2,'#6b5040');
+    p(9,15,6,1,'#7a5838');
+  },
+  elmar(ctx) {
+    const p=_npcPx(ctx);
+    p(0,0,24,30,'#100a08'); p(0,21,24,9,'#281e14'); p(3,17,18,6,'#322618');
+    p(9,15,6,4,'#b08868'); p(6,7,12,10,'#b08868');
+    p(5,7,2,5,'#5a3818'); p(17,7,2,5,'#5a3818');
+    p(8,10,2,2,'#704830'); p(14,10,2,2,'#704830');
+    p(10,13,4,1,'#a07858'); p(9,14,6,1,'#a07850');
+    p(14,23,4,4,'#c0a020');
+  },
+  iarno(ctx) {
+    const p=_npcPx(ctx);
+    p(0,0,24,30,'#0d0818'); p(0,21,24,9,'#161028'); p(3,16,18,7,'#1c1430');
+    p(9,14,6,5,'#a08870'); p(6,7,12,9,'#a08870');
+    p(5,5,14,4,'#181020'); p(16,6,3,6,'#181020');
+    p(7,14,10,2,'#281818');
+    p(8,10,2,2,'#4a3060'); p(14,10,2,2,'#4a3060');
+    p(6,14,2,1,'#887060'); p(16,14,2,1,'#887060');
+    p(21,5,1,16,'#503040'); p(20,5,2,1,'#7050a0');
+  },
+  harbin(ctx) {
+    const p=_npcPx(ctx);
+    p(0,0,24,30,'#0e0e0e'); p(0,21,24,9,'#282018'); p(2,17,20,6,'#342c1c');
+    p(8,16,8,3,'#c0a020'); p(8,14,8,4,'#c0a880'); p(5,7,14,10,'#c0a880');
+    p(5,7,2,6,'#685548'); p(17,7,2,6,'#685548'); p(7,9,10,2,'#504030');
+    p(7,11,2,2,'#706050'); p(15,11,2,2,'#706050');
+    p(9,16,6,2,'#b09868'); p(10,14,4,1,'#9a7858');
+  },
+  silga(ctx) {
+    const p=_npcPx(ctx);
+    p(0,0,24,30,'#120808'); p(0,21,24,9,'#1c0c0c'); p(2,16,20,7,'#240e0e');
+    p(0,21,24,1,'#a01010');
+    p(9,14,6,5,'#a07858'); p(5,6,14,10,'#a07858');
+    p(5,4,14,4,'#160e0e'); p(5,4,3,10,'#160e0e'); p(16,4,3,10,'#160e0e');
+    p(8,9,1,1,'#c07058'); p(9,10,1,1,'#c07058'); p(10,11,1,1,'#c07058');
+    p(8,10,2,1,'#3a1818'); p(14,10,2,1,'#3a1818');
+    p(9,14,6,1,'#6a3828'); p(15,22,5,5,'#8b0000');
+  },
+  mindflayer(ctx) {
+    const p=_npcPx(ctx);
+    p(0,0,24,30,'#080010'); p(0,21,24,9,'#100820'); p(3,17,18,7,'#180c30');
+    p(5,5,14,14,'#6a5880'); p(7,3,10,5,'#7060a0');
+    p(7,9,3,3,'#e0e0ff'); p(14,9,3,3,'#e0e0ff');
+    ctx.fillStyle='rgba(140,140,255,0.3)'; ctx.fillRect(5,8,6,6);
+    ctx.fillStyle='rgba(140,140,255,0.3)'; ctx.fillRect(13,8,6,6);
+    p(8,15,2,7,'#5a4870'); p(11,15,2,8,'#5a4870');
+    p(13,15,2,7,'#5a4870'); p(10,16,2,8,'#4a3860');
+    ctx.fillStyle='rgba(80,40,160,0.1)'; ctx.fillRect(0,0,24,30);
+  },
+  witness(ctx) {
+    const p=_npcPx(ctx);
+    p(0,0,24,30,'#020408');
+    ctx.fillStyle='rgba(40,20,60,0.8)'; ctx.fillRect(4,8,16,16);
+    ctx.fillStyle='rgba(60,30,90,0.5)'; ctx.fillRect(2,10,20,12);
+    p(9,12,6,5,'#080410'); p(10,13,4,2,'#c09820'); p(11,13,2,2,'#020408');
+    ctx.fillStyle='rgba(200,150,20,0.25)'; ctx.fillRect(7,11,10,7);
+    p(5,9,2,2,'#806010'); p(17,10,2,2,'#806010');
+    p(4,15,2,1,'#705010'); p(18,14,2,2,'#604820'); p(13,8,2,1,'#706010');
+    ctx.fillStyle='rgba(200,150,20,0.08)'; ctx.fillRect(0,0,24,30);
+  },
+};
+
+function drawAllNpcPortraits() {
+  const KEY_MAP = {
+    'Sister Garaele':'garaele','Sildar Hallwinter':'sildar',
+    'Gundren Rockseeker':'gundren','Toblen Stonehill':'toblen',
+    'Borik Stonehammer':'borik','Qelline':'qelline',
+    'Old Marta':'marta','Elmar Barthen':'elmar',
+    'Iarno Albrek':'iarno','Harbin Wester':'harbin',
+    'Silga':'silga','The Mind Flayer':'mindflayer','The Witness':'witness',
+  };
+  document.querySelectorAll('.npc-card').forEach(card => {
+    const nameEl = card.querySelector('.npc-name');
+    if (!nameEl) return;
+    const key = KEY_MAP[nameEl.textContent.trim()];
+    const fn = key && NPC_PORTRAITS[key];
+    if (!fn) return;
+    const canvas = document.createElement('canvas');
+    canvas.width = 24; canvas.height = 30;
+    canvas.className = 'npc-portrait';
+    const wrap = document.createElement('div');
+    wrap.className = 'npc-content';
+    while (card.firstChild) wrap.appendChild(card.firstChild);
+    card.appendChild(canvas);
+    card.appendChild(wrap);
+    fn(canvas.getContext('2d'));
+  });
+}
+
 function drawRurikPortrait(ctx) {
   const W = 48, H = 60;
   function px(x, y, w, h, col) {
@@ -1524,6 +1680,7 @@ updateCD();
 renderMap(W.currentMap);
 initCursors();
 drawRurikPortrait(document.getElementById('portrait-canvas').getContext('2d'));
+drawAllNpcPortraits();
 </script>
 </body>
 </html>
