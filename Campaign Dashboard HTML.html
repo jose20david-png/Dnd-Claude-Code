@@ -93,7 +93,6 @@ body {
   display: block;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
-  cursor: crosshair;
 }
 
 /* ── Info panel ── */
@@ -1244,6 +1243,53 @@ function updateHP() {
 }
 
 // ══════════════════════════════════════════════════════
+//  CUSTOM CURSORS
+// ══════════════════════════════════════════════════════
+function makeCursor(svgStr, hx, hy) {
+  return `url("data:image/svg+xml;base64,${btoa(svgStr)}") ${hx} ${hy}, crosshair`;
+}
+
+const CURSOR_MAP = makeCursor(`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+  <line x1="12" y1="2" x2="12" y2="9" stroke="#000" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+  <line x1="12" y1="15" x2="12" y2="22" stroke="#000" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+  <line x1="2" y1="12" x2="9" y2="12" stroke="#000" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+  <line x1="15" y1="12" x2="22" y2="12" stroke="#000" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+  <circle cx="12" cy="12" r="3.5" fill="none" stroke="#000" stroke-width="2.5" opacity="0.6"/>
+  <line x1="12" y1="2" x2="12" y2="9" stroke="#ffd700" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="12" y1="15" x2="12" y2="22" stroke="#ffd700" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="2" y1="12" x2="9" y2="12" stroke="#ffd700" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="15" y1="12" x2="22" y2="12" stroke="#ffd700" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="12" cy="12" r="3.5" fill="none" stroke="#ffd700" stroke-width="1.5"/>
+  <circle cx="12" cy="12" r="1" fill="#ffd700"/>
+</svg>`, 12, 12);
+
+const CURSOR_LOC = makeCursor(`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+  <line x1="10" y1="10" x2="22" y2="22" stroke="#000" stroke-width="5" stroke-linecap="round" opacity="0.4"/>
+  <line x1="10" y1="10" x2="22" y2="22" stroke="#3a1a08" stroke-width="4" stroke-linecap="round"/>
+  <line x1="10" y1="10" x2="22" y2="22" stroke="#6a3818" stroke-width="2" stroke-linecap="round"/>
+  <rect x="1" y="1" width="14" height="9" rx="2" fill="#000" opacity="0.4"/>
+  <rect x="0" y="0" width="14" height="9" rx="2" fill="#ffd700"/>
+  <rect x="1" y="1" width="12" height="7" rx="1.5" fill="#d4af37"/>
+  <rect x="0" y="1" width="4" height="7" rx="1" fill="#ffe060"/>
+  <polyline points="9,1.5 7,4.5 10,4.5 7,8" stroke="#8B5500" stroke-width="1" fill="none" stroke-linecap="round"/>
+</svg>`, 4, 4);
+
+function initCursors() {
+  const canvas = document.getElementById('map-canvas');
+  canvas.style.cursor = CURSOR_MAP;
+  canvas.addEventListener('mousemove', (e) => {
+    const grid = GRIDS[curMapId];
+    if (!grid) return;
+    const rect = canvas.getBoundingClientRect();
+    const tW = grid.tileW, tH = grid.tileH;
+    const tx = Math.floor((e.clientX - rect.left) * (canvas.width  / rect.width)  / tW);
+    const ty = Math.floor((e.clientY - rect.top)  * (canvas.height / rect.height) / tH);
+    canvas.style.cursor = locMapData[locKey(tx, ty)] ? CURSOR_LOC : CURSOR_MAP;
+  });
+  canvas.addEventListener('mouseleave', () => { canvas.style.cursor = CURSOR_MAP; });
+}
+
+// ══════════════════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════════════════
 document.getElementById('hday').textContent    = `Day ${W.day} — ${W.time}`;
@@ -1256,6 +1302,7 @@ document.getElementById('tr-order').textContent   = W.mindFlayer;
 updateHP();
 updateSpellSlots();
 renderMap(W.currentMap);
+initCursors();
 </script>
 </body>
 </html>
