@@ -396,6 +396,45 @@ body {
 .sc-desc   { color: #585870; font-size: 12px; line-height: 1.55; }
 .sc-roll-btn { margin-top: 8px; padding: 2px 9px; font-size: 9px; letter-spacing: 1px; border: 1px solid #222232; background: none; color: #303050; cursor: pointer; font-family: 'Courier New', monospace; text-transform: uppercase; transition: all 0.1s; }
 .sc-roll-btn:hover { border-color: #ffd700; color: #ffd700; background: rgba(255,215,0,0.04); }
+
+/* ══════════════════════ RESPONSIVE ══════════════════════ */
+@media (max-width: 960px) {
+  .two-col { grid-template-columns: 1fr; }
+  .stat-grid { grid-template-columns: repeat(3, 1fr); }
+  #panel { width: 200px; font-size: 11px; }
+  .vitals-row { flex-wrap: wrap; }
+  .vital-box { flex: 1 1 80px; }
+  #tab-character .scroll-panel { max-width: 100%; }
+  .spell-comp-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+}
+
+@media (max-width: 680px) {
+  #panel { display: none; }
+  #legend { font-size: 10px; gap: 4px 10px; }
+  #tab-bar { overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+  #tab-bar::-webkit-scrollbar { display: none; }
+  .tab-btn { padding: 6px 12px; font-size: 10px; letter-spacing: 1px; }
+  .scroll-panel { padding: 14px 16px; }
+  .npc-grid { grid-template-columns: 1fr; }
+  .npc-portrait { width: 56px; height: 70px; }
+  .spell-comp-grid { grid-template-columns: 1fr; }
+  #portrait-canvas { width: 108px; height: 135px; }
+  .char-name { font-size: 17px; }
+  .vitals-row { flex-wrap: wrap; }
+  .vital-box { flex: 1 1 90px; }
+  .hp-controls { flex-wrap: wrap; gap: 4px; }
+  .rest-btns { flex-wrap: wrap; }
+}
+
+@media (max-width: 480px) {
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .char-header { flex-direction: column; align-items: flex-start; }
+  #portrait-canvas { width: 120px; height: 150px; }
+  .vitals-row { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+  .stat-score { font-size: 18px; }
+  .npc-portrait { width: 48px; height: 60px; }
+  #header .htitle { font-size: 11px; letter-spacing: 1px; }
+}
 </style>
 </head>
 <body>
@@ -1227,6 +1266,25 @@ function stopAnim() {
 // ══════════════════════════════════════════════════════
 //  TAB SWITCHING
 // ══════════════════════════════════════════════════════
+function autoScaleMap() {
+  const wrap = document.getElementById('map-wrap');
+  const canvas = document.getElementById('map-canvas');
+  if (!canvas.width) return;
+  const available = wrap.clientWidth - 24;
+  if (canvas.width > available) {
+    const ratio = available / canvas.width;
+    canvas.style.width  = available + 'px';
+    canvas.style.height = (canvas.height * ratio) + 'px';
+  } else {
+    canvas.style.width  = '';
+    canvas.style.height = '';
+  }
+}
+
+window.addEventListener('resize', () => {
+  if (document.getElementById('tab-map').classList.contains('active')) autoScaleMap();
+});
+
 function switchTab(id) {
   const ids = ['map','character','quests','events','npcs','spells'];
   document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', ids[i] === id));
@@ -1281,6 +1339,7 @@ function renderMap(mapId) {
   updateBreadcrumb();
   buildLegend(grid, locs);
   drawMap();
+  autoScaleMap();
   startAnim();
 }
 
