@@ -237,6 +237,31 @@ body {
 }
 .spell-slot.used { background: #1a0808; border-color: #3a1a1a; color: #333; }
 .spell-slot-lbl { color: #444; font-size: 11px; margin-top: 6px; }
+.spell-slot { cursor: pointer; transition: all 0.15s; }
+.spell-slot:not(.used):hover { background: #1a3a1a; border-color: #4ade80; box-shadow: 0 0 8px rgba(74,222,128,0.4); transform: scale(1.08); }
+.spell-slot.used:hover { background: #2a1212; border-color: #5a2020; }
+.cd-slot {
+  width: 26px; height: 26px;
+  border: 1px solid #c9a227; border-radius: 2px;
+  background: #1e1400; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; letter-spacing: 1px; color: #c9a227;
+  transition: all 0.15s;
+}
+.cd-slot.used { background: #181008; border-color: #2a1a08; color: #2a2010; }
+.cd-slot:not(.used):hover { background: #2a1e00; border-color: #d4af37; box-shadow: 0 0 8px rgba(201,162,39,0.4); transform: scale(1.08); }
+.rest-btns { display: flex; gap: 8px; margin-top: 14px; }
+.rest-btn { padding: 4px 12px; font-family: 'Courier New', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border: 1px solid; background: none; transition: background 0.15s; }
+.rest-btn.long  { color: #4ade80; border-color: rgba(74,222,128,0.3); }
+.rest-btn.long:hover  { background: rgba(74,222,128,0.08); }
+.rest-btn.short { color: #facc15; border-color: rgba(250,204,21,0.3); }
+.rest-btn.short:hover { background: rgba(250,204,21,0.06); }
+.hp-controls { display: flex; align-items: center; gap: 6px; margin-bottom: 20px; margin-top: -14px; }
+.hp-ctrl-lbl { color: #333; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; margin-right: 4px; }
+.hp-btn { padding: 2px 8px; font-family: 'Courier New', monospace; font-size: 11px; cursor: pointer; border: 1px solid #222; background: #141414; color: #666; transition: all 0.15s; }
+.hp-btn:hover { border-color: #444; color: #aaa; background: #1e1e1e; }
+.hp-btn.full { color: #4ade80; border-color: rgba(74,222,128,0.3); }
+.hp-btn.full:hover { background: rgba(74,222,128,0.08); }
 
 .spell-list { display: flex; flex-direction: column; gap: 3px; }
 .spell-item { font-size: 12px; padding: 3px 6px; border-left: 2px solid #222; color: #8aaacc; }
@@ -378,6 +403,15 @@ body {
         <div class="vital-box"><div class="vital-label">Passive Perc.</div><div class="vital-value">13</div></div>
       </div>
 
+      <div class="hp-controls">
+        <span class="hp-ctrl-lbl">HP</span>
+        <button class="hp-btn" onclick="adjustHP(-1)">−1</button>
+        <button class="hp-btn" onclick="adjustHP(-5)">−5</button>
+        <button class="hp-btn" onclick="adjustHP(1)">+1</button>
+        <button class="hp-btn" onclick="adjustHP(5)">+5</button>
+        <button class="hp-btn full" onclick="adjustHP(W.charHpMax)">Full</button>
+      </div>
+
       <div class="two-col">
         <div>
           <div class="sec-title">Saving Throws</div>
@@ -416,6 +450,14 @@ body {
           <div class="slot-row" id="slot-row-1"></div>
           <div class="spell-slot-lbl">Level 2 (2 slots)</div>
           <div class="slot-row" id="slot-row-2"></div>
+
+          <div class="spell-slot-lbl" style="margin-top:14px">Channel Divinity (1/short rest)</div>
+          <div class="slot-row" id="cd-row"></div>
+
+          <div class="rest-btns">
+            <button class="rest-btn long"  onclick="longRest()">⊕ Long Rest</button>
+            <button class="rest-btn short" onclick="shortRest()">◎ Short Rest</button>
+          </div>
 
           <div class="sec-title">Spells</div>
           <div class="spell-list">
@@ -587,6 +629,8 @@ const W = {
   spellSlots1Max: 4,
   spellSlots2Used: 0,
   spellSlots2Max: 2,
+  channelDivinityUsed: 0,
+  channelDivinityMax: 1,
 };
 
 // ══════════════════════════════════════════════════════
@@ -1213,19 +1257,67 @@ function buildLegend(grid, locs) {
 //  CHARACTER UI
 // ══════════════════════════════════════════════════════
 function updateSpellSlots() {
-  const render = (rowId, max, used, label) => {
+  const render = (rowId, level, max, used, label) => {
     const row = document.getElementById(rowId);
     if (!row) return;
     row.innerHTML = '';
     for (let i = 0; i < max; i++) {
       const el = document.createElement('div');
-      el.className = 'spell-slot' + (i < used ? ' used' : '');
-      el.textContent = i < used ? '·' : label;
+      const isUsed = i < used;
+      el.className = 'spell-slot' + (isUsed ? ' used' : '');
+      el.textContent = isUsed ? '·' : label;
+      el.title = isUsed ? 'Click to restore' : 'Click to spend';
+      el.addEventListener('click', () => toggleSlot(level, i));
       row.appendChild(el);
     }
   };
-  render('slot-row-1', W.spellSlots1Max, W.spellSlots1Used, 'I');
-  render('slot-row-2', W.spellSlots2Max, W.spellSlots2Used, 'II');
+  render('slot-row-1', 1, W.spellSlots1Max, W.spellSlots1Used, 'I');
+  render('slot-row-2', 2, W.spellSlots2Max, W.spellSlots2Used, 'II');
+}
+
+function toggleSlot(level, idx) {
+  const usedKey = level === 1 ? 'spellSlots1Used' : 'spellSlots2Used';
+  const maxKey  = level === 1 ? 'spellSlots1Max'  : 'spellSlots2Max';
+  W[usedKey] = idx < W[usedKey] ? idx : Math.min(idx + 1, W[maxKey]);
+  updateSpellSlots();
+}
+
+function updateCD() {
+  const row = document.getElementById('cd-row');
+  if (!row) return;
+  row.innerHTML = '';
+  for (let i = 0; i < W.channelDivinityMax; i++) {
+    const el = document.createElement('div');
+    const isUsed = i < W.channelDivinityUsed;
+    el.className = 'cd-slot' + (isUsed ? ' used' : '');
+    el.textContent = isUsed ? '·' : 'CD';
+    el.title = isUsed ? 'Click to restore' : 'Click to use';
+    el.addEventListener('click', () => {
+      W.channelDivinityUsed = isUsed ? i : i + 1;
+      updateCD();
+    });
+    row.appendChild(el);
+  }
+}
+
+function adjustHP(delta) {
+  W.charHpCurrent = Math.min(W.charHpMax, Math.max(0, W.charHpCurrent + delta));
+  updateHP();
+}
+
+function longRest() {
+  W.spellSlots1Used = 0;
+  W.spellSlots2Used = 0;
+  W.channelDivinityUsed = 0;
+  W.charHpCurrent = W.charHpMax;
+  updateSpellSlots();
+  updateCD();
+  updateHP();
+}
+
+function shortRest() {
+  W.channelDivinityUsed = 0;
+  updateCD();
 }
 
 function updateHP() {
@@ -1301,6 +1393,7 @@ document.getElementById('tr-harpers').textContent = W.harpersEta;
 document.getElementById('tr-order').textContent   = W.mindFlayer;
 updateHP();
 updateSpellSlots();
+updateCD();
 renderMap(W.currentMap);
 initCursors();
 </script>
