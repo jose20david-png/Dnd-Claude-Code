@@ -988,17 +988,29 @@ const SPRITE_DRAW = {
     ctx.fillStyle='#200808'; ctx.fillRect(6,3,2,2);
   },
   C(ctx) {
+    const pulse = animTick === 1;
     ctx.fillStyle='#060e06'; ctx.fillRect(0,0,16,16);
     ctx.fillStyle='#282e28'; ctx.fillRect(0,5,16,11);
     ctx.fillStyle='#383e38'; ctx.fillRect(1,4,14,9);
     ctx.fillStyle='#404840'; ctx.fillRect(2,3,12,6);
     ctx.fillStyle='#040a04'; ctx.fillRect(4,7,8,9); ctx.fillRect(5,5,6,4); ctx.fillRect(6,4,4,2);
-    // Seal glow (green - ritual complete, Witness contained)
-    ctx.fillStyle='#003820'; ctx.fillRect(5,8,6,8);
-    ctx.fillStyle='#005030'; ctx.fillRect(6,9,4,6);
-    ctx.fillStyle='#008050'; ctx.fillRect(7,10,2,3);
-    ctx.fillStyle='#00cc80'; ctx.fillRect(7,11,2,1);
+    // Seal glow — heartbeat pulse (dim → bright on animTick)
+    ctx.fillStyle = pulse ? '#005030' : '#002818'; ctx.fillRect(5,8,6,8);
+    ctx.fillStyle = pulse ? '#007848' : '#004028'; ctx.fillRect(6,9,4,6);
+    ctx.fillStyle = pulse ? '#00b870' : '#006040'; ctx.fillRect(7,10,2,3);
+    ctx.fillStyle = pulse ? '#00ff9a' : '#009060'; ctx.fillRect(7,11,2,1);
+    // Outer glow halo on pulse
+    if (pulse) {
+      ctx.fillStyle='rgba(0,255,128,0.18)'; ctx.fillRect(4,7,8,9);
+      ctx.fillStyle='rgba(0,255,128,0.10)'; ctx.fillRect(3,6,10,11);
+    }
+    // Rock edge highlights
     ctx.fillStyle='#505848'; ctx.fillRect(2,3,2,1); ctx.fillRect(12,4,2,1);
+    // Bearer bond spark — appears on pulse
+    if (pulse) {
+      ctx.fillStyle='#a0ffd8'; ctx.fillRect(7,11,1,1);
+      ctx.fillStyle='rgba(160,255,216,0.6)'; ctx.fillRect(6,10,1,1); ctx.fillRect(9,10,1,1);
+    }
   },
   'Ω'(ctx) {
     ctx.fillStyle='#070f07'; ctx.fillRect(0,0,16,16);
