@@ -337,6 +337,65 @@ body {
 .npc-loc     { color: #888; font-size: 12px; margin-bottom: 6px; }
 .npc-loc::before { content: '📍 '; font-size: 10px; }
 .npc-notes   { color: #888; font-size: 12px; line-height: 1.5; font-style: italic; }
+
+/* ══════════════════════ DICE ROLLER ══════════════════════ */
+#dice-overlay {
+  position: fixed; bottom: 24px; right: 24px;
+  background: #0e0e16; border: 1px solid #2a2a45;
+  padding: 16px 20px 14px; min-width: 220px; z-index: 9000;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.75), 0 0 0 1px rgba(80,80,160,0.08);
+  opacity: 0; transform: translateY(12px);
+  transition: opacity 0.18s, transform 0.18s; pointer-events: none;
+}
+#dice-overlay.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+#dice-lbl  { color: #4a4a70; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 5px; }
+#dice-formula { color: #333; font-size: 11px; font-family: 'Courier New', monospace; margin-bottom: 10px; }
+#dice-pips { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; min-height: 32px; }
+.die-pip {
+  width: 30px; height: 30px; border: 1px solid #252535; background: #0c0c18;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: bold; color: #555;
+  font-family: 'Courier New', monospace; border-radius: 2px; transition: color 0.1s;
+}
+.die-pip.nat20 { color: #ffd700; border-color: #5a4a00; background: #1a1400; }
+.die-pip.nat1  { color: #f87171; border-color: #5a1010; background: #180808; }
+#dice-total { font-size: 36px; font-weight: bold; color: #ffd700; font-family: 'Courier New', monospace; line-height: 1; min-height: 42px; }
+#dice-breakdown { color: #383850; font-size: 11px; font-family: 'Courier New', monospace; margin-top: 4px; }
+#dice-close { position: absolute; top: 8px; right: 10px; color: #282838; cursor: pointer; font-size: 10px; font-family: 'Courier New', monospace; letter-spacing: 1px; }
+#dice-close:hover { color: #666; }
+#dice-again { margin-top: 12px; width: 100%; background: none; border: 1px solid #202030; color: #333; padding: 4px 8px; cursor: pointer; font-family: 'Courier New', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.1s; }
+#dice-again:hover { border-color: #3a3a60; color: #777; }
+.roll-btn { display: inline-flex; align-items: center; padding: 1px 6px; font-size: 9px; letter-spacing: 1px; border: 1px solid #222232; background: none; color: #303050; cursor: pointer; font-family: 'Courier New', monospace; margin-left: 6px; vertical-align: middle; transition: all 0.1s; text-transform: uppercase; }
+.roll-btn:hover { border-color: #ffd700; color: #ffd700; background: rgba(255,215,0,0.04); }
+.stat-box { cursor: pointer; }
+.stat-box:hover { background: #1a1a20; border-color: #2a2a40; }
+.save-row { cursor: pointer; }
+.save-row:hover { background: rgba(255,215,0,0.03); }
+
+/* ══════════════════════ SPELL COMPENDIUM TAB ══════════════════════ */
+#tab-spells .scroll-panel { max-width: 900px; }
+.spell-filter-bar { display: flex; gap: 8px; margin-bottom: 22px; }
+.spell-filter-btn { padding: 4px 14px; font-family: 'Courier New', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border: 1px solid #222; background: none; color: #444; transition: all 0.12s; }
+.spell-filter-btn:hover { color: #888; border-color: #333; }
+.spell-filter-btn.active { color: #ffd700; border-color: rgba(255,215,0,0.4); background: rgba(255,215,0,0.04); }
+.spell-comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 8px; margin-bottom: 28px; }
+.spell-comp-card { background: #0e0e14; border: 1px solid #1a1a22; padding: 11px 13px; position: relative; }
+.spell-comp-card.sc-cantrip  { border-left: 2px solid #2a4a7a; }
+.spell-comp-card.sc-domain   { border-left: 2px solid #1a5a38; }
+.spell-comp-card.sc-prepared { border-left: 2px solid #4a2a7a; }
+.spell-comp-card.sc-available{ border-left: 2px solid #222; opacity: 0.6; }
+.sc-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px; }
+.sc-name   { color: #b0b0c0; font-size: 13px; font-weight: bold; }
+.sc-school { color: #2a2a40; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
+.sc-badge  { display: inline-block; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; padding: 1px 6px; border-radius: 2px; margin-bottom: 5px; }
+.badge-cantrip  { background: rgba(50,80,140,.12);  color: #5070a0; border: 1px solid rgba(50,80,140,.3); }
+.badge-domain   { background: rgba(30,100,60,.12);  color: #40906a; border: 1px solid rgba(30,100,60,.3); }
+.badge-prepared { background: rgba(100,50,160,.12); color: #7050b0; border: 1px solid rgba(100,50,160,.3); }
+.badge-available{ background: rgba(40,40,40,.12);   color: #383838; border: 1px solid rgba(40,40,40,.3); }
+.sc-meta   { color: #282840; font-size: 10px; letter-spacing: 1px; margin-bottom: 6px; font-family: 'Courier New', monospace; }
+.sc-desc   { color: #585870; font-size: 12px; line-height: 1.55; }
+.sc-roll-btn { margin-top: 8px; padding: 2px 9px; font-size: 9px; letter-spacing: 1px; border: 1px solid #222232; background: none; color: #303050; cursor: pointer; font-family: 'Courier New', monospace; text-transform: uppercase; transition: all 0.1s; }
+.sc-roll-btn:hover { border-color: #ffd700; color: #ffd700; background: rgba(255,215,0,0.04); }
 </style>
 </head>
 <body>
@@ -355,6 +414,7 @@ body {
   <button class="tab-btn" onclick="switchTab('quests')">Quests</button>
   <button class="tab-btn" onclick="switchTab('events')">Events</button>
   <button class="tab-btn" onclick="switchTab('npcs')">NPCs</button>
+  <button class="tab-btn" onclick="switchTab('spells')">Spells</button>
 </div>
 
 <!-- ══════ CONTENT ══════ -->
@@ -397,12 +457,12 @@ body {
 
       <div class="sec-title">Ability Scores</div>
       <div class="stat-grid">
-        <div class="stat-box"><div class="stat-label">STR</div><div class="stat-score">14</div><div class="stat-mod">+2</div></div>
-        <div class="stat-box"><div class="stat-label">DEX</div><div class="stat-score">8</div><div class="stat-mod">−1</div></div>
-        <div class="stat-box"><div class="stat-label">CON</div><div class="stat-score">16</div><div class="stat-mod">+3</div></div>
-        <div class="stat-box"><div class="stat-label">INT</div><div class="stat-score">10</div><div class="stat-mod">+0</div></div>
-        <div class="stat-box"><div class="stat-label">WIS</div><div class="stat-score">16</div><div class="stat-mod">+3</div></div>
-        <div class="stat-box"><div class="stat-label">CHA</div><div class="stat-score">10</div><div class="stat-mod">+0</div></div>
+        <div class="stat-box" onclick="roll('STR Check',1,20,2)" title="Roll STR check"><div class="stat-label">STR</div><div class="stat-score">14</div><div class="stat-mod">+2</div></div>
+        <div class="stat-box" onclick="roll('DEX Check',1,20,-1)" title="Roll DEX check"><div class="stat-label">DEX</div><div class="stat-score">8</div><div class="stat-mod">−1</div></div>
+        <div class="stat-box" onclick="roll('CON Check',1,20,3)" title="Roll CON check"><div class="stat-label">CON</div><div class="stat-score">16</div><div class="stat-mod">+3</div></div>
+        <div class="stat-box" onclick="roll('INT Check',1,20,0)" title="Roll INT check"><div class="stat-label">INT</div><div class="stat-score">10</div><div class="stat-mod">+0</div></div>
+        <div class="stat-box" onclick="roll('WIS Check',1,20,3)" title="Roll WIS check"><div class="stat-label">WIS</div><div class="stat-score">16</div><div class="stat-mod">+3</div></div>
+        <div class="stat-box" onclick="roll('CHA Check',1,20,0)" title="Roll CHA check"><div class="stat-label">CHA</div><div class="stat-score">10</div><div class="stat-mod">+0</div></div>
       </div>
 
       <div class="vitals-row">
@@ -431,17 +491,17 @@ body {
         <div>
           <div class="sec-title">Saving Throws</div>
           <div class="saves-grid">
-            <div class="save-row"><span class="save-stat">Strength</span><span class="save-mod">+2</span></div>
-            <div class="save-row"><span class="save-stat">Dexterity</span><span class="save-mod">−1</span></div>
-            <div class="save-row"><span class="save-stat">Constitution</span><span class="save-mod">+3</span></div>
-            <div class="save-row"><span class="save-stat">Intelligence</span><span class="save-mod">+0</span></div>
-            <div class="save-row"><span class="save-stat">Wisdom</span><span class="save-mod prof">+5 ◆</span></div>
-            <div class="save-row"><span class="save-stat">Charisma</span><span class="save-mod prof">+2 ◆</span></div>
+            <div class="save-row" onclick="roll('STR Save',1,20,2)" title="Roll"><span class="save-stat">Strength</span><span class="save-mod">+2</span></div>
+            <div class="save-row" onclick="roll('DEX Save',1,20,-1)" title="Roll"><span class="save-stat">Dexterity</span><span class="save-mod">−1</span></div>
+            <div class="save-row" onclick="roll('CON Save',1,20,3)" title="Roll"><span class="save-stat">Constitution</span><span class="save-mod">+3</span></div>
+            <div class="save-row" onclick="roll('INT Save',1,20,0)" title="Roll"><span class="save-stat">Intelligence</span><span class="save-mod">+0</span></div>
+            <div class="save-row" onclick="roll('WIS Save',1,20,5)" title="Roll"><span class="save-stat">Wisdom</span><span class="save-mod prof">+5 ◆</span></div>
+            <div class="save-row" onclick="roll('CHA Save',1,20,2)" title="Roll"><span class="save-stat">Charisma</span><span class="save-mod prof">+2 ◆</span></div>
           </div>
 
           <div class="sec-title">Equipment</div>
           <div class="equip-list">
-            <div class="equip-item">Warhammer (+4 to hit, 1d8+2 bludgeoning)</div>
+            <div class="equip-item">Warhammer — 1d8+2 bludgeoning<button class="roll-btn" onclick="roll('Warhammer Attack',1,20,4)">ATK d20+4</button><button class="roll-btn" onclick="roll('Warhammer Damage',1,8,2)">DMG d8+2</button></div>
             <div class="equip-item">Chain Mail (AC 16)</div>
             <div class="equip-item">Shield with storm cloud motif (+2 AC)</div>
             <div class="equip-item">Holy Symbol of Talos</div>
@@ -453,7 +513,7 @@ body {
             <div class="trait-item">Darkvision 60 ft</div>
             <div class="trait-item">Dwarven Resilience — Advantage on saves vs. poison, resistance to poison damage</div>
             <div class="trait-item">Stonecunning — History (stonework) proficiency ×2</div>
-            <div class="trait-item">Wrath of the Storm — Reaction when hit: 2d8 lightning or thunder (DEX save DC 13 for half)</div>
+            <div class="trait-item">Wrath of the Storm — Reaction when hit: 2d8 lightning or thunder (DEX save DC 13 for half)<button class="roll-btn" onclick="roll('Wrath of the Storm',2,8,0)">2d8</button></div>
             <div class="trait-item">Channel Divinity (1/rest) — Turn Undead or Destructive Wrath (maximize lightning/thunder damage)</div>
             <div class="trait-item" style="color:#c9a227">★ Bearer of the Seal — Rurik stood at the center of the binding ritual as THE anchor. He bore the Witness's full fury and held. Permanently connected to the seal — a second heartbeat, deep beneath the mountain. The Stormfather's presence is now constant. This bond will never fade.</div>
           </div>
@@ -477,23 +537,23 @@ body {
           <div class="sec-title">Spells</div>
           <div class="spell-list">
             <div style="color:#333;font-size:10px;letter-spacing:2px;margin-bottom:4px">CANTRIPS</div>
-            <div class="spell-item cantrip"><span class="spell-tag">ATK</span>Sacred Flame (DEX save, 1d8 radiant)</div>
-            <div class="spell-item cantrip"><span class="spell-tag">UTL</span>Guidance (+1d4 to ability check)</div>
+            <div class="spell-item cantrip"><span class="spell-tag">ATK</span>Sacred Flame (DEX save, 1d8 radiant)<button class="roll-btn" onclick="roll('Sacred Flame',1,8,0)">DMG d8</button></div>
+            <div class="spell-item cantrip"><span class="spell-tag">UTL</span>Guidance (+1d4 to ability check)<button class="roll-btn" onclick="roll('Guidance Bonus',1,4,0)">d4</button></div>
             <div class="spell-item cantrip"><span class="spell-tag">UTL</span>Thaumaturgy (minor magical effects)</div>
             <div style="color:#333;font-size:10px;letter-spacing:2px;margin-bottom:4px;margin-top:8px">DOMAIN — 1ST (always prepared)</div>
-            <div class="spell-item always"><span class="spell-tag">ATK</span>Thunderwave (CON save, 2d8 thunder, push 10 ft)</div>
+            <div class="spell-item always"><span class="spell-tag">ATK</span>Thunderwave (CON save, 2d8 thunder, push 10 ft)<button class="roll-btn" onclick="roll('Thunderwave',2,8,0)">2d8</button></div>
             <div class="spell-item always"><span class="spell-tag">UTL</span>Fog Cloud (20 ft radius, heavily obscured)</div>
             <div style="color:#333;font-size:10px;letter-spacing:2px;margin-bottom:4px;margin-top:8px">DOMAIN — 2ND (always prepared)</div>
             <div class="spell-item always"><span class="spell-tag">ATK</span>Gust of Wind (STR save, push 15 ft)</div>
-            <div class="spell-item always"><span class="spell-tag">ATK</span>Shatter (CON save, 3d8 thunder, 10 ft radius)</div>
+            <div class="spell-item always"><span class="spell-tag">ATK</span>Shatter (CON save, 3d8 thunder, 10 ft radius)<button class="roll-btn" onclick="roll('Shatter',3,8,0)">3d8</button></div>
             <div style="color:#333;font-size:10px;letter-spacing:2px;margin-bottom:4px;margin-top:8px">PREPARED — 1ST</div>
-            <div class="spell-item spell"><span class="spell-tag">ATK</span>Guiding Bolt (+5, 4d6 radiant, next attacker has adv.)</div>
-            <div class="spell-item spell"><span class="spell-tag">ATK</span>Inflict Wounds (+5, 3d10 necrotic, melee touch)</div>
-            <div class="spell-item spell"><span class="spell-tag">HEL</span>Healing Word (bonus action, 1d4+3 HP)</div>
+            <div class="spell-item spell"><span class="spell-tag">ATK</span>Guiding Bolt (+5, 4d6 radiant, next attacker has adv.)<button class="roll-btn" onclick="roll('Guiding Bolt Atk',1,20,5)">ATK d20+5</button><button class="roll-btn" onclick="roll('Guiding Bolt Dmg',4,6,0)">DMG 4d6</button></div>
+            <div class="spell-item spell"><span class="spell-tag">ATK</span>Inflict Wounds (+5, 3d10 necrotic, melee touch)<button class="roll-btn" onclick="roll('Inflict Wounds Atk',1,20,5)">ATK d20+5</button><button class="roll-btn" onclick="roll('Inflict Wounds Dmg',3,10,0)">DMG 3d10</button></div>
+            <div class="spell-item spell"><span class="spell-tag">HEL</span>Healing Word (bonus action, 1d4+3 HP)<button class="roll-btn" onclick="roll('Healing Word',1,4,3)">d4+3</button></div>
             <div class="spell-item spell"><span class="spell-tag">DEF</span>Sanctuary (WIS save to attack target)</div>
             <div class="spell-item spell"><span class="spell-tag">DEF</span>Shield of Faith (bonus action, +2 AC, concentration)</div>
             <div style="color:#333;font-size:10px;letter-spacing:2px;margin-bottom:4px;margin-top:8px">PREPARED — 2ND</div>
-            <div class="spell-item spell"><span class="spell-tag">ATK</span>Spiritual Weapon (bonus action, no concentration)</div>
+            <div class="spell-item spell"><span class="spell-tag">ATK</span>Spiritual Weapon (bonus action, no concentration)<button class="roll-btn" onclick="roll('Spiritual Weapon Atk',1,20,5)">ATK d20+5</button><button class="roll-btn" onclick="roll('Spiritual Weapon Dmg',1,8,3)">DMG d8+3</button></div>
           </div>
         </div>
       </div>
@@ -621,7 +681,30 @@ body {
     </div>
   </div>
 
+  <!-- ── SPELLS ── -->
+  <div id="tab-spells" class="tab-panel">
+    <div class="scroll-panel">
+      <div class="spell-filter-bar">
+        <button class="spell-filter-btn active" onclick="setSpellFilter('all',this)">All Spells</button>
+        <button class="spell-filter-btn" onclick="setSpellFilter('prepared',this)">Prepared Only</button>
+        <button class="spell-filter-btn" onclick="setSpellFilter('available',this)">Available to Swap</button>
+      </div>
+      <div id="spell-compendium"></div>
+    </div>
+  </div>
+
 </div><!-- end #content -->
+
+<!-- ══════ DICE ROLLER OVERLAY ══════ -->
+<div id="dice-overlay">
+  <div id="dice-close" onclick="hideDice()">ESC</div>
+  <div id="dice-lbl">Roll</div>
+  <div id="dice-formula">—</div>
+  <div id="dice-pips"></div>
+  <div id="dice-total">—</div>
+  <div id="dice-breakdown"></div>
+  <button id="dice-again" onclick="rollAgain()">↺ Roll Again</button>
+</div>
 
 <script>
 'use strict';
@@ -1145,11 +1228,12 @@ function stopAnim() {
 //  TAB SWITCHING
 // ══════════════════════════════════════════════════════
 function switchTab(id) {
-  const ids = ['map','character','quests','events','npcs'];
+  const ids = ['map','character','quests','events','npcs','spells'];
   document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', ids[i] === id));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + id));
   if (id === 'map') { updateBreadcrumb(); startAnim(); }
   else { stopAnim(); document.getElementById('hbread').innerHTML = ''; }
+  if (id === 'spells' && !_spellsRendered) renderSpells();
 }
 
 // ══════════════════════════════════════════════════════
@@ -1392,6 +1476,174 @@ const CURSOR_LOC = makeCursor(`<svg xmlns="http://www.w3.org/2000/svg" width="24
   <rect x="0" y="1" width="4" height="7" rx="1" fill="#ffe060"/>
   <polyline points="9,1.5 7,4.5 10,4.5 7,8" stroke="#8B5500" stroke-width="1" fill="none" stroke-linecap="round"/>
 </svg>`, 4, 4);
+
+// ══════════════════════════════════════════════════════
+//  DICE ROLLER
+// ══════════════════════════════════════════════════════
+let _lastRollArgs = null;
+let _diceHideTimer = null;
+
+function roll(label, count, sides, modifier) {
+  _lastRollArgs = [label, count, sides, modifier];
+  const rolls = [];
+  for (let i = 0; i < count; i++) rolls.push(Math.floor(Math.random() * sides) + 1);
+  const total = rolls.reduce((a, b) => a + b, 0) + modifier;
+  _displayRoll(label, count, sides, modifier, rolls, total);
+  return total;
+}
+
+function rollAgain() { if (_lastRollArgs) roll(..._lastRollArgs); }
+
+function hideDice() {
+  document.getElementById('dice-overlay').classList.remove('visible');
+  if (_diceHideTimer) { clearTimeout(_diceHideTimer); _diceHideTimer = null; }
+}
+
+function _displayRoll(label, count, sides, modifier, rolls, total) {
+  const ov = document.getElementById('dice-overlay');
+  document.getElementById('dice-lbl').textContent = label;
+  const modStr = modifier === 0 ? '' : (modifier > 0 ? ` +${modifier}` : ` ${modifier}`);
+  document.getElementById('dice-formula').textContent = `${count}d${sides}${modStr}`;
+  document.getElementById('dice-total').textContent = '—';
+  document.getElementById('dice-total').style.color = '#ffd700';
+  document.getElementById('dice-breakdown').textContent = '';
+
+  const pipsEl = document.getElementById('dice-pips');
+  pipsEl.innerHTML = '';
+
+  rolls.forEach((finalVal, i) => {
+    const pip = document.createElement('div');
+    pip.className = 'die-pip';
+    pip.textContent = '?';
+    pipsEl.appendChild(pip);
+    let ticks = 0;
+    const maxTicks = 8 + i * 3;
+    const iv = setInterval(() => {
+      pip.textContent = Math.floor(Math.random() * sides) + 1;
+      if (++ticks >= maxTicks) {
+        clearInterval(iv);
+        pip.textContent = finalVal;
+        if (count === 1 && sides === 20 && finalVal === 20) pip.classList.add('nat20');
+        if (count === 1 && sides === 20 && finalVal === 1)  pip.classList.add('nat1');
+      }
+    }, 40);
+  });
+
+  const settleMs = (8 + (rolls.length - 1) * 3) * 40 + 100;
+  setTimeout(() => {
+    const totalEl = document.getElementById('dice-total');
+    totalEl.textContent = total;
+    if (count === 1 && sides === 20 && rolls[0] === 20) totalEl.style.color = '#ffd700';
+    else if (count === 1 && sides === 20 && rolls[0] === 1) totalEl.style.color = '#f87171';
+    else totalEl.style.color = '#ffd700';
+    const modPart = modifier === 0 ? '' : (modifier > 0 ? ` + ${modifier}` : ` − ${Math.abs(modifier)}`);
+    const rollPart = rolls.length > 1 ? `(${rolls.join(' + ')})` : `${rolls[0]}`;
+    document.getElementById('dice-breakdown').textContent = `${rollPart}${modPart} = ${total}`;
+  }, settleMs);
+
+  ov.classList.add('visible');
+  if (_diceHideTimer) clearTimeout(_diceHideTimer);
+  _diceHideTimer = setTimeout(hideDice, 12000);
+}
+
+// ══════════════════════════════════════════════════════
+//  SPELL COMPENDIUM
+// ══════════════════════════════════════════════════════
+const SPELL_DATA = [
+  { name:'Sacred Flame',    level:0, school:'Evocation',     time:'1 action',       range:'60 ft',            duration:'Instant',       comp:'V,S',   status:'cantrip',  desc:'Target must succeed on a DEX save or take 1d8 radiant damage. Cover provides no benefit.',                                                           rollFn:()=>roll('Sacred Flame',1,8,0) },
+  { name:'Guidance',        level:0, school:'Divination',    time:'1 action',       range:'Touch',            duration:'Conc, 1 min',   comp:'V,S',   status:'cantrip',  desc:'Willing creature can add 1d4 to one ability check before the spell ends.',                                                                            rollFn:()=>roll('Guidance Bonus',1,4,0) },
+  { name:'Thaumaturgy',     level:0, school:'Transmutation', time:'1 action',       range:'30 ft',            duration:'1 min',         comp:'V',     status:'cantrip',  desc:'Manifest a minor wonder: booming voice, flickering flames, tremors, eerie sounds, door opening.',                                                     rollFn:null },
+  { name:'Fog Cloud',       level:1, school:'Conjuration',   time:'1 action',       range:'120 ft',           duration:'Conc, 1 hr',    comp:'V,S',   status:'domain',   desc:'20-ft radius sphere of fog. Area is heavily obscured. Wind disperses it.',                                                                            rollFn:null },
+  { name:'Thunderwave',     level:1, school:'Evocation',     time:'1 action',       range:'Self (15-ft cube)', duration:'Instant',       comp:'V,S',   status:'domain',   desc:'CON save. Fail: 2d8 thunder + pushed 10 ft. Success: half. Unsecured objects are pushed.',                                                            rollFn:()=>roll('Thunderwave',2,8,0) },
+  { name:'Gust of Wind',    level:2, school:'Evocation',     time:'1 action',       range:'Self (60-ft line)', duration:'Conc, 1 min',   comp:'V,S,M', status:'domain',   desc:'60-ft line, 10 ft wide. STR save or pushed 15 ft and speed halved while in the area.',                                                              rollFn:null },
+  { name:'Shatter',         level:2, school:'Evocation',     time:'1 action',       range:'60 ft',            duration:'Instant',       comp:'V,S,M', status:'domain',   desc:'CON save. 10-ft radius. Fail: 3d8 thunder. Success: half. Inorganic creatures (constructs, stone) have disadvantage.',                              rollFn:()=>roll('Shatter',3,8,0) },
+  { name:'Guiding Bolt',    level:1, school:'Evocation',     time:'1 action',       range:'120 ft',           duration:'1 round',       comp:'V,S',   status:'prepared', desc:'+5 spell attack. Hit: 4d6 radiant. Next attack against target before end of your next turn has advantage.',                                          rollFn:()=>{ roll('Guiding Bolt Atk',1,20,5); setTimeout(()=>roll('Guiding Bolt Dmg',4,6,0),650); } },
+  { name:'Inflict Wounds',  level:1, school:'Necromancy',    time:'1 action',       range:'Touch',            duration:'Instant',       comp:'V,S',   status:'prepared', desc:'+5 melee spell attack. Hit: 3d10 necrotic damage.',                                                                                                  rollFn:()=>{ roll('Inflict Wounds Atk',1,20,5); setTimeout(()=>roll('Inflict Wounds Dmg',3,10,0),650); } },
+  { name:'Healing Word',    level:1, school:'Evocation',     time:'1 bonus action', range:'60 ft',            duration:'Instant',       comp:'V',     status:'prepared', desc:'A creature you can see regains 1d4+3 HP. Leaves your action free.',                                                                                  rollFn:()=>roll('Healing Word',1,4,3) },
+  { name:'Sanctuary',       level:1, school:'Abjuration',    time:'1 bonus action', range:'30 ft',            duration:'1 min',         comp:'V,S,M', status:'prepared', desc:'Creature gains sanctuary. Attackers must make a WIS save or choose a new target. Ends if ward acts aggressively.',                                  rollFn:null },
+  { name:'Shield of Faith', level:1, school:'Abjuration',    time:'1 bonus action', range:'60 ft',            duration:'Conc, 10 min',  comp:'V,S,M', status:'prepared', desc:'+2 AC to a creature you can see. Concentration.',                                                                                                    rollFn:null },
+  { name:'Spiritual Weapon',level:2, school:'Evocation',     time:'1 bonus action', range:'60 ft',            duration:'1 min',         comp:'V,S',   status:'prepared', desc:'No concentration. Spectral weapon. Bonus action each turn: +5 to hit, 1d8+3 force. Can move up to 20 ft per turn.',                                rollFn:()=>{ roll('Spiritual Weapon Atk',1,20,5); setTimeout(()=>roll('Spiritual Weapon Dmg',1,8,3),650); } },
+  { name:'Bane',            level:1, school:'Enchantment',   time:'1 action',       range:'30 ft',            duration:'Conc, 1 min',   comp:'V,S,M', status:'available',desc:'Up to 3 creatures. CHA save or subtract 1d4 from attack rolls and saving throws.',                                                                   rollFn:null },
+  { name:'Bless',           level:1, school:'Enchantment',   time:'1 action',       range:'30 ft',            duration:'Conc, 1 min',   comp:'V,S,M', status:'available',desc:'Up to 3 creatures add 1d4 to attack rolls and saving throws. Concentration.',                                                                        rollFn:()=>roll('Bless Bonus',1,4,0) },
+  { name:'Command',         level:1, school:'Enchantment',   time:'1 action',       range:'60 ft',            duration:'1 round',       comp:'V',     status:'available',desc:'One-word command. WIS save or obey: Approach, Drop, Flee, Grovel, or Halt.',                                                                        rollFn:null },
+  { name:'Cure Wounds',     level:1, school:'Evocation',     time:'1 action',       range:'Touch',            duration:'Instant',       comp:'V,S',   status:'available',desc:'Touch creature heals 1d8+3 HP. Slower than Healing Word but heals more.',                                                                            rollFn:()=>roll('Cure Wounds',1,8,3) },
+  { name:'Detect Magic',    level:1, school:'Divination',    time:'1 action',       range:'Self (30 ft)',     duration:'Conc, 10 min',  comp:'V,S',   status:'available',desc:'Sense presence of magic within 30 ft. Learn the school of any aura you sense.',                                                                      rollFn:null },
+  { name:'Detect Poison and Disease',level:1,school:'Divination',time:'1 action',   range:'Self (30 ft)',     duration:'Conc, 10 min',  comp:'V,S,M', status:'available',desc:'Sense poisons, poisonous creatures, and diseases within 30 ft.',                                                                                    rollFn:null },
+  { name:'Protection from Evil and Good',level:1,school:'Abjuration',time:'1 action',range:'Touch',           duration:'Conc, 10 min',  comp:'V,S,M', status:'available',desc:'Aberrations, celestials, elementals, fey, fiends, undead have disadvantage attacking target. Can\'t charm, frighten, or possess it.',             rollFn:null },
+  { name:'Purify Food and Drink',level:1,school:'Transmutation',time:'1 action',    range:'10 ft',            duration:'Instant',       comp:'V,S',   status:'available',desc:'Nonmagical food and drink within a 5-ft sphere is purified and freed of poison and disease.',                                                       rollFn:null },
+  { name:'Aid',             level:2, school:'Abjuration',    time:'1 action',       range:'30 ft',            duration:'8 hours',       comp:'V,S,M', status:'available',desc:'Up to 3 creatures. Max HP and current HP each increase by 5 for 8 hours.',                                                                          rollFn:null },
+  { name:'Augury',          level:2, school:'Divination',    time:'1 minute',       range:'Self',             duration:'Instant',       comp:'V,S,M', status:'available',desc:'Weal or woe for a specific course of action in the next 30 minutes. Ritual castable.',                                                              rollFn:null },
+  { name:'Blindness/Deafness',level:2,school:'Necromancy',   time:'1 action',       range:'30 ft',            duration:'1 min',         comp:'V',     status:'available',desc:'CON save or blinded or deafened (your choice). Target saves again at end of each of its turns.',                                                    rollFn:null },
+  { name:'Calm Emotions',   level:2, school:'Enchantment',   time:'1 action',       range:'60 ft',            duration:'Conc, 1 min',   comp:'V,S',   status:'available',desc:'CHA save. Suppress charmed or frightened condition, or make humanoids indifferent toward hostile creatures.',                                      rollFn:null },
+  { name:'Enhance Ability', level:2, school:'Transmutation', time:'1 action',       range:'Touch',            duration:'Conc, 1 hr',    comp:'V,S,M', status:'available',desc:'Bear\'s Endurance (CON adv + temp HP), Bull\'s Strength (STR adv), Cat\'s Grace (DEX adv), Eagle\'s Splendor (CHA adv), Fox\'s Cunning (INT adv), Owl\'s Wisdom (WIS adv).', rollFn:null },
+  { name:'Hold Person',     level:2, school:'Enchantment',   time:'1 action',       range:'60 ft',            duration:'Conc, 1 min',   comp:'V,S,M', status:'available',desc:'WIS save or paralyzed. Saves again each turn. Attacks have advantage; melee hits within 5 ft are automatic crits.',                               rollFn:null },
+  { name:'Lesser Restoration',level:2,school:'Abjuration',   time:'1 action',       range:'Touch',            duration:'Instant',       comp:'V,S',   status:'available',desc:'End one disease or one condition: blinded, deafened, paralyzed, or poisoned.',                                                                    rollFn:null },
+  { name:'Prayer of Healing',level:2,school:'Evocation',     time:'10 minutes',     range:'30 ft',            duration:'Instant',       comp:'V',     status:'available',desc:'Up to 6 creatures heal 2d8+3 HP. Cannot be cast in combat. Good for post-battle recovery.',                                                        rollFn:()=>roll('Prayer of Healing',2,8,3) },
+  { name:'Silence',         level:2, school:'Illusion',      time:'1 action',       range:'120 ft',           duration:'Conc, 10 min',  comp:'V,S',   status:'available',desc:'20-ft radius. No sound. Immune to thunder damage. Verbal spells can\'t be cast inside. Hard counters enemy spellcasters.',                       rollFn:null },
+  { name:'Warding Bond',    level:2, school:'Abjuration',    time:'1 action',       range:'Touch',            duration:'1 hour',        comp:'V,S,M', status:'available',desc:'Target gains +1 AC, +1 to saves, resistance to all damage. You take the same damage it takes. Both need a ring worth 50gp.',                     rollFn:null },
+  { name:'Zone of Truth',   level:2, school:'Enchantment',   time:'1 action',       range:'60 ft',            duration:'10 min',        comp:'V,S',   status:'available',desc:'15-ft sphere. CHA save or can\'t speak deliberate lies. You know who succeeds or fails.',                                                         rollFn:null },
+];
+
+let _spellFilter = 'all';
+let _spellsRendered = false;
+
+function setSpellFilter(f, btn) {
+  _spellFilter = f;
+  document.querySelectorAll('.spell-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderSpells();
+}
+
+function renderSpells() {
+  const container = document.getElementById('spell-compendium');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const groups = [
+    { key:'cantrip',   label:'Cantrips',                       badgeClass:'badge-cantrip',   titleColor:'#3a5a80' },
+    { key:'domain',    label:'Domain Spells — Always Prepared', badgeClass:'badge-domain',    titleColor:'#2a7050' },
+    { key:'prepared',  label:'Prepared Spells',                 badgeClass:'badge-prepared',  titleColor:'#6040a0' },
+    { key:'available', label:'Available to Prepare (swap on long rest)', badgeClass:'badge-available', titleColor:'#383838' },
+  ];
+
+  groups.forEach(group => {
+    if (_spellFilter === 'prepared' && group.key === 'available') return;
+    if (_spellFilter === 'available' && group.key !== 'available') return;
+    const spells = SPELL_DATA.filter(s => s.status === group.key);
+    if (!spells.length) return;
+
+    const title = document.createElement('div');
+    title.className = 'sec-title';
+    title.style.color = group.titleColor;
+    title.textContent = group.label;
+    container.appendChild(title);
+
+    const grid = document.createElement('div');
+    grid.className = 'spell-comp-grid';
+
+    spells.forEach(spell => {
+      const card = document.createElement('div');
+      card.className = `spell-comp-card sc-${spell.status}`;
+      const lvlLabel = spell.level === 0 ? 'Cantrip' : `${['','1st','2nd','3rd'][spell.level]} Level`;
+      card.innerHTML = `
+        <div class="sc-header"><span class="sc-name">${spell.name}</span><span class="sc-school">${spell.school}</span></div>
+        <span class="sc-badge ${group.badgeClass}">${lvlLabel}</span>
+        <div class="sc-meta">${spell.time} &nbsp;·&nbsp; ${spell.range} &nbsp;·&nbsp; ${spell.duration} &nbsp;·&nbsp; ${spell.comp}</div>
+        <div class="sc-desc">${spell.desc}</div>`;
+      if (spell.rollFn) {
+        const btn = document.createElement('button');
+        btn.className = 'sc-roll-btn';
+        btn.textContent = '⚄ Roll';
+        btn.onclick = spell.rollFn;
+        card.appendChild(btn);
+      }
+      grid.appendChild(card);
+    });
+
+    container.appendChild(grid);
+  });
+  _spellsRendered = true;
+}
 
 // ══════════════════════════════════════════════════════
 //  NPC PORTRAITS
