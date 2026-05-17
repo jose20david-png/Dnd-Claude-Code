@@ -436,6 +436,41 @@ body {
   .npc-portrait { width: 48px; height: 60px; }
   #header .htitle { font-size: 11px; letter-spacing: 1px; }
 }
+
+/* ── Music controls ── */
+#music-controls {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+#music-btn {
+  background: none;
+  border: 1px solid #2a2a2a;
+  color: #555;
+  font-size: 13px;
+  width: 26px;
+  height: 22px;
+  cursor: pointer;
+  border-radius: 3px;
+  line-height: 1;
+  padding: 0;
+  transition: color 0.15s, border-color 0.15s;
+}
+#music-btn:hover { color: #aaa; border-color: #555; }
+#music-btn.on { color: #a78bfa; border-color: #6d4fc2; }
+#music-label {
+  font-size: 10px;
+  font-family: 'Courier New', monospace;
+  color: #444;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: color 0.2s;
+  user-select: none;
+  min-width: 60px;
+}
+#music-label:hover { color: #888; }
 </style>
 </head>
 <body>
@@ -445,6 +480,10 @@ body {
   <div class="htitle">◈ RURIK STORMHAMMER</div>
   <div class="hday" id="hday">Day 7 — Morning</div>
   <div class="hbread" id="hbread"></div>
+  <div id="music-controls">
+    <button id="music-btn" onclick="musicToggle()" title="Toggle background music">🔇</button>
+    <span id="music-label" onclick="musicCycleScene()" title="Click to change scene">OFF</span>
+  </div>
 </div>
 
 <!-- ══════ TABS ══════ -->
@@ -2125,6 +2164,251 @@ function initCursors() {
 }
 
 // ══════════════════════════════════════════════════════
+//  MUSIC ENGINE — Procedural Web Audio API ambient RPG
+// ══════════════════════════════════════════════════════
+const Music = (() => {
+  let ctx = null, master = null;
+  let playing = false, currentScene = 'exploration';
+  let drones = [], melodyTimer = null;
+
+  // ── Scene definitions ────────────────────────────────
+  // Each scene: layered oscillator drones + LFO tremolo + optional random melody pings
+  const SCENES = {
+    exploration: {
+      label: '♪ EXPLORE',
+      drones: [
+        { hz: 55.00,  gain: 0.070, type: 'sine',      detune: 0  }, // A1 root
+        { hz: 55.00,  gain: 0.050, type: 'sine',      detune: 6  }, // A1 chorus
+        { hz: 82.41,  gain: 0.040, type: 'sine',      detune: 0  }, // E2 fifth
+        { hz: 110.00, gain: 0.030, type: 'triangle',  detune: 0  }, // A2 octave
+        { hz: 130.81, gain: 0.020, type: 'sine',      detune: 0  }, // C3 minor 3rd
+      ],
+      filter: 700, lfoHz: 0.08, lfoDepth: 0.28,
+      melody: [110, 130.81, 146.83, 164.81, 196.0, 220.0], // A minor pentatonic
+      melodyGain: 0.044, melodyMs: [4000, 9000],
+    },
+    combat: {
+      label: '♪ COMBAT',
+      drones: [
+        { hz: 73.42,  gain: 0.090, type: 'sawtooth', detune: 0   }, // D2 root
+        { hz: 73.42,  gain: 0.060, type: 'sawtooth', detune: 12  }, // D2 chorus
+        { hz: 110.00, gain: 0.050, type: 'square',   detune: 0   }, // A2 fifth
+        { hz: 155.56, gain: 0.040, type: 'sawtooth', detune: 0   }, // G#2 tritone (tension)
+      ],
+      filter: 1100, lfoHz: 1.7, lfoDepth: 0.55,
+      melody: null, // no melody — pure rhythmic tension
+      melodyGain: 0, melodyMs: [0, 0],
+    },
+    rest: {
+      label: '♪ REST',
+      drones: [
+        { hz: 65.41,  gain: 0.050, type: 'sine',     detune: 0  }, // C2 root
+        { hz: 98.00,  gain: 0.040, type: 'sine',     detune: 3  }, // G2 fifth
+        { hz: 130.81, gain: 0.040, type: 'sine',     detune: 0  }, // C3 octave
+        { hz: 164.81, gain: 0.030, type: 'triangle', detune: 0  }, // E3 major 3rd (warmth)
+      ],
+      filter: 480, lfoHz: 0.04, lfoDepth: 0.14,
+      melody: [130.81, 146.83, 164.81, 196.0, 220.0, 261.63], // C major
+      melodyGain: 0.034, melodyMs: [6000, 13000],
+    },
+    tavern: {
+      label: '♪ TAVERN',
+      drones: [
+        { hz: 98.00,  gain: 0.045, type: 'triangle', detune: 0  }, // G2
+        { hz: 146.83, gain: 0.040, type: 'triangle', detune: 4  }, // D3
+        { hz: 196.00, gain: 0.040, type: 'sine',     detune: 0  }, // G3
+        { hz: 246.94, gain: 0.030, type: 'triangle', detune: 0  }, // B3 major 3rd
+      ],
+      filter: 1800, lfoHz: 0.20, lfoDepth: 0.18,
+      melody: [196.0, 220.0, 246.94, 293.66, 329.63, 392.0], // G major pentatonic
+      melodyGain: 0.055, melodyMs: [600, 1800],
+    },
+    silence: {
+      label: '♪ SILENCE',
+      drones: [], filter: 0, lfoHz: 0, lfoDepth: 0,
+      melody: null, melodyGain: 0, melodyMs: [0, 0],
+    },
+  };
+  const SCENE_ORDER = ['exploration', 'combat', 'rest', 'tavern', 'silence'];
+
+  // ── Audio context init ───────────────────────────────
+  function init() {
+    if (ctx) return;
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    master = ctx.createGain();
+    master.gain.value = 0.55;
+    master.connect(ctx.destination);
+  }
+
+  // ── Stop all running drones (with fade) ─────────────
+  function stopDrones(fadeSec) {
+    clearTimeout(melodyTimer);
+    for (const d of drones) {
+      try {
+        const t = ctx.currentTime;
+        d.gain.gain.setValueAtTime(d.gain.gain.value, t);
+        d.gain.gain.linearRampToValueAtTime(0, t + fadeSec);
+        d.osc.stop(t + fadeSec + 0.1);
+        if (d.lfo) d.lfo.stop(t + fadeSec + 0.1);
+      } catch {}
+    }
+    drones = [];
+  }
+
+  // ── Start drones for a scene ────────────────────────
+  function startDrones(sceneName) {
+    const s = SCENES[sceneName];
+    if (!s || !s.drones.length) return;
+    for (const def of s.drones) {
+      const osc  = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const filt = ctx.createBiquadFilter();
+      const lfo  = ctx.createOscillator();
+      const lfog = ctx.createGain();
+
+      osc.type = def.type;
+      osc.frequency.value = def.hz;
+      osc.detune.value = def.detune + (Math.random() - 0.5) * 5;
+
+      filt.type = 'lowpass';
+      filt.frequency.value = s.filter;
+      filt.Q.value = 0.7;
+
+      gain.gain.setValueAtTime(0, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(def.gain, ctx.currentTime + 3.5);
+
+      lfo.type = 'sine';
+      lfo.frequency.value = s.lfoHz;
+      lfog.gain.value = def.gain * s.lfoDepth;
+
+      lfo.connect(lfog);
+      lfog.connect(gain.gain);
+      osc.connect(filt);
+      filt.connect(gain);
+      gain.connect(master);
+
+      osc.start();
+      lfo.start();
+      drones.push({ osc, gain, lfo });
+    }
+  }
+
+  // ── One melodic ping (plucked note) ─────────────────
+  function ping(freqs, gainVal) {
+    if (!playing || !ctx) return;
+    const hz = freqs[Math.floor(Math.random() * freqs.length)];
+    const hz2 = Math.random() > 0.65 ? hz * 2 : hz;
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const filt = ctx.createBiquadFilter();
+    osc.type = 'triangle';
+    osc.frequency.value = hz2;
+    osc.detune.value = (Math.random() - 0.5) * 8;
+    filt.type = 'bandpass';
+    filt.frequency.value = hz2 * 1.4;
+    filt.Q.value = 1.8;
+    const dur = 0.5 + Math.random() * 1.6;
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(gainVal, ctx.currentTime + 0.04);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
+    osc.connect(filt);
+    filt.connect(gain);
+    gain.connect(master);
+    osc.start();
+    osc.stop(ctx.currentTime + dur + 0.05);
+  }
+
+  // ── Schedule recurring melody pings ─────────────────
+  function scheduleMelody(sceneName) {
+    const s = SCENES[sceneName];
+    if (!playing || !s || !s.melody) return;
+    const [mn, mx] = s.melodyMs;
+    const delay = mn + Math.random() * (mx - mn);
+    melodyTimer = setTimeout(() => {
+      if (!playing || currentScene !== sceneName) return;
+      const count = 1 + Math.floor(Math.random() * 3);
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => { if (playing) ping(s.melody, s.melodyGain); },
+          i * (110 + Math.random() * 260));
+      }
+      scheduleMelody(sceneName);
+    }, delay);
+  }
+
+  // ── Public API ───────────────────────────────────────
+  function play(scene) {
+    init();
+    if (ctx.state === 'suspended') ctx.resume();
+    playing = true;
+    currentScene = scene || currentScene;
+    stopDrones(0.1);
+    setTimeout(() => { startDrones(currentScene); scheduleMelody(currentScene); }, 220);
+  }
+
+  function stop() {
+    playing = false;
+    if (ctx) stopDrones(1.8);
+  }
+
+  function toggle() {
+    if (playing) { stop(); return false; }
+    play(); return true;
+  }
+
+  function setScene(sceneName) {
+    if (!SCENES[sceneName] || sceneName === currentScene) return;
+    currentScene = sceneName;
+    if (!playing) return;
+    stopDrones(1.5);
+    if (sceneName !== 'silence') {
+      setTimeout(() => { startDrones(sceneName); scheduleMelody(sceneName); }, 1700);
+    }
+  }
+
+  function cycleScene() {
+    const idx  = SCENE_ORDER.indexOf(currentScene);
+    const next = SCENE_ORDER[(idx + 1) % SCENE_ORDER.length];
+    if (playing) setScene(next); else currentScene = next;
+    return next;
+  }
+
+  function getLabel()    { return SCENES[currentScene]?.label || '♪ OFF'; }
+  function isPlaying()   { return playing; }
+  function getScene()    { return currentScene; }
+
+  return { play, stop, toggle, setScene, cycleScene, getLabel, isPlaying, getScene, SCENES };
+})();
+
+function musicToggle() {
+  Music.toggle();
+  updateMusicUI();
+}
+
+function musicCycleScene() {
+  Music.cycleScene();
+  updateMusicUI();
+}
+
+function updateMusicUI() {
+  const btn = document.getElementById('music-btn');
+  const lbl = document.getElementById('music-label');
+  if (!btn || !lbl) return;
+  if (Music.isPlaying()) {
+    btn.textContent = '🎵';
+    btn.classList.add('on');
+    btn.title = 'Click to stop music';
+    lbl.textContent = Music.getLabel();
+    lbl.style.color = '#a78bfa';
+  } else {
+    btn.textContent = '🔇';
+    btn.classList.remove('on');
+    btn.title = 'Click to play music';
+    lbl.textContent = 'OFF';
+    lbl.style.color = '#444';
+  }
+}
+
+// ══════════════════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════════════════
 document.getElementById('hday').textContent    = `Day ${W.day} — ${W.time}`;
@@ -2341,6 +2625,10 @@ async function sendClaudePrompt() {
             } else if (event.type === 'state_update') {
               // Claude called a tool that changed game state — sync the UI
               applyStateUpdate(event.state);
+            } else if (event.type === 'music_scene') {
+              // Claude changed the music scene to match the narrative mood
+              Music.setScene(event.scene);
+              updateMusicUI();
             } else if (event.type === 'done') {
               document.getElementById('claude-tokens').textContent = event.token_count || 0;
             } else if (event.type === 'error') {
