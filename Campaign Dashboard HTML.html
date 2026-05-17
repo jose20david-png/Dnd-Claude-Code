@@ -472,6 +472,156 @@ body {
 }
 #music-label:hover { color: #888; }
 
+/* ── HP Bar ── */
+#hp-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 20px;
+  flex-shrink: 0;
+}
+#hp-bar-container {
+  width: 120px;
+  height: 14px;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+#hp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+  width: 100%;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+#hp-bar-fill.critical { background: linear-gradient(90deg, #ef4444 0%, #f87171 100%); }
+#hp-bar-fill.wounded { background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%); }
+#hp-bar-fill.healthy { background: linear-gradient(90deg, #10b981 0%, #34d399 100%); }
+#hp-text {
+  font-size: 10px;
+  font-family: 'Courier New', monospace;
+  color: #aaa;
+  letter-spacing: 1px;
+  min-width: 45px;
+  text-align: right;
+}
+
+/* ── Combat Tracker ── */
+.combat-combatant {
+  background: #16213e;
+  border: 1px solid #2a3a4a;
+  border-radius: 4px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+}
+.combat-combatant.player {
+  background: #1a2a3a;
+  border-left: 3px solid #10b981;
+}
+.combat-combatant.enemy {
+  background: #2a1a1a;
+  border-left: 3px solid #ef4444;
+}
+.combatant-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+.combatant-init {
+  background: #0c0f1a;
+  padding: 8px 12px;
+  border-radius: 3px;
+  text-align: center;
+  min-width: 50px;
+  border: 1px solid #1a2a3a;
+}
+.combatant-init-val {
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffd700;
+}
+.combatant-init-label {
+  font-size: 9px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.combatant-details {
+  flex: 1;
+}
+.combatant-name {
+  font-size: 14px;
+  font-weight: bold;
+  color: #d8d8e8;
+}
+.combatant-hp-container {
+  width: 200px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.combatant-hp-bar {
+  flex: 1;
+  height: 12px;
+  background: #0c0f1a;
+  border-radius: 2px;
+  overflow: hidden;
+  border: 1px solid #2a3a4a;
+}
+.combatant-hp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+  transition: width 0.3s ease;
+}
+.combatant-hp-fill.critical { background: linear-gradient(90deg, #ef4444 0%, #f87171 100%); }
+.combatant-hp-fill.wounded { background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%); }
+.combatant-hp-fill.healthy { background: linear-gradient(90deg, #10b981 0%, #34d399 100%); }
+.combatant-hp-text {
+  font-size: 11px;
+  color: #aaa;
+  min-width: 50px;
+  text-align: right;
+  font-family: 'Courier New', monospace;
+}
+.combatant-actions {
+  display: flex;
+  gap: 4px;
+}
+.combatant-action-btn {
+  padding: 4px 8px;
+  font-size: 11px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.combatant-remove-btn {
+  background: #dc2626;
+  color: #fff;
+}
+.combatant-remove-btn:hover {
+  background: #991b1b;
+}
+.combatant-damage-btn {
+  background: #f59e0b;
+  color: #000;
+}
+.combatant-damage-btn:hover {
+  background: #d97706;
+}
+.combatant-heal-btn {
+  background: #10b981;
+  color: #fff;
+}
+.combatant-heal-btn:hover {
+  background: #059669;
+}
+
 /* ── Quick Roll Bar ── */
 #quick-roll-bar {
   background: #0c0c12;
@@ -520,6 +670,12 @@ body {
   <div class="htitle">◈ RURIK STORMHAMMER</div>
   <div class="hday" id="hday">Day 7 — Morning</div>
   <div class="hbread" id="hbread"></div>
+  <div id="hp-display">
+    <div id="hp-bar-container">
+      <div id="hp-bar-fill"></div>
+    </div>
+    <div id="hp-text">27 / 27</div>
+  </div>
   <div id="music-controls">
     <button id="music-btn" onclick="musicToggle()" title="Toggle background music">🔇</button>
     <span id="music-label" onclick="musicCycleScene()" title="Click to change scene">OFF</span>
@@ -535,6 +691,7 @@ body {
   <button class="tab-btn" onclick="switchTab('npcs')">NPCs</button>
   <button class="tab-btn" onclick="switchTab('spells')">Spells</button>
   <button class="tab-btn" onclick="switchTab('inventory')">⚙️ Inventory</button>
+  <button class="tab-btn" id="combat-tab-btn" onclick="switchTab('combat')" style="display:none;">⚔️ Combat</button>
   <button class="tab-btn" onclick="switchTab('claude')">🤖 Claude</button>
 </div>
 
@@ -862,6 +1019,32 @@ body {
     </div>
   </div>
 
+  <!-- ── COMBAT TRACKER ── -->
+  <div id="tab-combat" class="tab-panel" style="display:none; flex-direction: column;">
+    <div style="padding:12px;background:#0c0f1a;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:16px;font-weight:bold;color:#ffd700;">⚔️ COMBAT TRACKER</div>
+      <div style="display:flex;gap:8px;">
+        <div style="background:#1a1a2e;padding:8px 12px;border-radius:3px;border-left:2px solid #ffd700;">
+          <div style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:1px;">ROUND</div>
+          <div style="font-size:18px;color:#ffd700;font-weight:bold;" id="combat-round">1</div>
+        </div>
+        <button onclick="advanceCombatRound()" style="padding:8px 12px;background:#16a34a;color:#fff;border:none;border-radius:3px;cursor:pointer;font-size:12px;font-weight:bold;">Next Round</button>
+        <button onclick="endCombat()" style="padding:8px 12px;background:#dc2626;color:#fff;border:none;border-radius:3px;cursor:pointer;font-size:12px;font-weight:bold;">End Combat</button>
+      </div>
+    </div>
+
+    <div style="flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:12px;" id="combat-combatants-list">
+      <!-- Combatants will be rendered here -->
+    </div>
+
+    <div style="padding:12px;background:#0f0f1a;border-top:1px solid #222;display:flex;gap:8px;">
+      <input type="text" id="combat-enemy-name" placeholder="Enemy name..." style="flex:1;padding:8px;background:#1a1a2e;color:#d8d8e8;border:1px solid #333;border-radius:3px;font-size:12px;" />
+      <input type="number" id="combat-enemy-hp" placeholder="HP" value="15" min="1" max="999" style="width:60px;padding:8px;background:#1a1a2e;color:#d8d8e8;border:1px solid #333;border-radius:3px;font-size:12px;" />
+      <input type="number" id="combat-enemy-init" placeholder="Init" value="10" min="-5" max="20" style="width:60px;padding:8px;background:#1a1a2e;color:#d8d8e8;border:1px solid #333;border-radius:3px;font-size:12px;" />
+      <button onclick="addCombatEnemy()" style="padding:8px 12px;background:#3b82f6;color:#fff;border:none;border-radius:3px;cursor:pointer;font-size:12px;font-weight:bold;">+ Add Enemy</button>
+    </div>
+  </div>
+
   <!-- ── CLAUDE AI CHAT ── -->
   <div id="tab-claude" class="tab-panel">
     <div class="scroll-panel" style="display:flex;flex-direction:column;gap:12px">
@@ -912,6 +1095,15 @@ let campaignState = null;
 let inventory = [];
 let quests = [];
 let npcs = [];
+
+// Combat tracker state
+let combatState = {
+  active: false,
+  currentRound: 1,
+  combatants: [
+    // Example structure: { id, name, maxHP, currentHP, initiative, isPlayer }
+  ]
+};
 
 async function loadGameState() {
   try {
@@ -1644,7 +1836,14 @@ function updateSpellSlots() {
 async function toggleSlot(level, idx) {
   const usedKey = level === 1 ? 'spellSlots1Used' : 'spellSlots2Used';
   const maxKey  = level === 1 ? 'spellSlots1Max'  : 'spellSlots2Max';
+  const oldUsed = W[usedKey];
   const newUsed = idx < W[usedKey] ? idx : Math.min(idx + 1, W[maxKey]);
+
+  // Spell cast sound when a slot is being used (not restored)
+  const isCasting = newUsed > oldUsed;
+  if (isCasting) {
+    try { SoundFX.spellCast(); } catch(e) { console.log('spell cast sound failed:', e); }
+  }
 
   W[usedKey] = newUsed;
   updateSpellSlots();
@@ -1690,7 +1889,14 @@ function updateCD() {
 }
 
 function adjustHP(delta) {
+  const oldHP = W.charHpCurrent;
   W.charHpCurrent = Math.min(W.charHpMax, Math.max(0, W.charHpCurrent + delta));
+
+  // Healing sound when HP increases
+  if (W.charHpCurrent > oldHP) {
+    try { SoundFX.healing(); } catch(e) { console.log('healing sound failed:', e); }
+  }
+
   updateHP();
 }
 
@@ -1750,6 +1956,8 @@ async function shortRest() {
 
 function updateHP() {
   const pct = Math.max(0, (W.charHpCurrent / W.charHpMax) * 100);
+
+  // Update Character tab HP display
   const el  = document.getElementById('char-hp');
   const bar = document.getElementById('char-hp-bar');
   if (el)  el.textContent = `${W.charHpCurrent} / ${W.charHpMax}`;
@@ -1759,6 +1967,18 @@ function updateHP() {
     if (pct > 50) el.classList.add('green');
     else if (pct > 25) el.classList.add('warn');
     else el.classList.add('danger');
+  }
+
+  // Update Header HP bar and text
+  const headerText = document.getElementById('hp-text');
+  const headerBar = document.getElementById('hp-bar-fill');
+  if (headerText) headerText.textContent = `${W.charHpCurrent} / ${W.charHpMax}`;
+  if (headerBar) {
+    headerBar.style.width = pct + '%';
+    headerBar.className = '';
+    if (pct > 50) headerBar.classList.add('healthy');
+    else if (pct > 25) headerBar.classList.add('wounded');
+    else headerBar.classList.add('critical');
   }
 }
 
@@ -1810,6 +2030,16 @@ function roll(label, count, sides, modifier) {
   const modPart = modifier === 0 ? '' : (modifier > 0 ? ` + ${modifier}` : ` − ${Math.abs(modifier)}`);
   const rollPart = rolls.length > 1 ? `(${rolls.join(' + ')})` : `${rolls[0]}`;
   _lastRollResult = { label, total, breakdown: `${rollPart}${modPart} = ${total}` };
+
+  // Sound effects for nat20/nat1 on d20 rolls
+  if (sides === 20) {
+    if (rolls[0] === 20) {
+      try { SoundFX.nat20(); } catch(e) { console.log('nat20 sound failed:', e); }
+    } else if (rolls[0] === 1) {
+      try { SoundFX.nat1(); } catch(e) { console.log('nat1 sound failed:', e); }
+    }
+  }
+
   _displayRoll(label, count, sides, modifier, rolls, total);
   return total;
 }
@@ -2509,6 +2739,197 @@ const Music = (() => {
   return { play, stop, toggle, setScene, cycleScene, getLabel, isPlaying, getScene, SCENES };
 })();
 
+// ══════════════════════════════════════════════════════
+//  SOUND EFFECTS ENGINE — One-shot procedural SFX
+// ══════════════════════════════════════════════════════
+const SoundFX = (() => {
+  let ctx = null, master = null;
+  let sfxVolume = 0.4;
+
+  function init() {
+    if (ctx) return;
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (ctx.state === 'suspended') ctx.resume();
+    master = ctx.createGain();
+    master.gain.value = sfxVolume;
+    master.connect(ctx.destination);
+  }
+
+  // ── NAT 20 (Success) — High bell chime ──────────────
+  function nat20() {
+    init();
+    const now = ctx.currentTime;
+    // Bell-like tone — harmonically rich, clear
+    const notes = [
+      { hz: 523.25, gain: 0.15, dur: 1.2 },  // C5
+      { hz: 523.25 * 1.25, gain: 0.12, dur: 0.9 },  // G5
+      { hz: 523.25 * 1.5, gain: 0.10, dur: 0.7 },   // E5 (major third up)
+    ];
+    for (const note of notes) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const filt = ctx.createBiquadFilter();
+
+      osc.type = 'sine';
+      osc.frequency.value = note.hz;
+
+      filt.type = 'highpass';
+      filt.frequency.value = 400;
+
+      gain.gain.setValueAtTime(note.gain, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + note.dur);
+
+      osc.connect(filt);
+      filt.connect(gain);
+      gain.connect(master);
+
+      osc.start(now);
+      osc.stop(now + note.dur + 0.1);
+    }
+  }
+
+  // ── NAT 1 (Failure) — Sad trombone descend ──────────
+  function nat1() {
+    init();
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(250, now);
+    osc.frequency.exponentialRampToValueAtTime(80, now + 1.2);  // Slide down
+
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
+
+    osc.connect(gain);
+    gain.connect(master);
+
+    osc.start(now);
+    osc.stop(now + 1.3);
+  }
+
+  // ── Combat Start — Sharp percussion ─────────────────
+  function combatStart() {
+    init();
+    const now = ctx.currentTime;
+    // Kick-like punch at 60 Hz
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(180, now);
+    osc.frequency.exponentialRampToValueAtTime(50, now + 0.08);
+
+    gain.gain.setValueAtTime(0.4, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+
+    osc.connect(gain);
+    gain.connect(master);
+    osc.start(now);
+    osc.stop(now + 0.35);
+
+    // High-pitched click at +50ms
+    setTimeout(() => {
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      const filt = ctx.createBiquadFilter();
+
+      osc2.type = 'square';
+      osc2.frequency.value = 2400;
+
+      filt.type = 'highpass';
+      filt.frequency.value = 1800;
+
+      gain2.gain.setValueAtTime(0.25, ctx.currentTime);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.15);
+
+      osc2.connect(filt);
+      filt.connect(gain2);
+      gain2.connect(master);
+
+      osc2.start(ctx.currentTime);
+      osc2.stop(ctx.currentTime + 0.2);
+    }, 50);
+  }
+
+  // ── Spell Cast — Magical shimmer ────────────────────
+  function spellCast() {
+    init();
+    const now = ctx.currentTime;
+    // Multiple ascending shimmer notes
+    const notes = [
+      { hz: 800, delay: 0, dur: 0.4 },
+      { hz: 1200, delay: 0.08, dur: 0.35 },
+      { hz: 1600, delay: 0.15, dur: 0.3 },
+    ];
+
+    for (const note of notes) {
+      setTimeout(() => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const filt = ctx.createBiquadFilter();
+
+        osc.type = 'sine';
+        osc.frequency.value = note.hz;
+        osc.detune.value = (Math.random() - 0.5) * 15;
+
+        filt.type = 'highpass';
+        filt.frequency.value = 600;
+
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + note.dur);
+
+        osc.connect(filt);
+        filt.connect(gain);
+        gain.connect(master);
+
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + note.dur + 0.05);
+      }, note.delay * 1000);
+    }
+  }
+
+  // ── Healing — Warm ascending tones ──────────────────
+  function healing() {
+    init();
+    const now = ctx.currentTime;
+    const notes = [
+      { hz: 264, gain: 0.12, dur: 0.5 },  // C4
+      { hz: 330, gain: 0.12, dur: 0.5 },  // E4
+      { hz: 396, gain: 0.12, dur: 0.6 },  // G4
+    ];
+
+    for (let i = 0; i < notes.length; i++) {
+      const note = notes[i];
+      setTimeout(() => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.value = note.hz;
+
+        gain.gain.setValueAtTime(0, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(note.gain, ctx.currentTime + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + note.dur);
+
+        osc.connect(gain);
+        gain.connect(master);
+
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + note.dur + 0.05);
+      }, i * 150);
+    }
+  }
+
+  function setVolume(v) {
+    sfxVolume = Math.max(0, Math.min(1, v));
+    if (master) master.gain.value = sfxVolume;
+  }
+
+  return { nat20, nat1, combatStart, spellCast, healing, setVolume };
+})();
+
 function musicToggle() {
   Music.toggle();
   updateMusicUI();
@@ -2535,6 +2956,174 @@ function updateMusicUI() {
     btn.title = 'Click to play music';
     lbl.textContent = 'OFF';
     lbl.style.color = '#444';
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  COMBAT TRACKER
+// ══════════════════════════════════════════════════════
+function startCombat(enemies) {
+  // Initialize combat with player + enemies
+  combatState.active = true;
+  combatState.currentRound = 1;
+  combatState.combatants = [
+    {
+      id: 'rurik',
+      name: 'Rurik Stormhammer',
+      isPlayer: true,
+      maxHP: 27,
+      currentHP: W.charHpCurrent,
+      initiative: 0,  // Will be filled in by player
+    }
+  ];
+
+  // Add enemies if provided
+  if (enemies && Array.isArray(enemies)) {
+    for (const enemy of enemies) {
+      combatState.combatants.push({
+        id: 'enemy_' + combatState.combatants.length,
+        name: enemy.name || 'Unknown Enemy',
+        isPlayer: false,
+        maxHP: enemy.hp || 15,
+        currentHP: enemy.hp || 15,
+        initiative: enemy.initiative || 10,
+      });
+    }
+  }
+
+  // Sort by initiative (highest first)
+  combatState.combatants.sort((a, b) => b.initiative - a.initiative);
+
+  // Show combat tab
+  const tabBtn = document.getElementById('combat-tab-btn');
+  if (tabBtn) tabBtn.style.display = 'inline-block';
+  switchTab('combat');
+  renderCombatTracker();
+}
+
+function addCombatEnemy() {
+  const nameInput = document.getElementById('combat-enemy-name');
+  const hpInput = document.getElementById('combat-enemy-hp');
+  const initInput = document.getElementById('combat-enemy-init');
+
+  const name = nameInput.value.trim();
+  const hp = parseInt(hpInput.value) || 15;
+  const init = parseInt(initInput.value) || 10;
+
+  if (!name) {
+    alert('Please enter enemy name');
+    return;
+  }
+
+  combatState.combatants.push({
+    id: 'enemy_' + Date.now(),
+    name: name,
+    isPlayer: false,
+    maxHP: hp,
+    currentHP: hp,
+    initiative: init,
+  });
+
+  // Re-sort by initiative
+  combatState.combatants.sort((a, b) => b.initiative - a.initiative);
+
+  // Clear inputs
+  nameInput.value = '';
+  hpInput.value = '15';
+  initInput.value = '10';
+
+  renderCombatTracker();
+}
+
+function damageInCombat(combatantId, amount) {
+  const combatant = combatState.combatants.find(c => c.id === combatantId);
+  if (!combatant) return;
+
+  combatant.currentHP = Math.max(0, combatant.currentHP - amount);
+  renderCombatTracker();
+
+  // Update player HP in main state if it's Rurik
+  if (combatantId === 'rurik') {
+    W.charHpCurrent = combatant.currentHP;
+    updateHP();
+  }
+}
+
+function healInCombat(combatantId, amount) {
+  const combatant = combatState.combatants.find(c => c.id === combatantId);
+  if (!combatant) return;
+
+  combatant.currentHP = Math.min(combatant.maxHP, combatant.currentHP + amount);
+  renderCombatTracker();
+
+  // Update player HP in main state if it's Rurik
+  if (combatantId === 'rurik') {
+    W.charHpCurrent = combatant.currentHP;
+    updateHP();
+    try { SoundFX.healing(); } catch(e) {}
+  }
+}
+
+function removeCombatant(combatantId) {
+  const idx = combatState.combatants.findIndex(c => c.id === combatantId);
+  if (idx !== -1) {
+    combatState.combatants.splice(idx, 1);
+    renderCombatTracker();
+  }
+}
+
+function advanceCombatRound() {
+  combatState.currentRound++;
+  document.getElementById('combat-round').textContent = combatState.currentRound;
+}
+
+function endCombat() {
+  combatState.active = false;
+  combatState.combatants = [];
+  combatState.currentRound = 1;
+
+  const tabBtn = document.getElementById('combat-tab-btn');
+  if (tabBtn) tabBtn.style.display = 'none';
+
+  switchTab('map');
+}
+
+function renderCombatTracker() {
+  const list = document.getElementById('combat-combatants-list');
+  if (!list) return;
+
+  list.innerHTML = '';
+
+  for (const combatant of combatState.combatants) {
+    const pct = Math.max(0, (combatant.currentHP / combatant.maxHP) * 100);
+    let hpClass = 'healthy';
+    if (pct <= 0) hpClass = 'critical';
+    else if (pct <= 25) hpClass = 'critical';
+    else if (pct <= 50) hpClass = 'wounded';
+
+    const div = document.createElement('div');
+    div.className = `combat-combatant ${combatant.isPlayer ? 'player' : 'enemy'}`;
+    div.innerHTML = `
+      <div class="combatant-init">
+        <div class="combatant-init-val">${combatant.initiative}</div>
+        <div class="combatant-init-label">Init</div>
+      </div>
+      <div class="combatant-details">
+        <div class="combatant-name">${combatant.name}${combatant.isPlayer ? ' (You)' : ''}</div>
+      </div>
+      <div class="combatant-hp-container">
+        <div class="combatant-hp-bar">
+          <div class="combatant-hp-fill ${hpClass}" style="width: ${pct}%"></div>
+        </div>
+        <div class="combatant-hp-text">${combatant.currentHP}/${combatant.maxHP}</div>
+      </div>
+      <div class="combatant-actions">
+        <button class="combatant-action-btn combatant-damage-btn" onclick="damageInCombat('${combatant.id}', 5)">−5</button>
+        <button class="combatant-action-btn combatant-heal-btn" onclick="healInCombat('${combatant.id}', 5)">+5</button>
+        ${!combatant.isPlayer ? `<button class="combatant-action-btn combatant-remove-btn" onclick="removeCombatant('${combatant.id}')">Remove</button>` : ''}
+      </div>
+    `;
+    list.appendChild(div);
   }
 }
 
@@ -2774,6 +3363,13 @@ async function sendClaudePrompt() {
             } else if (event.type === 'music_scene') {
               Music.setScene(event.scene);
               updateMusicUI();
+              // Combat start sound when entering combat
+              if (event.scene === 'combat') {
+                try { SoundFX.combatStart(); } catch(e) { console.log('combat start sound failed:', e); }
+              }
+            } else if (event.type === 'combat_started') {
+              // Initialize combat tracker with enemies from the tool result
+              startCombat(event.enemies || []);
             } else if (event.type === 'done') {
               document.getElementById('claude-tokens').textContent = event.token_count || 0;
             } else if (event.type === 'error') {

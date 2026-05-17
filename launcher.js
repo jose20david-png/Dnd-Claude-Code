@@ -225,7 +225,9 @@ const TOOLS = [
   {name:'end_session',description:'End the session, write a narrative journal entry, sync context file, commit and push to GitHub.',
    input_schema:{type:'object',properties:{summary:{type:'string',description:'One-line session summary for the git commit message.'},recap:{type:'string',description:'2-3 paragraph narrative journal entry written in vivid prose from the DM perspective, describing what happened this session — key events, decisions, dramatic moments, and how it ends. Written like a campaign diary, not a bullet list.'}},required:['summary','recap']}},
   {name:'set_music_scene',description:"Change the dashboard's background music to match the current narrative mood. Call this whenever the tone shifts: entering combat, arriving at a tavern, taking a rest, dramatic silence, etc.",
-   input_schema:{type:'object',properties:{scene:{type:'string',enum:['exploration','combat','rest','tavern','silence'],description:'exploration=travel/adventure, combat=battle/tension, rest=safe downtime/camp, tavern=social/inn, silence=dramatic pause'}},required:['scene']}}
+   input_schema:{type:'object',properties:{scene:{type:'string',enum:['exploration','combat','rest','tavern','silence'],description:'exploration=travel/adventure, combat=battle/tension, rest=safe downtime/camp, tavern=social/inn, silence=dramatic pause'}},required:['scene']}},
+  {name:'start_combat',description:'Initiate combat encounter. Opens combat tracker on dashboard with enemy list.',
+   input_schema:{type:'object',properties:{enemies:{type:'array',items:{type:'object',properties:{name:{type:'string'},hp:{type:'number'},initiative:{type:'number'}},required:['name','hp','initiative']},description:'List of enemies in combat. Each enemy has name, hp (max), and initiative.'}},required:['enemies']}}
 ];
 
 // ─── TOOL EXECUTOR ────────────────────────────────────────────────────────────
@@ -242,6 +244,12 @@ function executeTool(name, input) {
     case 'complete_quest_step': { const quest=state.quests.find(q=>q.id===input.quest_id); if(!quest)return {error:`Quest ${input.quest_id} not found`}; const step=quest.steps.find(s=>s.step_id===input.step_id); if(!step)return {error:`Step ${input.step_id} not found`}; step.completed=true; if(quest.steps.every(s=>s.completed))quest.status='completed'; state.history_log.push({timestamp:new Date().toISOString(),event:`Quest step completed: "${step.description}"`}); saveState(state); return {success:true,state_updated:true}; }
     case 'append_history_log': { state.history_log.push({timestamp:new Date().toISOString(),event:input.event}); saveState(state); return {success:true}; }
     case 'set_music_scene': { return {success:true, scene:input.scene, music_scene:true}; }
+    case 'start_combat': {
+      const enemies = input.enemies || [];
+      state.history_log.push({timestamp:new Date().toISOString(),event:`Combat started with ${enemies.map(e=>e.name).join(', ')}`});
+      saveState(state);
+      return {success:true,combat_started:true,enemies:enemies};
+    }
     case 'end_session': {
       try {
         // Write journal entry
@@ -435,6 +443,7 @@ async function streamAgenticLoop(messages, systemPrompt, res) {
       const result=executeTool(tu.name,tu.input);
       if(result.state_updated){stateUpdated=true;}
       if(result.music_scene){res.write(`data: ${JSON.stringify({type:'music_scene',scene:result.scene})}\n\n`);}
+      if(result.combat_started){res.write(`data: ${JSON.stringify({type:'combat_started',enemies:result.enemies})}\n\n`);}
       toolResults.push({type:'tool_result',tool_use_id:tu.id,content:JSON.stringify(result)});
     }
     if(stateUpdated){const ns=loadState();if(ns)res.write(`data: ${JSON.stringify({type:'state_update',state:ns})}\n\n`);}
