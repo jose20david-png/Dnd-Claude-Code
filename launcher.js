@@ -367,6 +367,7 @@ async function streamAgenticLoop(messages, systemPrompt, res) {
           if(!line.startsWith('data: '))continue;
           try{
             const d=JSON.parse(line.slice(6));
+            if(d.type==='error'){const em=d.error?.message||'Anthropic API error';console.error('  ✗ API:',em);res.write(`data: ${JSON.stringify({type:'error',error:em})}\n\n`);}
             if(d.type==='content_block_start'&&d.content_block.type==='tool_use'){currentTU={id:d.content_block.id,name:d.content_block.name};currentJson='';}
             if(d.type==='content_block_delta'){if(d.delta.type==='text_delta'){textTurn+=d.delta.text;res.write(`data: ${JSON.stringify({type:'text',content:d.delta.text})}\n\n`);}if(d.delta.type==='input_json_delta')currentJson+=d.delta.partial_json;}
             if(d.type==='content_block_stop'&&currentTU){try{currentTU.input=JSON.parse(currentJson);}catch{currentTU.input={};}toolUses.push(currentTU);currentTU=null;currentJson='';}
@@ -427,10 +428,19 @@ const relayServer = http.createServer((req,res)=>{
         const outTokens=await streamAgenticLoop(messagesForAPI,buildSystemPrompt(loadState()),res);
         let finalText='';
         for(let i=history.messages.length;i<messagesForAPI.length;i++){const m=messagesForAPI[i];if(m.role==='assistant'){if(Array.isArray(m.content))finalText+=m.content.filter(b=>b.type==='text').map(b=>b.text).join('');else if(typeof m.content==='string')finalText+=m.content;}}
-        history.messages.push({role:'assistant',content:finalText});
-        history.token_count+=estimateTokens(prompt)+(outTokens||estimateTokens(finalText));
-        history.model=MODEL;
-        saveHistory(history);
+        if(finalText.trim()){
+          // Only persist the exchange when the assistant actually produced text
+          history.messages.push({role:'assistant',content:finalText});
+          history.token_count+=estimateTokens(prompt)+(outTokens||estimateTokens(finalText));
+          history.model=MODEL;
+          saveHistory(history);
+        } else {
+          // No text produced (API error or tool-only turn with no follow-up narration)
+          // Roll back the user message so history stays clean and the next request succeeds
+          history.messages.pop();
+          saveHistory(history);
+          console.error('  ✗ Empty assistant turn — user message rolled back from history');
+        }
         res.write(`data: ${JSON.stringify({type:'done',token_count:history.token_count,model:MODEL})}\n\n`);
         res.end();
       }catch(err){res.write(`data: ${JSON.stringify({type:'error',error:err.message})}\n\n`);res.end();}
