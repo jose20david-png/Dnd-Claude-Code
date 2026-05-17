@@ -1,0 +1,36 @@
+{
+  "id": "npc_garaele",
+  "name": "Sister Garaele",
+  "role": "Shrine Keeper · Harper Agent · Ritual Voice #1",
+  "faction": "Harpers / Church of Selûne",
+  "status": "alive",
+  "location_id": "loc_marta_cabin",
+  "disposition": "ally",
+  "traits": [
+    "devout",
+    "exhausted but joyful",
+    "brave",
+    "harper operative"
+  ],
+  "goals": [
+    "see Phandalin freed",
+    "protect the seal",
+    "recover her staff"
+  ],
+  "secrets": [
+    "Harper field operative with deeper network than she reveals"
+  ],
+  "relationships": [
+    {
+      "target_id": "npc_rurik",
+      "type": "ally",
+      "notes": "Wept when the seal closed. Fully trusts him."
+    }
+  ],
+  "session_state": {
+    "injured": false,
+    "combat_ready": false,
+    "staff_spent": true,
+    "staff_recharging": true
+  }
+}

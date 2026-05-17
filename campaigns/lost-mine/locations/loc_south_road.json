@@ -1,0 +1,13 @@
+{
+  "id": "loc_south_road",
+  "name": "South Road — Triboar Trail",
+  "type": "wilderness",
+  "description": "Main route south toward Baldur's Gate. Redbrand outriders patrol. Patrol gap identified: 3–5am.",
+  "importance": "medium",
+  "connected_locations": [
+    "loc_phandalin",
+    "loc_marta_cabin"
+  ],
+  "threat_level": "medium",
+  "intel": "Patrol gap 3–5am. Outriders present outside that window."
+}

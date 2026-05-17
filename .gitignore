@@ -1,0 +1,22 @@
+# Environment / secrets
+.env
+
+# Node
+node_modules/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+http-server-error.txt
+http-server-output.txt
+
+# Claude session files (large/transient)
+claude_chat_history.json
+
+# Embedded repos / large tool data (not part of campaign)
+5ETOOLS MCP/
+Claude (2)/
+Claude (3)/

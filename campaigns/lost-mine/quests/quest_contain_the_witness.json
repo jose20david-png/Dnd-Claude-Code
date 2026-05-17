@@ -1,0 +1,43 @@
+{
+  "id": "quest_contain_the_witness",
+  "name": "Contain the Witness",
+  "status": "completed",
+  "priority": "resolved",
+  "summary": "Ancient entity imprisoned 400 years ago was escaping. Rurik performed the binding ritual as Bearer of the Seal on Day 6.",
+  "objectives": [
+    {
+      "text": "Locate Wave Echo Cave and investigate the seal",
+      "done": true
+    },
+    {
+      "text": "Gather the five ritual voices",
+      "done": true
+    },
+    {
+      "text": "Perform the binding ritual with Rurik as anchor",
+      "done": true
+    },
+    {
+      "text": "Reinforce and stabilize the seal",
+      "done": true
+    }
+  ],
+  "current_stage": "COMPLETE. Seal reinforced. Rurik permanently bonded as Bearer of the Seal.",
+  "related_npcs": [
+    "npc_rurik",
+    "npc_garaele",
+    "npc_sildar",
+    "npc_gundren",
+    "npc_toblen",
+    "npc_iarno",
+    "npc_the_witness"
+  ],
+  "related_locations": [
+    "loc_wave_echo_cave",
+    "loc_seal_chamber"
+  ],
+  "rewards": [
+    "Witness contained for years or decades",
+    "Rurik becomes Bearer of the Seal (permanent)"
+  ]
+}

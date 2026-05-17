@@ -1,0 +1,25 @@
+{
+  "id": "npc_borik",
+  "name": "Borik Stonehammer",
+  "role": "Dwarf Local · Perimeter Guard",
+  "faction": "Phandalin Civilians",
+  "status": "alive",
+  "location_id": "loc_marta_cabin",
+  "disposition": "ally",
+  "traits": [
+    "reliable",
+    "unshakeable",
+    "on watch"
+  ],
+  "goals": [
+    "protect the group",
+    "hold the perimeter"
+  ],
+  "secrets": [],
+  "relationships": [],
+  "session_state": {
+    "injured": false,
+    "combat_ready": true,
+    "on_watch": true
+  }
+}

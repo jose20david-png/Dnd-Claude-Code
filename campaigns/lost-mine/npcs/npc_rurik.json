@@ -1,0 +1,59 @@
+{
+  "id": "npc_rurik",
+  "name": "Rurik Stormhammer",
+  "role": "Player Character — Bearer of the Seal",
+  "faction": "Independent / Church of Talos",
+  "status": "alive",
+  "location_id": "loc_marta_cabin",
+  "disposition": "player",
+  "traits": [
+    "stubborn",
+    "devout (Talos)",
+    "protective",
+    "storm-touched",
+    "permanent seal bond"
+  ],
+  "goals": [
+    "protect Phandalin civilians",
+    "hunt the Mind Flayer",
+    "honor the Seal bond"
+  ],
+  "secrets": [
+    "Feels the Witness as a second heartbeat — permanent, unfading"
+  ],
+  "relationships": [
+    {
+      "target_id": "npc_garaele",
+      "type": "ally",
+      "notes": "Confirmed him as Bearer of the Seal"
+    },
+    {
+      "target_id": "npc_sildar",
+      "type": "ally",
+      "notes": "Trusted combat partner"
+    },
+    {
+      "target_id": "npc_gundren",
+      "type": "ally",
+      "notes": "Shared ritual burden"
+    },
+    {
+      "target_id": "npc_the_witness",
+      "type": "bound",
+      "notes": "Permanent ritual anchor bond"
+    }
+  ],
+  "inventory_notes": [
+    "Warhammer +4/1d8+2",
+    "Chain Mail AC16",
+    "Storm-cloud Shield",
+    "Holy Symbol of Talos",
+    "Guild Papers"
+  ],
+  "session_state": {
+    "injured": false,
+    "combat_ready": true,
+    "hp": "27/27",
+    "spell_slots_full": true
+  }
+}

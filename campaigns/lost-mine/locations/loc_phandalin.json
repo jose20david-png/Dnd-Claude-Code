@@ -1,0 +1,20 @@
+{
+  "id": "loc_phandalin",
+  "name": "Phandalin",
+  "type": "town",
+  "description": "Frontier mining town under Redbrand occupation. Silga commands 8–12 Redbrands. Three families extorted this week.",
+  "importance": "critical",
+  "connected_locations": [
+    "loc_marta_cabin",
+    "loc_wave_echo_cave",
+    "loc_south_road",
+    "loc_shrine_of_luck"
+  ],
+  "notable_npcs": [
+    "npc_silga",
+    "npc_harbin",
+    "npc_elmar"
+  ],
+  "controlled_by": "Redbrands",
+  "threat_level": "high"
+}

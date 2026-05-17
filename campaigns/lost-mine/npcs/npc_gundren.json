@@ -1,0 +1,32 @@
+{
+  "id": "npc_gundren",
+  "name": "Gundren Rockseeker",
+  "role": "Dwarf Merchant · Wave Echo Cave Claimant · Ritual Voice #3",
+  "faction": "Independent",
+  "status": "alive",
+  "location_id": "loc_marta_cabin",
+  "disposition": "ally",
+  "traits": [
+    "determined",
+    "shaken but steady",
+    "proud mine claimant"
+  ],
+  "goals": [
+    "reclaim Wave Echo Cave",
+    "see Phandalin safe"
+  ],
+  "secrets": [
+    "Mining claim gives legal right to the cave — politically complex post-ritual"
+  ],
+  "relationships": [
+    {
+      "target_id": "npc_rurik",
+      "type": "ally",
+      "notes": "His mine, his responsibility. Volunteered."
+    }
+  ],
+  "session_state": {
+    "injured": false,
+    "combat_ready": true
+  }
+}

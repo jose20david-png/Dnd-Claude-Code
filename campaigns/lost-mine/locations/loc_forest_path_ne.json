@@ -1,0 +1,12 @@
+{
+  "id": "loc_forest_path_ne",
+  "name": "Forest Path NE",
+  "type": "wilderness",
+  "description": "Rough forest path toward Conyberry. Weakening thralls may linger. Less monitored by Redbrands.",
+  "importance": "medium",
+  "connected_locations": [
+    "loc_marta_cabin"
+  ],
+  "threat_level": "low-medium",
+  "intel": "Weakening thralls possibly present. Rougher terrain. Qelline has partial knowledge."
+}

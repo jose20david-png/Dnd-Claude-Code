@@ -1,0 +1,52 @@
+{
+  "id": "quest_escape_route",
+  "name": "Escape Route Decision",
+  "status": "active",
+  "priority": "immediate",
+  "summary": "The party must decide how to move civilians safely from Marta's cabin. Three options on the table.",
+  "objectives": [
+    {
+      "text": "Choose escape route: South Road, Forest Path NE, or Hold for Harpers",
+      "done": false
+    },
+    {
+      "text": "Brief civilians on the chosen plan",
+      "done": false
+    },
+    {
+      "text": "Execute the move safely",
+      "done": false
+    }
+  ],
+  "current_stage": "Decision pending — Rurik has not yet chosen.",
+  "related_npcs": [
+    "npc_rurik",
+    "npc_sildar",
+    "npc_qelline",
+    "npc_iarno",
+    "npc_toblen"
+  ],
+  "related_locations": [
+    "loc_marta_cabin",
+    "loc_south_road",
+    "loc_forest_path_ne"
+  ],
+  "rewards": [
+    "Civilian safety",
+    "Harpers coordination opportunity"
+  ],
+  "options": {
+    "south_road": {
+      "risk": "medium",
+      "intel": "Patrol gap 3–5am, outriders outside window"
+    },
+    "forest_path_ne": {
+      "risk": "low-medium",
+      "intel": "Weakening thralls may linger, rougher terrain"
+    },
+    "hold_for_harpers": {
+      "risk": "hold in place ~2 days",
+      "intel": "Harpers arrive Day 9 with armed support"
+    }
+  }
+}

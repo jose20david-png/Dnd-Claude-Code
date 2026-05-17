@@ -1,0 +1,14 @@
+{
+  "id": "loc_shrine_of_luck",
+  "name": "Shrine of Luck",
+  "type": "building",
+  "description": "Shrine of Tymora in Phandalin. Blessed catacombs currently hold the five ritual artifacts. Sister Garaele's home base.",
+  "importance": "high",
+  "connected_locations": [
+    "loc_phandalin"
+  ],
+  "notable_npcs": [
+    "npc_garaele"
+  ],
+  "status": "artifacts secured in blessed catacombs"
+}

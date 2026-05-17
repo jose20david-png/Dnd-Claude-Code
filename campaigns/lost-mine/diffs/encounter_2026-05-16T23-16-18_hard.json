@@ -1,0 +1,53 @@
+{
+  "op": "add",
+  "entity_type": "encounter",
+  "entity_id": "enc_1778973378945",
+  "data": {
+    "id": "enc_1778973378945",
+    "session": "session_007",
+    "theme": "bandit redbrand",
+    "difficulty": "hard",
+    "party_level": 3,
+    "party_size": 1,
+    "budget_xp": 225,
+    "adjusted_xp": 187.5,
+    "budget_use_pct": 83,
+    "multiplier": 2.5,
+    "groups": [
+      {
+        "count": 3,
+        "xp_each": 25,
+        "monster": {
+          "name": "Bandit",
+          "slug": "bandit",
+          "cr": 0.125,
+          "xp": 25,
+          "hp": 11,
+          "ac": 12,
+          "speed": "30 ft.",
+          "str": 11,
+          "dex": 12,
+          "con": 12,
+          "int": 10,
+          "wis": 10,
+          "cha": 10,
+          "actions": [
+            {
+              "name": "Scimitar",
+              "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) slashing damage."
+            },
+            {
+              "name": "Light Crossbow",
+              "desc": "Ranged Weapon Attack: +3 to hit, range 80/320 ft., one target. Hit: 5 (1d8 + 1) piercing damage."
+            }
+          ],
+          "special_abilities": [],
+          "source": "wotc-srd"
+        }
+      }
+    ],
+    "generated_at": "2026-05-16T23:16:18.945Z"
+  },
+  "reason": "Generated hard encounter (83% budget) — theme: \"bandit redbrand\"",
+  "confidence": 0.9
+}

@@ -1,0 +1,43 @@
+{
+  "id": "npc_silga",
+  "name": "Silga",
+  "role": "Redbrand Field Commander",
+  "faction": "Redbrands",
+  "status": "alive",
+  "location_id": "loc_phandalin",
+  "disposition": "hostile",
+  "traits": [
+    "tactical",
+    "brutal",
+    "motivated",
+    "half-elf",
+    "relentless"
+  ],
+  "goals": [
+    "Capture or eliminate Rurik and the party",
+    "Maintain Redbrand control of Phandalin",
+    "Recover the stolen ritual artifacts"
+  ],
+  "secrets": [
+    "Blind spots and patrol schedules known to Iarno"
+  ],
+  "relationships": [
+    {
+      "target_id": "npc_rurik",
+      "type": "enemy",
+      "notes": "Personally led shrine raid, knows party escaped"
+    },
+    {
+      "target_id": "npc_iarno",
+      "type": "rival",
+      "notes": "Former colleague — betrayal factor"
+    }
+  ],
+  "session_state": {
+    "controlling_phandalin": true,
+    "has_outriders": true,
+    "actively_hunting": true,
+    "force_size": "8-12 Redbrands"
+  },
+  "threat_level": "high"
+}

@@ -1,0 +1,10 @@
+{
+  "campaign_id": "lost_mine_witness_arc",
+  "session_id": 7,
+  "timestamp": "2026-05-16T23:05:27.602Z",
+  "operations": [],
+  "meta": {
+    "source": "session_transcript",
+    "notes": "Scaffold. Populate operations after session."
+  }
+}

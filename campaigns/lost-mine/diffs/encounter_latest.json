@@ -1,0 +1,62 @@
+{
+  "op": "add",
+  "entity_type": "encounter",
+  "entity_id": "enc_1778973381037",
+  "data": {
+    "id": "enc_1778973381037",
+    "session": "session_007",
+    "theme": "undead thrall",
+    "difficulty": "deadly",
+    "party_level": 3,
+    "party_size": 1,
+    "budget_xp": 400,
+    "adjusted_xp": 400,
+    "budget_use_pct": 100,
+    "multiplier": 2,
+    "groups": [
+      {
+        "count": 2,
+        "xp_each": 100,
+        "monster": {
+          "name": "Cackling Skeleton",
+          "slug": "cackling-skeleton",
+          "cr": 0.5,
+          "xp": 100,
+          "hp": 26,
+          "ac": 9,
+          "speed": "30 ft.",
+          "str": 12,
+          "dex": 9,
+          "con": 15,
+          "int": 8,
+          "wis": 10,
+          "cha": 14,
+          "actions": [
+            {
+              "name": "Slam",
+              "desc": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) bludgeoning damage. The cackling skeleton has advantage on this attack roll if the target is demoralized."
+            },
+            {
+              "name": "Mock (Recharge 5-6)",
+              "desc": "The cackling skeleton mocks the futile efforts of up to three creatures it can see within 30 feet of it that aren't undead or constructs. Each target must make a DC 12 Charisma saving throw, taking 5 (2d4) psychic damage on a failed save, or half as much damage on a successful one. A demoralized target has disadvantage on this saving throw."
+            }
+          ],
+          "special_abilities": [
+            {
+              "name": "Cackle",
+              "desc": "The skeleton emits a constant, demoralizing cackle. When a creature that isn't an undead or a construct starts its turn within 30 feet of the cackling skeleton and can hear the skeleton, it must make a DC 10 Wisdom saving throw or feel demoralized by the skeleton's cackling. A demoralized creature has disadvantage on attack rolls until the start of its next turn."
+            },
+            {
+              "name": "Turn Vulnerability",
+              "desc": "The cackling skeleton has disadvantage on saving throws against any effect that turns undead."
+            }
+          ],
+          "source": "tob2"
+        }
+      }
+    ],
+    "generated_at": "2026-05-16T23:16:21.037Z"
+  },
+  "reason": "Generated deadly encounter (100% budget) — theme: \"undead thrall\"",
+  "confidence": 0.9
+}

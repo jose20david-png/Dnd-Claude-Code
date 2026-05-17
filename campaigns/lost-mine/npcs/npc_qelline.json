@@ -1,0 +1,30 @@
+{
+  "id": "npc_qelline",
+  "name": "Qelline",
+  "role": "Intelligence Operative · Halfling",
+  "faction": "Independent",
+  "status": "alive",
+  "location_id": "loc_marta_cabin",
+  "disposition": "ally",
+  "traits": [
+    "observant",
+    "detail-oriented",
+    "quick-thinking"
+  ],
+  "goals": [
+    "provide actionable intel for escape or liberation"
+  ],
+  "secrets": [],
+  "relationships": [],
+  "knowledge": [
+    "Detailed Redbrand patrol patterns",
+    "South Road patrol gap: 3–5am window",
+    "Outrider positions on Triboar Trail",
+    "Forest path NE terrain — partial knowledge"
+  ],
+  "session_state": {
+    "injured": false,
+    "combat_ready": false,
+    "intel_ready": true
+  }
+}

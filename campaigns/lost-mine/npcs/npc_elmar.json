@@ -1,0 +1,23 @@
+{
+  "id": "npc_elmar",
+  "name": "Elmar Barthen",
+  "role": "Merchant · Barthen's Provisions",
+  "faction": "Phandalin Civilians",
+  "status": "alive",
+  "location_id": "loc_phandalin",
+  "disposition": "ally",
+  "traits": [
+    "cooperative",
+    "well-supplied",
+    "knows trade roads south"
+  ],
+  "goals": [
+    "survive Redbrand occupation",
+    "resume normal trade"
+  ],
+  "secrets": [],
+  "relationships": [],
+  "session_state": {
+    "under_occupation": true
+  }
+}

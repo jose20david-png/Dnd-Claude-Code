@@ -1,0 +1,32 @@
+{
+  "id": "npc_marta",
+  "name": "Old Marta",
+  "role": "40-Year Seal Guardian · Host",
+  "faction": "Independent",
+  "status": "alive",
+  "location_id": "loc_marta_cabin",
+  "disposition": "ally",
+  "traits": [
+    "ancient wisdom",
+    "steady under pressure",
+    "seal historian"
+  ],
+  "goals": [
+    "support the party",
+    "advise on seal implications"
+  ],
+  "secrets": [
+    "Journals hold 40 years of seal degradation records — invaluable lore"
+  ],
+  "relationships": [
+    {
+      "target_id": "npc_rurik",
+      "type": "ally",
+      "notes": "Warned him: some anchors broke, some endured"
+    }
+  ],
+  "session_state": {
+    "injured": false,
+    "combat_ready": false
+  }
+}

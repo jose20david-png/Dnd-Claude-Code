@@ -1,0 +1,42 @@
+{
+  "id": "npc_sildar",
+  "name": "Sildar Hallwinter",
+  "role": "Retired Soldier · Lord's Alliance · Ritual Voice #2",
+  "faction": "Lord's Alliance",
+  "status": "alive",
+  "location_id": "loc_marta_cabin",
+  "disposition": "ally",
+  "traits": [
+    "tactical",
+    "experienced",
+    "cautious",
+    "intel-focused"
+  ],
+  "goals": [
+    "liberate Phandalin",
+    "gather Silga intel before action",
+    "protect civilians"
+  ],
+  "secrets": [],
+  "relationships": [
+    {
+      "target_id": "npc_rurik",
+      "type": "ally",
+      "notes": "Combat partner, trusts his judgment"
+    },
+    {
+      "target_id": "npc_silga",
+      "type": "enemy",
+      "notes": "Wants intel before confrontation"
+    }
+  ],
+  "knowledge": [
+    "Redbrand command structure",
+    "Patrol patterns via Qelline briefing"
+  ],
+  "session_state": {
+    "injured": false,
+    "combat_ready": true
+  },
+  "known_preference": "Wants Silga intel before committing to any escape route"
+}

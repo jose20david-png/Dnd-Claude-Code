@@ -1,0 +1,25 @@
+{
+  "id": "npc_toblen",
+  "name": "Toblen Stonehill",
+  "role": "Innkeeper · Ritual Voice #4",
+  "faction": "Phandalin Civilians",
+  "status": "alive",
+  "location_id": "loc_marta_cabin",
+  "disposition": "ally",
+  "traits": [
+    "protective of community",
+    "stubborn",
+    "wants to fight"
+  ],
+  "goals": [
+    "liberate Phandalin",
+    "protect his inn and neighbors"
+  ],
+  "secrets": [],
+  "relationships": [],
+  "session_state": {
+    "injured": false,
+    "combat_ready": true
+  },
+  "known_preference": "Strongly favors holding at cabin and waiting for Harpers"
+}

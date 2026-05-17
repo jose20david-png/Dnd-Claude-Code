@@ -1,0 +1,15 @@
+{
+  "id": "loc_wave_echo_cave",
+  "name": "Wave Echo Cave",
+  "type": "dungeon",
+  "description": "Ancient mine beneath the Sword Mountains. Contains the Seal Chamber. The binding ritual was performed here on Day 6.",
+  "importance": "critical",
+  "connected_locations": [
+    "loc_phandalin",
+    "loc_seal_chamber"
+  ],
+  "notable_npcs": [
+    "npc_the_witness"
+  ],
+  "lore": "Gundren Rockseeker holds the mining claim. 400-year-old imprisonment site of the Witness."
+}

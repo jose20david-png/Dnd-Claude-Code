@@ -1,0 +1,36 @@
+{
+  "id": "npc_mind_flayer",
+  "name": "The Mind Flayer",
+  "role": "Illithid · Former Witness Servant",
+  "faction": "Independent (severed from Witness)",
+  "status": "alive",
+  "location_id": "loc_unknown",
+  "disposition": "hostile",
+  "traits": [
+    "ancient",
+    "cunning",
+    "severed from master",
+    "rebuilding"
+  ],
+  "goals": [
+    "escape and regroup",
+    "rebuild influence without Witness power",
+    "survive"
+  ],
+  "secrets": [
+    "Knows Rurik is the Seal anchor — could become a targeted threat"
+  ],
+  "relationships": [
+    {
+      "target_id": "npc_the_witness",
+      "type": "severed",
+      "notes": "Cut off after sealing ritual"
+    }
+  ],
+  "session_state": {
+    "location_unknown": true,
+    "thralls_weakening": true,
+    "breeding_army_destroyed": true
+  },
+  "threat_level": "critical"
+}

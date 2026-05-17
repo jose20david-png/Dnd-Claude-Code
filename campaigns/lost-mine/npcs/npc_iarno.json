@@ -1,0 +1,42 @@
+{
+  "id": "npc_iarno",
+  "name": "Iarno Albrek",
+  "role": "Former Glasstaff · Ritual Voice #5 · Cipher Expert",
+  "faction": "Recovering / Formerly Redbrands",
+  "status": "alive",
+  "location_id": "loc_marta_cabin",
+  "disposition": "uncertain",
+  "traits": [
+    "intelligent",
+    "haunted by past",
+    "earnest in recovery",
+    "tactically sharp"
+  ],
+  "goals": [
+    "atone for Redbrand service",
+    "use inside knowledge to help",
+    "fully recover"
+  ],
+  "secrets": [
+    "Former Redbrand leadership — knows their internal structure intimately",
+    "Knows Silga's patrol patterns and blind spots — critical intelligence asset"
+  ],
+  "relationships": [
+    {
+      "target_id": "npc_silga",
+      "type": "rival",
+      "notes": "Former colleague — knows her vulnerabilities"
+    },
+    {
+      "target_id": "npc_rurik",
+      "type": "neutral",
+      "notes": "Volunteered for ritual, earning trust slowly"
+    }
+  ],
+  "session_state": {
+    "injured": false,
+    "recovering": true,
+    "combat_ready": false,
+    "intel_available": true
+  }
+}

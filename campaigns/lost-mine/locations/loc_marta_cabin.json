@@ -1,0 +1,24 @@
+{
+  "id": "loc_marta_cabin",
+  "name": "Old Marta's Cabin",
+  "type": "building",
+  "description": "Isolated cabin on the outskirts of Phandalin. Current party base of operations. Hosted the full party since Day 4.",
+  "importance": "critical",
+  "connected_locations": [
+    "loc_phandalin",
+    "loc_south_road",
+    "loc_forest_path_ne"
+  ],
+  "notable_npcs": [
+    "npc_marta",
+    "npc_rurik",
+    "npc_garaele",
+    "npc_sildar",
+    "npc_gundren",
+    "npc_iarno",
+    "npc_toblen",
+    "npc_borik",
+    "npc_qelline"
+  ],
+  "status": "safe — not yet discovered by Redbrands"
+}

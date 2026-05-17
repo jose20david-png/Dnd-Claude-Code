@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dice Roll</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  color: #fff;
+}
+.container {
+  text-align: center;
+}
+.dice-area {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+  min-height: 140px;
+}
+.die-wrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+}
+svg.lit {
+  filter: drop-shadow(0 0 20px #00ff88);
+}
+svg.dim {
+  opacity: 0.2;
+  transform: scale(0.87);
+}
+.die-num {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 48px;
+  font-weight: bold;
+  color: #00ff88;
+  z-index: 10;
+  pointer-events: none;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+.die-num.lit {
+  text-shadow: 0 0 20px rgba(0, 255, 136, 0.8), 0 0 30px rgba(0, 255, 136, 0.5);
+}
+.die-num.dim {
+  opacity: 0.18;
+  color: #444;
+  text-shadow: none;
+}
+.result-box {
+  background: rgba(0, 255, 136, 0.05);
+  border: 2px solid #00ff88;
+  border-radius: 8px;
+  padding: 20px 40px;
+  margin-top: 30px;
+  min-width: 300px;
+}
+.result-label {
+  font-size: 12px;
+  color: #888;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.result-value {
+  font-size: 48px;
+  font-weight: bold;
+  color: #00ff88;
+  margin: 10px 0;
+}
+.result-detail {
+  font-size: 14px;
+  color: #aaa;
+  margin-top: 8px;
+}
+.title {
+  font-size: 18px;
+  color: #00ff88;
+  margin-bottom: 20px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.info-text {
+  font-size: 12px;
+  color: #666;
+  margin-top: 20px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="title" id="title"></div>
+
+  <div class="dice-area" id="dice-area"></div>
+
+  <div class="result-box">
+    <div class="result-label">RESULT</div>
+    <div class="result-value" id="final-result">—</div>
+    <div class="result-detail" id="result-detail"></div>
+  </div>
+
+  <div class="info-text">Click anywhere to close</div>
+</div>
+
+<script>
+'use strict';
+
+const ANIM_MS = 800;
+const SIDES_SHAPES = {
+  4: (s) => `<polygon points="60,10 110,90 60,110 10,90" fill="none" stroke="currentColor" stroke-width="2"/>`,
+  6: (s) => `<rect x="20" y="20" width="80" height="80" fill="none" stroke="currentColor" stroke-width="2"/>`,
+  8: (s) => `<polygon points="60,10 100,35 100,85 60,110 20,85 20,35" fill="none" stroke="currentColor" stroke-width="2"/>`,
+  10: (s) => `<polygon points="60,5 95,40 85,100 35,100 25,40" fill="none" stroke="currentColor" stroke-width="2"/>`,
+  12: (s) => `<polygon points="60,8 102,28 110,70 90,105 30,105 10,70 18,28" fill="none" stroke="currentColor" stroke-width="2"/>`,
+  20: (s) => `<g><polygon points="60,8 105,35 100,85 60,108 20,85 15,35" fill="none" stroke="currentColor" stroke-width="2"/><line x1="40" y1="40" x2="80" y2="75" stroke="currentColor" stroke-width="1" opacity="0.5"/><line x1="80" y1="40" x2="40" y2="75" stroke="currentColor" stroke-width="1" opacity="0.5"/></g>`,
+  100: (s) => `<circle cx="60" cy="60" r="50" fill="none" stroke="currentColor" stroke-width="2"/>`
+};
+
+function getDieSVG(sides, num) {
+  const shape = SIDES_SHAPES[sides] ? SIDES_SHAPES[sides]() : `<rect x="20" y="20" width="80" height="80" fill="none" stroke="currentColor" stroke-width="2"/>`;
+  return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><g style="color: #00ff88;">${shape}</g></svg>`;
+}
+
+function getParams() {
+  // Prefer injected data (set by roll.py), fall back to URL params
+  if (window.ROLL_DATA) return window.ROLL_DATA;
+  const params = new URLSearchParams(window.location.search);
+  return {
+    sides: parseInt(params.get('sides')) || 20,
+    result: parseInt(params.get('result')) || 1,
+    modifier: parseInt(params.get('modifier')) || 0,
+    final: parseInt(params.get('final')) || 1,
+    rolls: params.get('rolls') || '1',
+    label: decodeURIComponent(params.get('label') || ''),
+    mode: params.get('mode') || 'normal'
+  };
+}
+
+function animateDie(dieId, finalResult, sides, onDone) {
+  const wrapper = document.getElementById(dieId);
+  const numEl = wrapper.querySelector('.die-num');
+  const svgEl = wrapper.querySelector('svg');
+  const faceEl = wrapper.querySelector('svg');
+
+  const t0 = performance.now();
+  let lastSwap = t0;
+
+  (function tick(now) {
+    const prog = Math.min((now - t0) / ANIM_MS, 1);
+
+    if (prog >= 1) {
+      numEl.textContent = finalResult;
+      numEl.classList.add('lit');
+      svgEl.classList.add('lit');
+      faceEl.classList.add('lit');
+      if (onDone) onDone();
+      return;
+    }
+
+    const interval = 38 + Math.pow(prog, 1.6) * 252;
+    if ((now - lastSwap) >= interval) {
+      numEl.textContent = Math.floor(Math.random() * sides) + 1;
+      lastSwap = now;
+    }
+
+    requestAnimationFrame(tick);
+  })(t0);
+}
+
+function start() {
+  const p = getParams();
+  const SIDES = p.sides;
+
+  // Title
+  if (p.label) {
+    document.getElementById('title').textContent = p.label;
+  } else {
+    document.getElementById('title').textContent = `d${SIDES} Roll`;
+  }
+
+  // Dice area
+  const diceArea = document.getElementById('dice-area');
+
+  if (p.mode === 'advantage' || p.mode === 'disadvantage') {
+    const [r1, r2] = p.rolls.split(',').map(x => parseInt(x));
+
+    // First die (loser gets dimmed)
+    const wrapper1 = document.createElement('div');
+    wrapper1.id = 'die-1';
+    wrapper1.className = 'die-wrapper';
+    wrapper1.innerHTML = getDieSVG(SIDES, 1) + '<div class="die-num">1</div>';
+    diceArea.appendChild(wrapper1);
+
+    // VS text
+    const vs = document.createElement('div');
+    vs.style.color = '#666';
+    vs.style.fontSize = '20px';
+    vs.style.fontWeight = 'bold';
+    vs.textContent = 'vs';
+    diceArea.appendChild(vs);
+
+    // Second die
+    const wrapper2 = document.createElement('div');
+    wrapper2.id = 'die-2';
+    wrapper2.className = 'die-wrapper';
+    wrapper2.innerHTML = getDieSVG(SIDES, 1) + '<div class="die-num">1</div>';
+    diceArea.appendChild(wrapper2);
+
+    // Animate both, dim the loser
+    let done = 0;
+    animateDie('die-1', r1, SIDES, () => {
+      done++;
+      if (done === 2) {
+        const winner = p.mode === 'advantage' ? Math.max(r1, r2) : Math.min(r1, r2);
+        const loserIsFirst = (p.mode === 'advantage' ? r2 : r1) === winner;
+        if (loserIsFirst) {
+          document.getElementById('die-2').classList.add('dim');
+          document.getElementById('die-2').querySelector('.die-num').classList.add('dim');
+          document.getElementById('die-2').querySelector('svg').classList.add('dim');
+        } else {
+          document.getElementById('die-1').classList.add('dim');
+          document.getElementById('die-1').querySelector('.die-num').classList.add('dim');
+          document.getElementById('die-1').querySelector('svg').classList.add('dim');
+        }
+      }
+    });
+    animateDie('die-2', r2, SIDES, () => {
+      done++;
+    });
+  } else {
+    // Single die
+    const wrapper = document.createElement('div');
+    wrapper.id = 'die-1';
+    wrapper.className = 'die-wrapper';
+    wrapper.innerHTML = getDieSVG(SIDES, 1) + '<div class="die-num">1</div>';
+    diceArea.appendChild(wrapper);
+
+    animateDie('die-1', p.result, SIDES);
+  }
+
+  // Result display
+  document.getElementById('final-result').textContent = p.final;
+
+  let detail = `d${SIDES}`;
+  if (p.mode === 'advantage') detail += ` (advantage: ${p.rolls.split(',')[0]} vs ${p.rolls.split(',')[1]}, took higher)`;
+  else if (p.mode === 'disadvantage') detail += ` (disadvantage: ${p.rolls.split(',')[0]} vs ${p.rolls.split(',')[1]}, took lower)`;
+
+  if (p.modifier !== 0) {
+    detail += ` ${p.modifier > 0 ? '+' : ''}${p.modifier}`;
+  }
+
+  document.getElementById('result-detail').textContent = detail;
+
+  // Auto-close after 5 seconds
+  setTimeout(() => window.close(), 5000);
+
+  // Click to close
+  document.addEventListener('click', () => window.close());
+}
+
+start();
+</script>
+</body>
+</html>

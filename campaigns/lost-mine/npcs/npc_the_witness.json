@@ -1,0 +1,36 @@
+{
+  "id": "npc_the_witness",
+  "name": "The Witness",
+  "role": "Ancient Imprisoned Entity",
+  "faction": "None — primordial",
+  "status": "contained",
+  "location_id": "loc_seal_chamber",
+  "disposition": "contained",
+  "traits": [
+    "vast",
+    "aware",
+    "hungry",
+    "patient",
+    "unknowable"
+  ],
+  "goals": [
+    "freedom",
+    "consumption of knowledge and minds"
+  ],
+  "secrets": [
+    "Still fully aware despite containment — watches Rurik constantly through the seal bond"
+  ],
+  "relationships": [
+    {
+      "target_id": "npc_rurik",
+      "type": "bound",
+      "notes": "Rurik is the eternal anchor — permanent bond, both ways"
+    }
+  ],
+  "session_state": {
+    "contained": true,
+    "seal_integrity_pct": 100,
+    "stable_years": true
+  },
+  "threat_level": "existential (contained)"
+}

@@ -1,0 +1,36 @@
+{
+  "id": "quest_hunt_mind_flayer",
+  "name": "Hunt the Mind Flayer",
+  "status": "active",
+  "priority": "critical",
+  "summary": "The Mind Flayer is at large after the sealing ritual. Breeding army destroyed. Must be hunted before it rebuilds.",
+  "objectives": [
+    {
+      "text": "Discover the breeding chamber",
+      "done": true
+    },
+    {
+      "text": "Destroy the breeding chamber (Shatter + collapse)",
+      "done": true
+    },
+    {
+      "text": "Locate the Mind Flayer",
+      "done": false
+    },
+    {
+      "text": "Eliminate or drive off the Mind Flayer",
+      "done": false
+    }
+  ],
+  "current_stage": "Breeding army destroyed (Day 6). Location unknown.",
+  "related_npcs": [
+    "npc_mind_flayer"
+  ],
+  "related_locations": [
+    "loc_wave_echo_cave"
+  ],
+  "rewards": [
+    "Regional safety",
+    "Elimination of thrall threat"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "npc_harbin",
+  "name": "Harbin Wester",
+  "role": "Townmaster of Phandalin",
+  "faction": "Phandalin Civilians",
+  "status": "alive",
+  "location_id": "loc_phandalin",
+  "disposition": "neutral",
+  "traits": [
+    "cowardly",
+    "self-preserving",
+    "follows power"
+  ],
+  "goals": [
+    "survive",
+    "maintain position under whoever holds power"
+  ],
+  "secrets": [],
+  "relationships": [],
+  "session_state": {
+    "under_occupation": true,
+    "compliant_with_redbrands": true
+  }
+}

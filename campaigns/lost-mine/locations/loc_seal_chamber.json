@@ -1,0 +1,15 @@
+{
+  "id": "loc_seal_chamber",
+  "name": "Seal Chamber",
+  "type": "dungeon",
+  "description": "Deep within Wave Echo Cave. Obsidian floor seal, now whole and glowing steady green. The Witness is imprisoned here. Rurik feels it as a second heartbeat.",
+  "importance": "critical",
+  "connected_locations": [
+    "loc_wave_echo_cave"
+  ],
+  "notable_npcs": [
+    "npc_the_witness"
+  ],
+  "seal_integrity_pct": 100,
+  "seal_status": "stable — years or decades"
+}

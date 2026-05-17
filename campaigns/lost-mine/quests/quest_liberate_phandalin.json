@@ -1,0 +1,40 @@
+{
+  "id": "quest_liberate_phandalin",
+  "name": "Liberate Phandalin",
+  "status": "active",
+  "priority": "high",
+  "summary": "Silga and the Redbrands control Phandalin. ~8–12 Redbrands active, three families extorted. Harpers arrive Day 9.",
+  "objectives": [
+    {
+      "text": "Gather intel on Silga (Iarno can provide)",
+      "done": false
+    },
+    {
+      "text": "Coordinate with arriving Harpers (Day 9)",
+      "done": false
+    },
+    {
+      "text": "Neutralize Redbrand presence",
+      "done": false
+    },
+    {
+      "text": "Restore Phandalin to civilian control",
+      "done": false
+    }
+  ],
+  "current_stage": "Planning phase. Iarno has intel on Silga. Harpers ETA Day 9.",
+  "related_npcs": [
+    "npc_silga",
+    "npc_iarno",
+    "npc_sildar",
+    "npc_toblen"
+  ],
+  "related_locations": [
+    "loc_phandalin"
+  ],
+  "rewards": [
+    "Town freedom",
+    "Redbrand defeat",
+    "Harpers alliance deepened"
+  ]
+}

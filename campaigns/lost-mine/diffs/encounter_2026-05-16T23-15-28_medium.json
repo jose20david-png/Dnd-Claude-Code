@@ -1,0 +1,64 @@
+{
+  "op": "add",
+  "entity_type": "encounter",
+  "entity_id": "enc_1778973328637",
+  "data": {
+    "id": "enc_1778973328637",
+    "session": "session_007",
+    "theme": "bandit",
+    "difficulty": "medium",
+    "party_level": 3,
+    "party_size": 1,
+    "budget_xp": 150,
+    "adjusted_xp": 150,
+    "budget_use_pct": 100,
+    "multiplier": 1.5,
+    "groups": [
+      {
+        "count": 1,
+        "xp_each": 100,
+        "monster": {
+          "name": "Tosculi Drone",
+          "slug": "tosculi-drone",
+          "cr": 0.5,
+          "xp": 100,
+          "hp": 22,
+          "ac": 13,
+          "speed": {
+            "walk": 20
+          },
+          "str": 8,
+          "dex": 16,
+          "con": 14,
+          "int": 8,
+          "wis": 12,
+          "cha": 4,
+          "actions": [
+            {
+              "name": "Claws",
+              "desc": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 8 (2d4 + 3) slashing damage."
+            },
+            {
+              "name": "Light Crossbow",
+              "desc": "Ranged Weapon Attack: +5 to hit, range 80/320 ft., one target. Hit: 7 (1d8 + 3) piercing damage."
+            }
+          ],
+          "special_abilities": [
+            {
+              "name": "Gliding Wings",
+              "desc": "The tosculi drone can use its wings to slowly descend when falling (as if under the effect of the feather fall spell). It can move up to 5 feet horizontally for every foot it falls. The tosculi drone can't gain height with these wings alone. If subjected to a strong wind or lift of any kind, it can use the updraft to glide farther."
+            },
+            {
+              "name": "Skittering",
+              "desc": "Up to two tosculi can share the same space at one time. The tosculi has advantage on melee attack rolls while sharing its space with another tosculi that isn't incapacitated."
+            }
+          ],
+          "source": "tob"
+        }
+      }
+    ],
+    "generated_at": "2026-05-16T23:15:28.637Z"
+  },
+  "reason": "Generated medium encounter (100% budget) — theme: \"bandit\"",
+  "confidence": 0.9
+}
