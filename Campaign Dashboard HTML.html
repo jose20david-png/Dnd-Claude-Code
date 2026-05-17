@@ -471,6 +471,46 @@ body {
   min-width: 60px;
 }
 #music-label:hover { color: #888; }
+
+/* ── Quick Roll Bar ── */
+#quick-roll-bar {
+  background: #0c0c12;
+  border-bottom: 1px solid #1a1a28;
+  padding: 3px 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+#quick-roll-bar::-webkit-scrollbar { display: none; }
+.qr-label {
+  color: #2a2a40;
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  margin-right: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.qr-btn {
+  background: none;
+  border: 1px solid #1a1a2a;
+  color: #3a3a58;
+  padding: 2px 9px;
+  cursor: pointer;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  border-radius: 2px;
+  transition: all 0.1s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.qr-btn:hover { color: #ffd700; border-color: #5a4a00; background: rgba(255,215,0,0.05); }
+.qr-btn:active { background: rgba(255,215,0,0.12); }
+.qr-mod { color: #2a2a40; font-size: 9px; margin-left: 3px; }
+.qr-btn:hover .qr-mod { color: #a07800; }
 </style>
 </head>
 <body>
@@ -496,6 +536,19 @@ body {
   <button class="tab-btn" onclick="switchTab('spells')">Spells</button>
   <button class="tab-btn" onclick="switchTab('inventory')">⚙️ Inventory</button>
   <button class="tab-btn" onclick="switchTab('claude')">🤖 Claude</button>
+</div>
+
+<!-- ══════ QUICK ROLL BAR ══════ -->
+<div id="quick-roll-bar">
+  <span class="qr-label">QUICK ROLL</span>
+  <button class="qr-btn" onclick="quickRoll('Perception',1,20,3)">PERCEPTION <span class="qr-mod">d20+3</span></button>
+  <button class="qr-btn" onclick="quickRoll('Insight',1,20,5)">INSIGHT <span class="qr-mod">d20+5</span></button>
+  <button class="qr-btn" onclick="quickRoll('WIS Save',1,20,5)">WIS SAVE <span class="qr-mod">d20+5</span></button>
+  <button class="qr-btn" onclick="quickRoll('Initiative',1,20,-1)">INITIATIVE <span class="qr-mod">d20−1</span></button>
+  <button class="qr-btn" onclick="quickRoll('ATK Warhammer',1,20,4)">ATK <span class="qr-mod">d20+4</span></button>
+  <button class="qr-btn" onclick="quickRoll('Warhammer DMG',1,8,2)">DMG <span class="qr-mod">d8+2</span></button>
+  <button class="qr-btn" onclick="quickRoll('Guiding Bolt',1,20,5)">GUIDING BOLT <span class="qr-mod">d20+5</span></button>
+  <button class="qr-btn" onclick="quickRoll('Healing Word',1,4,3)">HEALING WORD <span class="qr-mod">d4+3</span></button>
 </div>
 
 <!-- ══════ CONTENT ══════ -->
@@ -1772,6 +1825,18 @@ function sendRollToDM() {
   switchTab('claude');
   const textarea = document.getElementById('claude-prompt');
   textarea.value = msg;
+  sendClaudePrompt();
+}
+
+// Quick-Roll Bar: roll + auto-send to DM if chat is ready
+function quickRoll(label, count, sides, modifier) {
+  roll(label, count, sides, modifier);
+  if (!_lastRollResult) return;
+  const textarea = document.getElementById('claude-prompt');
+  if (!textarea || textarea.disabled) return; // DM is mid-response, don't interrupt
+  const { label: l, total: t, breakdown: b } = _lastRollResult;
+  switchTab('claude');
+  textarea.value = `${l}: **${t}** — ${b}`;
   sendClaudePrompt();
 }
 

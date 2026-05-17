@@ -21,6 +21,7 @@ const CAMPAIGN_STATE_PATH = path.join(APP_DIR, 'campaign_state.json');
 const CONTEXT_PATH        = path.join(APP_DIR, 'Campaign Context full.md');
 const CHAT_HISTORY_PATH   = path.join(APP_DIR, 'claude_chat_history.json');
 const DASHBOARD_PATH      = path.join(APP_DIR, 'Campaign Dashboard HTML.html');
+const JOURNAL_PATH        = path.join(APP_DIR, 'journal.md');
 const ENV_PATH            = path.join(APP_DIR, '.env');
 
 const MODEL                = 'claude-haiku-4-5';
@@ -221,8 +222,8 @@ const TOOLS = [
    input_schema:{type:'object',properties:{quest_id:{type:'string'},step_id:{type:'string'}},required:['quest_id','step_id']}},
   {name:'append_history_log',description:'Record a significant narrative event.',
    input_schema:{type:'object',properties:{event:{type:'string'}},required:['event']}},
-  {name:'end_session',description:'End the session, sync context file, commit and push to GitHub.',
-   input_schema:{type:'object',properties:{summary:{type:'string'}},required:['summary']}},
+  {name:'end_session',description:'End the session, write a narrative journal entry, sync context file, commit and push to GitHub.',
+   input_schema:{type:'object',properties:{summary:{type:'string',description:'One-line session summary for the git commit message.'},recap:{type:'string',description:'2-3 paragraph narrative journal entry written in vivid prose from the DM perspective, describing what happened this session — key events, decisions, dramatic moments, and how it ends. Written like a campaign diary, not a bullet list.'}},required:['summary','recap']}},
   {name:'set_music_scene',description:"Change the dashboard's background music to match the current narrative mood. Call this whenever the tone shifts: entering combat, arriving at a tavern, taking a rest, dramatic silence, etc.",
    input_schema:{type:'object',properties:{scene:{type:'string',enum:['exploration','combat','rest','tavern','silence'],description:'exploration=travel/adventure, combat=battle/tension, rest=safe downtime/camp, tavern=social/inn, silence=dramatic pause'}},required:['scene']}}
 ];
@@ -243,12 +244,24 @@ function executeTool(name, input) {
     case 'set_music_scene': { return {success:true, scene:input.scene, music_scene:true}; }
     case 'end_session': {
       try {
+        // Write journal entry
+        if (input.recap) {
+          const state=loadState(); const world=state.world;
+          const date=new Date().toISOString().slice(0,10);
+          const header=`\n---\n\n## ${world.time} | ${date}\n*${world.current_location}*\n\n`;
+          const entry=header+input.recap.trim()+'\n';
+          if (!fs.existsSync(JOURNAL_PATH)) {
+            fs.writeFileSync(JOURNAL_PATH,'# Rurik Stormhammer — Campaign Journal\n','utf8');
+          }
+          fs.appendFileSync(JOURNAL_PATH,entry,'utf8');
+          console.log('  ✓ Journal entry written to journal.md');
+        }
         updateContextFile(loadState());
         execSync('git add -A', {cwd:APP_DIR,stdio:'pipe'});
         const msg=input.summary.replace(/"/g,"'").replace(/\n/g,' ').slice(0,120);
         execSync(`git commit -m "Session end: ${msg}"`, {cwd:APP_DIR,stdio:'pipe'});
         execSync('git push', {cwd:APP_DIR,stdio:'pipe'});
-        return {success:true,message:'Context synced. Committed and pushed to GitHub.'};
+        return {success:true,message:'Journal written. Context synced. Committed and pushed to GitHub.'};
       } catch(e) {
         const msg=(e.stdout||'').toString();
         if(msg.includes('nothing to commit')) return {success:true,message:'Nothing new to commit.'};
@@ -316,7 +329,7 @@ RULES:
 - Call use_spell_slot immediately when a leveled spell is cast
 - Call update_hp after any damage or healing resolves
 - After tool calls, ALWAYS continue with vivid DM narration referencing the exact numbers
-- Call end_session when the player says they are done for the day
+- Call end_session when the player says they are done for the day; the recap field must be 2-3 paragraphs of vivid narrative prose describing the session's key events, decisions, and dramatic moments — written like a campaign diary entry, not a list
 
 ═══════════════════════
 CAMPAIGN: Lost Mine of Phandelver — The Witness Arc
