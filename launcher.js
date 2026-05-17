@@ -362,7 +362,29 @@ PENDING: South Road (3-5am gap) / Forest Path NE / Wait for Harpers`;
 function makeAPICall(bodyStr) {
   return new Promise((resolve,reject)=>{
     const buf=Buffer.from(bodyStr);
-    const req=https.request({hostname:'api.anthropic.com',path:'/v1/messages',method:'POST',headers:{'Content-Type':'application/json','Content-Length':buf.length,'x-api-key':API_KEY,'anthropic-version':'2023-06-01'}},resolve);
+    const req=https.request({hostname:'api.anthropic.com',path:'/v1/messages',method:'POST',headers:{'Content-Type':'application/json','Content-Length':buf.length,'x-api-key':API_KEY,'anthropic-version':'2023-06-01'}},(res)=>{
+      // CRITICAL: detect non-200 responses BEFORE handing the stream to the streaming parser.
+      // Anthropic returns errors (400, 401, 429, 500, 529) as a JSON body, not as SSE.
+      // If we don't catch this here, the streaming parser sees no "data: " lines and the
+      // turn looks empty — which is the root cause of "Empty assistant turn" failures.
+      if(res.statusCode!==200){
+        let body='';
+        res.setEncoding('utf8');
+        res.on('data',c=>body+=c);
+        res.on('end',()=>{
+          let errMsg=`HTTP ${res.statusCode}`;
+          try{const j=JSON.parse(body); if(j.error?.message)errMsg=`HTTP ${res.statusCode} — ${j.error.type||'error'}: ${j.error.message}`;}catch{}
+          if(errMsg===`HTTP ${res.statusCode}`)errMsg+=`: ${body.slice(0,300)}`;
+          const err=new Error(errMsg);
+          err.statusCode=res.statusCode;
+          err.body=body;
+          reject(err);
+        });
+        res.on('error',reject);
+        return;
+      }
+      resolve(res);
+    });
     req.on('error',reject);
     req.write(buf); req.end();
   });
@@ -370,17 +392,27 @@ function makeAPICall(bodyStr) {
 
 async function streamAgenticLoop(messages, systemPrompt, res) {
   let totalTokens=0;
+  let apiError=null;
+  console.log(`  ▶ Agentic loop start — ${messages.length} messages in context`);
   for (let loop=0;loop<6;loop++){
     const body=JSON.stringify({model:MODEL,max_tokens:2000,system:systemPrompt,tools:TOOLS,messages,stream:true});
-    const apiRes=await makeAPICall(body);
-    let textTurn='',toolUses=[],currentTU=null,currentJson='',stopReason='end_turn',stateUpdated=false;
+    let apiRes;
+    try {
+      apiRes=await makeAPICall(body);
+    } catch(err) {
+      apiError=err.message||String(err);
+      console.error(`  ✗ Loop ${loop} API call failed: ${apiError}`);
+      res.write(`data: ${JSON.stringify({type:'error',error:apiError})}\n\n`);
+      break;
+    }
+    let textTurn='',toolUses=[],currentTU=null,currentJson='',stopReason='end_turn',stateUpdated=false,streamErr=null;
     await new Promise(resolve=>{
       apiRes.on('data',chunk=>{
         for(const line of chunk.toString().split('\n')){
           if(!line.startsWith('data: '))continue;
           try{
             const d=JSON.parse(line.slice(6));
-            if(d.type==='error'){const em=d.error?.message||'Anthropic API error';console.error('  ✗ API:',em);res.write(`data: ${JSON.stringify({type:'error',error:em})}\n\n`);}
+            if(d.type==='error'){streamErr=d.error?.message||'Anthropic streaming error';console.error('  ✗ Stream error:',streamErr);res.write(`data: ${JSON.stringify({type:'error',error:streamErr})}\n\n`);}
             if(d.type==='content_block_start'&&d.content_block.type==='tool_use'){currentTU={id:d.content_block.id,name:d.content_block.name};currentJson='';}
             if(d.type==='content_block_delta'){if(d.delta.type==='text_delta'){textTurn+=d.delta.text;res.write(`data: ${JSON.stringify({type:'text',content:d.delta.text})}\n\n`);}if(d.delta.type==='input_json_delta')currentJson+=d.delta.partial_json;}
             if(d.type==='content_block_stop'&&currentTU){try{currentTU.input=JSON.parse(currentJson);}catch{currentTU.input={};}toolUses.push(currentTU);currentTU=null;currentJson='';}
@@ -389,7 +421,10 @@ async function streamAgenticLoop(messages, systemPrompt, res) {
         }
       });
       apiRes.on('end',resolve);
+      apiRes.on('error',e=>{streamErr=e.message;resolve();});
     });
+    console.log(`  ⟳ Loop ${loop}: text=${textTurn.length}c, tools=${toolUses.length}${toolUses.length?` [${toolUses.map(t=>t.name).join(',')}]`:''}, stop=${stopReason}${streamErr?`, streamErr=${streamErr}`:''}`);
+    if(streamErr){apiError=streamErr;break;}
     const assistantContent=[];
     if(textTurn)assistantContent.push({type:'text',text:textTurn});
     for(const tu of toolUses)assistantContent.push({type:'tool_use',id:tu.id,name:tu.name,input:tu.input});
@@ -397,7 +432,6 @@ async function streamAgenticLoop(messages, systemPrompt, res) {
     if(stopReason!=='tool_use'||!toolUses.length)break;
     const toolResults=[];
     for(const tu of toolUses){
-      console.log(`  🔧 ${tu.name}`);
       const result=executeTool(tu.name,tu.input);
       if(result.state_updated){stateUpdated=true;}
       if(result.music_scene){res.write(`data: ${JSON.stringify({type:'music_scene',scene:result.scene})}\n\n`);}
@@ -407,7 +441,8 @@ async function streamAgenticLoop(messages, systemPrompt, res) {
     toolResults.push({type:'text',text:'Tools executed. You MUST now write DM narration — describe what happens next in the scene. Do not call any more tools in this response unless strictly required.'});
     messages.push({role:'user',content:toolResults});
   }
-  return totalTokens;
+  console.log(`  ▶ Agentic loop end — totalTokens=${totalTokens}${apiError?`, apiError=${apiError}`:''}`);
+  return {totalTokens, apiError};
 }
 
 // ─── HTTP SERVERS ─────────────────────────────────────────────────────────────
@@ -439,28 +474,44 @@ const relayServer = http.createServer((req,res)=>{
         res.writeHead(200,{'Content-Type':'text/event-stream','Cache-Control':'no-cache','Connection':'keep-alive'});
         const messagesForAPI=history.messages.map(m=>({role:m.role,content:m.content}));
         const systemPrompt=buildSystemPrompt(loadState());
-        const outTokens=await streamAgenticLoop(messagesForAPI,systemPrompt,res);
-        let finalText='';
-        for(let i=history.messages.length;i<messagesForAPI.length;i++){const m=messagesForAPI[i];if(m.role==='assistant'){if(Array.isArray(m.content))finalText+=m.content.filter(b=>b.type==='text').map(b=>b.text).join('');else if(typeof m.content==='string')finalText+=m.content;}}
-        // Emergency fallback: tools ran but Claude produced no text — force one narration turn
-        if(!finalText.trim()&&messagesForAPI.length>history.messages.length+1){
+        console.log(`\n  ━━━ Chat request — history=${history.messages.length} msgs, est tokens=${history.token_count} ━━━`);
+        const r1=await streamAgenticLoop(messagesForAPI,systemPrompt,res);
+        let outTokens=r1.totalTokens, apiError=r1.apiError;
+        const collectFinalText=()=>{let t='';for(let i=history.messages.length;i<messagesForAPI.length;i++){const m=messagesForAPI[i];if(m.role==='assistant'){if(Array.isArray(m.content))t+=m.content.filter(b=>b.type==='text').map(b=>b.text).join('');else if(typeof m.content==='string')t+=m.content;}}return t;};
+        let finalText=collectFinalText();
+        // Emergency fallback: tools ran successfully but no narration produced (and no API error).
+        // Skip fallback on API errors — retrying will just hit the same error.
+        if(!apiError&&!finalText.trim()&&messagesForAPI.length>history.messages.length+1){
           console.warn('  ⚠️  No narration after tools — forcing follow-up narration call');
           messagesForAPI.push({role:'user',content:'You called tools but wrote no narration. Write your DM response now — describe what happens in the scene.'});
-          await streamAgenticLoop(messagesForAPI,systemPrompt,res);
-          for(let i=history.messages.length;i<messagesForAPI.length;i++){const m=messagesForAPI[i];if(m.role==='assistant'){if(Array.isArray(m.content))finalText+=m.content.filter(b=>b.type==='text').map(b=>b.text).join('');else if(typeof m.content==='string')finalText+=m.content;}}
+          const r2=await streamAgenticLoop(messagesForAPI,systemPrompt,res);
+          outTokens+=r2.totalTokens;
+          if(r2.apiError)apiError=r2.apiError;
+          finalText=collectFinalText();
         }
         if(finalText.trim()){
-          // Only persist the exchange when the assistant actually produced text
+          // Success — persist the exchange normally
           history.messages.push({role:'assistant',content:finalText});
           history.token_count+=estimateTokens(prompt)+(outTokens||estimateTokens(finalText));
           history.model=MODEL;
           saveHistory(history);
+          console.log(`  ✓ Turn saved — ${finalText.length} chars of narration`);
         } else {
-          // No text produced (API error or tool-only turn with no follow-up narration)
-          // Roll back the user message so history stays clean and the next request succeeds
-          history.messages.pop();
+          // Failure — instead of silent rollback, surface a visible error message to the user.
+          // This keeps history valid (alternating user/assistant) AND lets the user see what went wrong.
+          let errMsg;
+          if(apiError){
+            errMsg=`⚠️ **DM connection issue**\n\n\`${apiError}\`\n\n*Your message was kept. Try sending it again — if this is a rate limit or "overloaded" error, wait 10–20 seconds first.*`;
+          } else {
+            errMsg=`⚠️ **No DM narration this turn**\n\nThe DM called tools but didn't write a response. Try rephrasing, or send "continue" to prompt narration.`;
+          }
+          history.messages.push({role:'assistant',content:errMsg});
+          history.token_count+=estimateTokens(prompt);
+          history.model=MODEL;
           saveHistory(history);
-          console.error('  ✗ Empty assistant turn — user message rolled back from history');
+          // Stream the error as text so the dashboard shows it in the chat bubble
+          res.write(`data: ${JSON.stringify({type:'text',content:errMsg})}\n\n`);
+          console.error(`  ✗ Empty turn surfaced to user: ${apiError||'(no narration)'}`);
         }
         res.write(`data: ${JSON.stringify({type:'done',token_count:history.token_count,model:MODEL})}\n\n`);
         res.end();

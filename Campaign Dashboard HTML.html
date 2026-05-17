@@ -2777,7 +2777,11 @@ async function sendClaudePrompt() {
             } else if (event.type === 'done') {
               document.getElementById('claude-tokens').textContent = event.token_count || 0;
             } else if (event.type === 'error') {
-              document.getElementById('claude-streaming').innerHTML += `<span style="color:#f87171"> [Error: ${escapeHtml(event.error)}]</span>`;
+              // Append error into assistantMessage so it persists after renderClaudeHistory()
+              // re-renders from the canonical claudeMessages array
+              const errText = `\n\n⚠️ **API Error:** ${event.error}\n\n`;
+              assistantMessage += errText;
+              document.getElementById('claude-streaming').innerHTML = renderMarkdown(assistantMessage);
             }
           } catch (e) {}
         }
