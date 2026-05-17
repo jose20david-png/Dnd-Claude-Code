@@ -325,10 +325,10 @@ function buildSystemPrompt(state) {
   return `You are the Dungeon Master running a solo D&D 5e campaign. Use tools for ALL mechanical actions — never narrate a dice roll without calling roll_dice, never describe HP/slot changes without the corresponding tool.
 
 RULES:
-- Call roll_dice for EVERY dice roll (attacks, saves, damage, checks, initiative)
+- Call roll_dice for EVERY dice roll (attacks, saves, damage, checks, initiative) — EXCEPTION: if the player sends "[Player rolled X: total N ...]", that roll is already done; DO NOT re-roll it, just narrate the outcome
 - Call use_spell_slot immediately when a leveled spell is cast
 - Call update_hp after any damage or healing resolves
-- After tool calls, ALWAYS continue with vivid DM narration referencing the exact numbers
+- YOU MUST ALWAYS write narrative text. Every single response must contain prose narration — never reply with tool calls alone. Even if you call five tools, you MUST also write at least one sentence of DM narration in the same response turn.
 - Call end_session when the player says they are done for the day; the recap field must be 2-3 paragraphs of vivid narrative prose describing the session's key events, decisions, and dramatic moments — written like a campaign diary entry, not a list
 
 ═══════════════════════
@@ -404,7 +404,7 @@ async function streamAgenticLoop(messages, systemPrompt, res) {
       toolResults.push({type:'tool_result',tool_use_id:tu.id,content:JSON.stringify(result)});
     }
     if(stateUpdated){const ns=loadState();if(ns)res.write(`data: ${JSON.stringify({type:'state_update',state:ns})}\n\n`);}
-    toolResults.push({type:'text',text:'Tool calls complete. Now continue the scene with vivid DM narration, referencing the exact dice result.'});
+    toolResults.push({type:'text',text:'Tools executed. You MUST now write DM narration — describe what happens next in the scene. Do not call any more tools in this response unless strictly required.'});
     messages.push({role:'user',content:toolResults});
   }
   return totalTokens;
@@ -438,9 +438,17 @@ const relayServer = http.createServer((req,res)=>{
         history.messages.push({role:'user',content:prompt});
         res.writeHead(200,{'Content-Type':'text/event-stream','Cache-Control':'no-cache','Connection':'keep-alive'});
         const messagesForAPI=history.messages.map(m=>({role:m.role,content:m.content}));
-        const outTokens=await streamAgenticLoop(messagesForAPI,buildSystemPrompt(loadState()),res);
+        const systemPrompt=buildSystemPrompt(loadState());
+        const outTokens=await streamAgenticLoop(messagesForAPI,systemPrompt,res);
         let finalText='';
         for(let i=history.messages.length;i<messagesForAPI.length;i++){const m=messagesForAPI[i];if(m.role==='assistant'){if(Array.isArray(m.content))finalText+=m.content.filter(b=>b.type==='text').map(b=>b.text).join('');else if(typeof m.content==='string')finalText+=m.content;}}
+        // Emergency fallback: tools ran but Claude produced no text — force one narration turn
+        if(!finalText.trim()&&messagesForAPI.length>history.messages.length+1){
+          console.warn('  ⚠️  No narration after tools — forcing follow-up narration call');
+          messagesForAPI.push({role:'user',content:'You called tools but wrote no narration. Write your DM response now — describe what happens in the scene.'});
+          await streamAgenticLoop(messagesForAPI,systemPrompt,res);
+          for(let i=history.messages.length;i<messagesForAPI.length;i++){const m=messagesForAPI[i];if(m.role==='assistant'){if(Array.isArray(m.content))finalText+=m.content.filter(b=>b.type==='text').map(b=>b.text).join('');else if(typeof m.content==='string')finalText+=m.content;}}
+        }
         if(finalText.trim()){
           // Only persist the exchange when the assistant actually produced text
           history.messages.push({role:'assistant',content:finalText});

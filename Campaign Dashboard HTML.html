@@ -1836,7 +1836,8 @@ function quickRoll(label, count, sides, modifier) {
   if (!textarea || textarea.disabled) return; // DM is mid-response, don't interrupt
   const { label: l, total: t, breakdown: b } = _lastRollResult;
   switchTab('claude');
-  textarea.value = `${l}: **${t}** — ${b}`;
+  // Format as a plain narrative statement — no dice notation — so Claude narrates instead of re-rolling
+  textarea.value = `[Player rolled ${l}: total ${t} (${b.replace(/[*]/g,'')})] Please narrate the outcome.`;
   sendClaudePrompt();
 }
 
