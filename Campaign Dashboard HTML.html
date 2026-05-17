@@ -828,7 +828,10 @@ body {
   <div id="dice-pips"></div>
   <div id="dice-total">—</div>
   <div id="dice-breakdown"></div>
-  <button id="dice-again" onclick="rollAgain()">↺ Roll Again</button>
+  <div style="display:flex;gap:6px;margin-top:12px;">
+    <button id="dice-again" style="margin-top:0;flex:1;" onclick="rollAgain()">↺ Roll Again</button>
+    <button id="dice-send-dm" onclick="sendRollToDM()" title="Send this roll to the DM chat" style="flex:1;background:none;border:1px solid #2a2a45;color:#5a5a90;padding:4px 8px;cursor:pointer;font-family:'Courier New',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;transition:all 0.1s;">→ DM</button>
+  </div>
 </div>
 
 <script>
@@ -1728,6 +1731,7 @@ const CURSOR_LOC = makeCursor(`<svg xmlns="http://www.w3.org/2000/svg" width="24
 //  DICE ROLLER
 // ══════════════════════════════════════════════════════
 let _lastRollArgs = null;
+let _lastRollResult = null; // { label, total, breakdown }
 let _diceHideTimer = null;
 
 function roll(label, count, sides, modifier) {
@@ -1735,11 +1739,57 @@ function roll(label, count, sides, modifier) {
   const rolls = [];
   for (let i = 0; i < count; i++) rolls.push(Math.floor(Math.random() * sides) + 1);
   const total = rolls.reduce((a, b) => a + b, 0) + modifier;
+  // Capture result immediately (before animation) so → DM can use it right away
+  const modPart = modifier === 0 ? '' : (modifier > 0 ? ` + ${modifier}` : ` − ${Math.abs(modifier)}`);
+  const rollPart = rolls.length > 1 ? `(${rolls.join(' + ')})` : `${rolls[0]}`;
+  _lastRollResult = { label, total, breakdown: `${rollPart}${modPart} = ${total}` };
   _displayRoll(label, count, sides, modifier, rolls, total);
   return total;
 }
 
 function rollAgain() { if (_lastRollArgs) roll(..._lastRollArgs); }
+
+// Send the last widget roll to the DM Claude chat
+function sendRollToDM() {
+  if (!_lastRollResult) return;
+  const { label, total, breakdown } = _lastRollResult;
+  const msg = `${label}: **${total}** — ${breakdown}`;
+  hideDice();
+  switchTab('claude');
+  const textarea = document.getElementById('claude-prompt');
+  textarea.value = msg;
+  sendClaudePrompt();
+}
+
+// Detect dice expressions in text and roll them, returning the enriched string.
+// e.g. "d20+4" → "d20+4 → **16** [12+4]"
+function autoRollDiceInMessage(text) {
+  const regex = /\b(\d+)?d(\d+)([+-]\d+)?\b/gi;
+  const matches = [...text.matchAll(regex)];
+  if (!matches.length) return { text, lastRoll: null };
+
+  let result = text;
+  let lastRoll = null;
+  // Process in reverse so string indices stay valid after replacement
+  for (let i = matches.length - 1; i >= 0; i--) {
+    const m = matches[i];
+    const count = parseInt(m[1] || '1');
+    const sides = parseInt(m[2]);
+    const mod   = m[3] ? parseInt(m[3]) : 0;
+    if (sides < 2 || sides > 100 || count < 1 || count > 20) continue;
+
+    const rolls = [];
+    for (let j = 0; j < count; j++) rolls.push(Math.floor(Math.random() * sides) + 1);
+    const total  = rolls.reduce((a, b) => a + b, 0) + mod;
+    const modStr = mod === 0 ? '' : (mod > 0 ? `+${mod}` : `${mod}`);
+    const rollStr = rolls.length > 1 ? `(${rolls.join('+')}${modStr})` : `${rolls[0]}${modStr}`;
+    const replacement = `${m[0]} → **${total}** [${rollStr}]`;
+
+    result   = result.slice(0, m.index) + replacement + result.slice(m.index + m[0].length);
+    lastRoll = { label: m[0], count, sides, modifier: mod, rolls, total };
+  }
+  return { text: result, lastRoll };
+}
 
 function hideDice() {
   document.getElementById('dice-overlay').classList.remove('visible');
@@ -2575,8 +2625,20 @@ function renderMarkdown(text) {
 
 async function sendClaudePrompt() {
   const textarea = document.getElementById('claude-prompt');
-  const prompt = textarea.value.trim();
+  let prompt = textarea.value.trim();
   if (!prompt) return;
+
+  // Auto-roll any dice expressions the player typed (e.g. "d20+4", "2d6+3")
+  const { text: rolledPrompt, lastRoll } = autoRollDiceInMessage(prompt);
+  if (lastRoll) {
+    prompt = rolledPrompt;
+    // Show the dice overlay animation for the last rolled expression
+    const modPart2 = lastRoll.modifier === 0 ? '' : (lastRoll.modifier > 0 ? ` + ${lastRoll.modifier}` : ` − ${Math.abs(lastRoll.modifier)}`);
+    const rollPart2 = lastRoll.rolls.length > 1 ? `(${lastRoll.rolls.join(' + ')})` : `${lastRoll.rolls[0]}`;
+    _lastRollArgs   = [lastRoll.label, lastRoll.count, lastRoll.sides, lastRoll.modifier];
+    _lastRollResult = { label: lastRoll.label, total: lastRoll.total, breakdown: `${rollPart2}${modPart2} = ${lastRoll.total}` };
+    _displayRoll(lastRoll.label, lastRoll.count, lastRoll.sides, lastRoll.modifier, lastRoll.rolls, lastRoll.total);
+  }
 
   textarea.value = '';
   textarea.disabled = true;
