@@ -2785,6 +2785,11 @@ async function sendClaudePrompt() {
 
     // Use the captured reference — safe even if claudeMessages was replaced during streaming
     assistantEntry.content = assistantMessage;
+    // Tool-only turns produce no text — remove the empty placeholder so no blank bubble appears
+    if (!assistantMessage.trim()) {
+      const idx = claudeMessages.indexOf(assistantEntry);
+      if (idx !== -1) claudeMessages.splice(idx, 1);
+    }
     renderClaudeHistory(); // re-render with final styled message
 
   } catch (err) {
