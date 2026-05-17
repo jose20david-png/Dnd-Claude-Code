@@ -2660,6 +2660,9 @@ async function sendClaudePrompt() {
   claudeMessages.push({ role: 'user', content: prompt });
   renderClaudeHistory();
 
+  // Declare outside try so catch block can reference it for cleanup
+  let assistantEntry = null;
+
   try {
     const res = await fetch('http://localhost:3141/api/chat', {
       method: 'POST',
@@ -2673,8 +2676,10 @@ async function sendClaudePrompt() {
     const decoder = new TextDecoder();
     let assistantMessage = '';
 
-    // Add assistant message placeholder
-    claudeMessages.push({ role: 'assistant', content: '' });
+    // Keep a direct object reference — immune to array reassignment or index shifts
+    assistantEntry = { role: 'assistant', content: '' };
+    claudeMessages.push(assistantEntry);
+
     const histDiv = document.getElementById('claude-history');
     const msgDiv = document.createElement('div');
     msgDiv.style.cssText = 'margin-bottom:12px;padding:8px;border-radius:3px;background:#1a1a3a;border-left:2px solid #888';
@@ -2699,10 +2704,8 @@ async function sendClaudePrompt() {
               document.getElementById('claude-streaming').innerHTML = renderMarkdown(assistantMessage);
               msgDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             } else if (event.type === 'state_update') {
-              // Claude called a tool that changed game state — sync the UI
               applyStateUpdate(event.state);
             } else if (event.type === 'music_scene') {
-              // Claude changed the music scene to match the narrative mood
               Music.setScene(event.scene);
               updateMusicUI();
             } else if (event.type === 'done') {
@@ -2715,10 +2718,18 @@ async function sendClaudePrompt() {
       }
     }
 
-    claudeMessages[claudeMessages.length - 1].content = assistantMessage;
+    // Use the captured reference — safe even if claudeMessages was replaced during streaming
+    assistantEntry.content = assistantMessage;
+    renderClaudeHistory(); // re-render with final styled message
 
   } catch (err) {
     console.error('Prompt error:', err);
+    // Remove assistant placeholder if it was added
+    if (assistantEntry) {
+      const idx = claudeMessages.indexOf(assistantEntry);
+      if (idx !== -1) claudeMessages.splice(idx, 1);
+    }
+    // Remove user message we pushed before the try
     claudeMessages.pop();
     document.getElementById('claude-history').innerHTML += `<div style="color:#f87171;font-size:11px;padding:8px">Error: ${err.message}</div>`;
   } finally {
