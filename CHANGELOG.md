@@ -2,7 +2,16 @@
 
 ---
 
-## [2026-05-21] — Build 5 (current)
+## [2026-05-21] — Build 6 (current)
+
+### Fixes
+- **429 Rate Limit — round 2**: replaced fixed 20-message history window with token-budget windowing. Now caps conversational history at 4,500 estimated tokens with a hard limit of 30 messages. Math: 4500 (history) + 250 (system prompt) + 1000 (max output) ≈ 6K tokens per request, well under the 10K/min ceiling even with the 1.5s throttle.
+- `max_tokens` reduced 1200 → 1000 to give more headroom under the rate limit
+- Anthropic API requirement: drops a leading assistant message if windowing lands on one (must start with user)
+
+---
+
+## [2026-05-21] — Build 5
 
 ### New Features
 - **Fully Dynamic Dashboard** — all 4 main tabs (Character, Quests, Events, NPCs) now render entirely from `campaign_state.json`. No Rurik data bleeds through when loading a different campaign.

@@ -427,7 +427,7 @@ async function streamAgenticLoop(messages, systemPrompt, res) {
   let apiError=null;
   console.log(`  ▶ Agentic loop start — ${messages.length} messages in context`);
   for (let loop=0;loop<6;loop++){
-    const body=JSON.stringify({model:MODEL,max_tokens:1200,system:systemPrompt,tools:TOOLS,messages,stream:true});
+    const body=JSON.stringify({model:MODEL,max_tokens:1000,system:systemPrompt,tools:TOOLS,messages,stream:true});
     let apiRes;
     try {
       apiRes=await makeAPICall(body);
@@ -505,11 +505,26 @@ const relayServer = http.createServer((req,res)=>{
         const history=loadHistory();
         history.messages.push({role:'user',content:prompt});
         res.writeHead(200,{'Content-Type':'text/event-stream','Cache-Control':'no-cache','Connection':'keep-alive'});
-        const MAX_HISTORY_MESSAGES=20;
-        const allMapped=history.messages.map(m=>({role:m.role,content:m.content}));
-        const messagesForAPI=allMapped.length>MAX_HISTORY_MESSAGES?allMapped.slice(-MAX_HISTORY_MESSAGES):allMapped;
-        const systemPrompt=buildSystemPrompt(loadState());
-        console.log(`\n  ━━━ Chat request — history=${history.messages.length} msgs (sending last ${messagesForAPI.length}), est tokens=${history.token_count} ━━━`);
+        // Token-budget windowing: keep most recent messages within a strict token budget.
+        // Rate limit is 10K tokens/minute, so we cap conversational history well below that
+        // to leave room for system prompt, tool calls, and the model's output.
+        const HISTORY_TOKEN_BUDGET = 4500;
+        const HARD_MAX_MESSAGES    = 30;
+        const allMapped = history.messages.map(m => ({ role: m.role, content: m.content }));
+        const tokCount = m => estimateTokens(typeof m.content === 'string' ? m.content : JSON.stringify(m.content));
+        let runningTokens = 0;
+        let cutoff = allMapped.length;
+        for (let i = allMapped.length - 1; i >= 0 && (allMapped.length - i) <= HARD_MAX_MESSAGES; i--) {
+          const t = tokCount(allMapped[i]);
+          if (runningTokens + t > HISTORY_TOKEN_BUDGET && (allMapped.length - i) > 2) break;
+          runningTokens += t;
+          cutoff = i;
+        }
+        let messagesForAPI = allMapped.slice(cutoff);
+        // Anthropic requires the first message to be 'user' — drop a leading assistant if windowing landed on one
+        if (messagesForAPI[0]?.role === 'assistant') messagesForAPI = messagesForAPI.slice(1);
+        const systemPrompt = buildSystemPrompt(loadState());
+        console.log(`\n  ━━━ Chat request — history=${history.messages.length} msgs (sending last ${messagesForAPI.length}, ~${runningTokens} tokens) ━━━`);
         const msgStartIdx=messagesForAPI.length;
         const r1=await streamAgenticLoop(messagesForAPI,systemPrompt,res);
         let outTokens=r1.totalTokens, apiError=r1.apiError;
