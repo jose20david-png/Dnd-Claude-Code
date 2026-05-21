@@ -505,16 +505,19 @@ const relayServer = http.createServer((req,res)=>{
         const history=loadHistory();
         history.messages.push({role:'user',content:prompt});
         res.writeHead(200,{'Content-Type':'text/event-stream','Cache-Control':'no-cache','Connection':'keep-alive'});
-        const messagesForAPI=history.messages.map(m=>({role:m.role,content:m.content}));
+        const MAX_HISTORY_MESSAGES=20;
+        const allMapped=history.messages.map(m=>({role:m.role,content:m.content}));
+        const messagesForAPI=allMapped.length>MAX_HISTORY_MESSAGES?allMapped.slice(-MAX_HISTORY_MESSAGES):allMapped;
         const systemPrompt=buildSystemPrompt(loadState());
-        console.log(`\n  ━━━ Chat request — history=${history.messages.length} msgs, est tokens=${history.token_count} ━━━`);
+        console.log(`\n  ━━━ Chat request — history=${history.messages.length} msgs (sending last ${messagesForAPI.length}), est tokens=${history.token_count} ━━━`);
+        const msgStartIdx=messagesForAPI.length;
         const r1=await streamAgenticLoop(messagesForAPI,systemPrompt,res);
         let outTokens=r1.totalTokens, apiError=r1.apiError;
-        const collectFinalText=()=>{let t='';for(let i=history.messages.length;i<messagesForAPI.length;i++){const m=messagesForAPI[i];if(m.role==='assistant'){if(Array.isArray(m.content))t+=m.content.filter(b=>b.type==='text').map(b=>b.text).join('');else if(typeof m.content==='string')t+=m.content;}}return t;};
+        const collectFinalText=()=>{let t='';for(let i=msgStartIdx;i<messagesForAPI.length;i++){const m=messagesForAPI[i];if(m.role==='assistant'){if(Array.isArray(m.content))t+=m.content.filter(b=>b.type==='text').map(b=>b.text).join('');else if(typeof m.content==='string')t+=m.content;}}return t;};
         let finalText=collectFinalText();
         // Emergency fallback: tools ran successfully but no narration produced (and no API error).
         // Skip fallback on API errors — retrying will just hit the same error.
-        if(!apiError&&!finalText.trim()&&messagesForAPI.length>history.messages.length+1){
+        if(!apiError&&!finalText.trim()&&messagesForAPI.length>msgStartIdx+1){
           console.warn('  ⚠️  No narration after tools — forcing follow-up narration call');
           messagesForAPI.push({role:'user',content:'You called tools but wrote no narration. Write your DM response now — describe what happens in the scene.'});
           const r2=await streamAgenticLoop(messagesForAPI,systemPrompt,res);
