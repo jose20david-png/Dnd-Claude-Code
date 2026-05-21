@@ -111,9 +111,33 @@
     {
       "role": "assistant",
       "content": "# Absolutely! I'm Your Dungeon Master! 🎭🌍\n\n**Crystal clear.** You control **Kel's actions, dialogue, and thoughts**. I handle **everything else**:\n\n- All NPCs and their dialogue\n- Environmental descriptions\n- Enemy actions in combat\n- Consequences of your choices\n- The unfolding narrative\n- Atmospheric details and mood\n\nYou tell me what Kel **does** and **says**, and I'll paint the world around him and respond authentically.\n\n---\n\n## Ready to Begin! \n\n**So, Kel Stormblessed—where do we find you as this adventure begins?**\n\nAre you:\n- In a tavern, gathering information about the Fabrial?\n- On the road, traveling toward a rumored artifact location?\n- In a library or scholar's hall, researching ancient texts?\n- Somewhere else entirely?\n\n**Paint me a picture of where Kel is and what he's doing when our story opens.** ✨"
+    },
+    {
+      "role": "user",
+      "content": "Kel is sitting at an inn in the Ironpeak Mountains. Cup of wine on the table, reading his journal and scribing into it information on the fabrial's location. No luck yet on finding it"
+    },
+    {
+      "role": "assistant",
+      "content": "# The Ironpeak Inn - Evening's Shadow 🏔️🍷\n\nThe **Ironpeak Inn** creaks with age and mountain winds. Stone walls rise around you, weathered by centuries of alpine storms. A hearth crackles in the corner, casting dancing shadows across worn wooden tables. The common room smells of woodsmoke, spiced ale, and the earthy musk of travelers who've trudged through mountain passes.\n\nYour wine—a decent enough Neverwinter vintage—sits half-full beside your journal. The candlelight flickers across your notes: sketches of Netherese runes, theories about Fabrial construction, references to ancient texts. Months of searching. Dozens of dead ends. Each village, each library, each scholar who claimed to know something... all leading nowhere.\n\nThe inn is moderately busy. A few dwarven merchants huddle in a corner, their laughter boisterous. A cloaked figure sits alone near the window, nursing a drink in silence. Behind the bar, the **innkeeper**—a stout woman with iron-gray hair—wipes glasses with methodical precision.\n\nThen the door swings open with a gust of cold mountain air.\n\nA **young woman** stumbles in, snow clinging to her dark cloak. Her cheeks are flushed from cold, her breathing heavy. She looks panicked—eyes darting around the common room as if searching for something. Or perhaps *someone*.\n\nThe innkeeper's expression shifts. Concern. Recognition, maybe.\n\nThe woman's gaze sweeps across the room... and locks directly onto **you**, Kel, hunched over your journal at a corner table.\n\nHer eyes widen slightly. Then she makes a decision.\n\nShe walks directly toward you.\n\nWhat do you do?"
+    },
+    {
+      "role": "user",
+      "content": "Kel doesn't pay attention to her at first. He's deep in his notes"
+    },
+    {
+      "role": "assistant",
+      "content": "# The Woman Approaches ⛄👁️\n\nYou remain focused on your journal, your quill scratching across the parchment. Another theory about Fabrial resonance frequencies—something you read in a fragmentary text from Candlekeep last month. The wine warms your throat. The inn's ambient noise fades into background hum.\n\nFootsteps. Deliberate ones. Coming closer.\n\nThe woman reaches your table and stops. For a moment, there's silence—just her breathing, slightly ragged from exertion or fear or both.\n\nThen she speaks.\n\n\"You're a wizard.\"\n\nIt's not a question. Her voice is steady despite whatever urgency drove her here. She's young—mid-twenties, perhaps—with sharp features and intelligent eyes. There's dirt under her fingernails, and her cloak is torn at the hem.\n\nShe doesn't wait for acknowledgment. She glances back toward the door, then lowers her voice.\n\n\"I need someone who understands *old magic*. Netherese magic, specifically. The kind that most scholars have forgotten.\" Her eyes fix on you intently. \"Are you interested in lost knowledge?\"\n\nThe innkeeper watches from behind the bar, openly curious now.\n\n**What does Kel do?**"
+    },
+    {
+      "role": "user",
+      "content": "Kel says: \"first you had my attention, now you have my interest\" as he raises his eyes to her. How does she look?"
+    },
+    {
+      "role": "assistant",
+      "content": "# The Woman Revealed 👀✨\n\nKel's eyes lift from the journal, meeting her gaze directly. His tone is plain, matter-of-fact—no flourish, just honest curiosity.\n\nShe exhales slightly, as if relieved by his response. Now that you're looking at her fully, details emerge:\n\n**Her appearance:**\n- Late twenties, sharp cheekbones and intelligent dark eyes—the kind that suggest scholarly training or at least keen observation\n- Her dark hair is pulled back hastily, a few strands escaping. Practical, not vain\n- Beneath the snow-dusted cloak, she wears weathered traveling clothes—sturdy leather, well-maintained but worn\n- A faint scar runs along her jawline, old enough to have faded to pale white\n- Her hands are steady despite the urgency in her voice, though there's a tremor of exhaustion\n\nShe pulls out the chair across from you without asking permission and sits, keeping her voice low.\n\n\"My name is **Sera Thorne**. I'm an artifact researcher—or I was, before everything went wrong.\" She glances toward the innkeeper, then back to you. \"Three weeks ago, my expedition uncovered something in the **Underdark ruins** north of here. Ancient Netherese. A journal, actually. It contains detailed schematics and *operational notes* for something called a Fabrial.\"\n\nYour breath catches. Your hand instinctively tightens on your quill.\n\nShe leans forward slightly, eyes locked on yours.\n\n\"I assume that means something to you.\"\n\n**What does Kel say or do?**"
     }
   ],
   "created_at": "2026-05-21T22:41:17.265Z",
-  "token_count": 4959,
+  "token_count": 6247,
   "model": "claude-haiku-4-5"
 }
