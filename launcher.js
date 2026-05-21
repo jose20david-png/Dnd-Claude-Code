@@ -75,6 +75,26 @@ function cls() { process.stdout.write('\x1B[2J\x1B[0f'); }
 // ─── BANNER ───────────────────────────────────────────────────────────────────
 function showBanner() {
   cls();
+
+  // Read campaign state to decide what to show in the box
+  let line1 = 'Lost Mine of Phandelver · The Witness Arc';
+  let line2 = '';
+  let line3 = '';
+  try {
+    if (fs.existsSync(CAMPAIGN_STATE_PATH)) {
+      const s = JSON.parse(fs.readFileSync(CAMPAIGN_STATE_PATH, 'utf8'));
+      if (s.campaign_id !== 'new-campaign' && s.party && s.party[0]) {
+        const r = s.party[0];
+        const w = s.world;
+        line2 = `${r.name} · ${r.class} · Level ${r.level}`;
+        line3 = `${(w.current_location||'').slice(0,38)} · ${w.time||''}`;
+      }
+    }
+  } catch {}
+
+  // Pad lines to fit the box (52 chars wide inside)
+  const pad = (str) => str.slice(0, 50).padEnd(50);
+
   console.log('');
   console.log('  ██████╗ ██╗   ██╗██████╗ ██╗██╗  ██╗');
   console.log('  ██╔══██╗██║   ██║██╔══██╗██║██║ ██╔╝');
@@ -85,11 +105,12 @@ function showBanner() {
   console.log('');
   console.log('  ╔══════════════════════════════════════════════════════╗');
   console.log('  ║                                                      ║');
-  console.log('  ║   RURIK STORMHAMMER — BEARER OF THE SEAL            ║');
-  console.log('  ║   Lost Mine of Phandelver · The Witness Arc          ║');
+  console.log(`  ║   ${pad(line1)}  ║`);
+  if (line2) {
   console.log('  ║                                                      ║');
-  console.log('  ║   Cleric (Storm Domain) · Level 3 · Day 7           ║');
-  console.log('  ║   Old Marta\'s Cabin · Escape route undecided        ║');
+  console.log(`  ║   ${pad(line2)}  ║`);
+  console.log(`  ║   ${pad(line3)}  ║`);
+  }
   console.log('  ║                                                      ║');
   console.log('  ╚══════════════════════════════════════════════════════╝');
   console.log('');
