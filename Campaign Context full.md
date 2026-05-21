@@ -1,5 +1,5 @@
 # Rurik Stormhammer — Campaign Context File
-*Last updated: 2026-05-17 | Resume: "Resume our D&D campaign from this context file. You are the DM. I am JD, the player."*
+*Last updated: 2026-05-21 | Resume: "Resume our D&D campaign from this context file. You are the DM. I am JD, the player."*
 
 ---
 
@@ -12,14 +12,14 @@
 
 ---
 
-## SESSION STATE — Day 7 — Morning
+## SESSION STATE — Day 1 — Morning
 
 | Field | Value |
 |---|---|
-| Location | Old Marta's Cabin, Phandalin outskirts |
-| HP | 27 / 27 (full — long rest complete) |
-| Spell Slots | 3× 1st, 2× 2nd |
-| Channel Divinity | 1 / 1 available |
+| Location | Character Creation |
+| HP | 10 / 27 (wounded) |
+| Spell Slots |  (full) |
+| Channel Divinity | 0 / 0 available |
 ---
 
 ## PENDING DECISION
@@ -69,12 +69,12 @@ Sildar wants Silga intel before deciding. Iarno can provide it. **Rurik has not 
 ---
 
 
+
+
 ## SESSION NOTES (auto-generated)
 
-- State engine initialized. Day 7 Morning. Long rest complete at Marta's Cabin. Seal stable. Breeding chamber destroyed. Escape route decision pending.
-- Player confirmed state initialization. Narrative unlocked. Engine active.
-- Loaded context file. Day 7, Old Marta's Cabin, Phandalin outskirts, 27 / 27 (full — long rest complete), 4× 1st, 2× 2nd (full) (spell slots RESET).
-- Cast Guiding Bolt (Level 1 slot). Slots remaining: 3/4
+- New campaign started. Begin character creation.
+- Kel Stormblessed begins his journey in the Ironpeak Mountains, seated in an inn with wine and journal, searching for clues about the location of the Fabrial artifact.
 
 ## CHARACTER QUICK REFERENCE
 
