@@ -667,7 +667,7 @@ body {
 
 <!-- ══════ HEADER ══════ -->
 <div id="header">
-  <div class="htitle">◈ RURIK STORMHAMMER</div>
+  <div class="htitle" id="header-title">◈ RURIK STORMHAMMER</div>
   <div class="hday" id="hday">Day 7 — Morning</div>
   <div class="hbread" id="hbread"></div>
   <div id="hp-display">
@@ -1113,47 +1113,91 @@ async function loadGameState() {
     campaignState = data;
 
     const party = data.party[0];
+    const isNew = data.campaign_id === 'new-campaign';
+
     W = {
-      day: parseInt(data.world.time.match(/Day (\d+)/)?.[1] || 7),
-      time: data.world.time.match(/(Morning|Afternoon|Evening|Night)/)?.[1] || 'Morning',
-      sealPct: data.world.seal_integrity ?? 100,
-      sealStatus: data.world.seal_status || 'Stable — years',
-      harpersEta: '~2 days',
-      mindFlayer: 'At Large',
-      playerLocation: 'marta',
-      currentMap: 'campaign',
+      day:   parseInt(data.world.time.match(/Day (\d+)/)?.[1] || 1),
+      time:  data.world.time.match(/(Morning|Afternoon|Evening|Night)/)?.[1] || 'Morning',
+      sealPct:    data.world.seal_integrity ?? 100,
+      sealStatus: data.world.seal_status    || (isNew ? '—' : 'Stable — years'),
+      harpersEta: isNew ? '—' : '~2 days',
+      mindFlayer: isNew ? '—' : 'At Large',
+      playerLocation: isNew ? '' : 'marta',
+      currentMap: isNew ? null : 'campaign',
       charHpCurrent: party.hp,
-      charHpMax: 27,
-      charLevel: 3,
+      charHpMax:     party.hp || 10,
+      charLevel:     party.level || 1,
       spellSlots1Used: party.spell_slots.level_1.used,
-      spellSlots1Max: party.spell_slots.level_1.max,
+      spellSlots1Max:  party.spell_slots.level_1.max,
       spellSlots2Used: party.spell_slots.level_2.used,
-      spellSlots2Max: party.spell_slots.level_2.max,
+      spellSlots2Max:  party.spell_slots.level_2.max,
       channelDivinityUsed: party.channel_divinity.used,
-      channelDivinityMax: party.channel_divinity.max,
+      channelDivinityMax:  party.channel_divinity.max,
     };
     inventory = party.inventory || [];
-    quests = data.quests || [];
-    npcs = data.npcs || [];
+    quests    = data.quests     || [];
+    npcs      = data.npcs       || [];
 
-    document.getElementById('hday').textContent = `Day ${W.day} — ${W.time}`;
-    document.getElementById('tr-seal').textContent = `${W.sealPct}%`;
-    document.getElementById('seal-bar').style.width = `${W.sealPct}%`;
-    document.getElementById('seal-bar').style.background = W.sealPct === 100 ? '#4ade80' : W.sealPct > 50 ? '#facc15' : '#f87171';
-    document.getElementById('tr-days').textContent    = W.sealStatus;
-    document.getElementById('tr-harpers').textContent = W.harpersEta;
-    document.getElementById('tr-order').textContent   = W.mindFlayer;
+    // ── Header ─────────────────────────────────────────
+    const titleEl = document.getElementById('header-title');
+    if (titleEl) titleEl.textContent = isNew ? '◈ NEW CAMPAIGN' : `◈ ${party.name.toUpperCase()}`;
+    document.getElementById('hday').textContent = isNew ? 'Character Creation' : `Day ${W.day} — ${W.time}`;
+
+    // ── Threat board ───────────────────────────────────
+    document.getElementById('tr-seal').textContent     = isNew ? '—' : `${W.sealPct}%`;
+    document.getElementById('seal-bar').style.width    = isNew ? '0%' : `${W.sealPct}%`;
+    document.getElementById('seal-bar').style.background = W.sealPct >= 100 ? '#4ade80' : W.sealPct > 50 ? '#facc15' : '#f87171';
+    document.getElementById('tr-days').textContent     = W.sealStatus;
+    document.getElementById('tr-harpers').textContent  = W.harpersEta;
+    document.getElementById('tr-order').textContent    = W.mindFlayer;
+
+    // ── Character sheet & resources ────────────────────
     updateHP();
     updateSpellSlots();
     updateCD();
+
+    // ── Tabs ───────────────────────────────────────────
     renderInventoryTab();
     renderQuestsTab();
 
-    console.log('✓ Game state loaded from API');
+    // ── New campaign: wipe map canvas, go to Claude tab ─
+    if (isNew) {
+      clearMapForNewCampaign();
+      switchTab('claude');
+    }
+
+    console.log(`✓ Game state loaded — ${isNew ? 'NEW CAMPAIGN (character creation)' : data.campaign_id}`);
   } catch (err) {
     console.error('Failed to load state:', err);
     alert('Could not load from API. Is the server running on port 3140?');
   }
+}
+
+// Wipe the map canvas and show a "character creation" placeholder
+function clearMapForNewCampaign() {
+  const canvas = document.getElementById('map-canvas');
+  if (!canvas) return;
+  canvas.width  = 480;
+  canvas.height = 320;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#0a0a12';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#2a2a40';
+  ctx.strokeStyle = '#1a1a2e';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < canvas.width; x += 24)  { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke(); }
+  for (let y = 0; y < canvas.height; y += 24) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke(); }
+  ctx.fillStyle = '#333355';
+  ctx.font = 'bold 14px "Courier New"';
+  ctx.textAlign = 'center';
+  ctx.fillText('[ MAP UNLOCKED AFTER CHARACTER CREATION ]', canvas.width / 2, canvas.height / 2 - 10);
+  ctx.fillStyle = '#444466';
+  ctx.font = '11px "Courier New"';
+  ctx.fillText('Speak to the DM to begin your adventure', canvas.width / 2, canvas.height / 2 + 14);
+  ctx.textAlign = 'left';
+  // Also blank out the info panel
+  const infoBody = document.getElementById('info-body');
+  if (infoBody) infoBody.innerHTML = '<div style="color:#444;font-size:12px;padding:8px;text-align:center;line-height:1.8">No location data.<br>Complete character creation first.</div>';
 }
 
 // ══════════════════════════════════════════════════════
@@ -1688,6 +1732,11 @@ function switchTab(id) {
 function locKey(x, y) { return x + ',' + y; }
 
 function renderMap(mapId) {
+  // New campaign has no map yet — keep the placeholder canvas
+  if (!mapId || campaignState?.campaign_id === 'new-campaign') {
+    clearMapForNewCampaign();
+    return;
+  }
   curMapId = mapId;
   const grid = GRIDS[mapId];
   if (!grid) return;
@@ -3128,16 +3177,6 @@ function renderCombatTracker() {
 }
 
 // ══════════════════════════════════════════════════════
-//  INIT
-// ══════════════════════════════════════════════════════
-document.getElementById('hday').textContent    = `Day ${W.day} — ${W.time}`;
-document.getElementById('tr-seal').textContent = `${W.sealPct}%`;
-document.getElementById('seal-bar').style.width = `${W.sealPct}%`;
-document.getElementById('seal-bar').style.background = W.sealPct === 100 ? '#4ade80' : W.sealPct > 50 ? '#facc15' : '#f87171';
-document.getElementById('tr-days').textContent    = W.sealStatus;
-document.getElementById('tr-harpers').textContent = W.harpersEta;
-document.getElementById('tr-order').textContent   = W.mindFlayer;
-// ══════════════════════════════════════════════════════
 //  INVENTORY & QUESTS MANAGEMENT
 // ══════════════════════════════════════════════════════
 function renderInventoryTab() {
@@ -3247,7 +3286,19 @@ function applyStateUpdate(state) {
   const rurik = state.party[0];
   const world = state.world;
 
-  // Sync W object
+  // If campaign just transitioned from new-campaign to a real one, do a full reload
+  const wasNew = campaignState?.campaign_id === 'new-campaign';
+  const isNowReal = state.campaign_id && state.campaign_id !== 'new-campaign';
+  if (wasNew && isNowReal) {
+    console.log('[State Update] Campaign created — reloading dashboard fully');
+    loadGameState().then(() => {
+      renderMap(W.currentMap);
+      switchTab('map');
+    });
+    return;
+  }
+
+  // Standard incremental sync
   W.charHpCurrent = rurik.hp;
   if (rurik.spell_slots) {
     W.spellSlots1Used = rurik.spell_slots.level_1?.used ?? W.spellSlots1Used;
@@ -3266,6 +3317,12 @@ function applyStateUpdate(state) {
   if (rurik.inventory) window.inventory = rurik.inventory;
   if (state.quests)    window.quests    = state.quests;
 
+  // Update header to reflect current character name
+  const titleEl = document.getElementById('header-title');
+  if (titleEl && rurik.name && rurik.name !== 'New Character') {
+    titleEl.textContent = `◈ ${rurik.name.toUpperCase()}`;
+  }
+
   // Refresh all panels
   updateHP();
   updateSpellSlots();
@@ -3273,7 +3330,7 @@ function applyStateUpdate(state) {
   if (typeof renderInventoryTab === 'function') renderInventoryTab();
   if (typeof renderQuestsTab    === 'function') renderQuestsTab();
   const sealEl = document.getElementById('tr-seal');
-  if (sealEl) sealEl.textContent = `${W.sealPct}%`;
+  if (sealEl) sealEl.textContent = state.campaign_id === 'new-campaign' ? '—' : `${W.sealPct}%`;
 
   console.log('[State Update] HP:', rurik.hp, '| Slots Lv1:', rurik.spell_slots?.level_1?.used, '/', rurik.spell_slots?.level_1?.max);
 }
