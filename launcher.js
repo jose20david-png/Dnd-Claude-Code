@@ -29,9 +29,38 @@ const MODEL                = 'claude-haiku-4-5';
 const AUTO_SAVE_INTERVAL_MS = 5 * 60 * 1000;
 const PORTS                = [3140, 3141, 8080];
 
-// ─── REQUEST THROTTLING (rate limit protection) ───────────────────────────
+// ─── REQUEST THROTTLING & TOKEN RATE LIMITER ──────────────────────────────
 let lastRequestTime = 0;
-const REQUEST_DELAY_MS = 1500; // 1.5 second minimum between API calls to spread token usage
+const REQUEST_DELAY_MS = 1500; // minimum delay between API calls
+
+// Anthropic rate limit: 10,000 INPUT tokens per minute. We track input tokens
+// sent in a rolling 60-second window and wait before any call that would exceed.
+const TOKEN_LIMIT_PER_MIN = 8500;       // 1500 token buffer below the hard ceiling
+const TOKEN_WINDOW_MS     = 60 * 1000;
+const tokenUsage          = [];          // [{ time: ms, tokens: N }, ...]
+
+function pruneTokenUsage() {
+  const cutoff = Date.now() - TOKEN_WINDOW_MS;
+  while (tokenUsage.length && tokenUsage[0].time < cutoff) tokenUsage.shift();
+}
+function currentTokenUsage() {
+  pruneTokenUsage();
+  return tokenUsage.reduce((sum, u) => sum + u.tokens, 0);
+}
+async function waitForTokenCapacity(estimated) {
+  while (true) {
+    const used = currentTokenUsage();
+    if (used + estimated <= TOKEN_LIMIT_PER_MIN) return;
+    // Wait until the oldest entry expires from the window
+    const oldest = tokenUsage[0];
+    const waitMs = Math.max(500, (oldest.time + TOKEN_WINDOW_MS) - Date.now() + 250);
+    console.log(`  ⏳ Token rate guard: ${used}+${estimated} > ${TOKEN_LIMIT_PER_MIN}/min — waiting ${(waitMs/1000).toFixed(1)}s`);
+    await new Promise(r => setTimeout(r, waitMs));
+  }
+}
+function recordTokenUsage(tokens) {
+  tokenUsage.push({ time: Date.now(), tokens });
+}
 
 // ─── API KEY ──────────────────────────────────────────────────────────────────
 let API_KEY = '';
@@ -427,10 +456,21 @@ async function streamAgenticLoop(messages, systemPrompt, res) {
   let apiError=null;
   console.log(`  ▶ Agentic loop start — ${messages.length} messages in context`);
   for (let loop=0;loop<6;loop++){
+    // Estimate input tokens for this request and wait if we'd blow the per-minute budget
+    const msgsTokens = messages.reduce((sum,m)=>{
+      const c = typeof m.content === 'string' ? m.content : JSON.stringify(m.content);
+      return sum + estimateTokens(c);
+    }, 0);
+    const sysTokens = estimateTokens(systemPrompt);
+    const toolsTokens = estimateTokens(JSON.stringify(TOOLS)); // tool defs count toward input
+    const estInput = msgsTokens + sysTokens + toolsTokens;
+    await waitForTokenCapacity(estInput);
+
     const body=JSON.stringify({model:MODEL,max_tokens:1000,system:systemPrompt,tools:TOOLS,messages,stream:true});
     let apiRes;
     try {
       apiRes=await makeAPICall(body);
+      recordTokenUsage(estInput);
     } catch(err) {
       apiError=err.message||String(err);
       console.error(`  ✗ Loop ${loop} API call failed: ${apiError}`);

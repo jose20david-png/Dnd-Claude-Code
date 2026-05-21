@@ -2,7 +2,15 @@
 
 ---
 
-## [2026-05-21] — Build 6 (current)
+## [2026-05-21] — Build 7 (current)
+
+### Fixes
+- **429 Rate Limit — round 3**: added rolling token-rate limiter. Previous fixes only addressed per-call token count, but the agentic loop fires multiple API calls within seconds (each adding tool results, growing the context). Now tracks cumulative input tokens in a 60-second window and waits if the next call would exceed 8,500 tokens/min (1.5K buffer below the 10K ceiling). Tool definitions are now counted in the budget (they're large).
+- Console will now log `⏳ Token rate guard: X+Y > 8500/min — waiting Zs` when waiting
+
+---
+
+## [2026-05-21] — Build 6
 
 ### Fixes
 - **429 Rate Limit — round 2**: replaced fixed 20-message history window with token-budget windowing. Now caps conversational history at 4,500 estimated tokens with a hard limit of 30 messages. Math: 4500 (history) + 250 (system prompt) + 1000 (max output) ≈ 6K tokens per request, well under the 10K/min ceiling even with the 1.5s throttle.
