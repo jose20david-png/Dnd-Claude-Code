@@ -679,6 +679,51 @@ function loadSave(filename) {
   console.log('');
 }
 
+// Run build-campaign.js on a user-supplied .md file, then return to menu
+function importFromMd(callback) {
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  console.log('');
+  console.log('  ┌─ Import Campaign from Markdown ─────────────────────────┐');
+  console.log('  │  Enter the path to your .md file.                       │');
+  console.log('  │  Relative paths are resolved from:                      │');
+  console.log(`  │  ${APP_DIR.padEnd(56)}│`);
+  console.log('  │  Example:  my-campaign.md                               │');
+  console.log('  │            C:\\Users\\you\\Documents\\campaign.md           │');
+  console.log('  │  (Leave blank to cancel)                                │');
+  console.log('  └─────────────────────────────────────────────────────────┘');
+  console.log('');
+  rl.question('  > ', answer => {
+    rl.close();
+    const raw = answer.trim().replace(/^["']|["']$/g, '');
+    if (!raw) { console.log('  Cancelled.\n'); callback(); return; }
+
+    const builderPath = path.join(APP_DIR, 'scripts', 'build-campaign.js');
+    if (!fs.existsSync(builderPath)) {
+      console.error('  ✗ scripts/build-campaign.js not found.');
+      callback(); return;
+    }
+
+    // Resolve the md path
+    let mdPath = raw;
+    if (!path.isAbsolute(mdPath)) {
+      mdPath = path.resolve(APP_DIR, mdPath);
+    }
+
+    const { execFileSync } = require('child_process');
+    try {
+      const output = execFileSync(process.execPath, [builderPath, mdPath], {
+        encoding: 'utf8',
+        cwd: APP_DIR,
+      });
+      console.log(output);
+      console.log('  ✓ Import complete. Choose [Load Campaign] to play it.\n');
+    } catch (e) {
+      console.error('  ✗ Import failed:', (e.stderr || e.message || '').split('\n')[0]);
+    }
+    callback();
+  });
+}
+
 // ─── MAIN MENU ────────────────────────────────────────────────────────────────
 function showMenu(hasSave, callback) {
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
@@ -694,9 +739,11 @@ function showMenu(hasSave, callback) {
   console.log('  │   [2]  New Campaign             │');
   if (hasSavedCampaigns) {
   console.log('  │   [3]  Load Campaign            │');
-  console.log('  │   [4]  Quit                     │');
+  console.log('  │   [4]  Import from .md file     │');
+  console.log('  │   [5]  Quit                     │');
   } else {
-  console.log('  │   [3]  Quit                     │');
+  console.log('  │   [3]  Import from .md file     │');
+  console.log('  │   [4]  Quit                     │');
   }
   console.log('  └─────────────────────────────────┘');
   console.log('');
@@ -706,8 +753,10 @@ function showMenu(hasSave, callback) {
       const choice = answer.trim();
       if (choice === '1') { rl.close(); callback('continue'); }
       else if (choice === '2') { rl.close(); callback('new'); }
-      else if (choice === '3' && hasSavedCampaigns) { rl.close(); callback('load'); }
-      else if ((choice === '3' && !hasSavedCampaigns) || choice === '4') { rl.close(); callback('quit'); }
+      else if (choice === '3' && hasSavedCampaigns)  { rl.close(); callback('load'); }
+      else if (choice === '3' && !hasSavedCampaigns) { rl.close(); callback('import'); }
+      else if (choice === '4' && hasSavedCampaigns)  { rl.close(); callback('import'); }
+      else if ((choice === '4' && !hasSavedCampaigns) || choice === '5') { rl.close(); callback('quit'); }
       else { console.log(`  Please enter a valid option.`); ask(); }
     });
   }
@@ -849,6 +898,11 @@ async function main() {
           setTimeout(() => main(), 800);
         }
       });
+      return;
+    }
+
+    if (choice === 'import') {
+      importFromMd(() => setTimeout(() => main(), 400));
       return;
     }
 
