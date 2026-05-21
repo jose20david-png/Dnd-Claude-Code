@@ -2,7 +2,22 @@
 
 ---
 
-## [2026-05-21] — Build 4 (current)
+## [2026-05-21] — Build 5 (current)
+
+### New Features
+- **Fully Dynamic Dashboard** — all 4 main tabs (Character, Quests, Events, NPCs) now render entirely from `campaign_state.json`. No Rurik data bleeds through when loading a different campaign.
+- **Character tab**: ability scores with click-to-roll, saving throws with proficiency markers, all 18 skills with proficiency markers, traits & features, active conditions, spell list grouped by level, portrait generated from character name/class
+- **Quests tab**: active and completed quests from state, with steps and quest giver
+- **Events tab**: full `history_log` timeline, newest first
+- **NPCs tab**: NPC cards grouped by disposition (Allies / Neutral / Threats), all data from state
+- **Spell slots**: all 9 levels handled dynamically; `longRest()` resets all levels; `toggleSlot()` works on any level
+- **build-campaign.js**: parses `## Stats`, `## Saving Throws`, `## Skills`, `## Spells`, `## Traits & Features`, `## Conditions`, `## Description` from MD files
+- **campaign-template.md**: updated with all new sections
+- **Page title**: updates to character name on load
+
+---
+
+## [2026-05-21] — Build 4
 
 ### New Features
 - **MD Campaign Importer** (`scripts/build-campaign.js`) — parse a Markdown file into a save bundle loadable from the menu
