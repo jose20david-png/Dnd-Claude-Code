@@ -28,6 +28,10 @@ const MODEL                = 'claude-haiku-4-5';
 const AUTO_SAVE_INTERVAL_MS = 5 * 60 * 1000;
 const PORTS                = [3140, 3141, 8080];
 
+// ─── REQUEST THROTTLING (rate limit protection) ───────────────────────────
+let lastRequestTime = 0;
+const REQUEST_DELAY_MS = 1500; // 1.5 second minimum between API calls to spread token usage
+
 // ─── API KEY ──────────────────────────────────────────────────────────────────
 let API_KEY = '';
 try {
@@ -321,54 +325,52 @@ function buildSystemPrompt(state) {
   const rurik=state.party[0]; const world=state.world;
   const slots=Object.entries(rurik.spell_slots).filter(([,v])=>v.max>0).map(([k,v])=>`Lv${k.replace('level_','')}: ${v.max-v.used}/${v.max}`).join(', ');
   const cd=rurik.channel_divinity;
-  const inv=rurik.inventory.map(i=>`${i.name}${i.quantity>1?` ×${i.quantity}`:''}`).join(', ');
-  const activeQuests=(state.quests||[]).filter(q=>q.status==='active').map(q=>`${q.title}\n${q.steps.map(s=>`  ${s.completed?'[x]':'[ ]'} ${s.description}`).join('\n')}`).join('\n\n');
-  const allies=(state.npcs||[]).filter(n=>['ally','redeemed-enemy','civilian-ally'].includes(n.role)).map(n=>`• ${n.name} (${n.location}) — ${n.personality}`).join('\n');
+  // OPTIMIZATION: Only list key items (weapons, spellcasting focus, healing supplies)
+  const keyItems=rurik.inventory.filter(i=>['Warhammer','Holy Symbol','Healing Kit','Shield','Chain Mail'].includes(i.name)).map(i=>i.name).join(', ');
+  // OPTIMIZATION: Only include active quests with uncompleted steps (1-line summary)
+  const questSummary=(state.quests||[]).filter(q=>q.status==='active'&&q.steps.some(s=>!s.completed)).map(q=>`${q.title}: ${q.steps.filter(s=>!s.completed).map(s=>s.description).join(', ')}`).join(' | ');
 
   // New campaign — character creation mode
   if (state.campaign_id === 'new-campaign') {
-    return `You are a D&D 5e Dungeon Master. A new campaign is starting — the player has not yet created their character. Guide them through D&D 5e character creation step by step: race, class, background, ability scores, starting equipment, and backstory. Be enthusiastic and helpful. Once the character is complete, use the tools to set their name, class, level, and starting stats in the campaign state, then begin the adventure.`;
+    return `You are a D&D 5e Dungeon Master. Guide character creation step by step: race, class, background, ability scores, equipment, backstory. Be enthusiastic. Use tools to set name, class, level, and stats when complete.`;
   }
 
-  return `You are the Dungeon Master running a solo D&D 5e campaign. Use tools for ALL mechanical actions — never narrate a dice roll without calling roll_dice, never describe HP/slot changes without the corresponding tool.
+  return `You are the Dungeon Master for a solo D&D 5e campaign. Use tools for ALL mechanics (never narrate rolls/HP changes without calling the right tool).
 
 RULES:
-- Call roll_dice for EVERY dice roll (attacks, saves, damage, checks, initiative) — EXCEPTION: if the player sends "[Player rolled X: total N ...]", that roll is already done; DO NOT re-roll it, just narrate the outcome
-- Call use_spell_slot immediately when a leveled spell is cast
-- Call update_hp after any damage or healing resolves
-- YOU MUST ALWAYS write narrative text. Every single response must contain prose narration — never reply with tool calls alone. Even if you call five tools, you MUST also write at least one sentence of DM narration in the same response turn.
-- Call end_session when the player says they are done for the day; the recap field must be 2-3 paragraphs of vivid narrative prose describing the session's key events, decisions, and dramatic moments — written like a campaign diary entry, not a list
+- Roll EVERY dice check with roll_dice. EXCEPTION: if player sends "[Player rolled X: total N...]" that's already done—just narrate outcome.
+- Call use_spell_slot when spells cast, update_hp after damage/healing, end_session when player quits.
+- ALWAYS include prose narration alongside tool calls. No tool-only responses.
 
 ═══════════════════════
-CAMPAIGN: Lost Mine of Phandelver — The Witness Arc
-Location: ${world.current_location}
-Time: ${world.time}
-Seal: ${world.seal_integrity}% (${world.seal_status})
-Situation: ${world.lore_summary}
+CAMPAIGN: Lost Mine of Phandelver — Witness Arc
+Location: ${world.current_location} | Time: ${world.time} | Seal: ${world.seal_integrity}%
 
-CHARACTER — ${rurik.name} | ${rurik.class} Lv${rurik.level}
-HP: ${rurik.hp}/27 | AC: 18 | Prof: +2
-Slots: ${slots||'none'} | CD: ${cd.max-cd.used}/${cd.max}
-Spell DC 13 | Spell Attack +5
-Inventory: ${inv}
+CHARACTER: ${rurik.name} | ${rurik.class} L${rurik.level} | HP: ${rurik.hp}/27 | AC: 18
+Spells: ${slots||'none'} | CD: ${cd.max-cd.used}/${cd.max} | DC 13 | Atk +5
+Gear: ${keyItems||'standard equipment'}
 
-ACTIVE QUESTS
-${activeQuests||'None active'}
+ACTIVE: ${questSummary||'Awaiting orders'}
 
-ALLIES AT ${world.current_location.toUpperCase()}
-${allies||'None'}
-
-ANTAGONISTS
-• Silga — Redbrand field commander, Phandalin, 8-12 soldiers
-• The Mind Flayer — location unknown
-
-KEY INTEL: Iarno knows patrol schedules & 3-5am south road gap. Qelline scouted all three escape routes. Harpers arrive Day 9.
-PENDING: South Road (3-5am gap) / Forest Path NE / Wait for Harpers`;
+SITUATION: ${world.lore_summary}
+ANTAGONISTS: Silga (Redbrand, Phandalin) | Mind Flayer (location unknown)
+KEY: Iarno knows 3-5am road gap. Three escape routes exist. Harpers arrive Day 9.`;
 }
 
 // ─── AGENTIC DM LOOP ──────────────────────────────────────────────────────────
 function makeAPICall(bodyStr) {
   return new Promise((resolve,reject)=>{
+    // Rate limit throttling: enforce minimum delay between requests to spread token usage
+    const now = Date.now();
+    const timeSinceLastRequest = now - lastRequestTime;
+    if (timeSinceLastRequest < REQUEST_DELAY_MS) {
+      setTimeout(() => {
+        makeAPICall(bodyStr).then(resolve).catch(reject);
+      }, REQUEST_DELAY_MS - timeSinceLastRequest);
+      return;
+    }
+    lastRequestTime = Date.now();
+
     const buf=Buffer.from(bodyStr);
     const req=https.request({hostname:'api.anthropic.com',path:'/v1/messages',method:'POST',headers:{'Content-Type':'application/json','Content-Length':buf.length,'x-api-key':API_KEY,'anthropic-version':'2023-06-01'}},(res)=>{
       // CRITICAL: detect non-200 responses BEFORE handing the stream to the streaming parser.
@@ -403,7 +405,7 @@ async function streamAgenticLoop(messages, systemPrompt, res) {
   let apiError=null;
   console.log(`  ▶ Agentic loop start — ${messages.length} messages in context`);
   for (let loop=0;loop<6;loop++){
-    const body=JSON.stringify({model:MODEL,max_tokens:2000,system:systemPrompt,tools:TOOLS,messages,stream:true});
+    const body=JSON.stringify({model:MODEL,max_tokens:1200,system:systemPrompt,tools:TOOLS,messages,stream:true});
     let apiRes;
     try {
       apiRes=await makeAPICall(body);
