@@ -142,7 +142,19 @@ function parseMd(text) {
     character: {},
     world: {},
     inventory: [],
-    spellSlots: null,  // null = auto-detect
+    spellSlots: null,  // null = auto-detect from class/level
+    spells: { cantrips: [], always_prepared: [] },
+    stats: {},
+    saving_throw_profs: [],   // e.g. ['int', 'wis']
+    skill_profs: [],           // e.g. ['arcana', 'history']
+    ac: null,
+    ac_notes: '',
+    speed: 30,
+    initiative_bonus: null,
+    passive_perception: null,
+    traits: [],
+    conditions: [],
+    description: '',
     quests: [],
     npcs: [],
     notes: '',
@@ -180,20 +192,28 @@ function parseMd(text) {
     // H2 = section headers
     if (/^## /.test(line)) {
       const s = line.replace(/^## /, '').toLowerCase().trim();
-      if      (/^campaign/.test(s))  section = 'campaign';
-      else if (/^character/.test(s)) section = 'character';
-      else if (/^world/.test(s))     section = 'world';
-      else if (/^inventor/.test(s))  section = 'inventory';
-      else if (/^quest/.test(s))     section = 'quests';
-      else if (/^npc/.test(s))       section = 'npcs';
-      else if (/^spell/.test(s))     section = 'spellslots';
-      else if (/^note/.test(s))      section = 'notes';
-      else                           section = null;
+      if      (/^campaign/.test(s))       section = 'campaign';
+      else if (/^character/.test(s))     section = 'character';
+      else if (/^world/.test(s))         section = 'world';
+      else if (/^inventor/.test(s))      section = 'inventory';
+      else if (/^quest/.test(s))         section = 'quests';
+      else if (/^npc/.test(s))           section = 'npcs';
+      else if (/^spell slot/.test(s))    section = 'spellslots';
+      else if (/^spell/.test(s))         section = 'spells';
+      else if (/^stat/.test(s))          section = 'stats';
+      else if (/^saving/.test(s))        section = 'saving_throws';
+      else if (/^skill/.test(s))         section = 'skills';
+      else if (/^trait/.test(s) || /^feature/.test(s)) section = 'traits';
+      else if (/^condition/.test(s))     section = 'conditions';
+      else if (/^desc/.test(s))          section = 'description';
+      else if (/^equip/.test(s))         section = 'equipment';
+      else if (/^note/.test(s))          section = 'notes';
+      else                               section = null;
       subBlock = null;
       continue;
     }
 
-    // H3 = quest or NPC name
+    // H3 = quest / NPC name, or spell sub-group
     if (/^### /.test(line)) {
       const name = line.replace(/^### /, '').trim();
       if (section === 'quests') {
@@ -202,6 +222,14 @@ function parseMd(text) {
       } else if (section === 'npcs') {
         subBlock = { name, role: '', disposition: 'neutral', notes: '' };
         result.npcs.push(subBlock);
+      } else if (section === 'spells') {
+        const sub = name.toLowerCase();
+        if (/cantrip/.test(sub))                 subBlock = 'cantrips';
+        else if (/always|domain/.test(sub))       subBlock = 'always_prepared';
+        else {
+          const m = sub.match(/level\s*(\d+)|(\d+)(st|nd|rd|th)/);
+          subBlock = m ? `level_${m[1] || m[2]}` : null;
+        }
       }
       continue;
     }
@@ -329,6 +357,82 @@ function parseMd(text) {
       result.notes += (result.notes ? '\n' : '') + line;
       continue;
     }
+
+    // ── STATS section ──
+    if (section === 'stats') {
+      const kv = field(line);
+      if (!kv) continue;
+      const [k, v] = kv;
+      const SMAP = { str:'str', strength:'str', dex:'dex', dexterity:'dex',
+        con:'con', constitution:'con', int:'int', intelligence:'int',
+        wis:'wis', wisdom:'wis', cha:'cha', charisma:'cha' };
+      if (SMAP[k]) result.stats[SMAP[k]] = parseInt(v) || 10;
+      else if (k === 'ac' || k === 'armor class') result.ac = parseInt(v.match(/\d+/)?.[0]) || 10;
+      else if (k === 'ac notes' || k === 'armor notes') result.ac_notes = v;
+      else if (k === 'speed') result.speed = parseInt(v) || 30;
+      else if (k === 'passive perception' || k === 'passive perc') result.passive_perception = parseInt(v) || 10;
+      else if (k === 'initiative' || k === 'initiative bonus') result.initiative_bonus = parseInt(v.replace('+','')) || 0;
+      continue;
+    }
+
+    // ── SAVING THROWS section ──
+    if (section === 'saving_throws' && /^[-*]/.test(line)) {
+      const nm = clean(line).replace(/^[-*]\s*/,'').toLowerCase().trim();
+      const SMAP = { strength:'str', dexterity:'dex', constitution:'con',
+        intelligence:'int', wisdom:'wis', charisma:'cha',
+        str:'str', dex:'dex', con:'con', int:'int', wis:'wis', cha:'cha' };
+      for (const [full, short] of Object.entries(SMAP)) {
+        if (nm.includes(full)) { result.saving_throw_profs.push(short); break; }
+      }
+      continue;
+    }
+
+    // ── SKILLS section ──
+    if (section === 'skills' && /^[-*]/.test(line)) {
+      const sk = clean(line).replace(/^[-*]\s*/,'').replace(/\s*\(.*\)\s*$/,'').trim().toLowerCase();
+      if (sk) result.skill_profs.push(sk);
+      continue;
+    }
+
+    // ── SPELLS section ──
+    if (section === 'spells' && /^[-*]/.test(line) && subBlock) {
+      const spell = clean(line).replace(/^[-*]\s*/,'').trim();
+      if (spell) {
+        if (!result.spells[subBlock]) result.spells[subBlock] = [];
+        result.spells[subBlock].push(spell);
+      }
+      continue;
+    }
+
+    // ── TRAITS section ──
+    if (section === 'traits' && /^[-*]/.test(line)) {
+      const t = clean(line).replace(/^[-*]\s*/,'').trim();
+      if (t) result.traits.push(t);
+      continue;
+    }
+
+    // ── CONDITIONS section ──
+    if (section === 'conditions' && /^[-*]/.test(line)) {
+      const c = clean(line).replace(/^[-*]\s*/,'').trim();
+      if (c) result.conditions.push(c);
+      continue;
+    }
+
+    // ── DESCRIPTION section ──
+    if (section === 'description') {
+      const d = clean(line).replace(/^[-*]\s*/,'').trim();
+      if (d) result.description += (result.description ? ' ' : '') + d;
+      continue;
+    }
+
+    // ── EQUIPMENT section (alias for inventory) ──
+    if (section === 'equipment' && /^[-*]/.test(line)) {
+      const stripped = clean(line).replace(/^[-*]\s*/,'');
+      const m = stripped.match(/^(.+?)\s*\((\d+),\s*([^)]+)\)\s*$/);
+      if (m) result.inventory.push({ name: m[1].trim(), quantity: parseInt(m[2]), rarity: m[3].trim().toLowerCase() });
+      else if (stripped.trim()) result.inventory.push({ name: stripped.trim(), quantity: 1, rarity: 'common' });
+      continue;
+    }
   }
 
   return result;
@@ -381,11 +485,35 @@ function buildState(parsed) {
         class: clsDisplay,
         level: level,
         hp: hp,
+        hp_max: hp,
         background: char.background || '',
         alignment: char.alignment || '',
         status: 'active',
+        description: parsed.description || '',
+        // Ability scores
+        stats: Object.keys(parsed.stats).length
+          ? parsed.stats
+          : { str:10, dex:10, con:10, int:10, wis:10, cha:10 },
+        // Combat stats
+        ac: parsed.ac,
+        ac_notes: parsed.ac_notes || '',
+        speed: parsed.speed || 30,
+        proficiency_bonus: Math.ceil(1 + level / 4),
+        initiative_bonus: parsed.initiative_bonus !== null
+          ? parsed.initiative_bonus
+          : Math.floor(((parsed.stats.dex || 10) - 10) / 2),
+        passive_perception: parsed.passive_perception,
+        // Proficiencies
+        saving_throw_profs: parsed.saving_throw_profs,
+        skill_profs: parsed.skill_profs,
+        // Spells
+        spells: parsed.spells,
         spell_slots: spellSlots,
         channel_divinity: channelDivinity,
+        // Traits & conditions
+        traits: parsed.traits,
+        conditions: parsed.conditions,
+        // Inventory
         inventory: parsed.inventory,
       }
     ],

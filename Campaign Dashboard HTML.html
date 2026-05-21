@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Rurik Stormhammer — Campaign Dashboard</title>
+<title>Campaign Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -736,7 +736,7 @@ body {
 
   <!-- ── CHARACTER ── -->
   <div id="tab-character" class="tab-panel">
-    <div class="scroll-panel">
+    <div class="scroll-panel" id="character-tab-content">
       <div class="char-header">
         <canvas id="portrait-canvas" width="48" height="60"></canvas>
         <div class="char-identity">
@@ -867,7 +867,7 @@ body {
 
   <!-- ── QUESTS ── -->
   <div id="tab-quests" class="tab-panel">
-    <div class="scroll-panel" style="max-width:760px">
+    <div class="scroll-panel" id="quests-tab-content" style="max-width:760px">
       <div class="sec-title">Active Quests</div>
 
       <div class="quest-card critical">
@@ -936,7 +936,7 @@ body {
 
   <!-- ── EVENTS ── -->
   <div id="tab-events" class="tab-panel">
-    <div class="scroll-panel">
+    <div class="scroll-panel" id="events-tab-content">
       <div class="sec-title">Campaign Timeline</div>
       <div class="timeline">
         <div class="event-entry"><div class="event-dot major"></div><div class="event-day">DAY 1</div><div class="event-title">Arrival in Phandalin</div><div class="event-detail">Rurik arrives via the Triboar Trail. First glimpse of Redbrand presence — locals intimidated and silent. Contact made with Toblen Stonehill at the Stonehill Inn.</div></div>
@@ -958,7 +958,7 @@ body {
 
   <!-- ── NPCS ── -->
   <div id="tab-npcs" class="tab-panel">
-    <div class="scroll-panel">
+    <div class="scroll-panel" id="npcs-tab-content">
       <div class="sec-title">Allies</div>
       <div class="npc-grid">
         <div class="npc-card"><div class="npc-header"><div class="npc-name">Sister Garaele</div><div class="disp-badge d-ally">Ally</div></div><div class="npc-role">Shrine Keeper · Harper Agent</div><div class="npc-loc">Old Marta's Cabin</div><div class="npc-notes">Ritual complete — exhausted but joyful. Staff spent, recharging. Confirmed Rurik as Bearer of the Seal. Wept when the seal closed.</div></div>
@@ -1143,6 +1143,7 @@ async function loadGameState() {
     // ── Header ─────────────────────────────────────────
     const titleEl = document.getElementById('header-title');
     if (titleEl) titleEl.textContent = isNew ? '◈ NEW CAMPAIGN' : `◈ ${party.name.toUpperCase()}`;
+    document.title = isNew ? 'New Campaign — Dashboard' : `${party.name} — Campaign Dashboard`;
     document.getElementById('hday').textContent = isNew ? 'Character Creation' : `Day ${W.day} — ${W.time}`;
 
     // ── Threat board ───────────────────────────────────
@@ -1153,18 +1154,18 @@ async function loadGameState() {
     document.getElementById('tr-harpers').textContent  = W.harpersEta;
     document.getElementById('tr-order').textContent    = W.mindFlayer;
 
-    // ── Character sheet & resources ────────────────────
-    updateHP();
-    updateSpellSlots();
-    updateCD();
-
-    // ── Tabs ───────────────────────────────────────────
-    renderInventoryTab();
-    renderQuestsTab();
-
-    // ── New campaign: wipe everything, go to Claude tab ─
+    // ── All tabs ───────────────────────────────────────
     if (isNew) {
       clearAllTabsForNewCampaign();
+    } else {
+      renderCharacterTab();   // builds slot-row-N elements
+      renderQuestsTab();
+      renderEventsTab();
+      renderNpcsTab();
+      renderInventoryTab();
+      updateHP();
+      updateSpellSlots();     // populates slot-row-N created above
+      updateCD();
     }
 
     console.log(`✓ Game state loaded — ${isNew ? 'NEW CAMPAIGN (character creation)' : data.campaign_id}`);
@@ -1203,12 +1204,6 @@ function clearMapForNewCampaign() {
 
 // Wipe all campaign-specific tabs and inject a new-campaign welcome state
 function clearAllTabsForNewCampaign() {
-  // Save original HTML so it can be restored if the campaign was previously a real one
-  for (const id of WIPEABLE_TABS) {
-    const el = document.getElementById('tab-' + id);
-    if (el && !savedTabHTML[id]) savedTabHTML[id] = el.innerHTML;
-  }
-
   // Placeholder factory
   const ph = (icon, label) => `
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;padding:60px;text-align:center;">
@@ -1217,10 +1212,15 @@ function clearAllTabsForNewCampaign() {
       <div style="font-size:11px;color:#2a2a3a;margin-top:4px;">Available after character creation</div>
     </div>`;
 
-  document.getElementById('tab-character').innerHTML = ph('⚔️', 'No Character Yet');
-  document.getElementById('tab-quests').innerHTML    = ph('📋', 'No Quests Yet');
-  document.getElementById('tab-events').innerHTML    = ph('📜', 'No Events Yet');
-  document.getElementById('tab-npcs').innerHTML      = ph('👥', 'No NPCs Yet');
+  // Tabs are now dynamically rendered — just set placeholder content
+  const charEl = document.getElementById('character-tab-content');
+  const questEl = document.getElementById('quests-tab-content');
+  const eventsEl = document.getElementById('events-tab-content');
+  const npcsEl = document.getElementById('npcs-tab-content');
+  if (charEl)  charEl.innerHTML  = ph('⚔️', 'No Character Yet');
+  if (questEl) questEl.innerHTML = ph('📋', 'No Quests Yet');
+  if (eventsEl) eventsEl.innerHTML = ph('📜', 'No Events Yet');
+  if (npcsEl)  npcsEl.innerHTML  = ph('👥', 'No NPCs Yet');
   document.getElementById('tab-spells').innerHTML    = ph('✨', 'No Spells Yet');
   document.getElementById('tab-inventory').innerHTML = ph('🎒', 'No Inventory Yet');
 
@@ -1918,6 +1918,26 @@ function buildLegend(grid, locs) {
 //  CHARACTER UI
 // ══════════════════════════════════════════════════════
 function updateSpellSlots() {
+  // Dynamically render all slot levels present in the party state
+  const party = campaignState && campaignState.party && campaignState.party[0];
+  if (party && party.spell_slots) {
+    for (let lvl = 1; lvl <= 9; lvl++) {
+      const slot = party.spell_slots[`level_${lvl}`];
+      if (!slot || !slot.max) continue;
+      const row = document.getElementById(`slot-row-${lvl}`);
+      if (!row) continue;
+      row.innerHTML = '';
+      for (let i = 0; i < slot.max; i++) {
+        const el = document.createElement('div');
+        el.className = 'spell-slot' + (i < slot.used ? ' used' : '');
+        el.title = `Level ${lvl} slot ${i+1}`;
+        el.addEventListener('click', () => toggleSlot(lvl, i));
+        row.appendChild(el);
+      }
+    }
+    return; // new path — skip legacy render below
+  }
+  // Legacy fallback using W object
   const render = (rowId, level, max, used, label) => {
     const row = document.getElementById(rowId);
     if (!row) return;
@@ -1937,22 +1957,29 @@ function updateSpellSlots() {
 }
 
 async function toggleSlot(level, idx) {
+  // Read current state from campaignState if available, else fall back to W
+  const slotKey = `level_${level}`;
+  const slotData = campaignState && campaignState.party[0] && campaignState.party[0].spell_slots[slotKey];
+  const maxVal  = slotData ? slotData.max  : (level===1 ? W.spellSlots1Max  : W.spellSlots2Max);
+  const oldUsed = slotData ? slotData.used : (level===1 ? W.spellSlots1Used : W.spellSlots2Used);
+  const newUsed = idx < oldUsed ? idx : Math.min(idx + 1, maxVal);
+
+  // Sync W for levels 1 and 2 (legacy compat)
+  if (level === 1) { W.spellSlots1Used = newUsed; W.spellSlots1Max = maxVal; }
+  if (level === 2) { W.spellSlots2Used = newUsed; W.spellSlots2Max = maxVal; }
+
   const usedKey = level === 1 ? 'spellSlots1Used' : 'spellSlots2Used';
   const maxKey  = level === 1 ? 'spellSlots1Max'  : 'spellSlots2Max';
-  const oldUsed = W[usedKey];
-  const newUsed = idx < W[usedKey] ? idx : Math.min(idx + 1, W[maxKey]);
 
   // Spell cast sound when a slot is being used (not restored)
-  const isCasting = newUsed > oldUsed;
-  if (isCasting) {
+  if (newUsed > oldUsed) {
     try { SoundFX.spellCast(); } catch(e) { console.log('spell cast sound failed:', e); }
   }
 
-  W[usedKey] = newUsed;
+  if (campaignState && campaignState.party[0] && campaignState.party[0].spell_slots[slotKey]) {
+    campaignState.party[0].spell_slots[slotKey].used = newUsed;
+  }
   updateSpellSlots();
-
-  if (!campaignState) return;
-  campaignState.party[0].spell_slots[`level_${level}`].used = newUsed;
 
   try {
     const res = await fetch('http://localhost:3140/api/state', {
@@ -2008,13 +2035,21 @@ async function longRest() {
   W.spellSlots2Used = 0;
   W.channelDivinityUsed = 0;
   W.charHpCurrent = W.charHpMax;
+
+  if (campaignState && campaignState.party[0]) {
+    const slots = campaignState.party[0].spell_slots;
+    if (slots) for (const k of Object.keys(slots)) slots[k].used = 0;
+    if (campaignState.party[0].channel_divinity) campaignState.party[0].channel_divinity.used = 0;
+    campaignState.party[0].hp = W.charHpMax;
+  }
   updateSpellSlots();
   updateCD();
   updateHP();
 
   if (!campaignState) return;
+  // Ensure level_1/2 are set for legacy compat
   campaignState.party[0].spell_slots.level_1.used = 0;
-  campaignState.party[0].spell_slots.level_2.used = 0;
+  if (campaignState.party[0].spell_slots.level_2) campaignState.party[0].spell_slots.level_2.used = 0;
   campaignState.party[0].channel_divinity.used = 0;
   campaignState.party[0].hp = W.charHpMax;
 
@@ -3280,7 +3315,324 @@ async function deleteInventoryItem(idx) {
   } catch (err) { console.error('Failed to delete item:', err); }
 }
 
-function renderQuestsTab() { }
+// ══════════════════════════════════════════════════════
+//  DYNAMIC TAB RENDERERS
+// ══════════════════════════════════════════════════════
+
+const ALL_SKILLS = [
+  {name:'Acrobatics',stat:'dex'},{name:'Animal Handling',stat:'wis'},
+  {name:'Arcana',stat:'int'},{name:'Athletics',stat:'str'},
+  {name:'Deception',stat:'cha'},{name:'History',stat:'int'},
+  {name:'Insight',stat:'wis'},{name:'Intimidation',stat:'cha'},
+  {name:'Investigation',stat:'int'},{name:'Medicine',stat:'wis'},
+  {name:'Nature',stat:'int'},{name:'Perception',stat:'wis'},
+  {name:'Performance',stat:'cha'},{name:'Persuasion',stat:'cha'},
+  {name:'Religion',stat:'int'},{name:'Sleight of Hand',stat:'dex'},
+  {name:'Stealth',stat:'dex'},{name:'Survival',stat:'wis'},
+];
+const STAT_LABELS = ['STR','DEX','CON','INT','WIS','CHA'];
+const STAT_KEYS   = ['str','dex','con','int','wis','cha'];
+const SAVE_NAMES  = {str:'Strength',dex:'Dexterity',con:'Constitution',int:'Intelligence',wis:'Wisdom',cha:'Charisma'};
+
+function _mod(v){ const m=Math.floor((v-10)/2); return (m>=0?'+':'')+m; }
+function _modVal(v){ return Math.floor((v-10)/2); }
+
+// ─── CHARACTER TAB ───────────────────────────────────
+function renderCharacterTab() {
+  const el = document.getElementById('character-tab-content');
+  if (!el || !campaignState) return;
+  const p    = campaignState.party[0];
+  if (!p) return;
+  const stats = p.stats || {};
+  const prof  = p.proficiency_bonus || Math.ceil(1 + (p.level||1)/4);
+  const saves = p.saving_throw_profs || [];
+  const skillProfs = (p.skill_profs || []).map(s => s.toLowerCase().trim());
+  const spellSlots = p.spell_slots || {};
+  const spells = p.spells || {};
+  const hp = p.hp || 0;
+  const hpMax = p.hp_max || hp;
+  const ac  = p.ac || '—';
+  const acNotes = p.ac_notes ? ` (${p.ac_notes})` : '';
+  const init = p.initiative_bonus !== undefined ? (p.initiative_bonus >= 0 ? '+' : '') + p.initiative_bonus : _mod(stats.dex||10);
+  const speed = p.speed || 30;
+  const passPerc = p.passive_perception || (10 + _modVal(stats.wis||10) + (skillProfs.includes('perception') ? prof : 0));
+
+  // ── Stat grid ──
+  const statGrid = STAT_KEYS.map((k,i) => {
+    const score = stats[k] || 10;
+    const m = _modVal(score);
+    return `<div class="stat-box" onclick="roll('${STAT_LABELS[i]} Check',1,20,${m})" title="Roll ${STAT_LABELS[i]} check">
+      <div class="stat-label">${STAT_LABELS[i]}</div>
+      <div class="stat-score">${score}</div>
+      <div class="stat-mod">${_mod(score)}</div>
+    </div>`;
+  }).join('');
+
+  // ── Saving throws ──
+  const saveRows = STAT_KEYS.map(k => {
+    const isProficient = saves.includes(k);
+    const total = _modVal(stats[k]||10) + (isProficient ? prof : 0);
+    const label = (total>=0?'+':'')+total + (isProficient ? ' ◆' : '');
+    return `<div class="save-row" onclick="roll('${SAVE_NAMES[k]} Save',1,20,${total})" title="Roll">
+      <span class="save-stat">${SAVE_NAMES[k]}</span>
+      <span class="save-mod${isProficient?' prof':''}">${label}</span>
+    </div>`;
+  }).join('');
+
+  // ── Skills ──
+  const skillRows = ALL_SKILLS.map(sk => {
+    const key = sk.name.toLowerCase();
+    const isProficient = skillProfs.some(sp => key.includes(sp) || sp.includes(key.split(' ')[0]));
+    const total = _modVal(stats[sk.stat]||10) + (isProficient ? prof : 0);
+    const label = (total>=0?'+':'')+total + (isProficient ? ' ◆' : '');
+    return `<div class="save-row" onclick="roll('${sk.name}',1,20,${total})" title="Roll ${sk.name}">
+      <span class="save-stat">${sk.name} <span style="color:#444;font-size:10px">(${sk.stat.toUpperCase()})</span></span>
+      <span class="save-mod${isProficient?' prof':''}">${label}</span>
+    </div>`;
+  }).join('');
+
+  // ── Traits ──
+  const traitItems = (p.traits||[]).map(t =>
+    `<div class="trait-item">${t}</div>`).join('') ||
+    '<div class="trait-item" style="color:#444">No traits recorded.</div>';
+
+  // ── Conditions ──
+  const condBlock = (p.conditions||[]).length
+    ? `<div class="sec-title" style="color:#f87171;margin-top:12px">Conditions</div>
+       <div class="trait-list">${(p.conditions).map(c=>`<div class="trait-item" style="color:#f87171">${c}</div>`).join('')}</div>`
+    : '';
+
+  // ── Spell slots (right column) ──
+  let slotHtml = '';
+  for (let lvl = 1; lvl <= 9; lvl++) {
+    const slot = spellSlots[`level_${lvl}`];
+    if (!slot || !slot.max) continue;
+    slotHtml += `<div class="spell-slot-lbl">Level ${lvl} (${slot.max} slots)</div>
+      <div class="slot-row" id="slot-row-${lvl}"></div>`;
+  }
+  if (p.channel_divinity && p.channel_divinity.max > 0) {
+    slotHtml += `<div class="spell-slot-lbl" style="margin-top:14px">Channel Divinity (${p.channel_divinity.max}/rest)</div>
+      <div class="slot-row" id="cd-row"></div>`;
+  }
+
+  // ── Spell list (right column) ──
+  let spellListHtml = '';
+  if (spells.cantrips && spells.cantrips.length) {
+    spellListHtml += `<div style="color:#333;font-size:10px;letter-spacing:2px;margin-bottom:4px">CANTRIPS</div>`;
+    spellListHtml += spells.cantrips.map(s=>`<div class="spell-item cantrip"><span class="spell-tag">C</span>${s}</div>`).join('');
+  }
+  if (spells.always_prepared && spells.always_prepared.length) {
+    spellListHtml += `<div style="color:#333;font-size:10px;letter-spacing:2px;margin-bottom:4px;margin-top:8px">ALWAYS PREPARED</div>`;
+    spellListHtml += spells.always_prepared.map(s=>`<div class="spell-item always"><span class="spell-tag">★</span>${s}</div>`).join('');
+  }
+  for (let lvl = 1; lvl <= 9; lvl++) {
+    const group = spells[`level_${lvl}`];
+    if (!group || !group.length) continue;
+    spellListHtml += `<div style="color:#333;font-size:10px;letter-spacing:2px;margin-bottom:4px;margin-top:8px">LEVEL ${lvl}</div>`;
+    spellListHtml += group.map(s=>`<div class="spell-item spell"><span class="spell-tag">${lvl}</span>${s}</div>`).join('');
+  }
+
+  // ── Full render ──
+  el.innerHTML = `
+    <div class="char-header">
+      <canvas id="portrait-canvas" width="48" height="60"></canvas>
+      <div class="char-identity">
+        <div class="char-name">${p.name}</div>
+        <div class="char-sub">${[p.race,p.class,p.level?'Level '+p.level:'',p.background,p.alignment].filter(Boolean).join(' · ')}</div>
+        ${p.description ? `<div class="char-desc">${p.description}</div>` : ''}
+      </div>
+    </div>
+
+    <div class="sec-title">Ability Scores</div>
+    <div class="stat-grid">${statGrid}</div>
+
+    <div class="vitals-row">
+      <div class="vital-box"><div class="vital-label">HP</div><div class="vital-value green" id="char-hp">${hp} / ${hpMax}</div><div class="hp-bar-wrap"><div class="hp-bar"><div class="hp-bar-fill" id="char-hp-bar" style="width:100%"></div></div></div></div>
+      <div class="vital-box"><div class="vital-label">AC</div><div class="vital-value">${ac}${acNotes}</div></div>
+      <div class="vital-box"><div class="vital-label">Initiative</div><div class="vital-value">${init}</div></div>
+      <div class="vital-box"><div class="vital-label">Speed</div><div class="vital-value">${speed} ft</div></div>
+      <div class="vital-box"><div class="vital-label">Prof. Bonus</div><div class="vital-value">+${prof}</div></div>
+      <div class="vital-box"><div class="vital-label">Passive Perc.</div><div class="vital-value">${passPerc}</div></div>
+    </div>
+    <div class="hp-controls">
+      <span class="hp-ctrl-lbl">HP</span>
+      <button class="hp-btn" onclick="adjustHP(-1)">−1</button>
+      <button class="hp-btn" onclick="adjustHP(-5)">−5</button>
+      <button class="hp-btn" onclick="adjustHP(1)">+1</button>
+      <button class="hp-btn" onclick="adjustHP(5)">+5</button>
+      <button class="hp-btn full" onclick="adjustHP(W.charHpMax)">Full</button>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="sec-title">Saving Throws</div>
+        <div class="saves-grid">${saveRows}</div>
+        <div class="sec-title">Skills</div>
+        <div class="saves-grid">${skillRows}</div>
+        <div class="sec-title">Traits &amp; Features</div>
+        <div class="trait-list">${traitItems}</div>
+        ${condBlock}
+      </div>
+      <div>
+        <div class="sec-title">Spell Slots</div>
+        ${slotHtml || '<div style="color:#444;font-size:12px">No spell slots.</div>'}
+        <div class="rest-btns">
+          <button class="rest-btn long" onclick="longRest()">⊕ Long Rest</button>
+          <button class="rest-btn short" onclick="shortRest()">◎ Short Rest</button>
+        </div>
+        <div class="sec-title">Spells</div>
+        <div class="spell-list">${spellListHtml || '<div style="color:#444;font-size:12px">No spells recorded.</div>'}</div>
+      </div>
+    </div>`;
+
+  // Draw portrait after DOM is ready
+  setTimeout(() => {
+    const c = document.getElementById('portrait-canvas');
+    if (c) drawCharacterPortrait(c, p);
+  }, 0);
+}
+
+// ─── QUESTS TAB ──────────────────────────────────────
+function renderQuestsTab() {
+  const el = document.getElementById('quests-tab-content');
+  if (!el || !campaignState) return;
+  const allQuests = campaignState.quests || [];
+  const PRIORITY = {critical:'ub-critical',high:'ub-high',medium:'ub-medium',low:'ub-medium'};
+
+  function questCard(q) {
+    const badge = PRIORITY[q.priority] || 'ub-high';
+    const statusLabel = q.status === 'completed' ? 'Complete' : (q.priority||'Active');
+    const steps = (q.steps||[]).map(s => `
+      <div class="obj-item ${s.completed?'done':''}">
+        <span class="obj-check ${s.completed?'done':''}">${s.completed?'✓':'○'}</span>
+        <span>${s.description}</span>
+      </div>`).join('');
+    return `<div class="quest-card ${q.status==='completed'?'done':badge.replace('ub-','')}">
+      <div class="quest-header">
+        <div class="quest-name">${q.title}</div>
+        <div class="quest-badge ${badge}">${statusLabel}</div>
+      </div>
+      ${q.description?`<div class="quest-desc">${q.description}</div>`:''}
+      ${steps?`<div class="quest-obj">${steps}</div>`:''}
+      ${q.giver?`<div class="quest-leads">Quest Giver: ${q.giver}</div>`:''}
+    </div>`;
+  }
+
+  const active    = allQuests.filter(q => q.status !== 'completed');
+  const completed = allQuests.filter(q => q.status === 'completed');
+  let html = '';
+  if (active.length)    html += `<div class="sec-title">Active Quests</div>${active.map(questCard).join('')}`;
+  if (completed.length) html += `<div class="sec-title">Completed Quests</div>${completed.map(questCard).join('')}`;
+  if (!allQuests.length) html = '<div style="color:#444;padding:24px;text-align:center">No quests tracked yet.</div>';
+  el.innerHTML = html;
+}
+
+// ─── EVENTS TAB ──────────────────────────────────────
+function renderEventsTab() {
+  const el = document.getElementById('events-tab-content');
+  if (!el || !campaignState) return;
+  const log = (campaignState.history_log || []).slice().reverse();
+  if (!log.length) {
+    el.innerHTML = '<div style="color:#444;padding:24px;text-align:center">No events recorded yet.</div>';
+    return;
+  }
+  const entries = log.map(e => {
+    const d = e.timestamp ? new Date(e.timestamp) : null;
+    const dayStr = d ? `${d.toLocaleDateString()} ${d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}` : '';
+    return `<div class="event-entry">
+      <div class="event-dot good"></div>
+      <div class="event-day">${dayStr}</div>
+      <div class="event-detail">${e.event}</div>
+    </div>`;
+  }).join('');
+  el.innerHTML = `<div class="sec-title">Campaign Timeline</div><div class="timeline">${entries}</div>`;
+}
+
+// ─── NPCS TAB ────────────────────────────────────────
+function renderNpcsTab() {
+  const el = document.getElementById('npcs-tab-content');
+  if (!el || !campaignState) return;
+  const allNpcs = campaignState.npcs || [];
+  if (!allNpcs.length) {
+    el.innerHTML = '<div style="color:#444;padding:24px;text-align:center">No NPCs tracked yet.</div>';
+    return;
+  }
+
+  const DISP_MAP = {
+    friendly: {label:'Allies',   badge:'d-ally',      badgeText:'Ally'},
+    ally:     {label:'Allies',   badge:'d-ally',      badgeText:'Ally'},
+    neutral:  {label:'Neutral',  badge:'d-neutral',   badgeText:'Neutral'},
+    hostile:  {label:'Threats',  badge:'d-hostile',   badgeText:'Hostile'},
+    contained:{label:'Contained',badge:'d-recovering',badgeText:'Contained'},
+    recovering:{label:'Uncertain',badge:'d-recovering',badgeText:'Recovering'},
+  };
+
+  const groups = {};
+  for (const npc of allNpcs) {
+    const disp = (npc.disposition||'neutral').toLowerCase();
+    const info = DISP_MAP[disp] || {label:'Other', badge:'d-neutral', badgeText: disp};
+    if (!groups[info.label]) groups[info.label] = { info, npcs: [] };
+    groups[info.label].npcs.push({ npc, info });
+  }
+
+  const ORDER = ['Allies','Neutral','Uncertain','Threats','Contained','Other'];
+  let html = '';
+  for (const label of ORDER) {
+    if (!groups[label]) continue;
+    const {info, npcs: list} = groups[label];
+    html += `<div class="sec-title">${label}</div><div class="npc-grid">`;
+    for (const {npc, info: di} of list) {
+      const canvasId = 'npc-portrait-' + (npc.id || npc.name.toLowerCase().replace(/\s+/g,'-'));
+      html += `<div class="npc-card">
+        <div class="npc-header">
+          <div class="npc-name">${npc.name}</div>
+          <div class="disp-badge ${di.badge}">${di.badgeText}</div>
+        </div>
+        ${npc.role ? `<div class="npc-role">${npc.role}</div>` : ''}
+        ${npc.location ? `<div class="npc-loc">${npc.location}</div>` : ''}
+        ${npc.notes ? `<div class="npc-notes">${npc.notes}</div>` : ''}
+      </div>`;
+    }
+    html += `</div>`;
+  }
+  el.innerHTML = html;
+}
+
+// ─── CHARACTER PORTRAIT ───────────────────────────────
+function drawCharacterPortrait(canvas, p) {
+  const ctx = canvas.getContext('2d');
+  const px = (x,y,w,h,c) => { ctx.fillStyle=c; ctx.fillRect(x,y,w,h); };
+  ctx.fillStyle = '#0a0a12'; ctx.fillRect(0,0,48,60);
+
+  // Generate a deterministic palette from the character's name
+  let hash = 0;
+  for (const ch of (p.name||'')) hash = ((hash<<5)-hash)+ch.charCodeAt(0);
+  const hue = Math.abs(hash) % 360;
+  const accent = `hsl(${hue},60%,40%)`;
+  const skin   = `hsl(${(hue+40)%360},30%,55%)`;
+  const hair   = `hsl(${(hue+180)%360},40%,25%)`;
+
+  // Body/robe
+  px(6,28,36,32,accent);
+  // Head
+  px(14,10,20,18,skin);
+  // Hair
+  px(12,8,24,8,hair);
+  px(10,10,4,10,hair);
+  px(34,10,4,10,hair);
+  // Eyes - grey for Kél, normal for others
+  const isBlind = (p.conditions||[]).some(c => /blind/i.test(c));
+  const eyeColor = isBlind ? '#888' : `hsl(${hue},50%,60%)`;
+  px(17,17,4,3,eyeColor);
+  px(27,17,4,3,eyeColor);
+  // Level indicator strip at bottom
+  ctx.fillStyle = accent;
+  ctx.fillRect(0,54,48,6);
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 7px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText(`LVL ${p.level||1}`, 24, 60);
+}
 
 // ══════════════════════════════════════════════════════
 //  CLAUDE AI INTEGRATION
@@ -3368,6 +3720,7 @@ function applyStateUpdate(state) {
   }
   if (rurik.inventory) window.inventory = rurik.inventory;
   if (state.quests)    window.quests    = state.quests;
+  if (state.npcs)      window.npcs      = state.npcs;
 
   // Update header to reflect current character name
   const titleEl = document.getElementById('header-title');
@@ -3375,12 +3728,15 @@ function applyStateUpdate(state) {
     titleEl.textContent = `◈ ${rurik.name.toUpperCase()}`;
   }
 
-  // Refresh all panels
+  // Re-render all dynamic tabs
+  if (typeof renderCharacterTab === 'function') renderCharacterTab();
+  if (typeof renderQuestsTab    === 'function') renderQuestsTab();
+  if (typeof renderEventsTab    === 'function') renderEventsTab();
+  if (typeof renderNpcsTab      === 'function') renderNpcsTab();
+  if (typeof renderInventoryTab === 'function') renderInventoryTab();
   updateHP();
   updateSpellSlots();
   updateCD();
-  if (typeof renderInventoryTab === 'function') renderInventoryTab();
-  if (typeof renderQuestsTab    === 'function') renderQuestsTab();
   const sealEl = document.getElementById('tr-seal');
   if (sealEl) sealEl.textContent = state.campaign_id === 'new-campaign' ? '—' : `${W.sealPct}%`;
 

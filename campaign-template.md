@@ -27,6 +27,45 @@
 - **Location:** Neverwinter
 - **Time:** Day 1 — Morning
 
+## Stats
+- **STR:** 16
+- **DEX:** 8
+- **CON:** 14
+- **INT:** 10
+- **WIS:** 12
+- **CHA:** 10
+- **AC:** 16
+- **AC Notes:** Chain mail + shield
+- **Speed:** 30
+- **Passive Perception:** 11
+
+## Saving Throws (proficient)
+- Strength
+- Constitution
+
+## Skills (proficient)
+- Athletics
+- Intimidation
+- Perception
+
+## Spells
+
+### Cantrips
+<!-- Delete this section if your class has no cantrips -->
+
+### Level 1
+<!-- Delete this section if your class has no spell slots -->
+
+## Traits & Features
+- Fighting Style: Defense (+1 AC while wearing armor)
+- Second Wind: Bonus action — regain 1d10 + level HP once per short rest
+
+## Conditions
+<!-- Only add entries if your character has active conditions -->
+
+## Description
+Tall and broad-shouldered. Close-cropped dark hair, several small scars on the face from past campaigns. Moves with the deliberate economy of someone who has fought for a living.
+
 ## Inventory
 <!-- Format: - Item Name (quantity, rarity) -->
 - Longsword (1, common)
