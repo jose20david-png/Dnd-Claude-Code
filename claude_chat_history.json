@@ -135,9 +135,25 @@
     {
       "role": "assistant",
       "content": "# The Woman Revealed 👀✨\n\nKel's eyes lift from the journal, meeting her gaze directly. His tone is plain, matter-of-fact—no flourish, just honest curiosity.\n\nShe exhales slightly, as if relieved by his response. Now that you're looking at her fully, details emerge:\n\n**Her appearance:**\n- Late twenties, sharp cheekbones and intelligent dark eyes—the kind that suggest scholarly training or at least keen observation\n- Her dark hair is pulled back hastily, a few strands escaping. Practical, not vain\n- Beneath the snow-dusted cloak, she wears weathered traveling clothes—sturdy leather, well-maintained but worn\n- A faint scar runs along her jawline, old enough to have faded to pale white\n- Her hands are steady despite the urgency in her voice, though there's a tremor of exhaustion\n\nShe pulls out the chair across from you without asking permission and sits, keeping her voice low.\n\n\"My name is **Sera Thorne**. I'm an artifact researcher—or I was, before everything went wrong.\" She glances toward the innkeeper, then back to you. \"Three weeks ago, my expedition uncovered something in the **Underdark ruins** north of here. Ancient Netherese. A journal, actually. It contains detailed schematics and *operational notes* for something called a Fabrial.\"\n\nYour breath catches. Your hand instinctively tightens on your quill.\n\nShe leans forward slightly, eyes locked on yours.\n\n\"I assume that means something to you.\"\n\n**What does Kel say or do?**"
+    },
+    {
+      "role": "user",
+      "content": "\"a Fabrial?\"... \"I dont know what you're talking about girl...\" (Kel obviously knows. He writes a note in a parchment that says: \"not here...meet me outside in 20 minutes\")\n\nPlease leave me to my studies and my wine..."
+    },
+    {
+      "role": "assistant",
+      "content": "# A Calculated Move 🎭🍷\n\nSera reads your dismissal with sharp eyes. She's clearly intelligent enough to understand the game—or at least, she doesn't seem offended. A faint smile crosses her lips, knowing yet cautious.\n\nShe glances at the parchment you've slid across the table. Reads it. Nods once.\n\n\"Fair enough,\" she says quietly, standing up. \"Enjoy your wine, wizard.\"\n\nShe turns and walks back toward the bar, ordering a hot drink from the innkeeper with casual ease. She settles into a table near the window—the same one the cloaked figure vacated minutes ago—and pulls out a worn map, studying it as if she has nowhere urgent to be.\n\nBut her eyes flick toward you occasionally. Measuring. Waiting.\n\nThe innkeeper's gaze lingers on you both with undisguised curiosity, but she says nothing.\n\nThe common room settles back into its rhythmic hum. The dwarven merchants laugh loudly. The fire crackles. Twenty minutes stretches before you like a test of patience.\n\nYou return to your journal, though your mind is clearly elsewhere now. A Fabrial. Operational notes. Schematics. Everything you've been searching for, it seems, has just walked through that door.\n\n**Does Kel do anything during these twenty minutes, or does he wait and finish his wine?**"
+    },
+    {
+      "role": "user",
+      "content": "He finishes his wine and packs his journal. Goes to the innkeeper and pays for it all, including the girl's drink, he glances briefly at her and makes a courtesy with his head. Then walks outside and waits for the girl, out of sight"
+    },
+    {
+      "role": "assistant",
+      "content": "# Outside the Ironpeak Inn 🌙❄️\n\nKel settles his tab with the innkeeper—coin exchanged for silence, a courtesy that speaks volumes. He pays for Sera's drink as well, a calculated gesture. Not kindness, exactly. More like... an investment in what's to come.\n\nThe nod is brief, direct. Sera catches it. She watches you rise and move toward the door, understanding the signal.\n\nYou step into the mountain night.\n\nThe cold hits immediately—sharp, thin air at this altitude. Snow crunches beneath your boots. Above, stars blaze with crystalline clarity, undimmed by the lowlands' haze. The Ironpeak Mountains loom around you, their silhouettes dark against the star-field. A few lights from other buildings dot the darkness, but the inn's rear is largely isolated.\n\nYou position yourself in shadow, out of sight of the common room windows but with a clear view of the inn's exit.\n\nThe wind carries the scent of pine and distant snow. Your breath mists in the cold.\n\nTen minutes pass. Then fifteen.\n\nThe inn's door opens.\n\nSera emerges, her cloak wrapped tight, moving purposefully toward the darkened area where she suspects you're waiting. She's careful—glancing around, ensuring no one followed her. No dwarven merchants. No cloaked figures. Just her.\n\nShe spots you in the shadow.\n\n\"You came,\" she says quietly, approaching. \"Good. We don't have much time.\"\n\n**What does Kel ask or do?**"
     }
   ],
   "created_at": "2026-05-21T22:41:17.265Z",
-  "token_count": 6247,
+  "token_count": 7033,
   "model": "claude-haiku-4-5"
 }
