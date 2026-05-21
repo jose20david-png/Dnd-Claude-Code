@@ -346,14 +346,14 @@
     },
     {
       "role": "user",
-      "content": "Lets go then, Sera. End the session here."
+      "content": "Lets go then. \n\nEnd session"
     },
     {
       "role": "assistant",
-      "content": "# The Journey Begins 🏔️🌄\n\nThe mountain air hits you both like a physical force as you step through the inn's heavy wooden door. It's crisp, clean, carrying the scent of pine and distant snow. The morning sun climbs steadily higher, painting long shadows across the rocky terrain.\n\nSera leads the way with confident strides, her knowledge of these mountains evident in every step. The path she chooses isn't the main road—it winds through passes and natural corridors in the stone, places where locals rarely venture. She moves with purpose, her earlier fear tempered now by the presence of someone who understands.\n\n\"It's about a day's hard travel from here,\" she calls back over her shoulder as you both navigate a particularly steep section. \"The ruins are nestled in a hidden valley on the eastern face. The Netherese built them deliberately remote—far from civilization, far from prying eyes.\"\n\nThe landscape around you grows progressively more desolate. Vegetation thins. The air grows colder the higher you climb. Occasionally, you catch glimpses of something in the distance—geometric shapes that don't belong to nature, weathered stone edges that hint at ancient construction half-swallowed by time and geography.\n\nBy midday, you're high enough that the world below seems distant and irrelevant. The only sound is the wind, your footsteps, and the occasional tumble of loose stones down the mountainside.\n\nSera pauses at a ridge and points ahead.\n\nIn the distance, barely visible through the haze of altitude and thin air, you see it: the ruins. Towering structures of blackened stone, partially collapsed, arranged in a pattern that speaks of deliberate design. And at their heart, something that gleams faintly—metal catching the sunlight. The Fabrial.\n\n\"There,\" Sera says quietly. \"That's where it happened. That's where everything changed.\"\n\nHer hand trembles slightly as she points, but her voice remains steady.\n\nThe ruins await. The Spren awaits. And somewhere in that tangle of ancient magic and degrading machinery, answers—and perhaps something far more dangerous—await you both."
+      "content": "⚠️ **DM connection issue**\n\n`HTTP 429 — rate_limit_error: This request would exceed your organization's rate limit of 10,000 input tokens per minute (org: 107edf4e-18e0-4278-bdd7-3c1859a2b82a, model: claude-haiku-4-5-20251001). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.`\n\n*Your message was kept. Try sending it again — if this is a rate limit or \"overloaded\" error, wait 10–20 seconds first.*"
     }
   ],
   "created_at": "2026-05-21T22:41:17.265Z",
-  "token_count": 17037,
+  "token_count": 16069,
   "model": "claude-haiku-4-5"
 }
