@@ -23,6 +23,7 @@ const CHAT_HISTORY_PATH   = path.join(APP_DIR, 'claude_chat_history.json');
 const DASHBOARD_PATH      = path.join(APP_DIR, 'Campaign Dashboard HTML.html');
 const JOURNAL_PATH        = path.join(APP_DIR, 'journal.md');
 const ENV_PATH            = path.join(APP_DIR, '.env');
+const SAVES_DIR           = path.join(APP_DIR, 'saves');
 
 const MODEL                = 'claude-haiku-4-5';
 const AUTO_SAVE_INTERVAL_MS = 5 * 60 * 1000;
@@ -597,9 +598,89 @@ function openBrowser() {
   else exec(`xdg-open ${dashUrl}`);
 }
 
+// ─── SAVE SYSTEM ──────────────────────────────────────────────────────────────
+
+function ensureSavesDir() {
+  if (!fs.existsSync(SAVES_DIR)) fs.mkdirSync(SAVES_DIR, { recursive: true });
+}
+
+// Build a slug from character name + date for the filename
+function makeSaveFilename(state) {
+  const char = (state.party?.[0]?.name || 'unknown').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  const date = new Date().toISOString().slice(0, 10);
+  const time = state.world?.time?.replace(/[^a-z0-9]/gi, '-').toLowerCase() || 'day1';
+  return `${char}_${time}_${date}.json`;
+}
+
+// Write current campaign state + chat history into saves/
+function saveCurrentCampaign() {
+  try {
+    if (!fs.existsSync(CAMPAIGN_STATE_PATH)) return null;
+    const state = JSON.parse(fs.readFileSync(CAMPAIGN_STATE_PATH, 'utf8'));
+    if (state.campaign_id === 'new-campaign') return null; // nothing worth saving
+
+    const history = fs.existsSync(CHAT_HISTORY_PATH)
+      ? JSON.parse(fs.readFileSync(CHAT_HISTORY_PATH, 'utf8'))
+      : { messages: [] };
+
+    const r = state.party?.[0] || {};
+    const meta = {
+      character:   r.name        || 'Unknown',
+      class:       r.class       || '—',
+      level:       r.level       || 1,
+      hp:          r.hp          || 0,
+      location:    state.world?.current_location || '—',
+      time:        state.world?.time             || '—',
+      campaign_id: state.campaign_id             || '—',
+      saved_at:    new Date().toISOString(),
+      messages:    (history.messages || []).length,
+    };
+
+    ensureSavesDir();
+    const filename = makeSaveFilename(state);
+    const savePath = path.join(SAVES_DIR, filename);
+    fs.writeFileSync(savePath, JSON.stringify({ meta, state, history }, null, 2), 'utf8');
+    return filename;
+  } catch (e) {
+    console.error('  ⚠️  Save failed:', e.message);
+    return null;
+  }
+}
+
+// List all saves, most recent first
+function listSaves() {
+  ensureSavesDir();
+  try {
+    return fs.readdirSync(SAVES_DIR)
+      .filter(f => f.endsWith('.json'))
+      .map(f => {
+        try {
+          const raw = JSON.parse(fs.readFileSync(path.join(SAVES_DIR, f), 'utf8'));
+          return { filename: f, meta: raw.meta };
+        } catch { return null; }
+      })
+      .filter(Boolean)
+      .sort((a, b) => new Date(b.meta.saved_at) - new Date(a.meta.saved_at));
+  } catch { return []; }
+}
+
+// Restore a save into the active campaign files
+function loadSave(filename) {
+  const savePath = path.join(SAVES_DIR, filename);
+  const raw = JSON.parse(fs.readFileSync(savePath, 'utf8'));
+  saveState(raw.state);
+  saveHistory(raw.history || { messages: [], token_count: 0, model: MODEL });
+  console.log('');
+  console.log(`  ✓ Loaded: ${raw.meta.character} — ${raw.meta.time}`);
+  console.log(`  ✓ Location: ${raw.meta.location}`);
+  console.log('');
+}
+
 // ─── MAIN MENU ────────────────────────────────────────────────────────────────
 function showMenu(hasSave, callback) {
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  const saves = listSaves();
+  const hasSavedCampaigns = saves.length > 0;
 
   console.log('  ┌─────────────────────────────────┐');
   if (hasSave) {
@@ -608,7 +689,12 @@ function showMenu(hasSave, callback) {
     console.log('  │   [1]  Start Campaign           │');
   }
   console.log('  │   [2]  New Campaign             │');
+  if (hasSavedCampaigns) {
+  console.log('  │   [3]  Load Campaign            │');
+  console.log('  │   [4]  Quit                     │');
+  } else {
   console.log('  │   [3]  Quit                     │');
+  }
   console.log('  └─────────────────────────────────┘');
   console.log('');
 
@@ -617,8 +703,41 @@ function showMenu(hasSave, callback) {
       const choice = answer.trim();
       if (choice === '1') { rl.close(); callback('continue'); }
       else if (choice === '2') { rl.close(); callback('new'); }
-      else if (choice === '3') { rl.close(); callback('quit'); }
-      else { console.log('  Please enter 1, 2, or 3.'); ask(); }
+      else if (choice === '3' && hasSavedCampaigns) { rl.close(); callback('load'); }
+      else if ((choice === '3' && !hasSavedCampaigns) || choice === '4') { rl.close(); callback('quit'); }
+      else { console.log(`  Please enter a valid option.`); ask(); }
+    });
+  }
+  ask();
+}
+
+function showLoadMenu(callback) {
+  const saves = listSaves();
+  if (!saves.length) { console.log('  No saved campaigns found.\n'); callback(null); return; }
+
+  console.log('');
+  console.log('  ┌─ Saved Campaigns ─────────────────────────────────────────┐');
+  saves.forEach((s, i) => {
+    const m = s.meta;
+    const date = m.saved_at ? m.saved_at.slice(0, 10) : '—';
+    const line = `[${i + 1}]  ${m.character} · ${m.class} Lv${m.level} · ${m.time}`;
+    const sub  = `     ${m.location} · Saved ${date}`;
+    console.log(`  │  ${line.padEnd(58)}│`);
+    console.log(`  │  ${sub.padEnd(58)}│`);
+    if (i < saves.length - 1) console.log('  │                                                            │');
+  });
+  console.log('  │                                                            │');
+  console.log('  │  [0]  Back                                                 │');
+  console.log('  └────────────────────────────────────────────────────────────┘');
+  console.log('');
+
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  function ask() {
+    rl.question('  > ', answer => {
+      const n = parseInt(answer.trim());
+      if (answer.trim() === '0') { rl.close(); callback(null); return; }
+      if (n >= 1 && n <= saves.length) { rl.close(); callback(saves[n - 1].filename); return; }
+      console.log(`  Enter a number between 0 and ${saves.length}.`); ask();
     });
   }
   ask();
@@ -627,8 +746,9 @@ function showMenu(hasSave, callback) {
 function confirmNewCampaign(callback) {
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
   console.log('');
-  console.log('  ⚠️  NEW CAMPAIGN will erase ALL current progress.');
-  console.log('  This cannot be undone. Type YES to confirm:');
+  console.log('  Starting a new campaign will save the current one');
+  console.log('  to the saves/ folder, then wipe the active slot.');
+  console.log('  Type YES to confirm:');
   console.log('');
   rl.question('  > ', answer => {
     rl.close();
@@ -637,10 +757,26 @@ function confirmNewCampaign(callback) {
 }
 
 function resetToBrandNew() {
-  // Wipe state and history
+  // Auto-save current campaign before wiping (if it's a real campaign)
+  const saved = saveCurrentCampaign();
+  if (saved) {
+    console.log('');
+    console.log(`  ✓ Current campaign saved → saves/${saved}`);
+  }
+
+  // Add journal divider so entries don't blur between campaigns
+  try {
+    if (fs.existsSync(JOURNAL_PATH)) {
+      const divider = `\n\n${'═'.repeat(60)}\n  END OF CAMPAIGN — ${new Date().toISOString().slice(0, 10)}\n${'═'.repeat(60)}\n\n`;
+      fs.appendFileSync(JOURNAL_PATH, divider, 'utf8');
+    }
+  } catch {}
+
+  // Wipe active state and history
   saveState(JSON.parse(JSON.stringify(BLANK_STATE)));
   saveHistory({ messages: [], created_at: new Date().toISOString(), token_count: 0, model: MODEL });
-  // Optionally clear context file notes section
+
+  // Clear SESSION NOTES from context file
   try {
     if (fs.existsSync(CONTEXT_PATH)) {
       let ctx = fs.readFileSync(CONTEXT_PATH, 'utf8');
@@ -648,7 +784,7 @@ function resetToBrandNew() {
       fs.writeFileSync(CONTEXT_PATH, ctx, 'utf8');
     }
   } catch {}
-  console.log('');
+
   console.log('  ✓ Campaign data cleared. Starting fresh...');
   console.log('  ✓ Claude will guide you through character creation.');
   console.log('');
@@ -686,12 +822,29 @@ async function main() {
       confirmNewCampaign(confirmed => {
         if (!confirmed) {
           console.log('  Cancelled. Returning to menu...\n');
-          // Re-show menu
           setTimeout(() => main(), 500);
           return;
         }
         resetToBrandNew();
         launchGame();
+      });
+      return;
+    }
+
+    if (choice === 'load') {
+      showLoadMenu(filename => {
+        if (!filename) {
+          // Back — re-show main menu
+          setTimeout(() => main(), 200);
+          return;
+        }
+        try {
+          loadSave(filename);
+          launchGame();
+        } catch (e) {
+          console.error('  ✗ Failed to load save:', e.message);
+          setTimeout(() => main(), 800);
+        }
       });
       return;
     }
