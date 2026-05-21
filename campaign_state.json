@@ -1,20 +1,20 @@
 {
-  "campaign_id": "lost-mine-phandelver-witness-arc",
+  "campaign_id": "new-campaign",
   "world": {
-    "name": "Forgotten Realms — Phandelver Region",
-    "lore_summary": "The Witness is sealed beneath Wave Echo Cave. Breeding chamber destroyed Day 6. Mind Flayer at large, location unknown. Phandalin occupied by Redbrands under field commander Silga.",
-    "current_location": "Old Marta's Cabin, Phandalin outskirts",
-    "time": "Day 7 — Morning",
+    "name": "Forgotten Realms",
+    "lore_summary": "New campaign — character creation in progress.",
+    "current_location": "Character Creation",
+    "time": "Day 1 — Morning",
     "seal_integrity": 100,
-    "seal_status": "Stable — years"
+    "seal_status": "N/A"
   },
   "party": [
     {
-      "id": "rurik",
-      "name": "Rurik Stormhammer",
-      "class": "Cleric (Storm Domain)",
-      "level": 3,
-      "hp": 27,
+      "id": "player",
+      "name": "New Character",
+      "class": "Unset",
+      "level": 1,
+      "hp": 10,
       "status": "active",
       "spell_slots": {
         "cantrip": {
@@ -22,11 +22,11 @@
           "used": 0
         },
         "level_1": {
-          "max": 4,
-          "used": 1
+          "max": 0,
+          "used": 0
         },
         "level_2": {
-          "max": 2,
+          "max": 0,
           "used": 0
         },
         "level_3": {
@@ -43,266 +43,27 @@
         }
       },
       "channel_divinity": {
-        "max": 1,
+        "max": 0,
         "used": 0
       },
-      "inventory": [
-        {
-          "name": "Warhammer +1",
-          "quantity": 1,
-          "rarity": "uncommon"
-        },
-        {
-          "name": "Holy Symbol of Talos (amulet)",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Chain Mail",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Shield",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Backpack",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Bedroll",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Rope (50 ft)",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Torch",
-          "quantity": 3,
-          "rarity": "common"
-        },
-        {
-          "name": "Healing Kit",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Waterskin",
-          "quantity": 1,
-          "rarity": "common"
-        }
-      ]
+      "inventory": []
     }
   ],
-  "npcs": [
-    {
-      "id": "npc_garaele",
-      "name": "Sister Garaele",
-      "role": "ally",
-      "location": "Old Marta's Cabin",
-      "personality": "Devout, warm, staff depleted and recharging",
-      "knowledge": [
-        "Harper network",
-        "Shrine of Luck",
-        "binding ritual complete"
-      ]
-    },
-    {
-      "id": "npc_sildar",
-      "name": "Sildar Hallwinter",
-      "role": "ally",
-      "location": "Old Marta's Cabin",
-      "personality": "Military, tactical, will not commit without Silga intel",
-      "knowledge": [
-        "Lords Alliance contacts",
-        "Redbrand disposition",
-        "patrol count ~8-12"
-      ]
-    },
-    {
-      "id": "npc_gundren",
-      "name": "Gundren Rockseeker",
-      "role": "ally",
-      "location": "Old Marta's Cabin",
-      "personality": "Shaken but steady",
-      "knowledge": [
-        "Wave Echo Cave",
-        "Phandelver Compact history"
-      ]
-    },
-    {
-      "id": "npc_iarno",
-      "name": "Iarno Albrek",
-      "role": "redeemed-enemy",
-      "location": "Old Marta's Cabin",
-      "personality": "Recovering, cooperative, motivated to repair damage",
-      "knowledge": [
-        "Silga patrol rotations",
-        "Redbrand blind spots",
-        "3-5am south road gap",
-        "Silga tactics"
-      ]
-    },
-    {
-      "id": "npc_toblen",
-      "name": "Toblen Stonehill",
-      "role": "civilian-ally",
-      "location": "Old Marta's Cabin",
-      "personality": "Stubborn, wants to fight for Phandalin",
-      "knowledge": [
-        "town layout",
-        "three families under protection shakedown"
-      ]
-    },
-    {
-      "id": "npc_qelline",
-      "name": "Qelline Alderleaf",
-      "role": "ally",
-      "location": "Old Marta's Cabin",
-      "personality": "Practical, methodical, prepared intel notes",
-      "knowledge": [
-        "south road patrol gap 3-5am",
-        "forest path NE terrain",
-        "Harpers ETA Day 9"
-      ]
-    },
-    {
-      "id": "npc_silga",
-      "name": "Silga",
-      "role": "antagonist",
-      "location": "Phandalin",
-      "personality": "Tactical, brutal, experienced field commander",
-      "knowledge": [
-        "Redbrand full operations",
-        "outrider positions",
-        "shakedown schedules"
-      ]
-    },
-    {
-      "id": "npc_mindflayer",
-      "name": "The Mind Flayer",
-      "role": "antagonist",
-      "location": "unknown",
-      "personality": "Ancient, calculating, severed from the Witness",
-      "knowledge": [
-        "Wave Echo Cave layout",
-        "Witness history",
-        "Phandalin underground access"
-      ]
-    }
-  ],
-  "quests": [
-    {
-      "id": "quest_escape",
-      "title": "Escape Phandalin — Choose a Route",
-      "status": "active",
-      "steps": [
-        {
-          "step_id": "q1s1",
-          "description": "Consult Iarno for Silga patrol intel",
-          "completed": false
-        },
-        {
-          "step_id": "q1s2",
-          "description": "Choose route: South Road / Forest Path NE / Hold for Harpers",
-          "completed": false
-        },
-        {
-          "step_id": "q1s3",
-          "description": "Execute chosen escape plan",
-          "completed": false
-        }
-      ]
-    },
-    {
-      "id": "quest_mindflayer",
-      "title": "Hunt the Mind Flayer",
-      "status": "active",
-      "steps": [
-        {
-          "step_id": "q2s1",
-          "description": "Locate where the Mind Flayer retreated after breeding chamber collapse",
-          "completed": false
-        },
-        {
-          "step_id": "q2s2",
-          "description": "Confront and neutralize the Mind Flayer",
-          "completed": false
-        }
-      ]
-    },
-    {
-      "id": "quest_liberate",
-      "title": "Liberate Phandalin",
-      "status": "active",
-      "steps": [
-        {
-          "step_id": "q3s1",
-          "description": "Remove Silga from command",
-          "completed": false
-        },
-        {
-          "step_id": "q3s2",
-          "description": "Scatter or defeat 8-12 active Redbrands",
-          "completed": false
-        },
-        {
-          "step_id": "q3s3",
-          "description": "Restore safety to Phandalin townspeople",
-          "completed": false
-        }
-      ]
-    },
-    {
-      "id": "quest_witness",
-      "title": "Contain the Witness",
-      "status": "completed",
-      "steps": [
-        {
-          "step_id": "q4s1",
-          "description": "Reinforce the binding seal beneath Wave Echo Cave",
-          "completed": true
-        },
-        {
-          "step_id": "q4s2",
-          "description": "Destroy the Mind Flayer's ceremorphosis breeding pods",
-          "completed": true
-        }
-      ]
-    }
-  ],
+  "npcs": [],
+  "quests": [],
   "encounters": [],
   "history_log": [
     {
-      "timestamp": "2026-05-16T00:00:00Z",
-      "event": "State engine initialized. Day 7 Morning. Long rest complete at Marta's Cabin. Seal stable. Breeding chamber destroyed. Escape route decision pending."
+      "timestamp": "2026-05-21T21:41:25.843Z",
+      "event": "New campaign started. Begin character creation."
     },
     {
-      "timestamp": "2026-05-16T00:01:00Z",
-      "event": "Player confirmed state initialization. Narrative unlocked. Engine active."
+      "timestamp": "2026-05-21T21:51:46.732Z",
+      "event": "Rathal Ulayra, a High Elf Wizard from Evereska, begins his journey. A scholar of Evocation magic seeking to understand the intersection of physics and arcane forces, he is driven by insatiable curiosity and a desire to find an intellectual equal. Polite, calculating, and chaotic in nature—bound bycreed but truth itself."
     },
     {
-      "timestamp": "2026-05-16T23:34:33.898Z",
-      "event": "Loaded context file. Day 7, Old Marta's Cabin, Phandalin outskirts, 27 / 27 (full — long rest complete), 4× 1st, 2× 2nd (full) (spell slots RESET)."
-    },
-    {
-      "timestamp": "2026-05-17T01:12:01.901Z",
-      "event": "Cast Guiding Bolt (Level 1 slot). Slots remaining: 3/4"
-    },
-    {
-      "timestamp": "2026-05-17T22:48:14.629Z",
-      "event": "Day 7 Evening — Rurik communes with Talos in meditation at Old Marta's Cabin. Receives divine guidance: the Mind Flayded and isolated, seeking leverage to break the seal. Three paths revealed: immediate vengeance, careful preparation with allies, or return to Wave Echo Cave for ritual consecration. Stormfather's message: \"The storm strikes when it is ready. The wise warrior prepares the battlefield. The seal holds, but vigilance is eternal.\""
-    },
-    {
-      "timestamp": "2026-05-17T22:53:56.155Z",
-      "event": "DAY 7 — AFTERNOON/EVENING: Rurik, Qelline, and Toblen return from Stonehill Inn with critical intelligence. Wester (innkeeper) has agreed to defect from Silga's occupation and will arrive at Old Marta's tonight after closing to provide full details on the Redbrand field commander's movements and vulnerabilities. Risk acknowledged: Wester is motivated but frightened; if interrogated by Silga, he could break or betray the group.\n\nCONTINGENCY PLANNING: Sildar scouts high ground northeast of cabin for vantage point anding system (whistle signals). Iarno maps all Redbrand patrol routes and patterndren recovers from despair after Rurik reminds hDwarvish of the seal's permanence and their shared duty. Sister Garaele offers spiritual support.\n\nDIVINE COMMUNION: Rurik kneels in prayer to Talos and enters a meditative trance. The Stormfather reveals three paths forward: (1) Hunt the wounded Mind Flayer immediately while isolated, (2) Prepare thoroughly with Wester's intelligence before engagement, (3) Return to Wave Echo Cave to consecrate and strengthen the seal. Divine guidance: \"The storm strikes when it is ready. The wise warrior prepares the battlefield. The seal holds, but vigilance is eternal.\"\n\nDECISION MADE: The group chooses Path 2 — Prepare now, wait for Wester's intelligence, then hunt the Mind Flayer. The cabin is being fortified with supplies, weapons checked, and escape routes refreshed. Wester expected to arrive around the tenth bell (approximately 2 hours hence).\n\nCURRENT STATE: Evening settling. Allies engaged in preparation. Group morale steady and purposeful."
+      "timestamp": "2026-05-21T21:53:34.081Z",
+      "event": "CAMPAIGN CREATED: \"Echoes of the Arcane\" - Character Rathal Ulayra, High Elf Wizard (Evocation School), created and ready for adventure. Character origin: Evereska. Motivation: Understanding magic and physics, seeking a kindred mind. Alignment: Chaotic Neutral. Currently approaching the town of Millhaven on the Sword Coast, sensing discordant magical interference in the area. A guard at the gate has greeted Rathal and is awaiting response."
     }
-  ],
-  "_last_context_sync": "2026-05-17T01:20:12.482Z"
+  ]
 }
