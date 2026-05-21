@@ -351,9 +351,41 @@
     {
       "role": "assistant",
       "content": "⚠️ **DM connection issue**\n\n`HTTP 429 — rate_limit_error: This request would exceed your organization's rate limit of 10,000 input tokens per minute (org: 107edf4e-18e0-4278-bdd7-3c1859a2b82a, model: claude-haiku-4-5-20251001). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.`\n\n*Your message was kept. Try sending it again — if this is a rate limit or \"overloaded\" error, wait 10–20 seconds first.*"
+    },
+    {
+      "role": "user",
+      "content": "Lets go then. End session"
+    },
+    {
+      "role": "assistant",
+      "content": "⚠️ **DM connection issue**\n\n`HTTP 429 — rate_limit_error: This request would exceed your organization's rate limit of 10,000 input tokens per minute (org: 107edf4e-18e0-4278-bdd7-3c1859a2b82a, model: claude-haiku-4-5-20251001). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.`\n\n*Your message was kept. Try sending it again — if this is a rate limit or \"overloaded\" error, wait 10–20 seconds first.*"
+    },
+    {
+      "role": "user",
+      "content": "Where where we?"
+    },
+    {
+      "role": "assistant",
+      "content": "We were in the common room of the mountain inn at dawn. Kel and Sera had just finished their preparations—Kel meditating through the night, Sera having slept fitfully but better than before. \n\nYou (Kel) had complimented Sera on her eagerness, intensity, and curiosity—her thirst for knowledge. She appreciated it, and you both gathered provisions. Sera extended her hand as a partner, and you were about to head out toward the ruins together.\n\nYou said \"Let's go then\" and asked to end the session.\n\nWould you like me to write the closing narrative recap and commit this session to your campaign log?"
+    },
+    {
+      "role": "user",
+      "content": "yes"
+    },
+    {
+      "role": "assistant",
+      "content": "⚠️ **DM connection issue**\n\n`HTTP 429 — rate_limit_error: This request would exceed your organization's rate limit of 10,000 input tokens per minute (org: 107edf4e-18e0-4278-bdd7-3c1859a2b82a, model: claude-haiku-4-5-20251001). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.`\n\n*Your message was kept. Try sending it again — if this is a rate limit or \"overloaded\" error, wait 10–20 seconds first.*"
+    },
+    {
+      "role": "user",
+      "content": "Where where we?"
+    },
+    {
+      "role": "assistant",
+      "content": "We were at the mountain inn at dawn. Kel had just finished meditating through the night, contemplating the Netherese ruins and the Fabrial. Sera came downstairs, having slept better than she had in weeks. \n\nYou (Kel) complimented her on being eager, intense, and curious—praising her thirst for knowledge. She appreciated it. You both gathered provisions from the innkeeper, and Sera extended her hand as a partner. You were about to head out toward the ruins together to confront the Spren.\n\nYou said \"Let's go then\" and asked to end the session.\n\nWould you like me to write the closing narrative recap now?"
     }
   ],
   "created_at": "2026-05-21T22:41:17.265Z",
-  "token_count": 16069,
+  "token_count": 16387,
   "model": "claude-haiku-4-5"
 }
