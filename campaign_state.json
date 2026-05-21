@@ -1,36 +1,40 @@
 {
-  "campaign_id": "new-campaign",
+  "campaign_id": "fabrial-hunt",
+  "campaign_title": "The Fabrial Hunt — The Witness Arc",
   "world": {
-    "name": "Forgotten Realms",
-    "lore_summary": "New campaign — character creation in progress.",
-    "current_location": "Character Creation",
-    "time": "Day 1 — Morning",
+    "name": "Forgotten Realms (Post-Calamity)",
+    "lore_summary": "Six ancient Fabrials were created as a lock against the Void-That-Thirsts (Keth'zahir). 347 years ago, Karsus shattered that lock and the entity fed on the imbalance. Now Kél Stormblessed—a blind Divination Wizard—has become the seventh point of the hexagonal cage, containing the entity within himself. The Verdant Fabrial has fallen. Four points remain. The entity sleeps—but not for long.",
+    "current_location": "The Monastery (South)",
+    "time": "Day 11 — Morning",
     "seal_integrity": 100,
     "seal_status": "N/A"
   },
   "party": [
     {
-      "id": "player",
-      "name": "New Character",
-      "class": "Unset",
-      "level": 1,
-      "hp": 10,
+      "id": "kl-stormblessed",
+      "name": "Kél Stormblessed",
+      "race": "Variant Human",
+      "class": "Wizard (Divination (School of Divination))",
+      "level": 6,
+      "hp": 26,
+      "background": "Sage",
+      "alignment": "Chaotic Neutral",
       "status": "active",
       "spell_slots": {
         "cantrip": {
-          "max": 0,
+          "max": 3,
           "used": 0
         },
         "level_1": {
-          "max": 0,
+          "max": 4,
           "used": 0
         },
         "level_2": {
-          "max": 0,
+          "max": 3,
           "used": 0
         },
         "level_3": {
-          "max": 0,
+          "max": 3,
           "used": 0
         },
         "level_4": {
@@ -40,30 +44,220 @@
         "level_5": {
           "max": 0,
           "used": 0
+        },
+        "level_6": {
+          "max": 0,
+          "used": 0
+        },
+        "level_7": {
+          "max": 0,
+          "used": 0
+        },
+        "level_8": {
+          "max": 0,
+          "used": 0
+        },
+        "level_9": {
+          "max": 0,
+          "used": 0
         }
       },
       "channel_divinity": {
         "max": 0,
         "used": 0
       },
-      "inventory": []
+      "inventory": [
+        {
+          "name": "Spellbook",
+          "quantity": 1,
+          "rarity": "rare"
+        },
+        {
+          "name": "Arcane Focus",
+          "quantity": 1,
+          "rarity": "common"
+        },
+        {
+          "name": "Scholar's Pack",
+          "quantity": 1,
+          "rarity": "common"
+        },
+        {
+          "name": "Herbal Tea",
+          "quantity": 1,
+          "rarity": "common"
+        }
+      ]
     }
   ],
-  "npcs": [],
-  "quests": [],
+  "npcs": [
+    {
+      "id": "mira-ashvale",
+      "name": "Mira Ashvale",
+      "role": "Eighth of the Cognoscenti, romantic partner",
+      "disposition": "friendly",
+      "notes": "Dark hair with gold threads from speaking the Immortal Words. Bound to Fen (creation essence). Held Kél through the night. Her belief in him is becoming a tether against despair. Said: \"I see you. All of you. Even the broken parts.\"",
+      "location": "The Monastery (South)"
+    },
+    {
+      "id": "thorin-ironforge",
+      "name": "Thorin Ironforge",
+      "role": "Dwarf warrior and antiquarian, party anchor",
+      "disposition": "friendly",
+      "notes": "Red braided beard, chainmail, lightning-bolt hammer, stormcloud shield. 40 years studying old things. Published monograph on pre-Calamity binding techniques. Communicates primarily through \"Hm\" (which contains multitudes).",
+      "location": "The Monastery (South)"
+    },
+    {
+      "id": "elder-monk",
+      "name": "Elder Monk",
+      "role": "Monastery leader, keeper of Fabrial knowledge",
+      "disposition": "friendly",
+      "notes": "Recognized Kél on sight as \"the Stormblessed\" and \"the blind one who paid the price.\" Said: \"You are both cage and caged. The seventh point of a six-pointed binding. Something the world has never needed before.\"",
+      "location": "The Monastery (South)"
+    },
+    {
+      "id": "wren",
+      "name": "Wren",
+      "role": "Woodsman and tracker from Millhaven",
+      "disposition": "neutral",
+      "notes": "Compact, sharp-faced, dark circles under eyes. 11 years tracking experience. Lost someone named Cael. Notices exits, not threats. Witnessed Davan's shadow encounter.",
+      "location": "The Monastery (South)"
+    },
+    {
+      "id": "aldric",
+      "name": "Aldric",
+      "role": "Young man from Millhaven",
+      "disposition": "friendly",
+      "notes": "About 20 years old. Brown hair, recent scab above eyebrow. Cuts straight to the center of complicated questions. Said \"Somewhere to send everything\" about the Unnamed—earned Kél's deep respect.",
+      "location": "The Monastery (South)"
+    },
+    {
+      "id": "serath",
+      "name": "Serath",
+      "role": "Fifth of the Cognoscenti",
+      "disposition": "neutral",
+      "notes": "31 years following the Fabrial thread. Silver-streaked hair, sharp featured. Originally from Waterdeep. Travels with Pip and Davan.",
+      "location": "The Monastery (South)"
+    },
+    {
+      "id": "pip",
+      "name": "Pip",
+      "role": "Seventh of the Cognoscenti, chronicler",
+      "disposition": "friendly",
+      "notes": "Young woman, dark eyes behind simple spectacles. Ink-stained fingers, constant journal-keeper. Has read everything about Kél including Thornwall.",
+      "location": "The Monastery (South)"
+    },
+    {
+      "id": "davan",
+      "name": "Davan",
+      "role": "No formal Cognoscenti rank, traveler",
+      "disposition": "neutral",
+      "notes": "Quiet, dark-eyed, watchful. Spent 7 years searching for a shadow from an abandoned village. Bonded with a shadow in the valley—remembered \"someone.\"",
+      "location": "The Monastery (South)"
+    },
+    {
+      "id": "asha--the-architect",
+      "name": "Asha — The Architect",
+      "role": "Original creator of the Fabrials",
+      "disposition": "friendly",
+      "notes": "Founded the Cognoscenti. Was human originally—now exists at a coordinate in time rather than moving through it. Bare collar where a brooch once was. Karsus was her brightest student. Appears only as an echo/projection.",
+      "location": "The Monastery (South)"
+    },
+    {
+      "id": "syl",
+      "name": "Syl",
+      "role": "Resonant Shadow, Kél's bound companion",
+      "disposition": "friendly",
+      "notes": "Originally a dark candle-like void essence. Now: ethereal fae-like form, tiny luminous woman, translucent flowy dress. Rests on Kél's left shoulder. Speaks Ancient Netherese. Currently dimmed from the entity's touch but recovering.",
+      "location": "The Monastery (South)"
+    },
+    {
+      "id": "kess",
+      "name": "Kess",
+      "role": "Captain of local militia near Verdant Hollow",
+      "disposition": "neutral",
+      "notes": "Warned the party about the Architects of Want before the catastrophe at Verdant.",
+      "location": "The Monastery (South)"
+    }
+  ],
+  "quests": [
+    {
+      "id": "quest-1",
+      "title": "Secure the Remaining Fabrial Points",
+      "status": "active",
+      "description": "Four Fabrials remain unsealed. If another falls before the hexagon is secured, the Void-That-Thirsts will feed again—and Kél will be the first thing it unmakes.",
+      "giver": "Asha (The Architect)",
+      "steps": [
+        {
+          "description": "Reach the Deepwater Fabrial (South — at or near the Monastery)",
+          "completed": false
+        },
+        {
+          "description": "Reach the Ashborne Fabrial (East)",
+          "completed": false
+        },
+        {
+          "description": "Reach the Resonant Fabrial (North)",
+          "completed": false
+        },
+        {
+          "description": "Understand what securing the seventh point (center) requires",
+          "completed": false
+        },
+        {
+          "description": "Confront the surviving Architects of Want in the western passes",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "id": "quest-2",
+      "title": "Survive the Darkness",
+      "status": "active",
+      "description": "Kél is blind, containing an ancient entity, and drowning in despair after failing at Verdant Hollow. He must learn to live with what he carries before the entity wakes.",
+      "giver": "Mira Ashvale",
+      "steps": [
+        {
+          "description": "Learn to navigate the world through energy perception",
+          "completed": false
+        },
+        {
+          "description": "Work through the severe depression and self-recrimination",
+          "completed": false
+        },
+        {
+          "description": "Accept the weight of being cage and caged both",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "id": "quest-3",
+      "title": "Learn What the Monastery Knows",
+      "status": "active",
+      "description": "The elder monks have tended six points of binding for 347 years and know things no one else does.",
+      "giver": "Elder Monk",
+      "steps": [
+        {
+          "description": "Hear the elder's full account of the Void-That-Thirsts",
+          "completed": false
+        },
+        {
+          "description": "Understand what being the seventh point means in practice",
+          "completed": false
+        },
+        {
+          "description": "Determine whether the Verdant point can be restored or replaced",
+          "completed": false
+        }
+      ]
+    }
+  ],
   "encounters": [],
   "history_log": [
     {
-      "timestamp": "2026-05-21T21:41:25.843Z",
-      "event": "New campaign started. Begin character creation."
-    },
-    {
-      "timestamp": "2026-05-21T21:51:46.732Z",
-      "event": "Rathal Ulayra, a High Elf Wizard from Evereska, begins his journey. A scholar of Evocation magic seeking to understand the intersection of physics and arcane forces, he is driven by insatiable curiosity and a desire to find an intellectual equal. Polite, calculating, and chaotic in nature—bound bycreed but truth itself."
-    },
-    {
-      "timestamp": "2026-05-21T21:53:34.081Z",
-      "event": "CAMPAIGN CREATED: \"Echoes of the Arcane\" - Character Rathal Ulayra, High Elf Wizard (Evocation School), created and ready for adventure. Character origin: Evereska. Motivation: Understanding magic and physics, seeking a kindred mind. Alignment: Chaotic Neutral. Currently approaching the town of Millhaven on the Sword Coast, sensing discordant magical interference in the area. A guard at the gate has greeted Rathal and is awaiting response."
+      "timestamp": "2026-05-21T22:09:02.433Z",
+      "event": "Campaign imported from Markdown. Title: \"The Fabrial Hunt — The Witness Arc\". Character: Kél Stormblessed, Wizard (Divination (School of Divination)) Level 6."
     }
   ]
 }
