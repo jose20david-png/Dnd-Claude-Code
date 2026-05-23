@@ -71,9 +71,41 @@
     {
       "role": "assistant",
       "content": "# The Stranger Speaks 🕯️\n\nYou grip your staff instinctively, fingers brushing the smooth wood as you rise from your desk. Your voice is level—*calculating*, as always—but there's an edge to it. Caution. Control.\n\nThe figure doesn't flinch at your defensive posture. Instead, they step closer, the candlelight finally revealing more of their scarred visage. Their cloak is dark grey, travel-worn. The clouded eye doesn't blink.\n\n**\"No,\"** they say quietly, **\"you wouldn't expect visitors. Not here. Not after what happened to Kaine.\"**\n\nThey hold the coin steady, letting it catch the light.\n\n**\"My name is Corvus. I was... a friend of the Professor's. One of the few who knew what he was digging into before the river took him.\"** Their voice is rough, as if strained by old pain. **\"I've been watching you, Master Stormblessed. Watching to see if you'd receive the letter. Watching to see if you'd be foolish enough to come looking for answers.\"**\n\nCorvus pockets the coin slowly.\n\n**\"The Academy knows you're searching for something. They've sent inquiries. Subtle ones—the kind only a clever wizard would notice. Which means your time here is running short.\"** They pause, studying you with that one good eye. **\"Aldous was a good man. Better than most. They killed him because he found something in the Tower. Something that frightened *them*.\"**\n\n**\"I can help you. But not here. Not now. Too many eyes.\"**\n\n---\n\n**How do you respond?**"
+    },
+    {
+      "role": "user",
+      "content": "end session"
+    },
+    {
+      "role": "assistant",
+      "content": "# Session Ended ✨\n\nYour first session with **Kel Stormblessed** has been recorded and committed to the campaign archive. The mystery of Fabrials, the cryptic letter, and Corvus's dark revelation await your return.\n\n---\n\n## Next Time:\n\nWhen you resume, you'll face a critical choice: **Do you trust this scarred stranger?** What does Corvus want from you? And most importantly—**what did Aldous Kaine find in the Tower that was worth killing for?**\n\nThe dark gothic world of your adventure is taking shape. Shadows gather. Conspiracies deepen. And somewhere in Neverwinter, your mentor Elan Greywood may be far more entangled in darkness than you ever imagined.\n\n**The Obsidian Library awaits your return.** 🌙\n\n---\n\n**Until next time, adventurer. Rest well. Your story is just beginning.**"
+    },
+    {
+      "role": "user",
+      "content": "session start"
+    },
+    {
+      "role": "assistant",
+      "content": "# Welcome Back to Faerûn ⚡🔮\n\n---\n\n## CAMPAIGN RECAP\n\nYou are **Kel Stormblessed**, a brilliant Conjuration Wizard obsessed with uncovering the secrets of **Fabrials**—mysterious magical artifacts of immense power. You abandoned your teaching career at Neverwinter Academy to pursue this mystery, much to the confusion of your peers.\n\nYour mentor, **Elan Greywood** (a gnome wizard), holds secrets you desperately need to understand. But a cryptic, unsigned letter arrived three days ago—written in the hand of **Professor Aldous Kaine**, your mentor's closest colleague, who officially drowned in the river six months ago.\n\nThe letter warned: *\"Do not trust Elan. The things he seeks are not what he claims.\"*\n\nNow, in the candlelit study chamber of the **Obsidian Library**, a scarred stranger named **Corvus** has appeared with that same broken-star symbol, claiming Aldous was murdered—and that the Academy knows you're searching for something.\n\n---\n\n## THE PRESENT MOMENT 🕯️\n\n**Day 1 — Late Morning**\n\nYou've just responded to Corvus's cryptic warning. The scarred figure stands before you, one clouded white eye fixed upon you with unsettling intensity. The broken star coin has vanished into their cloak.\n\n**\"I can help you,\"** Corvus says, **\"but not here. Not now. Too many eyes.\"**\n\nThey glance toward the library's shadows—toward the towering shelves, the distant reading rooms, the darkened corridors.\n\n**\"There's a tavern called the *Brass Serpent*, two streets east of here. Near the docks. Meet me there at dusk. Come alone. Tell no one.\"** Corvus turns to leave, then pauses. **\"And Kel? Burn that letter. If the Academy finds it, they'll know Aldous reached you. That makes you dangerous to them. That makes you a target.\"**\n\nBefore you can respond, Corvus melts back into the library's shadows and vanishes between the towering stacks.\n\nYou're alone again. The candles flicker.\n\n---\n\n**What do you do?**"
+    },
+    {
+      "role": "user",
+      "content": "The letter said not to trust anybody at the academy. Also, you do know what happened to the las of the proffesor's friend right?"
+    },
+    {
+      "role": "assistant",
+      "content": "# A Sharp Question 🧙‍♂️\n\nYou're right to be cautious. **Very** right.\n\nThe letter explicitly warned: *\"Trust no one at the Academy. The corruption runs deeper than you know.\"*\n\nAnd now a mysterious figure—claiming to be Aldous's friend—appears with perfect knowledge of your movements, tells you to meet him at a tavern, and vanishes into shadow.\n\n**That's suspicious as hell.**\n\n---\n\nAs for **what happened to the last of Aldous Kaine's friends**—that's a detail we haven't established yet. This is your world. You knew Aldous. You were both at the Academy.\n\n**Tell me:**\n\n- **Did Aldous have other close colleagues or friends besides Elan?** \n- **What do YOU know about how Aldous died?** Was it truly a suicide by drowning, or did you ever hear whispers suggesting something darker?\n- **Has anyone else who was close to Aldous experienced... misfortune... since his death?**\n\nYour scholar's mind is already working the angles. You're piecing this together. Help me understand what **Kel Stormblessed** would actually know about the Professor's death and the people around him.\n\n**What's your instinct telling you?** 🎭"
+    },
+    {
+      "role": "user",
+      "content": "Sorry, I was talking about what happened to the last of professor's Elan friend. Making a connection between Corvus and Elan"
+    },
+    {
+      "role": "assistant",
+      "content": "# Ah! A Brilliant Connection 🔍\n\n**Excellent instinct.** You're thinking like a true investigator.\n\nLet me clarify the world for you:\n\n**Elan Greywood** is your mentor—the gnome wizard who taught you Conjuration. He's still alive, still at Neverwinter Academy (as far as you know). You haven't had direct contact with him since you left to pursue the Fabrial search, but he was aware of your departure.\n\n**Aldous Kaine** was *Elan's* closest colleague—they worked together on research projects. Aldous died six months ago (officially ruled suicide by drowning).\n\n---\n\n**Now here's what we need to establish:**\n\nDid Elan have **other friends or associates** who have suffered misfortune since Aldous's death? People close to him who've died, disappeared, or gone mad?\n\n**Are you suspecting:**\n- That Corvus might actually be working *for* Elan, sent to test you or trap you?\n- That there's a pattern of people close to Elan dying or vanishing?\n- That Corvus might be **Elan in disguise**, trying to manipulate you?\n\n**What does your scholar's mind suspect about the connections here?** \n\nWe can build the world around your theory. What tragedy or pattern do you think Kel would have noticed about Elan's inner circle? 🕵️‍♂️"
     }
   ],
   "created_at": "2026-05-23T18:40:32.012Z",
-  "token_count": 4871,
+  "token_count": 6685,
   "model": "claude-haiku-4-5"
 }
