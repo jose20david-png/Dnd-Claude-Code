@@ -103,9 +103,17 @@
     {
       "role": "assistant",
       "content": "# Ah! A Brilliant Connection 🔍\n\n**Excellent instinct.** You're thinking like a true investigator.\n\nLet me clarify the world for you:\n\n**Elan Greywood** is your mentor—the gnome wizard who taught you Conjuration. He's still alive, still at Neverwinter Academy (as far as you know). You haven't had direct contact with him since you left to pursue the Fabrial search, but he was aware of your departure.\n\n**Aldous Kaine** was *Elan's* closest colleague—they worked together on research projects. Aldous died six months ago (officially ruled suicide by drowning).\n\n---\n\n**Now here's what we need to establish:**\n\nDid Elan have **other friends or associates** who have suffered misfortune since Aldous's death? People close to him who've died, disappeared, or gone mad?\n\n**Are you suspecting:**\n- That Corvus might actually be working *for* Elan, sent to test you or trap you?\n- That there's a pattern of people close to Elan dying or vanishing?\n- That Corvus might be **Elan in disguise**, trying to manipulate you?\n\n**What does your scholar's mind suspect about the connections here?** \n\nWe can build the world around your theory. What tragedy or pattern do you think Kel would have noticed about Elan's inner circle? 🕵️‍♂️"
+    },
+    {
+      "role": "user",
+      "content": "Let the events unroll as I asked the questions, I'll let you decide and build up on the details"
+    },
+    {
+      "role": "assistant",
+      "content": "# Understood. The World Unfolds 🌙\n\nPerfect. I'll weave the details as we play. You ask the questions—sharp, clever questions—and I'll reveal what Kel Stormblessed discovers through investigation, conversation, and deduction.\n\n---\n\n## Back to the Moment\n\nYou're alone in the Obsidian Library. Corvus has vanished. The letter burns in your mind. The broken star coin image lingers.\n\nYour instincts are firing on all cylinders—**something about Corvus and Elan**, some connection you can't quite articulate yet.\n\nThe library is quiet. Dusty. **Observant.**\n\n---\n\n**What do you do now?**\n\n- Do you leave the library and investigate something specific?\n- Do you search the library's records for information about Aldous, Corvus, or Elan?\n- Do you prepare for the meeting at the *Brass Serpent* at dusk?\n- Do you try to find someone at the Academy to question carefully?\n- Something else entirely?\n\nThe day is young. You have hours before sunset. 🕯️\n\n**How does Kel Stormblessed proceed?**"
     }
   ],
   "created_at": "2026-05-23T18:40:32.012Z",
-  "token_count": 6685,
+  "token_count": 6984,
   "model": "claude-haiku-4-5"
 }
