@@ -2,9 +2,9 @@
   "campaign_id": "kel-stormblessed-campaign",
   "world": {
     "name": "Faerûn (Forgotten Realms)",
-    "lore_summary": "Kel Stormblessed, a brilliant Conjuration Wizard and Sage of Neverwinter Academy, has abandoned his teaching path to hunt for Fabrials—mysterious magical artifacts of immense power. His mentor, the gnome wizard Elan Greywood, holds secrets Kel desperately seeks. Dark magic spreads across the realm, and a cryptic letter hints that Elan may be entangled in a conspiracy far deeper than anyone imagined.",
-    "current_location": "The Obsidian Library - Candlelit study chamber",
-    "time": "Day 1 — Morning",
+    "lore_summary": "A weathered tavern near the docks where sailors, merchants, and those seeking anonymity gather. Dim lighting, thick ale, and few questions asked. Corvus has chosen this place deliberately—public enough to be safe, anonymous enough to hide secrets.\"",
+    "current_location": "The Brass Serpent Tavern - Dockside, Neverwinter",
+    "time": "Day 1 — Dusk",
     "seal_integrity": 100,
     "seal_status": "N/A",
     "map_id": null
@@ -143,6 +143,10 @@
     {
       "timestamp": "2026-05-23T18:52:35.495Z",
       "event": "Kel Stormblessed created. Wizard (Conjuration) Level 1. Adventure begins."
+    },
+    {
+      "timestamp": "2026-05-23T19:36:50.262Z",
+      "event": "Moved to The Brass Serpent Tavern - Dockside, Neverwinter — Day 1 — Dusk."
     }
   ]
 }
