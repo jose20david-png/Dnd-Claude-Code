@@ -103,9 +103,33 @@
     {
       "role": "assistant",
       "content": "Great choice! As a conjuration wizard, you can summon creatures and manipulate matter. Now, let's choose your cantrips. Which four cantrips would you like to start with? Here are some options:\n\n1. **Mage Hand** - Levitate a small object.\n2. **Ray of Frost** - Deal 1d8 cold damage.\n3. **Shocking Grasp** - Deal 1d8 lightning damage and grapple the target.\n4. **Fire Bolt** - Deal 1d10 fire damage."
+    },
+    {
+      "role": "user",
+      "content": "magehand, firebolt, prestidigitation and ray of frost"
+    },
+    {
+      "role": "assistant",
+      "content": "Great choices! Here are your cantrips:\n\n- **Mage Hand** - Levitate a small object.\n- **Fire Bolt** - Deal 1d10 fire damage.\n- **Prestidigitation** - Perform minor magical tricks.\n- **Ray of Frost** - Deal 1d8 cold damage.\n\nNow, let's determine your spell slots. As a 1st level wizard, you have:\n\n- Spell Slots: 4 level 1 slots.\n\nWhich 4 level 1 spells would you like to start with? Here are some options:\n\n1. **Magic Missile** - Fire 1d4 missiles that deal 1d4+1 force damage each.\n2. **Shield** - Create a shield that absorbs 5 damage and reflects the next spell cast at you.\n3. **Burning Hands** - Deal 1d6 fire damage in a 15ft cone.\n4. **Sleep** - Put 4d4 HD of creatures into a magical slumber.\n5. **Grease** - Cover a 10ft square with a layer of grease.\n6. **Mage Armor** - Gain a +1 bonus to AC for 8 hours."
+    },
+    {
+      "role": "user",
+      "content": "magic missile, shielf, mage armor and sleep"
+    },
+    {
+      "role": "assistant",
+      "content": "As the sun begins to rise, painting the sky with hues of orange and pink, you find yourself in a small village nestled in the heart of a vast forest. The air is cool and crisp, carrying with it the scent of pine and the faintest hint of smoke from last night's fires. The villagers are already beginning to stir, going about their daily chores and routines. As you walk through the village, you can't help but feel a sense of anticipation. This is where your adventure begins."
+    },
+    {
+      "role": "user",
+      "content": "magic missile, shield, sleep and mage armor"
+    },
+    {
+      "role": "assistant",
+      "content": "As you walk through the village, you notice a few villagers casting curious glances your way. One of them, an elderly woman with a kind smile, approaches you. \"Good morning, traveler,\" she greets warmly. \"I don't believe I've seen you around here before. What brings you to our little village?\"\n\nWhat would you like to do?\n\n1. Ask her about the village and its inhabitants.\n2. Inquire about any recent unusual events or happenings.\n3. Mention that you're an adventurer and ask if there's any work to be found.\n4. Something else (please specify)."
     }
   ],
   "created_at": "2026-05-23T22:04:30.255Z",
-  "token_count": 1625,
+  "token_count": 2910,
   "model": "open-mistral-nemo"
 }
