@@ -1,8 +1,8 @@
 {
   "campaign_id": "kel-stormblessed-campaign",
   "world": {
-    "name": "Dark Gothic Fantasy",
-    "lore_summary": "Kel Stormblessed, a brilliant Conjuration Wizard, has just discovered a cryptic letter from a murdered colleague hinting at a conspiracy of dark magic spreading across the realm—and their former mentor may be involved in ways unimaginable.",
+    "name": "Faerûn (Forgotten Realms)",
+    "lore_summary": "Kel Stormblessed, a brilliant Conjuration Wizard and Sage of Neverwinter Academy, has abandoned his teaching path to hunt for Fabrials—mysterious magical artifacts of immense power. His mentor, the gnome wizard Elan Greywood, holds secrets Kel desperately seeks. Dark magic spreads across the realm, and a cryptic letter hints that Elan may be entangled in a conspiracy far deeper than anyone imagined.",
     "current_location": "The Obsidian Library - Candlelit study chamber",
     "time": "Day 1 — Morning",
     "seal_integrity": 100,
@@ -16,8 +16,8 @@
       "race": "High Elf",
       "class": "Wizard (Conjuration)",
       "level": 1,
-      "hp": 6,
-      "hp_max": 6,
+      "hp": 7,
+      "hp_max": 7,
       "hit_dice_total": 1,
       "hit_dice_used": 0,
       "xp": 0,
@@ -30,19 +30,19 @@
       "background": "Sage",
       "alignment": "Chaotic Neutral",
       "stats": {
-        "str": 8,
-        "dex": 14,
+        "str": 10,
+        "dex": 15,
         "con": 12,
-        "int": 16,
-        "wis": 13,
-        "cha": 10
+        "int": 15,
+        "wis": 12,
+        "cha": 11
       },
       "ac": 12,
-      "ac_notes": "Unarmored (DEX)",
+      "ac_notes": "No armor (robes)",
       "speed": 30,
       "proficiency_bonus": 2,
-      "initiative_bonus": 2,
-      "passive_perception": 11.5,
+      "initiative_bonus": 2.5,
+      "passive_perception": 11,
       "saving_throw_profs": [
         "int",
         "wis"
@@ -54,25 +54,21 @@
         "Insight"
       ],
       "traits": [
-        "Darkvision (60 ft)",
-        "Keen Senses",
-        "Fey Ancestry",
-        "Trance",
-        "Elf Weapon Training",
-        "Cantrip: Prestidigitation (High Elf bonus)"
+        "Sage Features: Researcher (know how to find rare information)",
+        "High Elf Traits: Darkvision, Keen Senses, Fey Ancestry",
+        "Wizard Features: Spellcasting, Arcane Recovery, Conjuration Savant (faster to copy Conjuration spells)"
       ],
       "conditions": [],
-      "description": "Kel Stormblessed is a sharp-featured High Elf with blonde hair and piercing emerald eyes, bearing the restless energy of one who has spent countless hours poring over dusty tomes and forbidden grimoires. Brilliant and calculating yet deeply curious about the darker applications of arcane magic, Kel walks the line between scholarly pursuit and reckless experimentation—a conjurer whose chaotic nature makes them unpredictable allies and dangerous enemies.",
+      "description": "A thoughtful High Elf with blonde hair and piercing emerald eyes. Kel carries himself with the measured precision of a scholar, yet there's an electric intensity beneath—the hunger of someone chasing forbidden knowledge. Adult but not aged, calculating and curious in equal measure, he guards his inner world jealously.",
       "spells": {
         "cantrips": [
           "Fire Bolt",
-          "Mage Hand",
-          "Prestidigitation"
+          "Prestidigitation",
+          "Mage Hand"
         ],
         "level_1": [
           "Magic Missile",
-          "Tasha's Hideous Laughter",
-          "Unseen Servant"
+          "Shield"
         ],
         "level_2": [],
         "level_3": []
@@ -118,12 +114,12 @@
           "rarity": "uncommon"
         },
         {
-          "name": "Dagger",
+          "name": "Staff (Arcane Focus)",
           "quantity": 1,
-          "rarity": "common"
+          "rarity": "uncommon"
         },
         {
-          "name": "Component Pouch",
+          "name": "Dagger",
           "quantity": 1,
           "rarity": "common"
         },
@@ -133,24 +129,9 @@
           "rarity": "common"
         },
         {
-          "name": "Bottle of Ink",
+          "name": "Fine clothes",
           "quantity": 1,
           "rarity": "common"
-        },
-        {
-          "name": "Quill",
-          "quantity": 2,
-          "rarity": "common"
-        },
-        {
-          "name": "Small Knife",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Letter from dead colleague",
-          "quantity": 1,
-          "rarity": "uncommon"
         }
       ]
     }
@@ -160,7 +141,7 @@
   "encounters": [],
   "history_log": [
     {
-      "timestamp": "2026-05-23T18:47:26.761Z",
+      "timestamp": "2026-05-23T18:52:35.495Z",
       "event": "Kel Stormblessed created. Wizard (Conjuration) Level 1. Adventure begins."
     }
   ]
