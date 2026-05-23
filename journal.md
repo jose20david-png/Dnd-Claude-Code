@@ -55,3 +55,16 @@ In the quiet hours before dawn, Kel and Sera's conversation shifted from fear an
 Sera, initially carrying the weight of trauma alone,to see their partnership not as an escape but as a necessity. She realized that running made no sense when the cosmos itself seemed to have conspired to bring them together. As dawn broke over the mountains, she descended the stairs dressed for travel, ready to move forward rather than hide. Kel remained by the dying fire, meditating through the night on fabrials and Netherese bindings, crystallizing a single purpose: to see the Spren directly, to understand it not through theory but through observation.
 
 As first light painted the peaks gold, they gathered provisions and stepped out into the crisp mountain air. The path wound downward through twisted pines and ancient stone, the landscape itself bearing the subtle signatures of Netherese craftsmanship—worked rock, geometric impressions worn smooth by centuries. By afternoon, as the light began to slant toward evening, they drew close to their destination. Sera's whispered words—"We're close now"—hung in the cold mountain air as an acknowledgment that whatever awaited them in those ruins, they would face it together.
+
+
+════════════════════════════════════════════════════════════
+  END OF CAMPAIGN — 2026-05-23
+════════════════════════════════════════════════════════════
+
+
+---
+
+## Day 1 — Morning | 2026-05-23
+*The Obsidian Library - Candlelit study chamber*
+
+In the candlelit depths of the Obsidian Library, Kel Stormblessed—a brilliant High Elf Conjuration Wizard obsessed with uncovering the secrets of Fabrials—sits alone with a mysterious unsigned letter that has haunted him for three days. The letter, written in the hand of the supposedly dead Professor Aldous Kaine, warns him not to trust his own mentor, Elan Greywood, and speaks of something far darker than mere magical artifacts—keys to something that feeds on their world. As Kel studies the letter by candlelight, a scarred stranger emerges from the library's shadows, introducing himself as Corvus, a friend of Kaine's. He bears a tarnished coin marked with a broken star, the same symbol Kel recognizes from Kaine's study door. Corvus reveals that the Academy knows of Kel's search, that they are watching him, and that Kaine was murdered—not suicide—because he discovered something in the Tower. The session ends with this revelation hanging in the air, the tension between Kel and this mysterious figure unresolved, and the weight of dangerous knowledge settling on the young wizard's shoulders.

@@ -89,6 +89,7 @@ body {
   overflow: auto;
   padding: 12px;
   background: #0e0e0e;
+  position: relative;
 }
 #map-canvas {
   display: block;
@@ -676,6 +677,7 @@ body {
     </div>
     <div id="hp-text">27 / 27</div>
   </div>
+  <div id="session-timer" title="Session elapsed time" style="font-family:'Courier New',monospace;font-size:10px;color:#3a3a58;letter-spacing:1px;cursor:default;">00:00</div>
   <div id="music-controls">
     <button id="music-btn" onclick="musicToggle()" title="Toggle background music">🔇</button>
     <span id="music-label" onclick="musicCycleScene()" title="Click to change scene">OFF</span>
@@ -692,20 +694,15 @@ body {
   <button class="tab-btn" onclick="switchTab('spells')">Spells</button>
   <button class="tab-btn" onclick="switchTab('inventory')">⚙️ Inventory</button>
   <button class="tab-btn" id="combat-tab-btn" onclick="switchTab('combat')" style="display:none;">⚔️ Combat</button>
-  <button class="tab-btn" onclick="switchTab('claude')">🤖 Claude</button>
+  <button class="tab-btn" onclick="switchTab('journal'); loadJournalTab();">📖 Journal</button>
+  <button class="tab-btn" onclick="switchTab('notes'); loadNotesTab();">📝 Notes</button>
+  <button class="tab-btn" onclick="switchTab('claude')" id="claude-tab-btn">🤖 <span id="claude-tab-label">DM</span></button>
 </div>
 
 <!-- ══════ QUICK ROLL BAR ══════ -->
 <div id="quick-roll-bar">
   <span class="qr-label">QUICK ROLL</span>
-  <button class="qr-btn" onclick="quickRoll('Perception',1,20,3)">PERCEPTION <span class="qr-mod">d20+3</span></button>
-  <button class="qr-btn" onclick="quickRoll('Insight',1,20,5)">INSIGHT <span class="qr-mod">d20+5</span></button>
-  <button class="qr-btn" onclick="quickRoll('WIS Save',1,20,5)">WIS SAVE <span class="qr-mod">d20+5</span></button>
-  <button class="qr-btn" onclick="quickRoll('Initiative',1,20,-1)">INITIATIVE <span class="qr-mod">d20−1</span></button>
-  <button class="qr-btn" onclick="quickRoll('ATK Warhammer',1,20,4)">ATK <span class="qr-mod">d20+4</span></button>
-  <button class="qr-btn" onclick="quickRoll('Warhammer DMG',1,8,2)">DMG <span class="qr-mod">d8+2</span></button>
-  <button class="qr-btn" onclick="quickRoll('Guiding Bolt',1,20,5)">GUIDING BOLT <span class="qr-mod">d20+5</span></button>
-  <button class="qr-btn" onclick="quickRoll('Healing Word',1,4,3)">HEALING WORD <span class="qr-mod">d4+3</span></button>
+  <!-- Populated dynamically by buildQuickRollBar() from character state -->
 </div>
 
 <!-- ══════ CONTENT ══════ -->
@@ -715,6 +712,8 @@ body {
   <div id="tab-map" class="tab-panel active">
     <div id="main">
       <div id="map-wrap">
+        <div id="map-location-label" style="position:absolute;top:8px;left:8px;z-index:10;background:rgba(0,0,0,0.72);border:1px solid #1e1e3a;border-radius:3px;padding:4px 10px;font-size:11px;font-family:'Courier New',monospace;color:#8888cc;letter-spacing:1px;pointer-events:none;display:none;">📍</div>
+        <div id="map-weather-label" style="position:absolute;top:8px;right:8px;z-index:10;background:rgba(0,0,0,0.72);border:1px solid #1e1e3a;border-radius:3px;padding:4px 10px;font-size:11px;font-family:'Courier New',monospace;color:#8888aa;letter-spacing:1px;pointer-events:none;display:none;"></div>
         <canvas id="map-canvas"></canvas>
       </div>
       <div id="panel">
@@ -723,11 +722,14 @@ body {
           <div class="idle-note">Click a marked location for details.</div>
         </div>
         <div id="tracker">
-          <div class="tr-row"><span class="tr-lbl">SEAL INTEGRITY</span><span class="tr-val" id="tr-seal">100%</span></div>
-          <div class="bar"><div class="bar-fill" id="seal-bar" style="width:100%;background:#4ade80"></div></div>
-          <div class="tr-row"><span class="tr-lbl">SEAL STATUS</span><span class="tr-val" id="tr-days">Stable — years</span></div>
-          <div class="tr-row"><span class="tr-lbl">HARPERS ETA</span><span class="tr-val warn" id="tr-harpers">~2 days</span></div>
-          <div class="tr-row"><span class="tr-lbl">MIND FLAYER</span><span class="tr-val danger" id="tr-order">At Large</span></div>
+          <div class="tr-row"><span class="tr-lbl">WORLD</span><span class="tr-val" id="tr-world" style="font-size:10px">—</span></div>
+          <div class="tr-row"><span class="tr-lbl">LOCATION</span><span class="tr-val" id="tr-location" style="font-size:10px">—</span></div>
+          <div class="tr-row"><span class="tr-lbl">TIME</span><span class="tr-val" id="tr-days">—</span></div>
+          <div id="tr-seal-row" style="display:none">
+            <div class="tr-row" style="margin-top:8px"><span class="tr-lbl">SEAL</span><span class="tr-val" id="tr-seal">100%</span></div>
+            <div class="bar"><div class="bar-fill" id="seal-bar" style="width:100%;background:#4ade80"></div></div>
+            <div class="tr-row"><span class="tr-lbl">STATUS</span><span class="tr-val" id="tr-seal-status">Stable</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -737,256 +739,44 @@ body {
   <!-- ── CHARACTER ── -->
   <div id="tab-character" class="tab-panel">
     <div class="scroll-panel" id="character-tab-content">
-      <div class="char-header">
-        <canvas id="portrait-canvas" width="48" height="60"></canvas>
-        <div class="char-identity">
-          <div class="char-name">Rurik Stormhammer</div>
-          <div class="char-sub">Mountain Dwarf · Cleric (Storm Domain) · <span style="color:#ffd700">Level 3</span> · Guild Artisan · Talos · <span style="color:#c9a227">Bearer of the Seal</span></div>
-          <div class="char-desc">~4'8", broad and powerful. Dark crimson hair and beard braided with silver wire and iron rings. Storm-grey eyes. Static electricity crackles constantly around his braids — brighter since the ritual. The air smells of ozone near him.</div>
-        </div>
-      </div>
-
-      <div class="sec-title">Ability Scores</div>
-      <div class="stat-grid">
-        <div class="stat-box" onclick="roll('STR Check',1,20,2)" title="Roll STR check"><div class="stat-label">STR</div><div class="stat-score">14</div><div class="stat-mod">+2</div></div>
-        <div class="stat-box" onclick="roll('DEX Check',1,20,-1)" title="Roll DEX check"><div class="stat-label">DEX</div><div class="stat-score">8</div><div class="stat-mod">−1</div></div>
-        <div class="stat-box" onclick="roll('CON Check',1,20,3)" title="Roll CON check"><div class="stat-label">CON</div><div class="stat-score">16</div><div class="stat-mod">+3</div></div>
-        <div class="stat-box" onclick="roll('INT Check',1,20,0)" title="Roll INT check"><div class="stat-label">INT</div><div class="stat-score">10</div><div class="stat-mod">+0</div></div>
-        <div class="stat-box" onclick="roll('WIS Check',1,20,3)" title="Roll WIS check"><div class="stat-label">WIS</div><div class="stat-score">16</div><div class="stat-mod">+3</div></div>
-        <div class="stat-box" onclick="roll('CHA Check',1,20,0)" title="Roll CHA check"><div class="stat-label">CHA</div><div class="stat-score">10</div><div class="stat-mod">+0</div></div>
-      </div>
-
-      <div class="vitals-row">
-        <div class="vital-box">
-          <div class="vital-label">HP</div>
-          <div class="vital-value green" id="char-hp">27 / 27</div>
-          <div class="hp-bar-wrap"><div class="hp-bar"><div class="hp-bar-fill" id="char-hp-bar" style="width:100%"></div></div></div>
-        </div>
-        <div class="vital-box"><div class="vital-label">AC</div><div class="vital-value">16</div></div>
-        <div class="vital-box"><div class="vital-label">Initiative</div><div class="vital-value">−1</div></div>
-        <div class="vital-box"><div class="vital-label">Speed</div><div class="vital-value">25 ft</div></div>
-        <div class="vital-box"><div class="vital-label">Prof. Bonus</div><div class="vital-value">+2</div></div>
-        <div class="vital-box"><div class="vital-label">Passive Perc.</div><div class="vital-value">13</div></div>
-      </div>
-
-      <div class="hp-controls">
-        <span class="hp-ctrl-lbl">HP</span>
-        <button class="hp-btn" onclick="adjustHP(-1)">−1</button>
-        <button class="hp-btn" onclick="adjustHP(-5)">−5</button>
-        <button class="hp-btn" onclick="adjustHP(1)">+1</button>
-        <button class="hp-btn" onclick="adjustHP(5)">+5</button>
-        <button class="hp-btn full" onclick="adjustHP(W.charHpMax)">Full</button>
-      </div>
-
-      <div class="two-col">
-        <div>
-          <div class="sec-title">Saving Throws</div>
-          <div class="saves-grid">
-            <div class="save-row" onclick="roll('STR Save',1,20,2)" title="Roll"><span class="save-stat">Strength</span><span class="save-mod">+2</span></div>
-            <div class="save-row" onclick="roll('DEX Save',1,20,-1)" title="Roll"><span class="save-stat">Dexterity</span><span class="save-mod">−1</span></div>
-            <div class="save-row" onclick="roll('CON Save',1,20,3)" title="Roll"><span class="save-stat">Constitution</span><span class="save-mod">+3</span></div>
-            <div class="save-row" onclick="roll('INT Save',1,20,0)" title="Roll"><span class="save-stat">Intelligence</span><span class="save-mod">+0</span></div>
-            <div class="save-row" onclick="roll('WIS Save',1,20,5)" title="Roll"><span class="save-stat">Wisdom</span><span class="save-mod prof">+5 ◆</span></div>
-            <div class="save-row" onclick="roll('CHA Save',1,20,2)" title="Roll"><span class="save-stat">Charisma</span><span class="save-mod prof">+2 ◆</span></div>
-          </div>
-
-          <div class="sec-title">Skills</div>
-          <div class="saves-grid">
-            <div class="save-row" onclick="roll('Perception',1,20,3)"    title="Roll Perception"><span class="save-stat">Perception <span style="color:#444;font-size:10px">(WIS)</span></span><span class="save-mod">+3</span></div>
-            <div class="save-row" onclick="roll('Insight',1,20,5)"       title="Roll Insight"><span class="save-stat">Insight <span style="color:#444;font-size:10px">(WIS)</span></span><span class="save-mod prof">+5 ◆</span></div>
-            <div class="save-row" onclick="roll('Medicine',1,20,3)"      title="Roll Medicine"><span class="save-stat">Medicine <span style="color:#444;font-size:10px">(WIS)</span></span><span class="save-mod">+3</span></div>
-            <div class="save-row" onclick="roll('Persuasion',1,20,2)"    title="Roll Persuasion"><span class="save-stat">Persuasion <span style="color:#444;font-size:10px">(CHA)</span></span><span class="save-mod prof">+2 ◆</span></div>
-            <div class="save-row" onclick="roll('Intimidation',1,20,0)"  title="Roll Intimidation"><span class="save-stat">Intimidation <span style="color:#444;font-size:10px">(CHA)</span></span><span class="save-mod">+0</span></div>
-            <div class="save-row" onclick="roll('Religion',1,20,2)"      title="Roll Religion"><span class="save-stat">Religion <span style="color:#444;font-size:10px">(INT)</span></span><span class="save-mod prof">+2 ◆</span></div>
-            <div class="save-row" onclick="roll('History',1,20,2)"       title="Roll History"><span class="save-stat">History <span style="color:#444;font-size:10px">(INT)</span></span><span class="save-mod prof">+2 ◆</span></div>
-            <div class="save-row" onclick="roll('Investigation',1,20,0)" title="Roll Investigation"><span class="save-stat">Investigation <span style="color:#444;font-size:10px">(INT)</span></span><span class="save-mod">+0</span></div>
-            <div class="save-row" onclick="roll('Athletics',1,20,2)"     title="Roll Athletics"><span class="save-stat">Athletics <span style="color:#444;font-size:10px">(STR)</span></span><span class="save-mod">+2</span></div>
-            <div class="save-row" onclick="roll('Stealth',1,20,-1)"      title="Roll Stealth (disadv. in chain mail)"><span class="save-stat">Stealth <span style="color:#444;font-size:10px">(DEX)</span></span><span class="save-mod" style="color:#555">−1 ⚠</span></div>
-          </div>
-
-          <div class="sec-title">Equipment</div>
-          <div class="equip-list">
-            <div class="equip-item">Warhammer — 1d8+2 bludgeoning<button class="roll-btn" onclick="roll('Warhammer Attack',1,20,4)">ATK d20+4</button><button class="roll-btn" onclick="roll('Warhammer Damage',1,8,2)">DMG d8+2</button></div>
-            <div class="equip-item">Chain Mail (AC 16)</div>
-            <div class="equip-item">Shield with storm cloud motif (+2 AC)</div>
-            <div class="equip-item">Holy Symbol of Talos</div>
-            <div class="equip-item">Guild Papers (Guild Artisan)</div>
-          </div>
-
-          <div class="sec-title">Traits &amp; Features</div>
-          <div class="trait-list">
-            <div class="trait-item">Darkvision 60 ft</div>
-            <div class="trait-item">Dwarven Resilience — Advantage on saves vs. poison, resistance to poison damage</div>
-            <div class="trait-item">Stonecunning — History (stonework) proficiency ×2</div>
-            <div class="trait-item">Wrath of the Storm — Reaction when hit: 2d8 lightning or thunder (DEX save DC 13 for half)<button class="roll-btn" onclick="roll('Wrath of the Storm',2,8,0)">2d8</button></div>
-            <div class="trait-item">Channel Divinity (1/rest) — Turn Undead or Destructive Wrath (maximize lightning/thunder damage)</div>
-            <div class="trait-item" style="color:#c9a227">★ Bearer of the Seal — Rurik stood at the center of the binding ritual as THE anchor. He bore the Witness's full fury and held. Permanently connected to the seal — a second heartbeat, deep beneath the mountain. The Stormfather's presence is now constant. This bond will never fade.</div>
-          </div>
-        </div>
-
-        <div>
-          <div class="sec-title">Spell Slots</div>
-          <div class="spell-slot-lbl">Level 1 (4 slots)</div>
-          <div class="slot-row" id="slot-row-1"></div>
-          <div class="spell-slot-lbl">Level 2 (2 slots)</div>
-          <div class="slot-row" id="slot-row-2"></div>
-
-          <div class="spell-slot-lbl" style="margin-top:14px">Channel Divinity (1/short rest)</div>
-          <div class="slot-row" id="cd-row"></div>
-
-          <div class="rest-btns">
-            <button class="rest-btn long"  onclick="longRest()">⊕ Long Rest</button>
-            <button class="rest-btn short" onclick="shortRest()">◎ Short Rest</button>
-          </div>
-
-          <div class="sec-title">Spells</div>
-          <div class="spell-list">
-            <div style="color:#333;font-size:10px;letter-spacing:2px;margin-bottom:4px">CANTRIPS</div>
-            <div class="spell-item cantrip"><span class="spell-tag">ATK</span>Sacred Flame (DEX save, 1d8 radiant)<button class="roll-btn" onclick="roll('Sacred Flame',1,8,0)">DMG d8</button></div>
-            <div class="spell-item cantrip"><span class="spell-tag">UTL</span>Guidance (+1d4 to ability check)<button class="roll-btn" onclick="roll('Guidance Bonus',1,4,0)">d4</button></div>
-            <div class="spell-item cantrip"><span class="spell-tag">UTL</span>Thaumaturgy (minor magical effects)</div>
-            <div style="color:#333;font-size:10px;letter-spacing:2px;margin-bottom:4px;margin-top:8px">DOMAIN — 1ST (always prepared)</div>
-            <div class="spell-item always"><span class="spell-tag">ATK</span>Thunderwave (CON save, 2d8 thunder, push 10 ft)<button class="roll-btn" onclick="roll('Thunderwave',2,8,0)">2d8</button></div>
-            <div class="spell-item always"><span class="spell-tag">UTL</span>Fog Cloud (20 ft radius, heavily obscured)</div>
-            <div style="color:#333;font-size:10px;letter-spacing:2px;margin-bottom:4px;margin-top:8px">DOMAIN — 2ND (always prepared)</div>
-            <div class="spell-item always"><span class="spell-tag">ATK</span>Gust of Wind (STR save, push 15 ft)</div>
-            <div class="spell-item always"><span class="spell-tag">ATK</span>Shatter (CON save, 3d8 thunder, 10 ft radius)<button class="roll-btn" onclick="roll('Shatter',3,8,0)">3d8</button></div>
-            <div style="color:#333;font-size:10px;letter-spacing:2px;margin-bottom:4px;margin-top:8px">PREPARED — 1ST</div>
-            <div class="spell-item spell"><span class="spell-tag">ATK</span>Guiding Bolt (+5, 4d6 radiant, next attacker has adv.)<button class="roll-btn" onclick="roll('Guiding Bolt Atk',1,20,5)">ATK d20+5</button><button class="roll-btn" onclick="roll('Guiding Bolt Dmg',4,6,0)">DMG 4d6</button></div>
-            <div class="spell-item spell"><span class="spell-tag">ATK</span>Inflict Wounds (+5, 3d10 necrotic, melee touch)<button class="roll-btn" onclick="roll('Inflict Wounds Atk',1,20,5)">ATK d20+5</button><button class="roll-btn" onclick="roll('Inflict Wounds Dmg',3,10,0)">DMG 3d10</button></div>
-            <div class="spell-item spell"><span class="spell-tag">HEL</span>Healing Word (bonus action, 1d4+3 HP)<button class="roll-btn" onclick="roll('Healing Word',1,4,3)">d4+3</button></div>
-            <div class="spell-item spell"><span class="spell-tag">DEF</span>Sanctuary (WIS save to attack target)</div>
-            <div class="spell-item spell"><span class="spell-tag">DEF</span>Shield of Faith (bonus action, +2 AC, concentration)</div>
-            <div style="color:#333;font-size:10px;letter-spacing:2px;margin-bottom:4px;margin-top:8px">PREPARED — 2ND</div>
-            <div class="spell-item spell"><span class="spell-tag">ATK</span>Spiritual Weapon (bonus action, no concentration)<button class="roll-btn" onclick="roll('Spiritual Weapon Atk',1,20,5)">ATK d20+5</button><button class="roll-btn" onclick="roll('Spiritual Weapon Dmg',1,8,3)">DMG d8+3</button></div>
-          </div>
-        </div>
-      </div>
+      <!-- Rendered by renderCharacterTab() -->
     </div>
   </div>
 
-  <!-- ── QUESTS ── -->
+  <!-- __ QUESTS ── -->
   <div id="tab-quests" class="tab-panel">
     <div class="scroll-panel" id="quests-tab-content" style="max-width:760px">
-      <div class="sec-title">Active Quests</div>
-
-      <div class="quest-card critical">
-        <div class="quest-header">
-          <div class="quest-name">Hunt the Mind Flayer</div>
-          <div class="quest-badge ub-critical">Critical</div>
-        </div>
-        <div class="quest-desc">The Mind Flayer — the Witness's servant — is still at large. Cut off from its master's power, its thralls are weakening. Its breeding army is buried. But it knows what Rurik did.</div>
-        <div class="quest-obj">
-          <div class="obj-item done"><span class="obj-check done">✓</span><span>Discover the breeding chamber — 7 ceremorphosis pods inside Wave Echo Cave</span></div>
-          <div class="obj-item done"><span class="obj-check done">✓</span><span>Destroy the breeding chamber (Shatter + collapse)</span></div>
-          <div class="obj-item"><span class="obj-check">○</span><span>Locate the Mind Flayer — last seen near Wave Echo Cave, now at large</span></div>
-          <div class="obj-item"><span class="obj-check">○</span><span>Eliminate or drive off the Mind Flayer before it rebuilds</span></div>
-        </div>
-        <div class="quest-leads">Leads: Qelline (intel network) · Weakening thralls may reveal location</div>
-      </div>
-
-      <div class="quest-card high">
-        <div class="quest-header">
-          <div class="quest-name">Neutralize the Redbrands</div>
-          <div class="quest-badge ub-high">High</div>
-        </div>
-        <div class="quest-desc">Silga, their half-elf field commander, holds Phandalin with 8–12 Redbrands. Brutal and tactical. Harpers arrive in ~2 days — the window to coordinate is now.</div>
-        <div class="quest-obj">
-          <div class="obj-item done"><span class="obj-check done">✓</span><span>Identify Glasstaff (Iarno Albrek) — now freed and allied</span></div>
-          <div class="obj-item"><span class="obj-check">○</span><span>Locate and neutralize Silga (capture or kill)</span></div>
-          <div class="obj-item"><span class="obj-check">○</span><span>Clear or assault Tresendar Manor</span></div>
-          <div class="obj-item"><span class="obj-check">○</span><span>Coordinate with arriving Harpers for town liberation</span></div>
-        </div>
-        <div class="quest-leads">Leads: Sildar · Iarno Albrek · Qelline (intel) · Harpers ETA ~Day 9</div>
-      </div>
-
-      <div class="quest-card medium">
-        <div class="quest-header">
-          <div class="quest-name">Manage Civilian Safety</div>
-          <div class="quest-badge ub-medium">Medium</div>
-        </div>
-        <div class="quest-desc">Phandalin is still under Redbrand grip. Hold and coordinate with the Harpers, or move now?</div>
-        <div class="quest-obj">
-          <div class="obj-item"><span class="obj-check">○</span><span>Decide: strike Redbrands now or wait for Harpers (~2 days)</span></div>
-          <div class="obj-item"><span class="obj-check">○</span><span>Coordinate with Toblen and Barthen on civilian safety</span></div>
-          <div class="obj-item"><span class="obj-check">○</span><span>Establish evacuation route if needed (South Road → Baldur's Gate)</span></div>
-        </div>
-        <div class="quest-leads">Leads: Toblen Stonehill · Qelline · Harpers arriving Day 9</div>
-      </div>
-
-      <div class="sec-title">Completed Quests</div>
-
-      <div class="quest-card done">
-        <div class="quest-header">
-          <div class="quest-name">Stop the Witness</div>
-          <div class="quest-badge ub-done">Complete</div>
-        </div>
-        <div class="quest-desc">Ancient godlike entity imprisoned 400 years ago. The seal was failing — Rurik performed the binding ritual as Bearer of the Seal. Witness contained for years or decades.</div>
-        <div class="quest-obj">
-          <div class="obj-item done"><span class="obj-check done">✓</span><span>Locate Wave Echo Cave and investigate the seal</span></div>
-          <div class="obj-item done"><span class="obj-check done">✓</span><span>Retrieve and secure the five artifacts</span></div>
-          <div class="obj-item done"><span class="obj-check done">✓</span><span>Decrypt the binding ritual — all pages unlocked</span></div>
-          <div class="obj-item done"><span class="obj-check done">✓</span><span>Perform the Binding Ritual — Rurik as anchor</span></div>
-          <div class="obj-item done"><span class="obj-check done">✓</span><span>Destroy the breeding chamber — 7 pods obliterated, passage collapsed</span></div>
-        </div>
-        <div class="quest-leads">Rurik is the Bearer of the Seal — a permanent bond with the ancient imprisonment beneath Wave Echo Cave.</div>
-      </div>
+      <!-- Rendered by renderQuestsTab() -->
     </div>
   </div>
 
-  <!-- ── EVENTS ── -->
+  <!-- __ EVENTS ── -->
   <div id="tab-events" class="tab-panel">
     <div class="scroll-panel" id="events-tab-content">
-      <div class="sec-title">Campaign Timeline</div>
-      <div class="timeline">
-        <div class="event-entry"><div class="event-dot major"></div><div class="event-day">DAY 1</div><div class="event-title">Arrival in Phandalin</div><div class="event-detail">Rurik arrives via the Triboar Trail. First glimpse of Redbrand presence — locals intimidated and silent. Contact made with Toblen Stonehill at the Stonehill Inn.</div></div>
-        <div class="event-entry"><div class="event-dot threat"></div><div class="event-day">DAY 1</div><div class="event-title">Redbrand Confrontation</div><div class="event-detail">Redbrands openly threatening civilians. Silga identified as field commander — half-elf, brutal, feared. Redbrand base traced to Tresendar Manor.</div></div>
-        <div class="event-entry"><div class="event-dot good"></div><div class="event-day">DAY 1–2</div><div class="event-title">Sister Garaele &amp; the Harper Warning</div><div class="event-detail">Sister Garaele reveals her Harper affiliation. A Harper cipher describes a "Witness" sealed 400 years ago — something ancient is stirring beneath Wave Echo Cave.</div></div>
-        <div class="event-entry"><div class="event-dot major"></div><div class="event-day">DAY 2–3</div><div class="event-title">Wave Echo Cave Expedition</div><div class="event-detail">Rurik and company descend into Wave Echo Cave. Discover the Seal Chamber — a 15-foot circular seal with spreading cracks, a watching eye at its center. The Witness is aware and pressing.</div></div>
-        <div class="event-entry"><div class="event-dot good"></div><div class="event-day">DAY 3</div><div class="event-title">Artifacts Retrieved &amp; Glasstaff Unmasked</div><div class="event-detail">All five artifacts recovered. Iarno Albrek (Glasstaff) identified and freed — now an uncertain but valuable asset. Party consolidates at the Shrine of Luck.</div></div>
-        <div class="event-entry"><div class="event-dot major"></div><div class="event-day">DAY 4 — Morning</div><div class="event-title">The Stormfather Speaks — Book Unlocked</div><div class="event-detail">Rurik places the book on the altar and prays. Stormlight erupts across the shrine. Ancient words flow unbidden. Pages 11–25 dissolve. The binding ritual is revealed: five voices, one anchor, bound eternally to the seal. Rurik immediately volunteers.</div></div>
-        <div class="event-entry"><div class="event-dot threat"></div><div class="event-day">DAY 4 — Afternoon</div><div class="event-title">Silga Raids the Shrine</div><div class="event-detail">10–12 Redbrands led by Silga assault the Shrine of Luck. The party escapes through the catacombs with all artifacts. Silga breaches the shrine moments after they descend.</div></div>
-        <div class="event-entry"><div class="event-dot good"></div><div class="event-day">DAY 4 — Evening</div><div class="event-title">Regrouped at Old Marta's Cabin</div><div class="event-detail">Full party reaches Marta's cabin safely. Iarno begins decrypting final pages (21–25). The ritual must be performed at Wave Echo Cave.</div></div>
-        <div class="event-entry"><div class="event-dot major"></div><div class="event-day">DAY 5</div><div class="event-title">Scouting Missions</div><div class="event-detail">Harper waystone confirmed safe. Wave Echo Cave scouted — 3 Redbrand scouts on the ridge, growing to 5 by evening. Silga is building a kill zone at the main approach.</div></div>
-        <div class="event-entry"><div class="event-dot threat"></div><div class="event-day">DAY 6 — Morning</div><div class="event-title">The Miners' Passage — Breeding Chamber Discovered</div><div class="event-detail">Party uses Gundren's back entrance to bypass Silga's scouts. Deep inside: a hidden chamber with 7 ceremorphosis pods — the Mind Flayer's illithid breeding army. Decision made: preserve the staff's power for the ritual.</div></div>
-        <div class="event-entry"><div class="event-dot major"></div><div class="event-day">DAY 6 — The Ritual</div><div class="event-title">The Binding Ritual — Rurik Becomes the Bearer of the Seal</div><div class="event-detail">In the Seal Chamber, the obsidian seal cracking from Mind Flayer corruption. Garaele, Sildar, Gundren, and Iarno form the ring at the four cardinal points. Rurik stands at the center — THE anchor. The Witness surges. Rurik holds. The Stormfather stands behind him. The seal closes. Whole. Glowing steady. THE WITNESS IS CONTAINED. Rurik levels to Level 3.</div></div>
-        <div class="event-entry"><div class="event-dot good"></div><div class="event-day">DAY 6 — After the Ritual</div><div class="event-title">Breeding Chamber Destroyed</div><div class="event-detail">On the way out, Rurik casts Shatter into the breeding chamber — 15 thunder damage obliterates all 7 pods. The passage collapses under 100+ tons of rock. The Mind Flayer's army is buried. The party escapes through the miners' passage.</div></div>
-        <div class="event-entry"><div class="event-dot major"></div><div class="event-day">DAY 7 — Morning (NOW)</div><div class="event-title">Day 7 Begins — Planning the Next Move</div><div class="event-detail">Full party at Marta's cabin. Long rest complete. Full HP and spell slots. Harpers ~2 days out. Silga still commands the Redbrands in Phandalin. The Mind Flayer is at large. The next fight is above ground. Three escape routes on the table — Rurik's call.</div></div>
-      </div>
+      <!-- Rendered by renderEventsTab() -->
     </div>
   </div>
 
-  <!-- ── NPCS ── -->
-  <div id="tab-npcs" class="tab-panel">
+  <!-- __ NPCS ── -->
+  <div id="tab-npcs" class="tab-panel" style="flex-direction:column">
+    <div style="padding:8px 12px;border-bottom:1px solid #1a1a2e;display:flex;gap:8px;align-items:center;flex-shrink:0">
+      <input id="npc-search" type="text" placeholder="Search NPCs…" oninput="renderNpcsTab()"
+        style="flex:1;background:#0e0e1a;color:#ccc;border:1px solid #222;padding:5px 8px;font-size:12px;font-family:monospace;outline:none;">
+      <select id="npc-filter" onchange="renderNpcsTab()"
+        style="background:#0e0e1a;color:#888;border:1px solid #222;padding:5px 6px;font-size:11px;font-family:monospace;outline:none;cursor:pointer;">
+        <option value="">All</option>
+        <option value="friendly">Allies</option>
+        <option value="neutral">Neutral</option>
+        <option value="hostile">Hostile</option>
+        <option value="contained">Contained</option>
+      </select>
+    </div>
     <div class="scroll-panel" id="npcs-tab-content">
-      <div class="sec-title">Allies</div>
-      <div class="npc-grid">
-        <div class="npc-card"><div class="npc-header"><div class="npc-name">Sister Garaele</div><div class="disp-badge d-ally">Ally</div></div><div class="npc-role">Shrine Keeper · Harper Agent</div><div class="npc-loc">Old Marta's Cabin</div><div class="npc-notes">Ritual complete — exhausted but joyful. Staff spent, recharging. Confirmed Rurik as Bearer of the Seal. Wept when the seal closed.</div></div>
-        <div class="npc-card"><div class="npc-header"><div class="npc-name">Sildar Hallwinter</div><div class="disp-badge d-ally">Ally</div></div><div class="npc-role">Retired Soldier · Lord's Alliance · Ritual Voice #2</div><div class="npc-loc">Old Marta's Cabin</div><div class="npc-notes">Volunteered immediately for the binding ritual. Combat capable — on watch rotation. Wants intel on Silga before any decision.</div></div>
-        <div class="npc-card"><div class="npc-header"><div class="npc-name">Gundren Rockseeker</div><div class="disp-badge d-ally">Ally</div></div><div class="npc-role">Dwarf Merchant · Wave Echo Cave claimant · Ritual Voice #3</div><div class="npc-loc">Old Marta's Cabin</div><div class="npc-notes">Volunteered for the ritual — his mine, his responsibility. Shaken but steady.</div></div>
-        <div class="npc-card"><div class="npc-header"><div class="npc-name">Toblen Stonehill</div><div class="disp-badge d-ally">Ally</div></div><div class="npc-role">Innkeeper · Ritual Voice #4</div><div class="npc-loc">Old Marta's Cabin</div><div class="npc-notes">Wants to hold and fight for the town. Helping settle the four recovering prisoners. Steady under pressure.</div></div>
-        <div class="npc-card"><div class="npc-header"><div class="npc-name">Borik Stonehammer</div><div class="disp-badge d-ally">Ally</div></div><div class="npc-role">Dwarf Local · Guard</div><div class="npc-loc">Old Marta's Cabin</div><div class="npc-notes">On perimeter watch. Reliable. Not part of the ritual five but committed to protecting those who are.</div></div>
-        <div class="npc-card"><div class="npc-header"><div class="npc-name">Qelline</div><div class="disp-badge d-ally">Ally</div></div><div class="npc-role">Intelligence Contact · Halfling</div><div class="npc-loc">Old Marta's Cabin</div><div class="npc-notes">Has detailed notes on Redbrand patrol patterns. Identified the 3–5am patrol gap on the South Road. Ready to brief Rurik when needed.</div></div>
-        <div class="npc-card"><div class="npc-header"><div class="npc-name">Old Marta</div><div class="disp-badge d-ally">Ally</div></div><div class="npc-role">40-year Seal Guardian · Host</div><div class="npc-loc">Old Marta's Cabin</div><div class="npc-notes">Hosting the full party. Confirmed the binding ritual's history. Warned that some anchors broke, some endured. Her journals hold 40 years of seal degradation records.</div></div>
-        <div class="npc-card"><div class="npc-header"><div class="npc-name">Elmar Barthen</div><div class="disp-badge d-ally">Ally</div></div><div class="npc-role">Merchant · Barthen's Provisions</div><div class="npc-loc">Barthen's Provisions, Phandalin</div><div class="npc-notes">Rurik's merchant contact. Cooperative, well-supplied. Knows the trade roads south toward Baldur's Gate.</div></div>
-      </div>
-
-      <div class="sec-title" style="margin-top:28px">Uncertain</div>
-      <div class="npc-grid">
-        <div class="npc-card"><div class="npc-header"><div class="npc-name">Iarno Albrek</div><div class="disp-badge d-recovering">Recovering</div></div><div class="npc-role">Former Glasstaff · Ritual Voice #5 · Cipher Expert</div><div class="npc-loc">Old Marta's Cabin</div><div class="npc-notes">Volunteered for the ritual. Knows Silga's patterns and blind spots intimately — former Redbrand leadership. Steadier now than he was. Wants to help.</div></div>
-        <div class="npc-card"><div class="npc-header"><div class="npc-name">Harbin Wester</div><div class="disp-badge d-neutral">Neutral</div></div><div class="npc-role">Townmaster of Phandalin</div><div class="npc-loc">Townmaster's Hall, Phandalin</div><div class="npc-notes">Too afraid to act against the Redbrands. Will follow whoever holds power in the town.</div></div>
-      </div>
-
-      <div class="sec-title" style="margin-top:28px">Threats</div>
-      <div class="npc-grid">
-        <div class="npc-card"><div class="npc-header"><div class="npc-name">Silga</div><div class="disp-badge d-hostile">Hostile</div></div><div class="npc-role">Redbrand Field Commander</div><div class="npc-loc">Phandalin — actively hunting</div><div class="npc-notes">Personally led the shrine raid. Knows the party escaped with the artifacts. Actively searching roads and forest. Brutal and motivated — do not underestimate her.</div></div>
-        <div class="npc-card"><div class="npc-header"><div class="npc-name">The Mind Flayer</div><div class="disp-badge d-hostile">Hostile</div></div><div class="npc-role">Illithid · Former Witness Servant</div><div class="npc-loc">Unknown — at large</div><div class="npc-notes">Cut off from the Witness's power. Breeding army buried and destroyed. Thralls weakening. Location unknown. Still highly dangerous. Must be hunted before it rebuilds.</div></div>
-        <div class="npc-card"><div class="npc-header"><div class="npc-name">The Witness</div><div class="disp-badge d-recovering">Contained</div></div><div class="npc-role">Ancient Imprisoned Entity</div><div class="npc-loc">Seal Chamber, Wave Echo Cave</div><div class="npc-notes">Pure knowledge, hunger, and awareness. Seal reinforced by Rurik's binding ritual — stable for years or decades. Still aware. Still watches. Rurik feels its presence constantly as the Bearer of the Seal.</div></div>
-      </div>
+      <!-- Rendered by renderNpcsTab() -->
     </div>
   </div>
 
-  <!-- ── INVENTORY ── -->
+  <!-- __ INVENTORY ── -->
   <div id="tab-inventory" class="tab-panel">
     <div class="scroll-panel">
       <div style="padding: 16px; max-width: 600px;">
@@ -1010,10 +800,13 @@ body {
   <!-- ── SPELLS ── -->
   <div id="tab-spells" class="tab-panel">
     <div class="scroll-panel">
-      <div class="spell-filter-bar">
-        <button class="spell-filter-btn active" onclick="setSpellFilter('all',this)">All Spells</button>
-        <button class="spell-filter-btn" onclick="setSpellFilter('prepared',this)">Prepared Only</button>
-        <button class="spell-filter-btn" onclick="setSpellFilter('available',this)">Available to Swap</button>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">
+        <input id="spell-search-input" type="text" placeholder="Search spells..." oninput="filterSpellSearch(this.value)" style="flex:1;padding:6px 10px;background:#0c0c14;color:#c8c8d8;border:1px solid #1a1a2e;border-radius:3px;font-family:'Courier New',monospace;font-size:12px;outline:none;" />
+        <div class="spell-filter-bar" style="margin-bottom:0;">
+          <button class="spell-filter-btn active" onclick="setSpellFilter('all',this)">All</button>
+          <button class="spell-filter-btn" onclick="setSpellFilter('prepared',this)">Prepared</button>
+          <button class="spell-filter-btn" onclick="setSpellFilter('available',this)">Available</button>
+        </div>
       </div>
       <div id="spell-compendium"></div>
     </div>
@@ -1045,13 +838,41 @@ body {
     </div>
   </div>
 
+  <!-- ── JOURNAL ── -->
+  <div id="tab-journal" class="tab-panel">
+    <div class="scroll-panel" style="padding:24px;max-width:760px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div style="font-size:13px;color:#999;text-transform:uppercase;letter-spacing:2px;font-weight:bold;">Campaign Journal</div>
+        <button onclick="_journalLoaded=false;loadJournalTab(true);" style="background:none;border:1px solid #222232;color:#444;padding:4px 10px;cursor:pointer;font-family:'Courier New',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;">↺ Refresh</button>
+      </div>
+      <div id="journal-content" style="font-size:13px;color:#ccc;line-height:1.7;white-space:pre-wrap;font-family:'Courier New',monospace;"></div>
+      <div id="journal-empty" style="color:#333;font-size:12px;text-align:center;padding:40px 0;display:none;">No journal entries yet. End a session to write the first entry.</div>
+    </div>
+  </div>
+
+  <!-- ── DM NOTES (SCRATCHPAD) ── -->
+  <div id="tab-notes" class="tab-panel">
+    <div class="scroll-panel" style="padding:24px;max-width:760px;display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-size:13px;color:#999;text-transform:uppercase;letter-spacing:2px;font-weight:bold;">DM Notes</div>
+        <div style="display:flex;gap:8px;">
+          <span id="notes-saved-indicator" style="font-size:10px;color:#4ade80;letter-spacing:1px;opacity:0;transition:opacity 0.5s;font-family:'Courier New',monospace;">Saved</span>
+          <button onclick="exportJournal()" style="background:none;border:1px solid #222232;color:#444;padding:4px 10px;cursor:pointer;font-family:'Courier New',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;" title="Export session journal as Markdown">↓ Export Journal</button>
+        </div>
+      </div>
+      <div style="font-size:11px;color:#3a3a58;letter-spacing:1px;">Private DM scratchpad — auto-saved to notes.md. Survives sessions.</div>
+      <textarea id="notes-textarea" placeholder="Session notes, NPC details, plot threads, reminders..." style="width:100%;min-height:400px;padding:14px;background:#0c0c14;color:#c8c8d8;border:1px solid #1a1a2e;border-radius:4px;font-family:'Courier New',monospace;font-size:13px;resize:vertical;line-height:1.6;outline:none;box-sizing:border-box;"></textarea>
+    </div>
+  </div>
+
   <!-- ── CLAUDE AI CHAT ── -->
   <div id="tab-claude" class="tab-panel">
     <div class="scroll-panel" style="display:flex;flex-direction:column;gap:12px">
       <div style="background:#1a1a2e;padding:12px;border-radius:4px;border-left:2px solid #888">
         <div style="font-size:13px;color:#999;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-weight:bold">Model</div>
-        <div style="font-size:16px;color:#d8d8e8;font-weight:bold" id="claude-model">claude-3-5-haiku</div>
-        <div style="font-size:13px;color:#888;margin-top:6px">Tokens: <span id="claude-tokens">0</span> / ~5,000,000</div>
+        <div style="font-size:16px;color:#d8d8e8;font-weight:bold" id="claude-model">claude-haiku-4-5</div>
+        <div style="font-size:13px;color:#888;margin-top:6px">Tokens: <span id="claude-tokens">0</span></div>
+        <div style="font-size:11px;margin-top:4px"><span id="dm-status" style="color:#4ade80">● Connected</span></div>
       </div>
 
       <div id="claude-history" style="flex:1;overflow-y:auto;border:1px solid #222;border-radius:3px;background:#0e0e14;padding:10px;min-height:200px;max-height:400px">
@@ -1081,6 +902,7 @@ body {
   <div style="display:flex;gap:6px;margin-top:12px;">
     <button id="dice-again" style="margin-top:0;flex:1;" onclick="rollAgain()">↺ Roll Again</button>
     <button id="dice-send-dm" onclick="sendRollToDM()" title="Send this roll to the DM chat" style="flex:1;background:none;border:1px solid #2a2a45;color:#5a5a90;padding:4px 8px;cursor:pointer;font-family:'Courier New',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;transition:all 0.1s;">→ DM</button>
+    <button id="dice-copy-btn" onclick="copyDiceResult()" title="Copy result to clipboard" style="margin-top:0;background:none;border:1px solid #2a2a45;color:#5a5a90;padding:4px 8px;cursor:pointer;font-family:'Courier New',monospace;font-size:11px;transition:all 0.1s;">⎘</button>
   </div>
 </div>
 
@@ -1117,24 +939,25 @@ async function loadGameState() {
     const party = data.party[0];
     const isNew = data.campaign_id === 'new-campaign';
 
+    const cd = party.channel_divinity || { max: 0, used: 0 };
     W = {
-      day:   parseInt(data.world.time.match(/Day (\d+)/)?.[1] || 1),
-      time:  data.world.time.match(/(Morning|Afternoon|Evening|Night)/)?.[1] || 'Morning',
+      day:   parseInt((data.world.time||'').match(/Day (\d+)/)?.[1] || 1),
+      time:  (data.world.time||'').match(/(Morning|Afternoon|Evening|Night)/)?.[1] || '',
       sealPct:    data.world.seal_integrity ?? 100,
-      sealStatus: data.world.seal_status    || (isNew ? '—' : 'Stable — years'),
-      harpersEta: isNew ? '—' : '~2 days',
-      mindFlayer: isNew ? '—' : 'At Large',
-      playerLocation: isNew ? '' : 'marta',
-      currentMap: isNew ? null : 'campaign',
+      sealStatus: data.world.seal_status    || 'Stable',
+      // Map: prefer world.map_id if set, else match campaign_id against GRIDS, else no map
+      currentMap: (() => {
+        if (isNew) return null;
+        const mid = data.world && data.world.map_id;
+        if (mid && typeof GRIDS !== 'undefined' && GRIDS[mid]) return mid;
+        if (typeof GRIDS !== 'undefined' && GRIDS[data.campaign_id]) return data.campaign_id;
+        return null;
+      })(),
       charHpCurrent: party.hp,
-      charHpMax:     party.hp || 10,
+      charHpMax:     party.hp_max || party.hp || 10,
       charLevel:     party.level || 1,
-      spellSlots1Used: party.spell_slots.level_1.used,
-      spellSlots1Max:  party.spell_slots.level_1.max,
-      spellSlots2Used: party.spell_slots.level_2.used,
-      spellSlots2Max:  party.spell_slots.level_2.max,
-      channelDivinityUsed: party.channel_divinity.used,
-      channelDivinityMax:  party.channel_divinity.max,
+      channelDivinityUsed: cd.used,
+      channelDivinityMax:  cd.max,
     };
     inventory = party.inventory || [];
     quests    = data.quests     || [];
@@ -1144,15 +967,13 @@ async function loadGameState() {
     const titleEl = document.getElementById('header-title');
     if (titleEl) titleEl.textContent = isNew ? '◈ NEW CAMPAIGN' : `◈ ${party.name.toUpperCase()}`;
     document.title = isNew ? 'New Campaign — Dashboard' : `${party.name} — Campaign Dashboard`;
-    document.getElementById('hday').textContent = isNew ? 'Character Creation' : `Day ${W.day} — ${W.time}`;
+    document.getElementById('hday').textContent = isNew ? 'Character Creation' : `${data.world.time || 'Day 1'}`;
+    const claudeTabLbl = document.getElementById('claude-tab-label');
+    if (claudeTabLbl && !isNew && party.name && party.name !== 'New Character')
+      claudeTabLbl.textContent = party.name.split(' ')[0];
 
-    // ── Threat board ───────────────────────────────────
-    document.getElementById('tr-seal').textContent     = isNew ? '—' : `${W.sealPct}%`;
-    document.getElementById('seal-bar').style.width    = isNew ? '0%' : `${W.sealPct}%`;
-    document.getElementById('seal-bar').style.background = W.sealPct >= 100 ? '#4ade80' : W.sealPct > 50 ? '#facc15' : '#f87171';
-    document.getElementById('tr-days').textContent     = W.sealStatus;
-    document.getElementById('tr-harpers').textContent  = W.harpersEta;
-    document.getElementById('tr-order').textContent    = W.mindFlayer;
+    // ── Campaign status panel ──────────────────────────
+    updateCampaignStatusPanel(data, isNew);
 
     // ── All tabs ───────────────────────────────────────
     if (isNew) {
@@ -1166,12 +987,60 @@ async function loadGameState() {
       updateHP();
       updateSpellSlots();     // populates slot-row-N created above
       updateCD();
+      buildQuickRollBar(party);
     }
 
+    updateCampaignStatusPanel(data, isNew);
+    updateMapLocationLabel(data);
     console.log(`✓ Game state loaded — ${isNew ? 'NEW CAMPAIGN (character creation)' : data.campaign_id}`);
   } catch (err) {
     console.error('Failed to load state:', err);
     alert('Could not load from API. Is the server running on port 3140?');
+  }
+}
+
+// ─── CAMPAIGN STATUS PANEL (map sidebar) ─────────────
+function updateCampaignStatusPanel(state, isNew) {
+  const world = state && state.world;
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || '—'; };
+  if (isNew || !world) {
+    set('tr-world', '—'); set('tr-location', '—'); set('tr-days', '—');
+    const sealRow = document.getElementById('tr-seal-row');
+    if (sealRow) sealRow.style.display = 'none';
+    return;
+  }
+  set('tr-world', world.name || '—');
+  const loc = (world.current_location || '').slice(0, 28);
+  set('tr-location', loc || '—');
+  set('tr-days', world.time || '—');
+  // Only show seal row if campaign tracks seal_integrity below 100 (or seal_status is set)
+  const sealRow = document.getElementById('tr-seal-row');
+  const sealPct = world.seal_integrity ?? 100;
+  const hasSeal = sealPct < 100 || (world.seal_status && world.seal_status !== 'N/A' && world.seal_status !== 'Stable');
+  if (sealRow) sealRow.style.display = hasSeal ? 'block' : 'none';
+  if (hasSeal) {
+    set('tr-seal', `${sealPct}%`);
+    set('tr-seal-status', world.seal_status || 'Unknown');
+    const bar = document.getElementById('seal-bar');
+    if (bar) { bar.style.width = `${sealPct}%`; bar.style.background = sealPct >= 100 ? '#4ade80' : sealPct > 50 ? '#facc15' : '#f87171'; }
+  }
+}
+
+// ─── MAP LOCATION LABEL ───────────────────────────────
+function updateMapLocationLabel(state) {
+  const el = document.getElementById('map-location-label');
+  if (!el) return;
+  if (!state || state.campaign_id === 'new-campaign') {
+    el.style.display = 'none';
+    return;
+  }
+  const loc = (state.world && state.world.current_location) || '';
+  const time = (state.world && state.world.time) || '';
+  if (loc) {
+    el.textContent = `📍 ${loc}${time ? '  ·  ' + time : ''}`;
+    el.style.display = 'block';
+  } else {
+    el.style.display = 'none';
   }
 }
 
@@ -1235,18 +1104,44 @@ function clearAllTabsForNewCampaign() {
   claudeMessages = [];
   const histDiv = document.getElementById('claude-history');
   if (histDiv) histDiv.innerHTML = `
-    <div style="padding:24px 16px;text-align:center;border:1px solid #1a1a30;border-radius:6px;background:#0a0a14;margin:8px 0;">
-      <div style="font-size:28px;margin-bottom:14px;">⚔️</div>
-      <div style="color:#ffd700;font-size:14px;font-weight:bold;letter-spacing:3px;margin-bottom:10px;">NEW CAMPAIGN</div>
-      <div style="color:#666;font-size:12px;line-height:1.9;margin-bottom:16px;">
-        Your adventure is about to begin.<br>
-        The Dungeon Master is waiting.<br><br>
-        <span style="color:#888;">Send a message to start character creation.<br>
-        The DM will guide you through race, class, background,<br>
-        ability scores, and backstory.</span>
+    <div style="padding:20px 16px;border:1px solid #1a1a30;border-radius:6px;background:#0a0a14;margin:8px 0;">
+      <div style="text-align:center;margin-bottom:18px;">
+        <div style="font-size:32px;margin-bottom:10px;">⚔️</div>
+        <div style="color:#ffd700;font-size:13px;font-weight:bold;letter-spacing:3px;">NEW CAMPAIGN</div>
       </div>
-      <div style="background:#111120;border:1px solid #222;border-radius:4px;padding:10px;font-size:11px;color:#555;font-family:'Courier New',monospace;">
-        Try: <span style="color:#aaa">"Let's start character creation"</span>
+
+      <div style="color:#888;font-size:12px;line-height:1.8;margin-bottom:18px;text-align:center;">
+        Tell the DM what kind of adventure you want.<br>
+        They'll guide you through character creation step by step.
+      </div>
+
+      <div style="background:#0d0d1a;border:1px solid #1e1e32;border-radius:4px;padding:12px;margin-bottom:14px;">
+        <div style="color:#555;font-size:10px;letter-spacing:2px;margin-bottom:8px;font-family:'Courier New',monospace;">HOW IT WORKS</div>
+        <div style="font-size:11px;color:#666;line-height:1.9;">
+          🌍 Pick a setting &amp; premise<br>
+          ⚔️ Choose your class &amp; race<br>
+          🎲 Roll your ability scores<br>
+          📖 Pick skills, spells &amp; gear<br>
+          ✨ Name your character &amp; begin
+        </div>
+      </div>
+
+      <div style="background:#0d0d1a;border:1px solid #1e1e32;border-radius:4px;padding:12px;margin-bottom:14px;">
+        <div style="color:#555;font-size:10px;letter-spacing:2px;margin-bottom:8px;font-family:'Courier New',monospace;">YOUR DASHBOARD</div>
+        <div style="font-size:11px;color:#666;line-height:1.9;">
+          📋 <span style="color:#888">Character</span> — full sheet, spells, stats<br>
+          🗺️ <span style="color:#888">Map</span> — your current location<br>
+          ⚔️ <span style="color:#888">Combat</span> — initiative &amp; HP tracker<br>
+          🎲 <span style="color:#888">Dice</span> — quick rolls anytime<br>
+          📜 <span style="color:#888">Events</span> — campaign timeline<br>
+          👥 <span style="color:#888">NPCs</span> — everyone you've met
+        </div>
+      </div>
+
+      <div style="background:#111120;border:1px solid #222;border-radius:4px;padding:10px;text-align:center;">
+        <div style="font-size:11px;color:#555;margin-bottom:6px;font-family:'Courier New',monospace;">START WITH</div>
+        <div style="font-size:12px;color:#aaa;font-style:italic">"I want to play a gritty mercenary in a dark fantasy world"</div>
+        <div style="font-size:11px;color:#333;margin-top:4px;">— or just say "let's create a character"</div>
       </div>
     </div>`;
 
@@ -1769,15 +1664,27 @@ window.addEventListener('resize', () => {
   if (document.getElementById('tab-map').classList.contains('active')) autoScaleMap();
 });
 
+let _journalLoaded = false;
 function switchTab(id) {
-  const ids = ['map','character','quests','events','npcs','spells','inventory','claude'];
-  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', ids[i] === id));
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + id));
+  const ids = ['map','character','quests','events','npcs','spells','inventory','combat','journal','notes','claude'];
+  // Match button by data or position — use querySelectorAll on tab-btn; toggle active by id match
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    const onclick = b.getAttribute('onclick') || '';
+    const match   = onclick.match(/switchTab\('([^']+)'\)/);
+    if (match) b.classList.toggle('active', match[1] === id);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => {
+    const show = p.id === 'tab-' + id;
+    p.classList.toggle('active', show);
+    // Combat tab uses display:none/flex directly
+    if (p.id === 'tab-combat') p.style.display = show ? 'flex' : 'none';
+  });
   if (id === 'map') { updateBreadcrumb(); startAnim(); }
   else { stopAnim(); document.getElementById('hbread').innerHTML = ''; }
   if (id === 'spells' && !_spellsRendered) renderSpells();
   if (id === 'inventory') renderInventoryTab();
   if (id === 'claude') loadClaudeHistory();
+  if (id === 'journal' && !_journalLoaded) { loadJournalTab(); _journalLoaded = true; }
 }
 
 // ══════════════════════════════════════════════════════
@@ -1918,86 +1825,47 @@ function buildLegend(grid, locs) {
 //  CHARACTER UI
 // ══════════════════════════════════════════════════════
 function updateSpellSlots() {
-  // Dynamically render all slot levels present in the party state
   const party = campaignState && campaignState.party && campaignState.party[0];
-  if (party && party.spell_slots) {
-    for (let lvl = 1; lvl <= 9; lvl++) {
-      const slot = party.spell_slots[`level_${lvl}`];
-      if (!slot || !slot.max) continue;
-      const row = document.getElementById(`slot-row-${lvl}`);
-      if (!row) continue;
-      row.innerHTML = '';
-      for (let i = 0; i < slot.max; i++) {
-        const el = document.createElement('div');
-        el.className = 'spell-slot' + (i < slot.used ? ' used' : '');
-        el.title = `Level ${lvl} slot ${i+1}`;
-        el.addEventListener('click', () => toggleSlot(lvl, i));
-        row.appendChild(el);
-      }
-    }
-    return; // new path — skip legacy render below
-  }
-  // Legacy fallback using W object
-  const render = (rowId, level, max, used, label) => {
-    const row = document.getElementById(rowId);
-    if (!row) return;
+  if (!party || !party.spell_slots) return;
+  for (let lvl = 1; lvl <= 9; lvl++) {
+    const slot = party.spell_slots[`level_${lvl}`];
+    if (!slot || !slot.max) continue;
+    const row = document.getElementById(`slot-row-${lvl}`);
+    if (!row) continue;
     row.innerHTML = '';
-    for (let i = 0; i < max; i++) {
+    for (let i = 0; i < slot.max; i++) {
       const el = document.createElement('div');
-      const isUsed = i < used;
-      el.className = 'spell-slot' + (isUsed ? ' used' : '');
-      el.textContent = isUsed ? '·' : label;
-      el.title = isUsed ? 'Click to restore' : 'Click to spend';
-      el.addEventListener('click', () => toggleSlot(level, i));
+      el.className = 'spell-slot' + (i < slot.used ? ' used' : '');
+      el.title = `Level ${lvl} slot — ${i < slot.used ? 'spent (click to restore)' : 'available (click to spend)'}`;
+      el.addEventListener('click', () => toggleSlot(lvl, i));
       row.appendChild(el);
     }
-  };
-  render('slot-row-1', 1, W.spellSlots1Max, W.spellSlots1Used, 'I');
-  render('slot-row-2', 2, W.spellSlots2Max, W.spellSlots2Used, 'II');
+  }
 }
 
 async function toggleSlot(level, idx) {
-  // Read current state from campaignState if available, else fall back to W
+  if (!campaignState || !campaignState.party[0]) return;
   const slotKey = `level_${level}`;
-  const slotData = campaignState && campaignState.party[0] && campaignState.party[0].spell_slots[slotKey];
-  const maxVal  = slotData ? slotData.max  : (level===1 ? W.spellSlots1Max  : W.spellSlots2Max);
-  const oldUsed = slotData ? slotData.used : (level===1 ? W.spellSlots1Used : W.spellSlots2Used);
-  const newUsed = idx < oldUsed ? idx : Math.min(idx + 1, maxVal);
+  const slotData = campaignState.party[0].spell_slots[slotKey];
+  if (!slotData) return;
+  const oldUsed = slotData.used;
+  const newUsed = idx < oldUsed ? idx : Math.min(idx + 1, slotData.max);
+  if (newUsed === oldUsed) return;
 
-  // Sync W for levels 1 and 2 (legacy compat)
-  if (level === 1) { W.spellSlots1Used = newUsed; W.spellSlots1Max = maxVal; }
-  if (level === 2) { W.spellSlots2Used = newUsed; W.spellSlots2Max = maxVal; }
+  if (newUsed > oldUsed) try { SoundFX.spellCast(); } catch(e) {}
 
-  const usedKey = level === 1 ? 'spellSlots1Used' : 'spellSlots2Used';
-  const maxKey  = level === 1 ? 'spellSlots1Max'  : 'spellSlots2Max';
-
-  // Spell cast sound when a slot is being used (not restored)
-  if (newUsed > oldUsed) {
-    try { SoundFX.spellCast(); } catch(e) { console.log('spell cast sound failed:', e); }
-  }
-
-  if (campaignState && campaignState.party[0] && campaignState.party[0].spell_slots[slotKey]) {
-    campaignState.party[0].spell_slots[slotKey].used = newUsed;
-  }
+  slotData.used = newUsed;
   updateSpellSlots();
 
   try {
     const res = await fetch('http://localhost:3140/api/state', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(campaignState)
     });
     const result = await res.json();
-    if (!result.success) {
-      W[usedKey] = level === 1 ? campaignState.party[0].spell_slots.level_1.used : campaignState.party[0].spell_slots.level_2.used;
-      updateSpellSlots();
-      alert('Error: ' + result.error);
-    } else {
-      campaignState = result.state;
-    }
-  } catch (err) {
-    console.error('Failed to update spell slot:', err);
-  }
+    if (!result.success) { slotData.used = oldUsed; updateSpellSlots(); alert('Error: ' + result.error); }
+    else campaignState = result.state;
+  } catch (err) { console.error('Failed to update spell slot:', err); }
 }
 
 function updateCD() {
@@ -2031,65 +1899,52 @@ function adjustHP(delta) {
 }
 
 async function longRest() {
-  W.spellSlots1Used = 0;
-  W.spellSlots2Used = 0;
-  W.channelDivinityUsed = 0;
-  W.charHpCurrent = W.charHpMax;
-
-  if (campaignState && campaignState.party[0]) {
-    const slots = campaignState.party[0].spell_slots;
-    if (slots) for (const k of Object.keys(slots)) slots[k].used = 0;
-    if (campaignState.party[0].channel_divinity) campaignState.party[0].channel_divinity.used = 0;
-    campaignState.party[0].hp = W.charHpMax;
+  if (!campaignState || !campaignState.party[0]) return;
+  const p = campaignState.party[0];
+  // Reset all spell slots, CD, HP
+  if (p.spell_slots) for (const k of Object.keys(p.spell_slots)) p.spell_slots[k].used = 0;
+  if (p.channel_divinity) p.channel_divinity.used = 0;
+  p.hp = p.hp_max || p.hp;
+  // Restore hit dice (half max, min 1)
+  if (p.hit_dice_total != null) {
+    const regain = Math.max(1, Math.floor(p.hit_dice_total / 2));
+    p.hit_dice_used = Math.max(0, (p.hit_dice_used || 0) - regain);
   }
-  updateSpellSlots();
-  updateCD();
-  updateHP();
-
-  if (!campaignState) return;
-  // Ensure level_1/2 are set for legacy compat
-  campaignState.party[0].spell_slots.level_1.used = 0;
-  if (campaignState.party[0].spell_slots.level_2) campaignState.party[0].spell_slots.level_2.used = 0;
-  campaignState.party[0].channel_divinity.used = 0;
-  campaignState.party[0].hp = W.charHpMax;
-
+  // Sync W from state (not from stale W values)
+  W.charHpCurrent      = p.hp;
+  W.charHpMax          = p.hp_max || p.hp;
+  W.channelDivinityUsed = 0;
+  W.channelDivinityMax  = p.channel_divinity?.max || W.channelDivinityMax;
+  updateSpellSlots(); updateCD(); updateHP();
   try {
     const res = await fetch('http://localhost:3140/api/state', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(campaignState)
     });
     const result = await res.json();
-    if (result.success) {
-      campaignState = result.state;
-    } else {
-      alert('Error saving long rest: ' + result.error);
-    }
-  } catch (err) {
-    console.error('Failed to save long rest:', err);
-  }
+    if (result.success) campaignState = result.state;
+    else console.error('Error saving long rest:', result.error);
+  } catch (err) { console.error('Failed to save long rest:', err); }
 }
 
 async function shortRest() {
+  if (!campaignState || !campaignState.party[0]) return;
+  const p = campaignState.party[0];
+  const isWarlock = /warlock/i.test(p.class || '');
+  // Warlocks recover all pact slots on short rest
+  if (isWarlock && p.spell_slots) for (const k of Object.keys(p.spell_slots)) p.spell_slots[k].used = 0;
+  if (p.channel_divinity) p.channel_divinity.used = 0;
   W.channelDivinityUsed = 0;
   updateCD();
-
-  if (!campaignState) return;
-  campaignState.party[0].channel_divinity.used = 0;
-
+  if (isWarlock) updateSpellSlots();
   try {
     const res = await fetch('http://localhost:3140/api/state', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(campaignState)
     });
     const result = await res.json();
-    if (result.success) {
-      campaignState = result.state;
-    }
-  } catch (err) {
-    console.error('Failed to save short rest:', err);
-  }
+    if (result.success) campaignState = result.state;
+  } catch (err) { console.error('Failed to save short rest:', err); }
 }
 
 function updateHP() {
@@ -2184,11 +2039,13 @@ function roll(label, count, sides, modifier) {
 
 function rollAgain() { if (_lastRollArgs) roll(..._lastRollArgs); }
 
-// Send the last widget roll to the DM Claude chat
+// Send the last widget roll to the DM — uses the system-note format so Claude narrates, not re-rolls
 function sendRollToDM() {
   if (!_lastRollResult) return;
   const { label, total, breakdown } = _lastRollResult;
-  const msg = `${label}: **${total}** — ${breakdown}`;
+  // Strip markdown bold from breakdown for clean inline text
+  const cleanBreakdown = breakdown.replace(/\*\*/g, '');
+  const msg = `[Player rolled ${label}: total **${total}** (${cleanBreakdown})] Please narrate the outcome.`;
   hideDice();
   switchTab('claude');
   const textarea = document.getElementById('claude-prompt');
@@ -2207,6 +2064,48 @@ function quickRoll(label, count, sides, modifier) {
   // Format as a plain narrative statement — no dice notation — so Claude narrates instead of re-rolling
   textarea.value = `[Player rolled ${l}: total ${t} (${b.replace(/[*]/g,'')})] Please narrate the outcome.`;
   sendClaudePrompt();
+}
+
+// Show a DM roll (from SSE dice_roll event) in the dice overlay
+function showDMRoll(event) {
+  const expr = event.expression || '?';
+  const total = event.total ?? '?';
+  const breakdown = event.breakdown || String(total);
+  const purpose = event.purpose || '';
+
+  // Parse individual die values from breakdown like "[12, 4] + 3 = **19**" or "[15] = **15**"
+  const pips = document.getElementById('dice-pips');
+  pips.innerHTML = '';
+  // Extract numbers inside brackets first — these are the actual die rolls
+  const bracketMatch = breakdown.match(/\[([^\]]+)\]/);
+  const dieValues = bracketMatch
+    ? bracketMatch[1].split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n))
+    : [total].filter(n => typeof n === 'number' && !isNaN(n));
+  const maxSide = dieValues.length > 0 ? Math.max(...dieValues) : 20;
+  for (const v of dieValues) {
+    const pip = document.createElement('div');
+    pip.className = 'die-pip' + (v === 20 && maxSide === 20 ? ' nat20' : v === 1 && maxSide >= 4 ? ' nat1' : '');
+    pip.textContent = v;
+    pips.appendChild(pip);
+  }
+
+  document.getElementById('dice-lbl').textContent = purpose ? `DM · ${purpose}` : 'DM Roll';
+  document.getElementById('dice-formula').textContent = expr;
+  document.getElementById('dice-total').textContent = total;
+  document.getElementById('dice-breakdown').textContent = breakdown;
+
+  // Nat20/nat1 sounds
+  if (total === 20) { try { SoundFX.nat20(); } catch(e) {} }
+  if (total === 1)  { try { SoundFX.nat1();  } catch(e) {} }
+
+  // Store as last roll result in case player hits "→ DM"
+  _lastRollResult = { label: purpose || expr, total, breakdown };
+  _lastRollArgs   = null; // can't re-roll DM's dice
+
+  const overlay = document.getElementById('dice-overlay');
+  overlay.classList.add('visible');
+  clearTimeout(_diceHideTimer);
+  _diceHideTimer = setTimeout(() => overlay.classList.remove('visible'), 6000);
 }
 
 // Detect dice expressions in text and roll them, returning the enriched string.
@@ -2331,6 +2230,12 @@ const SPELL_DATA = [
 
 let _spellFilter = 'all';
 let _spellsRendered = false;
+let _spellSearchQuery = '';
+
+function filterSpellSearch(q) {
+  _spellSearchQuery = q.toLowerCase().trim();
+  renderSpells();
+}
 
 function setSpellFilter(f, btn) {
   _spellFilter = f;
@@ -2354,7 +2259,15 @@ function renderSpells() {
   groups.forEach(group => {
     if (_spellFilter === 'prepared' && group.key === 'available') return;
     if (_spellFilter === 'available' && group.key !== 'available') return;
-    const spells = SPELL_DATA.filter(s => s.status === group.key);
+    let spells = SPELL_DATA.filter(s => s.status === group.key);
+    // Apply search filter across name, school, and description
+    if (_spellSearchQuery) {
+      spells = spells.filter(s =>
+        s.name.toLowerCase().includes(_spellSearchQuery) ||
+        s.school.toLowerCase().includes(_spellSearchQuery) ||
+        s.desc.toLowerCase().includes(_spellSearchQuery)
+      );
+    }
     if (!spells.length) return;
 
     const title = document.createElement('div');
@@ -2387,6 +2300,9 @@ function renderSpells() {
 
     container.appendChild(grid);
   });
+  if (_spellSearchQuery && container.children.length === 0) {
+    container.innerHTML = `<div style="color:#333;text-align:center;padding:40px 0;font-size:12px;letter-spacing:1px;">No spells matching "${_spellSearchQuery}"</div>`;
+  }
   _spellsRendered = true;
 }
 
@@ -2517,134 +2433,9 @@ const NPC_PORTRAITS = {
   },
 };
 
-function drawAllNpcPortraits() {
-  const KEY_MAP = {
-    'Sister Garaele':'garaele','Sildar Hallwinter':'sildar',
-    'Gundren Rockseeker':'gundren','Toblen Stonehill':'toblen',
-    'Borik Stonehammer':'borik','Qelline':'qelline',
-    'Old Marta':'marta','Elmar Barthen':'elmar',
-    'Iarno Albrek':'iarno','Harbin Wester':'harbin',
-    'Silga':'silga','The Mind Flayer':'mindflayer','The Witness':'witness',
-  };
-  document.querySelectorAll('.npc-card').forEach(card => {
-    const nameEl = card.querySelector('.npc-name');
-    if (!nameEl) return;
-    const key = KEY_MAP[nameEl.textContent.trim()];
-    const fn = key && NPC_PORTRAITS[key];
-    if (!fn) return;
-    const canvas = document.createElement('canvas');
-    canvas.width = 24; canvas.height = 30;
-    canvas.className = 'npc-portrait';
-    const wrap = document.createElement('div');
-    wrap.className = 'npc-content';
-    while (card.firstChild) wrap.appendChild(card.firstChild);
-    card.appendChild(canvas);
-    card.appendChild(wrap);
-    fn(canvas.getContext('2d'));
-  });
-}
+// drawAllNpcPortraits() removed — portraits now generated dynamically in renderNpcsTab()
 
-function drawRurikPortrait(ctx) {
-  const W = 48, H = 60;
-  function px(x, y, w, h, col) {
-    ctx.fillStyle = col;
-    ctx.fillRect(x, y, w || 1, h || 1);
-  }
-  // background — deep storm grey
-  ctx.fillStyle = '#0d1018';
-  ctx.fillRect(0, 0, W, H);
-
-  // subtle vignette gradient
-  const vg = ctx.createRadialGradient(24, 30, 8, 24, 30, 34);
-  vg.addColorStop(0, 'rgba(0,0,0,0)');
-  vg.addColorStop(1, 'rgba(0,0,0,0.55)');
-  ctx.fillStyle = vg;
-  ctx.fillRect(0, 0, W, H);
-
-  // chain mail body — rows of silver rings
-  const mailCols = ['#2a2e38','#2e3240','#333848','#3a3f4a'];
-  for (let row = 0; row < 22; row++) {
-    for (let col = 0; col < W; col++) {
-      ctx.fillStyle = mailCols[(row + col) % mailCols.length];
-      ctx.fillRect(col, H - 22 + row, 1, 1);
-    }
-  }
-  // mail highlight
-  ctx.fillStyle = 'rgba(180,190,210,0.07)';
-  ctx.fillRect(14, H - 22, 20, 6);
-
-  // neck
-  px(20, 34, 8, 6, '#8a6a50');
-
-  // head base — square dwarf face
-  px(14, 12, 20, 22, '#a07858');
-
-  // face shading — sides slightly darker
-  px(14, 12, 3, 22, '#8a6848');
-  px(31, 12, 3, 22, '#8a6848');
-  // forehead highlight
-  px(17, 12, 14, 4, '#b08868');
-
-  // deep-set eyes — storm grey with spark
-  px(17, 19, 4, 3, '#1a1e28');  // left socket
-  px(27, 19, 4, 3, '#1a1e28');  // right socket
-  px(18, 20, 2, 2, '#5a7090');  // left iris
-  px(28, 20, 2, 2, '#5a7090');  // right iris
-  px(18, 20, 1, 1, '#8ab0d0');  // left highlight
-  px(29, 20, 1, 1, '#8ab0d0');  // right highlight
-  // static spark near eyes
-  px(16, 19, 1, 1, '#a0c8f0');
-  px(32, 19, 1, 1, '#a0c8f0');
-
-  // nose bridge
-  px(22, 23, 4, 4, '#906858');
-  px(21, 26, 2, 1, '#7a5840');
-  px(25, 26, 2, 1, '#7a5840');
-
-  // mouth — stern set
-  px(19, 30, 10, 1, '#6a4a38');
-  px(20, 31, 8, 1, '#7a5848');
-
-  // thick dwarf brows
-  px(16, 17, 6, 2, '#4a1818');
-  px(26, 17, 6, 2, '#4a1818');
-
-  // beard — full, wide, crimson-dark
-  px(12, 30, 24, 4, '#4a1818');   // upper beard
-  px(10, 34, 28, 5, '#3a1010');   // mid beard wider
-  px(12, 38, 6,  2, '#5a2020');   // left braid tip
-  px(30, 38, 6,  2, '#5a2020');   // right braid tip
-
-  // beard braid texture — silver wire rings
-  for (let i = 0; i < 4; i++) {
-    px(14, 31 + i * 2, 2, 1, '#8a8090'); // left wire ring
-    px(32, 31 + i * 2, 2, 1, '#8a8090'); // right wire ring
-  }
-  // iron ring accents
-  px(15, 35, 2, 2, '#444450');
-  px(31, 35, 2, 2, '#444450');
-
-  // hair — crimson, swept back
-  px(14, 8,  20, 6, '#4a1010');  // top hair
-  px(12, 12, 4,  8, '#3a0e0e');  // left hair fall
-  px(32, 12, 4,  8, '#3a0e0e');  // right hair fall
-  // hair highlight — single bright strand
-  px(22, 8, 4, 2, '#6a2020');
-
-  // static electricity sparks in braids
-  px(13, 14, 1, 1, '#80b0e8');
-  px(34, 16, 1, 1, '#80b0e8');
-  px(12, 18, 1, 1, '#60a0d8');
-  px(35, 22, 1, 1, '#a0c8f0');
-
-  // holy symbol of Talos — small glowing bolt on chest
-  ctx.fillStyle = '#c9a227';
-  ctx.fillRect(22, H - 18, 4, 1);
-  ctx.fillRect(23, H - 17, 2, 1);
-  ctx.fillRect(21, H - 16, 6, 1);
-  ctx.fillStyle = 'rgba(201,162,39,0.2)';
-  ctx.fillRect(20, H - 20, 8, 6);
-}
+// drawRurikPortrait() removed — replaced by description-driven drawCharacterPortrait()
 
 function initCursors() {
   const canvas = document.getElementById('map-canvas');
@@ -3101,17 +2892,20 @@ function updateMusicUI() {
 //  COMBAT TRACKER
 // ══════════════════════════════════════════════════════
 function startCombat(enemies) {
-  // Initialize combat with player + enemies
+  const char = campaignState && campaignState.party && campaignState.party[0];
+  const playerId = (char && char.id) || 'player';
+  const playerName = (char && char.name) || 'Player';
+  const playerHpMax = (char && (char.hp_max || char.hp)) || W.charHpMax || 10;
   combatState.active = true;
   combatState.currentRound = 1;
   combatState.combatants = [
     {
-      id: 'rurik',
-      name: 'Rurik Stormhammer',
+      id: playerId,
+      name: playerName,
       isPlayer: true,
-      maxHP: 27,
-      currentHP: W.charHpCurrent,
-      initiative: 0,  // Will be filled in by player
+      maxHP: playerHpMax,
+      currentHP: W.charHpCurrent || playerHpMax,
+      initiative: 0,
     }
   ];
 
@@ -3176,29 +2970,41 @@ function addCombatEnemy() {
 function damageInCombat(combatantId, amount) {
   const combatant = combatState.combatants.find(c => c.id === combatantId);
   if (!combatant) return;
-
   combatant.currentHP = Math.max(0, combatant.currentHP - amount);
   renderCombatTracker();
-
-  // Update player HP in main state if it's Rurik
-  if (combatantId === 'rurik') {
+  if (combatant.isPlayer) {
     W.charHpCurrent = combatant.currentHP;
     updateHP();
+    // Persist player HP change to campaign state
+    if (campaignState && campaignState.party[0]) {
+      campaignState.party[0].hp = combatant.currentHP;
+      fetch('http://localhost:3140/api/state', {
+        method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(campaignState)
+      }).catch(()=>{});
+    }
+    // Death at 0 HP
+    if (combatant.currentHP === 0) {
+      setTimeout(() => alert(`${combatant.name} is at 0 HP — unconscious! Begin death saving throws (3 fails = dead, 3 saves = stable at 1 HP).`), 100);
+    }
   }
 }
 
 function healInCombat(combatantId, amount) {
   const combatant = combatState.combatants.find(c => c.id === combatantId);
   if (!combatant) return;
-
   combatant.currentHP = Math.min(combatant.maxHP, combatant.currentHP + amount);
   renderCombatTracker();
-
-  // Update player HP in main state if it's Rurik
-  if (combatantId === 'rurik') {
+  if (combatant.isPlayer) {
     W.charHpCurrent = combatant.currentHP;
     updateHP();
     try { SoundFX.healing(); } catch(e) {}
+    // Persist player HP change to campaign state
+    if (campaignState && campaignState.party[0]) {
+      campaignState.party[0].hp = combatant.currentHP;
+      fetch('http://localhost:3140/api/state', {
+        method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(campaignState)
+      }).catch(()=>{});
+    }
   }
 }
 
@@ -3334,8 +3140,10 @@ const STAT_LABELS = ['STR','DEX','CON','INT','WIS','CHA'];
 const STAT_KEYS   = ['str','dex','con','int','wis','cha'];
 const SAVE_NAMES  = {str:'Strength',dex:'Dexterity',con:'Constitution',int:'Intelligence',wis:'Wisdom',cha:'Charisma'};
 
-function _mod(v){ const m=Math.floor((v-10)/2); return (m>=0?'+':'')+m; }
-function _modVal(v){ return Math.floor((v-10)/2); }
+// Correct D&D 5e proficiency bonus table: +2 at 1-4, +3 at 5-8, +4 at 9-12, +5 at 13-16, +6 at 17-20
+function _profBonus(level){ return Math.floor(((level||1) - 1) / 4) + 2; }
+function _mod(v){ const n=parseInt(v)||10; const m=Math.floor((n-10)/2); return (m>=0?'+':'')+m; }
+function _modVal(v){ const n=parseInt(v)||10; return Math.floor((n-10)/2); }
 
 // ─── CHARACTER TAB ───────────────────────────────────
 function renderCharacterTab() {
@@ -3344,7 +3152,7 @@ function renderCharacterTab() {
   const p    = campaignState.party[0];
   if (!p) return;
   const stats = p.stats || {};
-  const prof  = p.proficiency_bonus || Math.ceil(1 + (p.level||1)/4);
+  const prof  = p.proficiency_bonus || _profBonus(p.level);
   const saves = p.saving_throw_profs || [];
   const skillProfs = (p.skill_profs || []).map(s => s.toLowerCase().trim());
   const spellSlots = p.spell_slots || {};
@@ -3548,13 +3356,47 @@ function renderEventsTab() {
   el.innerHTML = `<div class="sec-title">Campaign Timeline</div><div class="timeline">${entries}</div>`;
 }
 
+// ─── JOURNAL TAB ─────────────────────────────────────
+async function loadJournalTab(force) {
+  _journalLoaded = true; // mark loaded regardless so switchTab doesn't re-trigger
+  const el   = document.getElementById('journal-content');
+  const emEl = document.getElementById('journal-empty');
+  if (!el) return;
+  el.innerHTML = '<span style="color:#444">Loading…</span>';
+  try {
+    const res  = await fetch('http://localhost:3140/api/journal');
+    const data = await res.json();
+    const text = (data.content || '').trim();
+    if (text) {
+      // Render as Markdown so ## headings, **bold**, *italic* display properly
+      el.innerHTML = renderMarkdown(text);
+      el.style.display = '';
+      if (emEl) emEl.style.display = 'none';
+    } else {
+      el.innerHTML = '';
+      el.style.display = 'none';
+      if (emEl) emEl.style.display = '';
+    }
+  } catch(e) {
+    el.innerHTML = '⚠️ Could not load journal — is the server running?';
+    el.style.display = '';
+    if (emEl) emEl.style.display = 'none';
+  }
+}
+
 // ─── NPCS TAB ────────────────────────────────────────
 function renderNpcsTab() {
   const el = document.getElementById('npcs-tab-content');
   if (!el || !campaignState) return;
-  const allNpcs = campaignState.npcs || [];
+  const searchQ  = (document.getElementById('npc-search')?.value || '').toLowerCase();
+  const filterD  = (document.getElementById('npc-filter')?.value || '').toLowerCase();
+  let allNpcs = campaignState.npcs || [];
+  // Apply search
+  if (searchQ) allNpcs = allNpcs.filter(n => (n.name+n.role+n.notes+n.location).toLowerCase().includes(searchQ));
+  // Apply disposition filter
+  if (filterD) allNpcs = allNpcs.filter(n => (n.disposition||'').toLowerCase() === filterD);
   if (!allNpcs.length) {
-    el.innerHTML = '<div style="color:#444;padding:24px;text-align:center">No NPCs tracked yet.</div>';
+    el.innerHTML = `<div style="color:#444;padding:24px;text-align:center">${searchQ||filterD ? 'No NPCs match that search.' : 'No NPCs tracked yet.'}</div>`;
     return;
   }
 
@@ -3582,56 +3424,343 @@ function renderNpcsTab() {
     const {info, npcs: list} = groups[label];
     html += `<div class="sec-title">${label}</div><div class="npc-grid">`;
     for (const {npc, info: di} of list) {
-      const canvasId = 'npc-portrait-' + (npc.id || npc.name.toLowerCase().replace(/\s+/g,'-'));
+      const canvasId = 'npc-portrait-' + (npc.id || npc.name.toLowerCase().replace(/[^a-z0-9]+/g,'-'));
       html += `<div class="npc-card">
-        <div class="npc-header">
-          <div class="npc-name">${npc.name}</div>
-          <div class="disp-badge ${di.badge}">${di.badgeText}</div>
+        <canvas id="${canvasId}" class="npc-portrait" width="24" height="30"></canvas>
+        <div class="npc-content">
+          <div class="npc-header">
+            <div class="npc-name">${npc.name}</div>
+            <div class="disp-badge ${di.badge}">${di.badgeText}</div>
+          </div>
+          ${npc.role ? `<div class="npc-role">${npc.role}</div>` : ''}
+          ${npc.location ? `<div class="npc-loc">${npc.location}</div>` : ''}
+          ${npc.notes ? `<div class="npc-notes">${npc.notes}</div>` : ''}
         </div>
-        ${npc.role ? `<div class="npc-role">${npc.role}</div>` : ''}
-        ${npc.location ? `<div class="npc-loc">${npc.location}</div>` : ''}
-        ${npc.notes ? `<div class="npc-notes">${npc.notes}</div>` : ''}
       </div>`;
     }
     html += `</div>`;
   }
   el.innerHTML = html;
+
+  // Draw NPC portraits after DOM is ready
+  setTimeout(() => {
+    for (const npc of allNpcs) {
+      const canvasId = 'npc-portrait-' + (npc.id || npc.name.toLowerCase().replace(/[^a-z0-9]+/g,'-'));
+      const c = document.getElementById(canvasId);
+      if (c) drawNpcPortrait(c, npc);
+    }
+  }, 0);
 }
 
-// ─── CHARACTER PORTRAIT ───────────────────────────────
+// ─── QUICK ROLL BAR ───────────────────────────────────
+function buildQuickRollBar(p) {
+  const bar = document.getElementById('quick-roll-bar');
+  if (!bar || !p || !p.name || p.name === 'New Character') return;
+
+  const stats = p.stats || {};
+  const prof  = p.proficiency_bonus || _profBonus(p.level);
+  const mod   = s => Math.floor(((s||10)-10)/2);
+  const fmt   = n => (n>=0?'+':'')+n;
+  const skillProfs = (p.skill_profs||[]).map(s=>s.toLowerCase());
+  const hasSP = sk => skillProfs.some(sp => sp.includes(sk.toLowerCase()) || sk.toLowerCase().includes(sp.split(' ')[0]));
+
+  // ── Build roll candidates ──────────────────────────
+  const rolls = [];
+
+  // Initiative
+  rolls.push({ label:'INITIATIVE', expr:`d20${fmt(mod(stats.dex))}`, fn:`roll('Initiative',1,20,${mod(stats.dex)})` });
+
+  // Key skills (top 4 by total bonus)
+  const SKILL_STAT = { perception:'wis', insight:'wis', investigation:'int', stealth:'dex', athletics:'str', arcana:'int', persuasion:'cha', intimidation:'cha', deception:'cha', history:'int', medicine:'wis', nature:'int', religion:'int', acrobatics:'dex', survival:'wis' };
+  const skillRolls = Object.entries(SKILL_STAT).map(([sk, st]) => {
+    const base = mod(stats[st]);
+    const total = base + (hasSP(sk) ? prof : 0);
+    return { sk, total, isProficient: hasSP(sk) };
+  }).filter(r => r.total > 0 || r.isProficient).sort((a,b)=>b.total-a.total).slice(0,3);
+  for (const r of skillRolls) {
+    const label = r.sk.charAt(0).toUpperCase()+r.sk.slice(1);
+    rolls.push({ label: label.toUpperCase(), expr:`d20${fmt(r.total)}`, fn:`roll('${label}',1,20,${r.total})` });
+  }
+
+  // Saving throws (proficient ones)
+  const SAVE_STAT = { str:'STR Save', dex:'DEX Save', con:'CON Save', int:'INT Save', wis:'WIS Save', cha:'CHA Save' };
+  const saveProfKeys = (p.saving_throw_profs||[]).map(s=>s.toLowerCase());
+  for (const sk of saveProfKeys.slice(0,2)) {
+    const st = sk.slice(0,3);
+    const total = mod(stats[st]) + prof;
+    if (SAVE_STAT[st]) rolls.push({ label: SAVE_STAT[st].toUpperCase(), expr:`d20${fmt(total)}`, fn:`roll('${SAVE_STAT[st]}',1,20,${total})` });
+  }
+
+  // Weapon attack — find weapon in inventory; fallback to unarmed
+  const WEAPON_RE = /sword|hammer|axe|bow|dagger|rapier|mace|spear|staff|blade|lance|maul|flail|whip|trident|pike|halberd|scimitar|club|quarterstaff|handaxe|javelin|glaive|warhammer/i;
+  const weapon = (p.inventory||[]).find(i => WEAPON_RE.test(i.name));
+  if (weapon) {
+    const magicM = weapon.name.match(/\+(\d)/);
+    const magicBonus = magicM ? parseInt(magicM[1]) : 0;
+    const usesDex = /dagger|rapier|whip|finesse|bow|crossbow|dart|sling/i.test(weapon.name);
+    const atkStat  = usesDex ? mod(stats.dex) : mod(stats.str);
+    const atkBonus = atkStat + prof + magicBonus;
+    const dmgBonus = atkStat + magicBonus;
+    const dmgDie   = /great|maul|halberd|pike|lance|heavy/i.test(weapon.name) ? 12
+                   : /long|battle|war|rapier|quarterstaff/i.test(weapon.name) ? 8
+                   : /short|scim|hand|axe|club|mace|warhammer/i.test(weapon.name) ? 6 : 6;
+    const shortName = (weapon.name.replace(/\s*\+[0-9]+\s*/g,'').split(' ').pop() || 'Weapon').toUpperCase().slice(0,8);
+    rolls.push({ label:`ATK ${shortName}`, expr:`d20${fmt(atkBonus)}`, fn:`roll('Attack — ${weapon.name}',1,20,${atkBonus})` });
+    rolls.push({ label:`DMG ${shortName}`, expr:`d${dmgDie}${fmt(dmgBonus)}`, fn:`roll('Damage — ${weapon.name}',1,${dmgDie},${dmgBonus})` });
+  } else {
+    // Unarmed strike fallback
+    const unarmedBonus = mod(stats.str) + prof;
+    rolls.push({ label:'UNARMED', expr:`d20${fmt(unarmedBonus)}`, fn:`roll('Unarmed Strike',1,20,${unarmedBonus})` });
+  }
+
+  // Spell attack (if spellcaster) — use class-correct ability
+  const cls = (p.class||'').toLowerCase();
+  const spellStat = /wizard|arcane|eldritch knight/i.test(cls) ? stats.int
+                  : /cleric|druid|ranger|paladin/i.test(cls) ? stats.wis
+                  : /bard|sorcerer|warlock/i.test(cls) ? stats.cha
+                  : Math.max(stats.int||10, stats.wis||10, stats.cha||10); // highest mental for unknowns
+  const isSpellcaster = p.spells?.cantrips?.length || (p.spell_slots && Object.values(p.spell_slots).some(s=>s.max>0));
+  if (isSpellcaster) {
+    const spellAtk = mod(spellStat) + prof;
+    const spellDC  = 8 + mod(spellStat) + prof;
+    rolls.push({ label:'SPELL ATK', expr:`d20${fmt(spellAtk)}`, fn:`roll('Spell Attack',1,20,${spellAtk})` });
+  }
+
+  // Build HTML — max 8 buttons
+  let html = '<span class="qr-label">QUICK ROLL</span>';
+  for (const r of rolls.slice(0, 8)) {
+    html += `<button class="qr-btn" onclick="${r.fn}">${r.label} <span class="qr-mod">${r.expr}</span></button>`;
+  }
+  bar.innerHTML = html;
+}
+
+// ─── DESCRIPTION-DRIVEN PORTRAIT SYSTEM ───────────────
+// Parses a free-text description into discrete portrait features.
+function parsePortraitFeatures(desc, opts = {}) {
+  const d = (desc || '').toLowerCase();
+  const role = (opts.role || '').toLowerCase();
+  const cls  = (opts.cls  || '').toLowerCase();
+  const conds = (opts.conditions || []).map(c => (c||'').toLowerCase());
+  const blind = conds.some(c => /blind/.test(c)) || /\b(blind|grey eyes? \(?pupil)/.test(d);
+
+  // Hair color (priority order)
+  let hair = '#3a2418';                              // default dark brown
+  if (/\b(silver|white|grey|gray)\b.*\bhair\b/.test(d) || /\bhair\b.*\b(silver|white)\b/.test(d)) hair = '#c8c8d0';
+  if (/\bblond|golden hair|fair hair/.test(d)) hair = '#d4b366';
+  if (/\bred (hair|braid|beard)|copper hair|ginger/.test(d)) hair = '#a04020';
+  if (/\bblack hair|raven|jet/.test(d)) hair = '#1a1a22';
+  if (/\bdark hair|brown hair/.test(d)) hair = '#3a2418';
+
+  // Hair streaks
+  let streak = null;
+  if (/silver threads?|silver streak|streaked with silver/.test(d)) streak = '#d8d8e0';
+  else if (/gold threads?|gold streak|threaded with gold/.test(d))  streak = '#e0b850';
+
+  // Skin tone
+  let skin = '#d6b48a';
+  if (/\bfair (skin|complexion)|pale\b/.test(d)) skin = '#e6c8a8';
+  else if (/\bolive (skin|complexion)|tan\b/.test(d)) skin = '#c89870';
+  else if (/\bdark (skin|complexion)|brown skin/.test(d)) skin = '#8a5a3a';
+  else if (/\bruddy|weathered/.test(d)) skin = '#c89878';
+
+  // Beard
+  const beard = /\bbeard\b/.test(d);
+  const beardBraided = /braided beard|braid/.test(d);
+
+  // Spectacles
+  const specs = /spectacles?|glasses|eyeglasses/.test(d);
+
+  // Scar
+  const scar = /\bscar\b/.test(d);
+
+  // Robe vs armor vs cloak
+  let outfit = 'robe';
+  if (/chainmail|chain mail|plate|armor|armour/.test(d) || /fighter|paladin|warrior|cleric/.test(cls) || /warrior|militia|captain|guard|soldier/.test(role)) outfit = 'armor';
+  else if (/wizard|sorcerer|warlock|mage/.test(cls) || /robe|monk/.test(d) || /monk|architect/.test(role)) outfit = 'robe';
+  else if (/cloak|hood|woodsman|tracker/.test(d) || /tracker|hunter|ranger/.test(role)) outfit = 'cloak';
+
+  // Robe / outfit color
+  let outfitColor = '#3a3a5a';
+  if (/wizard|sage/.test(cls + ' ' + role) || /grey robe|gray robe|storm/.test(d)) outfitColor = '#2a2a3e';
+  if (/monk|elder/.test(d + ' ' + role)) outfitColor = '#5a4a3a';
+  if (/militia|guard|soldier|captain/.test(role)) outfitColor = '#5a4032';
+  if (outfit === 'armor') outfitColor = '#6a6a78';
+  if (/woodsman|tracker|hunter/.test(d + ' ' + role)) outfitColor = '#3a4a2a';
+  if (/architect|ancient/.test(role + ' ' + d)) outfitColor = '#4a3a5a';
+
+  // Ethereal (Syl)
+  const ethereal = /ethereal|luminous|translucent|fae|spirit|shadow/.test(d + ' ' + role);
+
+  // Spectral grey eyes vs colored
+  let eyeColor = '#3a78c0';
+  if (blind) eyeColor = '#b8b8c0';
+  else if (/dark eyes|brown eyes/.test(d)) eyeColor = '#3a2a1a';
+  else if (/green eyes/.test(d)) eyeColor = '#3a8a40';
+  else if (/gold eyes|amber eyes|threads of gold/.test(d)) eyeColor = '#d8a838';
+
+  // Brooch / accessory
+  const brooch = /brooch|amulet|pendant|holy symbol/.test(d);
+
+  // Young vs old
+  const young = /young|youth|early twenties|teen|\b1[5-9]\b|\b2[0-4]\b/.test(d);
+
+  return { hair, streak, skin, beard, beardBraided, specs, scar, outfit, outfitColor, eyeColor, ethereal, brooch, young, blind };
+}
+
+// Master portrait drawer — scales to any size (default 48x60).
+function drawPortrait(ctx, feats, W = 48, H = 60) {
+  const sx = W/48, sy = H/60;
+  const px = (x,y,w,h,c) => { ctx.fillStyle = c; ctx.fillRect(Math.floor(x*sx), Math.floor(y*sy), Math.ceil(w*sx), Math.ceil(h*sy)); };
+
+  // Background — soft vignette
+  ctx.fillStyle = feats.ethereal ? '#1a1a2e' : '#0d1018';
+  ctx.fillRect(0,0,W,H);
+  if (!feats.ethereal) {
+    const vg = ctx.createRadialGradient(W/2, H/2, W*0.15, W/2, H/2, W*0.7);
+    vg.addColorStop(0, 'rgba(255,255,255,0.04)');
+    vg.addColorStop(1, 'rgba(0,0,0,0.4)');
+    ctx.fillStyle = vg; ctx.fillRect(0,0,W,H);
+  }
+
+  // Shoulders / outfit base
+  if (feats.outfit === 'armor') {
+    // Chainmail texture
+    px(4,30,40,28, feats.outfitColor);
+    px(5,32,38,2, '#4a4a55');
+    px(5,38,38,2, '#4a4a55');
+    px(5,44,38,2, '#4a4a55');
+    px(5,50,38,2, '#4a4a55');
+    // Pauldrons
+    px(2,30,6,8, '#888894');
+    px(40,30,6,8, '#888894');
+  } else if (feats.outfit === 'cloak') {
+    px(4,30,40,28, feats.outfitColor);
+    px(6,28,36,4, '#1a2014');
+    // Hood folds
+    px(8,30,4,28, '#2a3a1a');
+    px(36,30,4,28, '#2a3a1a');
+  } else {
+    // Robe
+    px(6,30,36,28, feats.outfitColor);
+    // Robe inner trim
+    px(20,30,8,28, '#1a1a28');
+  }
+
+  // Brooch / amulet
+  if (feats.brooch) {
+    px(22,34,4,4, '#d8b840');
+    px(23,35,2,2, '#fff8c0');
+  }
+
+  // Neck
+  px(20,26,8,4, feats.skin);
+
+  // Head
+  px(14,10,20,18, feats.skin);
+
+  // Hair (top + sides) — wizard / mage gets longer
+  px(12,7,24,8, feats.hair);
+  px(10,9,4,12, feats.hair);
+  px(34,9,4,12, feats.hair);
+  // Hair flowing (longer)
+  if (feats.outfit === 'robe') {
+    px(10,20,3,6, feats.hair);
+    px(35,20,3,6, feats.hair);
+  }
+
+  // Silver / gold streaks in hair
+  if (feats.streak) {
+    px(15,8,2,7, feats.streak);
+    px(22,7,2,8, feats.streak);
+    px(29,8,2,7, feats.streak);
+    if (feats.outfit === 'robe') {
+      px(11,20,2,5, feats.streak);
+      px(35,20,2,5, feats.streak);
+    }
+  }
+
+  // Eyes
+  px(16,17,5,3, '#0a0a12');   // eye socket
+  px(27,17,5,3, '#0a0a12');
+  px(17,17,3,2, feats.eyeColor);
+  px(28,17,3,2, feats.eyeColor);
+  if (feats.blind) {
+    // Glassy highlight + slightly dimmer iris
+    px(18,17,1,1, '#fff');
+    px(29,17,1,1, '#fff');
+  } else {
+    px(18,17,1,1, '#fff');
+    px(29,17,1,1, '#fff');
+  }
+
+  // Spectacles
+  if (feats.specs) {
+    ctx.strokeStyle = '#a89868';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(Math.floor(15*sx), Math.floor(16*sy), Math.ceil(7*sx), Math.ceil(5*sy));
+    ctx.strokeRect(Math.floor(26*sx), Math.floor(16*sy), Math.ceil(7*sx), Math.ceil(5*sy));
+    px(22,18,4,1, '#a89868');
+  }
+
+  // Scar
+  if (feats.scar) {
+    px(20,13,1,3, '#a84848');
+  }
+
+  // Nose
+  px(23,20,2,3, `rgba(0,0,0,0.18)`);
+
+  // Mouth
+  if (feats.beard) {
+    px(15,24,18,5, feats.hair);
+    if (feats.beardBraided) {
+      px(20,28,2,6, feats.hair);
+      px(26,28,2,6, feats.hair);
+    }
+  } else {
+    px(20,24,8,1, '#5a3030');
+  }
+
+  // Ethereal overlay (translucent shimmer)
+  if (feats.ethereal) {
+    ctx.fillStyle = 'rgba(180,200,255,0.18)';
+    ctx.fillRect(0,0,W,H);
+    // Faint glow particles
+    for (let i = 0; i < 6; i++) {
+      const x = (i*7 + 4) % W, y = (i*11 + 6) % H;
+      px(x, y, 1, 1, 'rgba(220,230,255,0.6)');
+    }
+  }
+}
+
+// ─── CHARACTER PORTRAIT (48x60) ───────────────────────
 function drawCharacterPortrait(canvas, p) {
   const ctx = canvas.getContext('2d');
-  const px = (x,y,w,h,c) => { ctx.fillStyle=c; ctx.fillRect(x,y,w,h); };
-  ctx.fillStyle = '#0a0a12'; ctx.fillRect(0,0,48,60);
+  const feats = parsePortraitFeatures(p.description, {
+    cls: p.class || '',
+    conditions: p.conditions || [],
+  });
+  drawPortrait(ctx, feats, 48, 60);
 
-  // Generate a deterministic palette from the character's name
+  // Level strip
   let hash = 0;
   for (const ch of (p.name||'')) hash = ((hash<<5)-hash)+ch.charCodeAt(0);
   const hue = Math.abs(hash) % 360;
-  const accent = `hsl(${hue},60%,40%)`;
-  const skin   = `hsl(${(hue+40)%360},30%,55%)`;
-  const hair   = `hsl(${(hue+180)%360},40%,25%)`;
-
-  // Body/robe
-  px(6,28,36,32,accent);
-  // Head
-  px(14,10,20,18,skin);
-  // Hair
-  px(12,8,24,8,hair);
-  px(10,10,4,10,hair);
-  px(34,10,4,10,hair);
-  // Eyes - grey for Kél, normal for others
-  const isBlind = (p.conditions||[]).some(c => /blind/i.test(c));
-  const eyeColor = isBlind ? '#888' : `hsl(${hue},50%,60%)`;
-  px(17,17,4,3,eyeColor);
-  px(27,17,4,3,eyeColor);
-  // Level indicator strip at bottom
+  const accent = `hsl(${hue},55%,38%)`;
   ctx.fillStyle = accent;
   ctx.fillRect(0,54,48,6);
   ctx.fillStyle = '#fff';
   ctx.font = 'bold 7px monospace';
   ctx.textAlign = 'center';
   ctx.fillText(`LVL ${p.level||1}`, 24, 60);
+}
+
+// ─── NPC PORTRAIT (24x30) ─────────────────────────────
+function drawNpcPortrait(canvas, npc) {
+  const ctx = canvas.getContext('2d');
+  const desc = (npc.notes || '') + ' ' + (npc.role || '');
+  const feats = parsePortraitFeatures(desc, { role: npc.role || '' });
+  drawPortrait(ctx, feats, 24, 30);
 }
 
 // ══════════════════════════════════════════════════════
@@ -3688,59 +3817,58 @@ function escapeHtml(text) {
 // Apply a state update from the DM relay (triggered by tool use)
 function applyStateUpdate(state) {
   if (!state || !state.party || !state.party[0]) return;
+  const prevCampaignId = campaignState?.campaign_id;
   window.campaignState = state;
-  const rurik = state.party[0];
+  const char = state.party[0];
   const world = state.world;
 
-  // If campaign just transitioned from new-campaign to a real one, reload the page
-  // (all tabs are hardcoded HTML — a full reload is the cleanest restoration)
-  const wasNew = campaignState?.campaign_id === 'new-campaign';
-  const isNowReal = state.campaign_id && state.campaign_id !== 'new-campaign';
-  if (wasNew && isNowReal) {
-    console.log('[State Update] Campaign created — reloading page to restore full dashboard');
+  // Campaign just created — reload so all tabs come alive
+  if (prevCampaignId === 'new-campaign' && state.campaign_id !== 'new-campaign') {
+    console.log('[State Update] Campaign created — reloading dashboard');
     location.reload();
     return;
   }
 
-  // Standard incremental sync
-  W.charHpCurrent = rurik.hp;
-  if (rurik.spell_slots) {
-    W.spellSlots1Used = rurik.spell_slots.level_1?.used ?? W.spellSlots1Used;
-    W.spellSlots1Max  = rurik.spell_slots.level_1?.max  ?? W.spellSlots1Max;
-    W.spellSlots2Used = rurik.spell_slots.level_2?.used ?? W.spellSlots2Used;
-    W.spellSlots2Max  = rurik.spell_slots.level_2?.max  ?? W.spellSlots2Max;
+  // Sync W object generically from state
+  W.charHpCurrent = char.hp;
+  W.charHpMax     = char.hp_max || char.hp;
+  if (char.channel_divinity) {
+    W.channelDivinityUsed = char.channel_divinity.used;
+    W.channelDivinityMax  = char.channel_divinity.max;
   }
-  if (rurik.channel_divinity) {
-    W.channelDivinityUsed = rurik.channel_divinity.used ?? W.channelDivinityUsed;
-    W.channelDivinityMax  = rurik.channel_divinity.max  ?? W.channelDivinityMax;
-  }
-  if (state.world) {
+  if (world) {
     W.sealPct    = world.seal_integrity ?? W.sealPct;
     W.sealStatus = world.seal_status    ?? W.sealStatus;
   }
-  if (rurik.inventory) window.inventory = rurik.inventory;
-  if (state.quests)    window.quests    = state.quests;
-  if (state.npcs)      window.npcs      = state.npcs;
+  if (char.inventory) window.inventory = char.inventory;
+  if (state.quests)   window.quests    = state.quests;
+  if (state.npcs)     window.npcs      = state.npcs;
 
-  // Update header to reflect current character name
+  // Header
   const titleEl = document.getElementById('header-title');
-  if (titleEl && rurik.name && rurik.name !== 'New Character') {
-    titleEl.textContent = `◈ ${rurik.name.toUpperCase()}`;
-  }
+  if (titleEl && char.name && char.name !== 'New Character')
+    titleEl.textContent = `◈ ${char.name.toUpperCase()}`;
+  // Claude tab label — show character name so you know who the DM is playing for
+  const claudeTabLabel = document.getElementById('claude-tab-label');
+  if (claudeTabLabel && char.name && char.name !== 'New Character')
+    claudeTabLabel.textContent = char.name.split(' ')[0]; // First name only to keep it short
+  const hdayEl = document.getElementById('hday');
+  if (hdayEl && world) hdayEl.textContent = world.time || '';
 
-  // Re-render all dynamic tabs
-  if (typeof renderCharacterTab === 'function') renderCharacterTab();
-  if (typeof renderQuestsTab    === 'function') renderQuestsTab();
-  if (typeof renderEventsTab    === 'function') renderEventsTab();
-  if (typeof renderNpcsTab      === 'function') renderNpcsTab();
-  if (typeof renderInventoryTab === 'function') renderInventoryTab();
+  // Re-render all tabs
+  renderCharacterTab();
+  renderQuestsTab();
+  renderEventsTab();
+  renderNpcsTab();
+  renderInventoryTab();
   updateHP();
   updateSpellSlots();
   updateCD();
-  const sealEl = document.getElementById('tr-seal');
-  if (sealEl) sealEl.textContent = state.campaign_id === 'new-campaign' ? '—' : `${W.sealPct}%`;
-
-  console.log('[State Update] HP:', rurik.hp, '| Slots Lv1:', rurik.spell_slots?.level_1?.used, '/', rurik.spell_slots?.level_1?.max);
+  updateCampaignStatusPanel(state, false);
+  updateMapLocationLabel(state);
+  buildQuickRollBar(char);
+  if (state.world?.weather) updateWeatherOverlay(state.world.weather);
+  console.log(`[State Update] ${char.name} HP:${char.hp}/${W.charHpMax}`);
 }
 
 // Minimal markdown renderer for DM responses
@@ -3776,6 +3904,8 @@ async function sendClaudePrompt() {
 
   textarea.value = '';
   textarea.disabled = true;
+  const statusEl = document.getElementById('dm-status');
+  if (statusEl) { statusEl.style.color = '#fbbf24'; statusEl.textContent = '● Thinking…'; }
 
   claudeMessages.push({ role: 'user', content: prompt });
   renderClaudeHistory();
@@ -3835,6 +3965,13 @@ async function sendClaudePrompt() {
             } else if (event.type === 'combat_started') {
               // Initialize combat tracker with enemies from the tool result
               startCombat(event.enemies || []);
+            } else if (event.type === 'dice_roll') {
+              // DM rolled dice — show the dice overlay with the result
+              showDMRoll(event);
+            } else if (event.type === 'level_up') {
+              handleLevelUp(event.level);
+            } else if (event.type === 'weather_update') {
+              handleWeatherUpdate(event.weather);
             } else if (event.type === 'done') {
               document.getElementById('claude-tokens').textContent = event.token_count || 0;
             } else if (event.type === 'error') {
@@ -3860,17 +3997,17 @@ async function sendClaudePrompt() {
 
   } catch (err) {
     console.error('Prompt error:', err);
-    // Remove assistant placeholder if it was added
     if (assistantEntry) {
       const idx = claudeMessages.indexOf(assistantEntry);
       if (idx !== -1) claudeMessages.splice(idx, 1);
     }
-    // Remove user message we pushed before the try
     claudeMessages.pop();
-    document.getElementById('claude-history').innerHTML += `<div style="color:#f87171;font-size:11px;padding:8px">Error: ${err.message}</div>`;
+    document.getElementById('claude-history').innerHTML += `<div style="color:#f87171;font-size:11px;padding:8px">Error: ${err.message}. Is the DM relay running on :3141?</div>`;
+    if (statusEl) { statusEl.style.color = '#f87171'; statusEl.textContent = '● Disconnected'; setTimeout(()=>{ if(statusEl){statusEl.style.color='#4ade80';statusEl.textContent='● Connected';} }, 5000); }
   } finally {
     textarea.disabled = false;
     textarea.focus();
+    if (statusEl && statusEl.textContent === '● Thinking…') { statusEl.style.color = '#4ade80'; statusEl.textContent = '● Connected'; }
   }
 }
 
@@ -3887,14 +4024,213 @@ async function clearClaudeHistory() {
 }
 
 // ══════════════════════════════════════════════════════
+//  LEVEL-UP HANDLER
+// ══════════════════════════════════════════════════════
+function handleLevelUp(level) {
+  // Flash a celebratory toast
+  const toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1a1400;border:2px solid #ffd700;color:#ffd700;padding:20px 40px;font-size:22px;font-weight:bold;letter-spacing:3px;text-transform:uppercase;font-family:"Courier New",monospace;z-index:9999;pointer-events:none;text-align:center;border-radius:4px;';
+  toast.innerHTML = `★ LEVEL UP ★<br><span style="font-size:14px;color:#c9a227">Now Level ${level}</span>`;
+  document.body.appendChild(toast);
+  try { SoundFX.nat20(); } catch(e) {}
+  setTimeout(() => toast.remove(), 3500);
+}
+
+// ══════════════════════════════════════════════════════
+//  SERVER HEALTH CHECK (reconnect indicator)
+// ══════════════════════════════════════════════════════
+let _serverHealthy = true;
+async function checkServerHealth() {
+  try {
+    const r = await fetch('http://localhost:3140/api/state', { method:'GET', signal: AbortSignal.timeout(3000) });
+    if (r.ok && !_serverHealthy) {
+      _serverHealthy = true;
+      const el = document.getElementById('dm-status');
+      if (el) { el.style.color = '#4ade80'; el.textContent = '● Connected'; }
+      // Refresh state after reconnect
+      loadGameState();
+    }
+    _serverHealthy = true;
+  } catch {
+    if (_serverHealthy) {
+      _serverHealthy = false;
+      const el = document.getElementById('dm-status');
+      if (el) { el.style.color = '#f87171'; el.textContent = '● Server offline'; }
+    }
+  }
+}
+// Poll every 15 seconds — cheap, no SSE required
+setInterval(checkServerHealth, 15000);
+
+// ══════════════════════════════════════════════════════
+//  MUSIC SCENE INDICATOR
+// ══════════════════════════════════════════════════════
+function updateMusicUI() {
+  // Uses the existing music-label element (next to the music toggle button)
+  const el = document.getElementById('music-label');
+  if (!el) return;
+  const scene = Music && Music._currentScene ? Music._currentScene : (typeof currentScene !== 'undefined' ? currentScene : '');
+  const LABELS = { exploration:'♪ Explore', combat:'⚔ Combat', rest:'🌙 Rest', tavern:'🍺 Tavern', silence:'— Silence' };
+  el.textContent = Music && Music._on ? (LABELS[scene] || (scene ? `♪ ${scene}` : '♪ Music')) : 'OFF';
+}
+
+// ══════════════════════════════════════════════════════
+//  TAB SCROLL PRESERVATION
+// ══════════════════════════════════════════════════════
+const _tabScrollPos = {};
+const _origSwitchTab = switchTab;
+// Wrap switchTab to save/restore scroll positions
+window.switchTab = function(id) {
+  // Save current active tab scroll
+  const activePanel = document.querySelector('.tab-panel.active .scroll-panel');
+  if (activePanel) {
+    const activeId = activePanel.closest('.tab-panel')?.id?.replace('tab-','');
+    if (activeId) _tabScrollPos[activeId] = activePanel.scrollTop;
+  }
+  _origSwitchTab(id);
+  // Restore scroll for the newly activated tab
+  requestAnimationFrame(() => {
+    const newPanel = document.querySelector(`#tab-${id} .scroll-panel`);
+    if (newPanel && _tabScrollPos[id] != null) newPanel.scrollTop = _tabScrollPos[id];
+  });
+};
+
+// ══════════════════════════════════════════════════════
+//  CLIPBOARD COPY FOR DICE RESULTS
+// ══════════════════════════════════════════════════════
+function copyDiceResult() {
+  if (!_lastRollResult) return;
+  const { label, total, breakdown } = _lastRollResult;
+  const text = `${label}: ${total} (${breakdown.replace(/\*\*/g,'')})`;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('dice-copy-btn');
+    if (btn) { btn.textContent = '✓'; setTimeout(()=>{ btn.textContent = '⎘'; }, 1200); }
+  }).catch(() => {});
+}
+
+// ══════════════════════════════════════════════════════
+//  SESSION TIMER
+// ══════════════════════════════════════════════════════
+const _sessionStart = Date.now();
+function updateSessionTimer() {
+  const el = document.getElementById('session-timer');
+  if (!el) return;
+  const elapsed = Math.floor((Date.now() - _sessionStart) / 1000);
+  const h = Math.floor(elapsed / 3600);
+  const m = Math.floor((elapsed % 3600) / 60);
+  const s = elapsed % 60;
+  el.textContent = h > 0
+    ? `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
+    : `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+setInterval(updateSessionTimer, 1000);
+updateSessionTimer();
+
+// ══════════════════════════════════════════════════════
+//  DM NOTES TAB (SCRATCHPAD)
+// ══════════════════════════════════════════════════════
+let _notesLoaded = false;
+let _notesSaveTimer = null;
+
+async function loadNotesTab() {
+  if (_notesLoaded) return;
+  _notesLoaded = true;
+  try {
+    const r = await fetch('http://localhost:3140/api/notes');
+    const { content } = await r.json();
+    const ta = document.getElementById('notes-textarea');
+    if (ta) ta.value = content || '';
+  } catch (e) { console.warn('Notes load failed:', e); }
+
+  // Auto-save on input with 1s debounce
+  const ta = document.getElementById('notes-textarea');
+  if (ta) {
+    ta.addEventListener('input', () => {
+      clearTimeout(_notesSaveTimer);
+      _notesSaveTimer = setTimeout(saveNotes, 1000);
+    });
+  }
+}
+
+async function saveNotes() {
+  const ta = document.getElementById('notes-textarea');
+  if (!ta) return;
+  try {
+    await fetch('http://localhost:3140/api/notes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content: ta.value })
+    });
+    const ind = document.getElementById('notes-saved-indicator');
+    if (ind) { ind.style.opacity = '1'; setTimeout(() => { ind.style.opacity = '0'; }, 1500); }
+  } catch (e) { console.warn('Notes save failed:', e); }
+}
+
+// ══════════════════════════════════════════════════════
+//  WEATHER OVERLAY
+// ══════════════════════════════════════════════════════
+const WEATHER_ICONS = {
+  clear:'☀️', cloudy:'⛅', overcast:'☁️', light_rain:'🌧', heavy_rain:'🌧🌧',
+  thunderstorm:'⛈', fog:'🌫', snow:'❄️', blizzard:'❄️❄️', heatwave:'🌡', magical:'✨'
+};
+
+function updateWeatherOverlay(weather) {
+  const el = document.getElementById('map-weather-label');
+  if (!el) return;
+  if (!weather || !weather.condition) { el.style.display = 'none'; return; }
+  const icon = WEATHER_ICONS[weather.condition] || '🌤';
+  el.textContent = `${icon} ${weather.condition.replace(/_/g,' ')}`;
+  el.style.display = 'block';
+}
+
+// ══════════════════════════════════════════════════════
+//  EXPORT JOURNAL
+// ══════════════════════════════════════════════════════
+async function exportJournal() {
+  try {
+    const r = await fetch('http://localhost:3140/api/journal');
+    const { content } = await r.json();
+    if (!content) { alert('No journal entries yet.'); return; }
+    const blob = new Blob([content], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const char = window.campaignState?.party?.[0];
+    const name = char?.name?.replace(/\s+/g,'-') || 'campaign';
+    a.href = url;
+    a.download = `${name}-journal.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch (e) { alert('Export failed — is the server running?'); }
+}
+
+// ══════════════════════════════════════════════════════
+//  WEATHER SSE EVENT HANDLER
+// ══════════════════════════════════════════════════════
+// Called from SSE stream parser when set_weather tool fires
+function handleWeatherUpdate(weather) {
+  updateWeatherOverlay(weather);
+  // Also update the tracker panel if visible
+  const trLocation = document.getElementById('tr-location');
+  if (trLocation && weather.description) {
+    // Add weather briefly to location display
+    const orig = trLocation.textContent;
+    trLocation.textContent = `${orig} · ${weather.condition.replace(/_/g,' ')}`;
+  }
+}
+
+// ══════════════════════════════════════════════════════
 //  INITIALIZE ON PAGE LOAD
 // ══════════════════════════════════════════════════════
 (async () => {
   await loadGameState();
   renderMap(W.currentMap);
   initCursors();
-  drawRurikPortrait(document.getElementById('portrait-canvas').getContext('2d'));
-  drawAllNpcPortraits();
+  checkServerHealth();
+  // Load weather from initial state
+  const weather = window.campaignState?.world?.weather;
+  if (weather) updateWeatherOverlay(weather);
+  // Portraits are now drawn dynamically inside renderCharacterTab() and renderNpcsTab()
+  // using description-driven procedural art.
 })();
 </script>
 </body>

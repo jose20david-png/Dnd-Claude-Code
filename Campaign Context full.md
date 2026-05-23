@@ -16,10 +16,13 @@
 
 | Field | Value |
 |---|---|
-| Location | Character Creation |
-| HP | 10 / 27 (wounded) |
-| Spell Slots |  (full) |
-| Channel Divinity | 0 / 0 available |
+| Character | Kel Stormblessed Â· Wizard (Conjuration) Â· Level 1 |
+| Location | The Obsidian Library - Candlelit study chamber |
+| HP | 7 / 7 (full) |
+| Spell Slots | 2Ã— 1 (full) |
+
+*Last updated: 2026-05-23*
+
 ---
 
 ## PENDING DECISION
@@ -71,10 +74,6 @@ Sildar wants Silga intel before deciding. Iarno can provide it. **Rurik has not 
 
 
 
-## SESSION NOTES (auto-generated)
-
-- New campaign started. Begin character creation.
-- Kel Stormblessed begins his journey in the Ironpeak Mountains, seated in an inn with wine and journal, searching for clues about the location of the Fabrial artifact.
 
 ## CHARACTER QUICK REFERENCE
 
@@ -104,3 +103,8 @@ python "C:\Users\jose2\Desktop\roll-dice-skill\scripts\roll.py" <sides> [mode] [
 | d4+3 (Healing Word) | `... 4 normal 3 --label "Healing Word"` |
 
 Opens a browser animation, closes after 5 seconds. Results also printed to terminal.
+
+
+## SESSION NOTES (auto-generated)
+
+- Kel Stormblessed created. Wizard (Conjuration) Level 1. Adventure begins.
