@@ -6,7 +6,8 @@
     "current_location": "Character Creation",
     "time": "Day 1 — Morning",
     "seal_integrity": 100,
-    "seal_status": "N/A"
+    "seal_status": "N/A",
+    "map_id": null
   },
   "party": [
     {
@@ -54,12 +55,8 @@
   "encounters": [],
   "history_log": [
     {
-      "timestamp": "2026-05-21T22:41:10.453Z",
+      "timestamp": "2026-05-23T18:40:25.904Z",
       "event": "New campaign started. Begin character creation."
-    },
-    {
-      "timestamp": "2026-05-21T22:51:23.559Z",
-      "event": "Kel Stormblessed begins his journey in the Ironpeak Mountains, seated in an inn with wine and journal, searching for clues about the location of the Fabrial artifact."
     }
   ]
 }
