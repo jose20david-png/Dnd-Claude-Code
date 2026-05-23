@@ -2,7 +2,37 @@
 
 ---
 
-## [2026-05-23] — Build 14 (current)
+## [2026-05-23] — Build 16 (current)
+
+### API Migration — Anthropic → Mistral AI
+- **Model changed** to `open-mistral-nemo` (Mistral free tier, 12B, function-calling capable).
+- **Token rate limit** raised to `40,000 TPM` (Mistral free tier vs. Anthropic Tier 1 ~10K).
+- **`.env` key** changed from `ANTHROPIC_API_KEY` to `MISTRAL_API_KEY`.
+- **`makeAPICall()`** rewritten for Mistral REST API (`api.mistral.ai/v1/chat/completions`, `Authorization: Bearer` header, no `anthropic-version` header).
+- **`streamAgenticLoop()`** rewritten for OpenAI-compatible SSE format:
+  - System prompt sent as first message in array (`{role:'system', content:...}`), not a top-level field.
+  - SSE parsed from `choices[0].delta.content` / `choices[0].delta.tool_calls[].index`.
+  - Tool results sent as individual `{role:'tool', tool_call_id, content}` messages (not batched user-turn blocks).
+  - Stream terminates on `data: [DONE]` line.
+  - Tool calls accumulated by `index` to handle parallel/chunked streaming.
+  - Narration nudge message injected after tool execution.
+- **`MISTRAL_TOOLS`** array built from TOOLS using `{type:'function', function:{name,description,parameters}}` schema (OpenAI tool format).
+- **Startup error message** updated to reference `MISTRAL_API_KEY`.
+- **Console label** updated: `Claude DM → Mistral DM`.
+- **Prompt caching** (`TOOLS_CACHED`, `cache_control`) removed — Mistral does not support Anthropic's caching headers.
+
+---
+
+## [2026-05-23] — Build 15
+
+### Performance — Token Rate Fix
+- **Prompt caching** — system prompt and last tool definition tagged with `cache_control: {type:'ephemeral'}`. Cache hits reduce input token cost by ~75%.
+- **History budget** reduced from 4500 → 2500 tokens per call.
+- **Recent events** trimmed from last 5 → last 3 per system prompt.
+
+---
+
+## [2026-05-23] — Build 14
 
 ### Performance
 - **`TOOLS` token count cached at startup** — `getToolsJson()` serializes the 14 tool definitions once; the agentic loop no longer calls `JSON.stringify(TOOLS)` on every iteration (6× per user turn).

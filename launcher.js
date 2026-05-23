@@ -25,7 +25,7 @@ const JOURNAL_PATH        = path.join(APP_DIR, 'journal.md');
 const ENV_PATH            = path.join(APP_DIR, '.env');
 const SAVES_DIR           = path.join(APP_DIR, 'saves');
 
-const MODEL                = 'claude-haiku-4-5';
+const MODEL                = 'open-mistral-nemo';
 const AUTO_SAVE_INTERVAL_MS = 5 * 60 * 1000;
 const PORTS                = [3140, 3141, 8080];
 
@@ -33,9 +33,9 @@ const PORTS                = [3140, 3141, 8080];
 let lastRequestTime = 0;
 const REQUEST_DELAY_MS = 1500; // minimum delay between API calls
 
-// Anthropic rate limit: 10,000 INPUT tokens per minute. We track input tokens
-// sent in a rolling 60-second window and wait before any call that would exceed.
-const TOKEN_LIMIT_PER_MIN = 8500;       // 1500 token buffer below the hard ceiling
+// Mistral free tier is much more generous than Anthropic Tier 1.
+// We still guard against runaway loops but set a high ceiling.
+const TOKEN_LIMIT_PER_MIN = 40000;      // Mistral free tier: ~1 req/sec, high monthly quota
 const TOKEN_WINDOW_MS     = 60 * 1000;
 const tokenUsage          = [];          // [{ time: ms, tokens: N }, ...]
 
@@ -66,7 +66,7 @@ function recordTokenUsage(tokens) {
 let API_KEY = '';
 try {
   const env = fs.readFileSync(ENV_PATH, 'utf8');
-  const m = env.match(/ANTHROPIC_API_KEY=(.+)/);
+  const m = env.match(/MISTRAL_API_KEY=(.+)/);
   if (m) API_KEY = m[1].trim();
 } catch {}
 
@@ -429,13 +429,12 @@ const TOOLS = [
      required:['name','class','level','hp','stats']}}
 ];
 
-// Prompt-cache variant: last tool carries cache_control so Anthropic caches
-// the entire tools block on the first call each 5-minute window.
-// Saves ~2 000 cached-read tokens per subsequent loop iteration (cost only —
-// TPM rate limit still counts all tokens, but cost drops ~75% on cache hits).
-const TOOLS_CACHED = TOOLS.map((t, i) =>
-  i === TOOLS.length - 1 ? { ...t, cache_control: { type: 'ephemeral' } } : t
-);
+// Mistral/OpenAI function-calling format wraps each tool in {type:'function', function:{...}}
+// and uses 'parameters' instead of 'input_schema'.
+const MISTRAL_TOOLS = TOOLS.map(t => ({
+  type: 'function',
+  function: { name: t.name, description: t.description, parameters: t.input_schema }
+}));
 
 // ─── TOOL EXECUTOR ────────────────────────────────────────────────────────────
 function executeTool(name, input) {
@@ -940,125 +939,221 @@ ${recentEvents||'— Campaign beginning —'}`;
 
 }
 
-// ─── AGENTIC DM LOOP ──────────────────────────────────────────────────────────
+// ─── AGENTIC DM LOOP (Mistral AI) ─────────────────────────────────────────────
 function makeAPICall(bodyStr) {
-  return new Promise((resolve,reject)=>{
-    // Rate limit throttling: enforce minimum delay between requests to spread token usage
+  return new Promise((resolve, reject) => {
+    // Enforce minimum delay between requests
     const now = Date.now();
     const timeSinceLastRequest = now - lastRequestTime;
     if (timeSinceLastRequest < REQUEST_DELAY_MS) {
-      setTimeout(() => {
-        makeAPICall(bodyStr).then(resolve).catch(reject);
-      }, REQUEST_DELAY_MS - timeSinceLastRequest);
+      setTimeout(() => makeAPICall(bodyStr).then(resolve).catch(reject),
+        REQUEST_DELAY_MS - timeSinceLastRequest);
       return;
     }
     lastRequestTime = Date.now();
 
-    const buf=Buffer.from(bodyStr);
-    const req=https.request({hostname:'api.anthropic.com',path:'/v1/messages',method:'POST',headers:{'Content-Type':'application/json','Content-Length':buf.length,'x-api-key':API_KEY,'anthropic-version':'2023-06-01'}},(res)=>{
-      // CRITICAL: detect non-200 responses BEFORE handing the stream to the streaming parser.
-      // Anthropic returns errors (400, 401, 429, 500, 529) as a JSON body, not as SSE.
-      // If we don't catch this here, the streaming parser sees no "data: " lines and the
-      // turn looks empty — which is the root cause of "Empty assistant turn" failures.
-      if(res.statusCode!==200){
-        let body='';
+    const buf = Buffer.from(bodyStr);
+    const req = https.request({
+      hostname: 'api.mistral.ai',
+      path: '/v1/chat/completions',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': buf.length,
+        'Authorization': `Bearer ${API_KEY}`
+      }
+    }, (res) => {
+      // Non-200 = error body (not SSE). Parse and reject so the caller can log it properly.
+      if (res.statusCode !== 200) {
+        let body = '';
         res.setEncoding('utf8');
-        res.on('data',c=>body+=c);
-        res.on('end',()=>{
-          let errMsg=`HTTP ${res.statusCode}`;
-          try{const j=JSON.parse(body); if(j.error?.message)errMsg=`HTTP ${res.statusCode} — ${j.error.type||'error'}: ${j.error.message}`;}catch{}
-          if(errMsg===`HTTP ${res.statusCode}`)errMsg+=`: ${body.slice(0,300)}`;
-          const err=new Error(errMsg);
-          err.statusCode=res.statusCode;
-          err.body=body;
+        res.on('data', c => body += c);
+        res.on('end', () => {
+          let errMsg = `HTTP ${res.statusCode}`;
+          try {
+            const j = JSON.parse(body);
+            if (j.message) errMsg = `HTTP ${res.statusCode} — ${j.message}`;
+            else if (j.error?.message) errMsg = `HTTP ${res.statusCode} — ${j.error.message}`;
+          } catch {}
+          if (errMsg === `HTTP ${res.statusCode}`) errMsg += `: ${body.slice(0, 300)}`;
+          const err = new Error(errMsg);
+          err.statusCode = res.statusCode;
           reject(err);
         });
-        res.on('error',reject);
+        res.on('error', reject);
         return;
       }
       resolve(res);
     });
-    req.on('error',reject);
-    // Timeout: if Anthropic doesn't respond within 90s, reject so the SSE doesn't hang forever
-    req.setTimeout(90000, () => {
-      req.destroy(new Error('Anthropic API request timed out after 90s'));
-    });
+    req.on('error', reject);
+    req.setTimeout(90000, () => req.destroy(new Error('Mistral API request timed out after 90s')));
     req.write(buf); req.end();
   });
 }
 
 async function streamAgenticLoop(messages, systemPrompt, res) {
-  let totalTokens=0;
-  let apiError=null;
+  let totalTokens = 0;
+  let apiError = null;
+
+  // Mistral uses OpenAI-compatible chat format: system goes as the first message.
+  // We maintain mistralMsgs separately so the caller's `messages` array stays simple
+  // (plain {role, content:string} pairs) for history tracking.
+  const mistralMsgs = [
+    { role: 'system', content: systemPrompt },
+    ...messages.map(m => ({
+      role: m.role,
+      content: typeof m.content === 'string' ? m.content : JSON.stringify(m.content)
+    }))
+  ];
+
   console.log(`  ▶ Agentic loop start — ${messages.length} messages in context`);
-  for (let loop=0;loop<6;loop++){
-    // Estimate input tokens for this request and wait if we'd blow the per-minute budget
-    const msgsTokens = messages.reduce((sum,m)=>{
-      const c = typeof m.content === 'string' ? m.content : JSON.stringify(m.content);
-      return sum + estimateTokens(c);
-    }, 0);
-    const sysTokens = estimateTokens(systemPrompt);
-    const { tokens: toolsTokens } = getToolsJson(); // cached — TOOLS never change at runtime
-    const estInput = msgsTokens + sysTokens + toolsTokens;
+
+  for (let loop = 0; loop < 6; loop++) {
+    // Token estimation for rate guard
+    const msgsTokens = mistralMsgs.reduce((s, m) =>
+      s + estimateTokens(typeof m.content === 'string' ? m.content : JSON.stringify(m.content)), 0);
+    const { tokens: toolsTokens } = getToolsJson();
+    const estInput = msgsTokens + toolsTokens;
     await waitForTokenCapacity(estInput);
 
-    // System prompt as a cacheable content block — Anthropic caches it for 5 min
-    // so subsequent loop iterations in the same turn pay only 10% of normal input cost.
-    const body=JSON.stringify({model:MODEL,max_tokens:1000,
-      system:[{type:'text',text:systemPrompt,cache_control:{type:'ephemeral'}}],
-      tools:TOOLS_CACHED,messages,stream:true});
+    const body = JSON.stringify({
+      model: MODEL,
+      max_tokens: 1000,
+      messages: mistralMsgs,
+      tools: MISTRAL_TOOLS,
+      stream: true
+    });
+
     let apiRes;
     try {
-      apiRes=await makeAPICall(body);
+      apiRes = await makeAPICall(body);
       recordTokenUsage(estInput);
-    } catch(err) {
-      apiError=err.message||String(err);
+    } catch (err) {
+      apiError = err.message || String(err);
       console.error(`  ✗ Loop ${loop} API call failed: ${apiError}`);
-      res.write(`data: ${JSON.stringify({type:'error',error:apiError})}\n\n`);
+      res.write(`data: ${JSON.stringify({ type: 'error', error: apiError })}\n\n`);
       break;
     }
-    let textTurn='',toolUses=[],currentTU=null,currentJson='',stopReason='end_turn',stateUpdated=false,streamErr=null;
-    await new Promise(resolve=>{
-      apiRes.on('data',chunk=>{
-        for(const line of chunk.toString().split('\n')){
-          if(!line.startsWith('data: '))continue;
-          try{
-            const d=JSON.parse(line.slice(6));
-            if(d.type==='error'){streamErr=d.error?.message||'Anthropic streaming error';console.error('  ✗ Stream error:',streamErr);res.write(`data: ${JSON.stringify({type:'error',error:streamErr})}\n\n`);}
-            if(d.type==='content_block_start'&&d.content_block.type==='tool_use'){currentTU={id:d.content_block.id,name:d.content_block.name};currentJson='';}
-            if(d.type==='content_block_delta'){if(d.delta.type==='text_delta'){textTurn+=d.delta.text;res.write(`data: ${JSON.stringify({type:'text',content:d.delta.text})}\n\n`);}if(d.delta.type==='input_json_delta')currentJson+=d.delta.partial_json;}
-            if(d.type==='content_block_stop'&&currentTU){try{currentTU.input=JSON.parse(currentJson);}catch{currentTU.input={};}toolUses.push(currentTU);currentTU=null;currentJson='';}
-            if(d.type==='message_delta'){stopReason=d.delta.stop_reason||'end_turn';if(d.usage)totalTokens+=d.usage.output_tokens||0;}
-          }catch{}
+
+    // ── Parse Mistral's OpenAI-compatible SSE stream ───────────────────────────
+    // Text arrives in: choices[0].delta.content
+    // Tool calls arrive in: choices[0].delta.tool_calls[{index,id,function:{name,arguments}}]
+    // Stop signals: choices[0].finish_reason = 'stop' | 'tool_calls'
+    // Stream ends with: data: [DONE]
+    let textTurn = '';
+    let toolCalls = [];        // [{id, name, argsStr}]
+    let stopReason = 'stop';
+    let stateUpdated = false;
+    let streamErr = null;
+
+    await new Promise(resolve => {
+      let buf = '';
+      apiRes.on('data', chunk => {
+        buf += chunk.toString();
+        const lines = buf.split('\n');
+        buf = lines.pop(); // keep incomplete last line
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const data = line.slice(6).trim();
+          if (data === '[DONE]') { resolve(); return; }
+          try {
+            const d = JSON.parse(data);
+            if (d.error) {
+              streamErr = d.error.message || 'Mistral streaming error';
+              console.error('  ✗ Stream error:', streamErr);
+              res.write(`data: ${JSON.stringify({ type: 'error', error: streamErr })}\n\n`);
+            }
+            const delta = d.choices?.[0]?.delta;
+            if (!delta) { if (d.choices?.[0]?.finish_reason) stopReason = d.choices[0].finish_reason; continue; }
+
+            // Text content
+            if (delta.content) {
+              textTurn += delta.content;
+              res.write(`data: ${JSON.stringify({ type: 'text', content: delta.content })}\n\n`);
+            }
+
+            // Tool call streaming — Mistral sends incremental argument JSON chunks
+            if (delta.tool_calls) {
+              for (const tc of delta.tool_calls) {
+                // tc.index identifies which parallel tool call this chunk belongs to
+                const idx = tc.index ?? 0;
+                if (!toolCalls[idx]) toolCalls[idx] = { id: '', name: '', argsStr: '' };
+                if (tc.id)               toolCalls[idx].id      = tc.id;
+                if (tc.function?.name)   toolCalls[idx].name    = tc.function.name;
+                if (tc.function?.arguments) toolCalls[idx].argsStr += tc.function.arguments;
+              }
+            }
+
+            const finish = d.choices?.[0]?.finish_reason;
+            if (finish) stopReason = finish;
+            if (d.usage) totalTokens += d.usage.completion_tokens || 0;
+          } catch {}
         }
       });
-      apiRes.on('end',resolve);
-      apiRes.on('error',e=>{streamErr=e.message;resolve();});
+      apiRes.on('end', resolve);
+      apiRes.on('error', e => { streamErr = e.message; resolve(); });
     });
-    console.log(`  ⟳ Loop ${loop}: text=${textTurn.length}c, tools=${toolUses.length}${toolUses.length?` [${toolUses.map(t=>t.name).join(',')}]`:''}, stop=${stopReason}${streamErr?`, streamErr=${streamErr}`:''}`);
-    if(streamErr){apiError=streamErr;break;}
-    const assistantContent=[];
-    if(textTurn)assistantContent.push({type:'text',text:textTurn});
-    for(const tu of toolUses)assistantContent.push({type:'tool_use',id:tu.id,name:tu.name,input:tu.input});
-    if(assistantContent.length)messages.push({role:'assistant',content:assistantContent});
-    if(stopReason!=='tool_use'||!toolUses.length)break;
-    const toolResults=[];
-    for(const tu of toolUses){
-      const result=executeTool(tu.name,tu.input);
-      if(result.state_updated){stateUpdated=true;}
-      if(result.dice_rolled){res.write(`data: ${JSON.stringify({type:'dice_roll',expression:result.rolled,purpose:result.purpose,breakdown:result.result,total:result.total})}\n\n`);}
-      if(result.music_scene){res.write(`data: ${JSON.stringify({type:'music_scene',scene:result.scene})}\n\n`);}
-      if(result.combat_started){res.write(`data: ${JSON.stringify({type:'combat_started',enemies:result.enemies})}\n\n`);}
-      if(result.leveled){res.write(`data: ${JSON.stringify({type:'level_up',level:result.level})}\n\n`);}
-      if(result.weather){res.write(`data: ${JSON.stringify({type:'weather_update',weather:result.weather})}\n\n`);}
-      toolResults.push({type:'tool_result',tool_use_id:tu.id,content:JSON.stringify(result)});
+
+    // Filter out any sparse slots left by non-contiguous indices
+    toolCalls = toolCalls.filter(Boolean);
+
+    console.log(`  ⟳ Loop ${loop}: text=${textTurn.length}c, tools=${toolCalls.length}${toolCalls.length ? ` [${toolCalls.map(t => t.name).join(',')}]` : ''}, stop=${stopReason}${streamErr ? `, streamErr=${streamErr}` : ''}`);
+    if (streamErr) { apiError = streamErr; break; }
+
+    // ── Add assistant turn to Mistral context ──────────────────────────────────
+    if (toolCalls.length > 0) {
+      mistralMsgs.push({
+        role: 'assistant',
+        content: textTurn || null,
+        tool_calls: toolCalls.map(tc => ({
+          id: tc.id,
+          type: 'function',
+          function: { name: tc.name, arguments: tc.argsStr }
+        }))
+      });
+    } else {
+      mistralMsgs.push({ role: 'assistant', content: textTurn });
     }
-    if(stateUpdated){const ns=loadState();if(ns)res.write(`data: ${JSON.stringify({type:'state_update',state:ns})}\n\n`);}
-    toolResults.push({type:'text',text:'Tools executed. You MUST now write DM narration — describe what happens next in the scene. Do not call any more tools in this response unless strictly required.'});
-    messages.push({role:'user',content:toolResults});
+
+    // Keep caller's messages array up-to-date (used by collectFinalText)
+    if (textTurn) messages.push({ role: 'assistant', content: textTurn });
+
+    if (stopReason !== 'tool_calls' || toolCalls.length === 0) break;
+
+    // ── Execute tools, push results back as 'tool' messages ───────────────────
+    // Mistral expects one {role:'tool'} message per tool call (not batched like Anthropic).
+    for (const tc of toolCalls) {
+      let input = {};
+      try { input = JSON.parse(tc.argsStr); } catch {}
+      console.log(`    🔧 ${tc.name}`, JSON.stringify(input).slice(0, 80));
+      let result;
+      try { result = executeTool(tc.name, input); } catch (e) { result = { error: e.message }; }
+      console.log(`    ✓`, JSON.stringify(result).slice(0, 120));
+
+      // Emit SSE events for real-time dashboard updates
+      if (result.state_updated) stateUpdated = true;
+      if (result.dice_rolled)   res.write(`data: ${JSON.stringify({ type: 'dice_roll',     expression: result.rolled, purpose: result.purpose, breakdown: result.result, total: result.total })}\n\n`);
+      if (result.music_scene)   res.write(`data: ${JSON.stringify({ type: 'music_scene',   scene: result.scene })}\n\n`);
+      if (result.combat_started)res.write(`data: ${JSON.stringify({ type: 'combat_started',enemies: result.enemies })}\n\n`);
+      if (result.leveled)       res.write(`data: ${JSON.stringify({ type: 'level_up',      level: result.level })}\n\n`);
+      if (result.weather)       res.write(`data: ${JSON.stringify({ type: 'weather_update',weather: result.weather })}\n\n`);
+
+      // One tool message per call (Mistral/OpenAI format)
+      mistralMsgs.push({ role: 'tool', tool_call_id: tc.id, content: JSON.stringify(result) });
+    }
+
+    if (stateUpdated) {
+      const ns = loadState();
+      if (ns) res.write(`data: ${JSON.stringify({ type: 'state_update', state: ns })}\n\n`);
+    }
+
+    // Narration nudge: ask the model to write DM prose now that tools are done
+    mistralMsgs.push({ role: 'user', content: 'Tools executed. Write your DM narration now — describe what happens in the scene. No more tool calls unless strictly necessary.' });
+    toolCalls = [];
   }
-  console.log(`  ▶ Agentic loop end — totalTokens=${totalTokens}${apiError?`, apiError=${apiError}`:''}`);
-  return {totalTokens, apiError};
+
+  console.log(`  ▶ Agentic loop end — totalTokens=${totalTokens}${apiError ? `, apiError=${apiError}` : ''}`);
+  return { totalTokens, apiError };
 }
 
 // ─── HTTP SERVERS ─────────────────────────────────────────────────────────────
@@ -1490,7 +1585,7 @@ async function main() {
     console.log(`  ${APP_DIR}`);
     console.log('');
     console.log('  Containing exactly this line:');
-    console.log('  ANTHROPIC_API_KEY=sk-ant-...');
+    console.log('  MISTRAL_API_KEY=your-mistral-key-here');
     console.log('');
     console.log('  Press Enter to exit.');
     await new Promise(r => process.stdin.once('data', r));
@@ -1557,7 +1652,7 @@ function launchGame() {
 
   startServers(() => {
     console.log('  ✓ Campaign API   → localhost:3140');
-    console.log('  ✓ Claude DM      → localhost:3141');
+    console.log('  ✓ Mistral DM     → localhost:3141');
     console.log('  ✓ Dashboard      → localhost:8080');
     console.log('');
     console.log('  Opening dashboard in browser...');
