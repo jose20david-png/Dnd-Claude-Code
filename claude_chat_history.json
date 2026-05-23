@@ -63,9 +63,17 @@
     {
       "role": "assistant",
       "content": "# Noted & Locked! 💚\n\nThat's a beautiful character detail—the brilliant, calculating wizard too wrapped up in his obsession to find love, yet *hoping* in that quiet way. There's real depth there. Maybe the road ahead will surprise him... or maybe his focus will cost him. We'll see what the dark gothic world has in store.\n\nYour romantic life is now part of Kel's character fabric. If the right person crosses your path—someone who *understands* how your mind works—the story will know it.\n\n---\n\n## Back to the Present Moment 🕯️\n\nYou're staring at this scarred stranger in the Obsidian Library, their weathered hand holding that broken star coin. The tension is palpable. Candlelight dances across their clouded white eye.\n\n**The figure waits for your response.**\n\n---\n\n**What do you do?**\n\nDo you:\n- **Reach for your staff** defensively?\n- **Ask them directly** who they are?\n- **Try to sense if they're magical** (Arcana check)?\n- **Something else entirely?**\n\n*The moment hangs in the silence of the library. Your pulse quickens.*"
+    },
+    {
+      "role": "user",
+      "content": "Who goes there? Didn't expect any visitors."
+    },
+    {
+      "role": "assistant",
+      "content": "# The Stranger Speaks 🕯️\n\nYou grip your staff instinctively, fingers brushing the smooth wood as you rise from your desk. Your voice is level—*calculating*, as always—but there's an edge to it. Caution. Control.\n\nThe figure doesn't flinch at your defensive posture. Instead, they step closer, the candlelight finally revealing more of their scarred visage. Their cloak is dark grey, travel-worn. The clouded eye doesn't blink.\n\n**\"No,\"** they say quietly, **\"you wouldn't expect visitors. Not here. Not after what happened to Kaine.\"**\n\nThey hold the coin steady, letting it catch the light.\n\n**\"My name is Corvus. I was... a friend of the Professor's. One of the few who knew what he was digging into before the river took him.\"** Their voice is rough, as if strained by old pain. **\"I've been watching you, Master Stormblessed. Watching to see if you'd receive the letter. Watching to see if you'd be foolish enough to come looking for answers.\"**\n\nCorvus pockets the coin slowly.\n\n**\"The Academy knows you're searching for something. They've sent inquiries. Subtle ones—the kind only a clever wizard would notice. Which means your time here is running short.\"** They pause, studying you with that one good eye. **\"Aldous was a good man. Better than most. They killed him because he found something in the Tower. Something that frightened *them*.\"**\n\n**\"I can help you. But not here. Not now. Too many eyes.\"**\n\n---\n\n**How do you respond?**"
     }
   ],
   "created_at": "2026-05-23T18:40:32.012Z",
-  "token_count": 4478,
+  "token_count": 4871,
   "model": "claude-haiku-4-5"
 }
