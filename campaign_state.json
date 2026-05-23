@@ -1,9 +1,9 @@
 {
-  "campaign_id": "new-campaign",
+  "campaign_id": "kel-stormblessed-campaign",
   "world": {
-    "name": "Forgotten Realms",
-    "lore_summary": "New campaign — character creation in progress.",
-    "current_location": "Character Creation",
+    "name": "Dark Gothic Fantasy",
+    "lore_summary": "Kel Stormblessed, a brilliant Conjuration Wizard, has just discovered a cryptic letter from a murdered colleague hinting at a conspiracy of dark magic spreading across the realm—and their former mentor may be involved in ways unimaginable.",
+    "current_location": "The Obsidian Library - Candlelit study chamber",
     "time": "Day 1 — Morning",
     "seal_integrity": 100,
     "seal_status": "N/A",
@@ -11,15 +11,79 @@
   },
   "party": [
     {
-      "id": "player",
-      "name": "New Character",
-      "class": "Unset",
+      "id": "kel-stormblessed",
+      "name": "Kel Stormblessed",
+      "race": "High Elf",
+      "class": "Wizard (Conjuration)",
       "level": 1,
-      "hp": 10,
+      "hp": 6,
+      "hp_max": 6,
+      "hit_dice_total": 1,
+      "hit_dice_used": 0,
+      "xp": 0,
+      "death_saves": {
+        "successes": 0,
+        "failures": 0,
+        "stable": false
+      },
       "status": "active",
+      "background": "Sage",
+      "alignment": "Chaotic Neutral",
+      "stats": {
+        "str": 8,
+        "dex": 14,
+        "con": 12,
+        "int": 16,
+        "wis": 13,
+        "cha": 10
+      },
+      "ac": 12,
+      "ac_notes": "Unarmored (DEX)",
+      "speed": 30,
+      "proficiency_bonus": 2,
+      "initiative_bonus": 2,
+      "passive_perception": 11.5,
+      "saving_throw_profs": [
+        "int",
+        "wis"
+      ],
+      "skill_profs": [
+        "Arcana",
+        "History",
+        "Investigation",
+        "Insight"
+      ],
+      "traits": [
+        "Darkvision (60 ft)",
+        "Keen Senses",
+        "Fey Ancestry",
+        "Trance",
+        "Elf Weapon Training",
+        "Cantrip: Prestidigitation (High Elf bonus)"
+      ],
+      "conditions": [],
+      "description": "Kel Stormblessed is a sharp-featured High Elf with blonde hair and piercing emerald eyes, bearing the restless energy of one who has spent countless hours poring over dusty tomes and forbidden grimoires. Brilliant and calculating yet deeply curious about the darker applications of arcane magic, Kel walks the line between scholarly pursuit and reckless experimentation—a conjurer whose chaotic nature makes them unpredictable allies and dangerous enemies.",
+      "spells": {
+        "cantrips": [
+          "Fire Bolt",
+          "Mage Hand",
+          "Prestidigitation"
+        ],
+        "level_1": [
+          "Magic Missile",
+          "Tasha's Hideous Laughter",
+          "Unseen Servant"
+        ],
+        "level_2": [],
+        "level_3": []
+      },
       "spell_slots": {
+        "1": {
+          "max": 2,
+          "used": 0
+        },
         "cantrip": {
-          "max": 0,
+          "max": 3,
           "used": 0
         },
         "level_1": {
@@ -47,7 +111,48 @@
         "max": 0,
         "used": 0
       },
-      "inventory": []
+      "inventory": [
+        {
+          "name": "Spellbook",
+          "quantity": 1,
+          "rarity": "uncommon"
+        },
+        {
+          "name": "Dagger",
+          "quantity": 1,
+          "rarity": "common"
+        },
+        {
+          "name": "Component Pouch",
+          "quantity": 1,
+          "rarity": "common"
+        },
+        {
+          "name": "Scholar's Pack",
+          "quantity": 1,
+          "rarity": "common"
+        },
+        {
+          "name": "Bottle of Ink",
+          "quantity": 1,
+          "rarity": "common"
+        },
+        {
+          "name": "Quill",
+          "quantity": 2,
+          "rarity": "common"
+        },
+        {
+          "name": "Small Knife",
+          "quantity": 1,
+          "rarity": "common"
+        },
+        {
+          "name": "Letter from dead colleague",
+          "quantity": 1,
+          "rarity": "uncommon"
+        }
+      ]
     }
   ],
   "npcs": [],
@@ -55,8 +160,8 @@
   "encounters": [],
   "history_log": [
     {
-      "timestamp": "2026-05-23T18:40:25.904Z",
-      "event": "New campaign started. Begin character creation."
+      "timestamp": "2026-05-23T18:47:26.761Z",
+      "event": "Kel Stormblessed created. Wizard (Conjuration) Level 1. Adventure begins."
     }
   ]
 }

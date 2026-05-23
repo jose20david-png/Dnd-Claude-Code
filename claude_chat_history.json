@@ -15,9 +15,33 @@
     {
       "role": "assistant",
       "content": "# Excellent Choice! 🌙⚔️\n\nA **dark gothic fantasy** world—where ancient magic clashes with creeping corruption, where castles loom under brooding skies, and where heroism is tested against encroaching shadow. Perfect.\n\n---\n\n## STEP 2: YOUR CLASS\n\nIn this grim realm, what role calls to you? Here's what each feels like:\n\n⚔️ **Fighter** — Disciplined, relentless. You are steel and strategy—a warrior who masters their blade through sheer will.\n\n🔮 **Wizard** — Intellectual, dangerous. You bend arcane forces to your will, but magic always demands a price.\n\n⚫ **Warlock** — Tempted, powerful. You've made a dark bargain for power beyond mortal ken—but whose strings do you dance on?\n\n✨ **Cleric** — Faithful, resilient. You channel divine or profane energy to heal, smite, and protect (or damn) those around you.\n\n🗡️ **Rogue** — Cunning, shadowed. You move unseen, strike true, and survive by wit and blade in a corrupt world.\n\n**Which calls to you?**"
+    },
+    {
+      "role": "user",
+      "content": "Conjuration Wizard and my race is High Elf. Name is Kel Stormblessed. Adult, but not old. Blonde heair, emeral eyes. Curious and calculative. Chaotic Neutral"
+    },
+    {
+      "role": "assistant",
+      "content": "# Fantastic! We're building something special here. 🔮⚡\n\nI love the momentum—but let's make sure we lock in everything properly, step by step. You've given me some **excellent** details:\n\n✅ **Class:** Conjuration Wizard  \n✅ **Race:** High Elf  \n✅ **Name:** Kel Stormblessed  \n✅ **Appearance:** Blonde hair, emerald eyes, adult  \n✅ **Personality:** Curious, calculating, Chaotic Neutral  \n\nPerfect! Now let's continue building the rest systematically.\n\n---\n\n## STEP 3: BACKGROUND (confirmed High Elf ✓)\n\nYour elven heritage is set. Now, what shaped Kel before they became a wizard? Choose one:\n\n📚 **Sage** — You pursued knowledge obsessively in libraries and academies. You gain *Arcana* and *History* proficiency, plus extra languages.\n\n🎪 **Folk Hero** — You stood against corruption and tyranny among common folk. You gain *Animal Handling* and *Survival*, plus a hidden network of allies.\n\n🕵️ **Criminal** — You survived the underworld's shadows—theft, schemes, betrayal. You gain *Stealth* and *Deception*, plus underworld contacts.\n\n**Which shaped Kel's past?**"
+    },
+    {
+      "role": "user",
+      "content": "Sage"
+    },
+    {
+      "role": "assistant",
+      "content": "# Perfect! The Scholar of Storms 📚⚡\n\nKel Stormblessed—a High Elf Conjuration Wizard with the mind of a Sage. You've spent years chasing forbidden knowledge, and now you're about to discover why the world needs it.\n\n---\n\n## STEP 4: ABILITY SCORES\n\nNow we roll for raw power. I'll roll **4d6 (drop the lowest)** for each of your six ability scores in order: STR, DEX, CON, INT, WIS, CHA.\n\nLet's begin!# Your Scores Are In! 🎲\n\nHere's what the dice have blessed you with:\n\n| Stat | Roll |\n|------|------|\n| **STR** | 10 |\n| **DEX** | 15 |\n| **CON** | 12 |\n| **INT** | 15 |\n| **WIS** | 12 |\n| **CHA** | 11 |\n\n---\n\n## My Suggestion:\n\nFor a **Conjuration Wizard**, I'd assign them like this:\n\n- **INT: 15** (your spellcasting ability—absolutely essential)\n- **DEX: 15** (AC and initiative—wizards need this to survive)\n- **CON: 12** (HP pool and concentration checks)\n- **WIS: 12** (Perception and Insight)\n- **CHA: 11** (Charisma, fits a calculating scholar)\n- **STR: 10** (dump stat for wizards—you don't swing swords)\n\nThis gives you a **solid, survivable wizard** with great control magic and decent defenses.\n\n**Does this assignment feel right to you, or would you shuffle things differently?** You have complete freedom here—just let me know your final stats and we'll lock them in."
+    },
+    {
+      "role": "user",
+      "content": "Yes thats ok"
+    },
+    {
+      "role": "assistant",
+      "content": "# Excellent! Now for the finishing touches. 🔮\n\nLet me ask a few quick questions to round out Kel's story:\n\n---\n\n## STEP 5: BACKGROUND & MOTIVATION\n\n**A few quick details:**\n\n1. **Your mentor or connection:** You're a Sage Wizard—who taught you? A mysterious figure? An academy? Someone now dead or missing? (This matters for the dark secret ahead...)\n\n2. **Why are you adventuring now?** What pulled you from your studies into the dangerous world? A mystery? A threat? A discovery?\n\n3. **What's one dark secret Kel harbors?** Something about your past, your magic, or your ambitions that would make others wary?\n\nThese details will shape the opening of your adventure and make it *personal*.\n\nAlso, quick mechanical question:\n\n4. **Hit Points:** As a Level 1 Wizard, you get 6 + CON modifier (which is +1). So your **max HP is 7**. Does that sound right?\n\nTake your time with these—they'll make the story sing. 🌙"
     }
   ],
   "created_at": "2026-05-23T18:40:32.012Z",
-  "token_count": 543,
+  "token_count": 1958,
   "model": "claude-haiku-4-5"
 }
