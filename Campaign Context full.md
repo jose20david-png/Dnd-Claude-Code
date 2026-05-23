@@ -12,14 +12,14 @@
 
 ---
 
-## SESSION STATE — Day 1 — Morning
+## SESSION STATE — Day 1 — Dusk
 
 | Field | Value |
 |---|---|
-| Character | Kel Stormblessed Â· Wizard (Conjuration) Â· Level 1 |
-| Location | The Obsidian Library - Candlelit study chamber |
+| Character | Kel Stormblessed · Wizard (Conjuration) · Level 1 |
+| Location | The Brass Serpent Tavern - Dockside, Neverwinter |
 | HP | 7 / 7 (full) |
-| Spell Slots | 2Ã— 1 (full) |
+| Spell Slots | 2× 1 (full) |
 
 *Last updated: 2026-05-23*
 
@@ -108,3 +108,5 @@ Opens a browser animation, closes after 5 seconds. Results also printed to termi
 ## SESSION NOTES (auto-generated)
 
 - Kel Stormblessed created. Wizard (Conjuration) Level 1. Adventure begins.
+- Moved to The Brass Serpent Tavern - Dockside, Neverwinter — Day 1 — Dusk.
+- Kel enters deep study of Aldous's journal in Marta's hidden chamber. Achieves flow state, absorbing critical information about the tower, fabrials, and the Circle's movements. Makes substantial progress before exhaustion forces rest.

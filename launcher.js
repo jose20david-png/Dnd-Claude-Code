@@ -54,7 +54,7 @@ async function waitForTokenCapacity(estimated) {
     // Wait until the oldest entry expires from the window
     const oldest = tokenUsage[0];
     const waitMs = Math.max(500, (oldest.time + TOKEN_WINDOW_MS) - Date.now() + 250);
-    console.log(`  â³ Token rate guard: ${used}+${estimated} > ${TOKEN_LIMIT_PER_MIN}/min — waiting ${(waitMs/1000).toFixed(1)}s`);
+    console.log(`  ⏳ Token rate guard: ${used}+${estimated} > ${TOKEN_LIMIT_PER_MIN}/min — waiting ${(waitMs/1000).toFixed(1)}s`);
     await new Promise(r => setTimeout(r, waitMs));
   }
 }
@@ -117,8 +117,8 @@ function showBanner() {
         const r = s.party[0];
         const w = s.world;
         line1 = `${(w.name||'Campaign').slice(0,50)}`;
-        line2 = `${r.name} Â· ${r.class} Â· Level ${r.level}`;
-        line3 = `${(w.current_location||'').slice(0,38)} Â· ${w.time||''}`;
+        line2 = `${r.name} · ${r.class} · Level ${r.level}`;
+        line3 = `${(w.current_location||'').slice(0,38)} · ${w.time||''}`;
       }
     }
   } catch {}
@@ -127,23 +127,23 @@ function showBanner() {
   const pad = (str) => str.slice(0, 50).padEnd(50);
 
   console.log('');
-  console.log('  â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•— â–ˆâ–ˆâ•—   â–ˆâ–ˆâ•—â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•— â–ˆâ–ˆâ•—â–ˆâ–ˆâ•—  â–ˆâ–ˆâ•—');
-  console.log('  â–ˆâ–ˆâ•”══â–ˆâ–ˆâ•—â–ˆâ–ˆâ•‘   â–ˆâ–ˆâ•‘â–ˆâ–ˆâ•”══â–ˆâ–ˆâ•—â–ˆâ–ˆâ•‘â–ˆâ–ˆâ•‘ â–ˆâ–ˆâ•”â•');
-  console.log('  â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•”â•â–ˆâ–ˆâ•‘   â–ˆâ–ˆâ•‘â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•”â•â–ˆâ–ˆâ•‘â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•”â• ');
-  console.log('  â–ˆâ–ˆâ•”══â–ˆâ–ˆâ•—â–ˆâ–ˆâ•‘   â–ˆâ–ˆâ•‘â–ˆâ–ˆâ•”══â–ˆâ–ˆâ•—â–ˆâ–ˆâ•‘â–ˆâ–ˆâ•”═â–ˆâ–ˆâ•— ');
-  console.log('  â–ˆâ–ˆâ•‘  â–ˆâ–ˆâ•‘â•šâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•”â•â–ˆâ–ˆâ•‘  â–ˆâ–ˆâ•‘â–ˆâ–ˆâ•‘â–ˆâ–ˆâ•‘  â–ˆâ–ˆâ•—');
-  console.log('  â•š═â•  â•š═â• â•š═════â• â•š═â•  â•š═â•â•š═â•â•š═â•  â•š═â•');
+  console.log('  ██████╗ ██╗   ██╗██████╗ ██╗██╗  ██╗');
+  console.log('  ██╔══██╗██║   ██║██╔══██╗██║██║ ██╔╝');
+  console.log('  ██████╔╝██║   ██║██████╔╝██║█████╔╝ ');
+  console.log('  ██╔══██╗██║   ██║██╔══██╗██║██╔═██╗ ');
+  console.log('  ██║  ██║╚██████╔╝██║  ██║██║██║  ██╗');
+  console.log('  ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝');
   console.log('');
-  console.log('  â•”══════════════════════════════════════════════════════â•—');
-  console.log('  â•‘                                                      â•‘');
-  console.log(`  â•‘   ${pad(line1)}  â•‘`);
+  console.log('  ╔══════════════════════════════════════════════════════╗');
+  console.log('  ║                                                      ║');
+  console.log(`  ║   ${pad(line1)}  ║`);
   if (line2) {
-  console.log('  â•‘                                                      â•‘');
-  console.log(`  â•‘   ${pad(line2)}  â•‘`);
-  console.log(`  â•‘   ${pad(line3)}  â•‘`);
+  console.log('  ║                                                      ║');
+  console.log(`  ║   ${pad(line2)}  ║`);
+  console.log(`  ║   ${pad(line3)}  ║`);
   }
-  console.log('  â•‘                                                      â•‘');
-  console.log('  â•š══════════════════════════════════════════════════════â•');
+  console.log('  ║                                                      ║');
+  console.log('  ╚══════════════════════════════════════════════════════╝');
   console.log('');
 }
 
@@ -160,19 +160,19 @@ function showStateSummary() {
       .join('  ');
     const cd = r.channel_divinity || { max:1, used:0 };
     const lastEvent = (s.history_log || []).slice(-1)[0];
-    console.log(`  â”Œ─ Saved Campaign ─────────────────────────────────────â”`);
-    console.log(`  â”‚  Character : ${(r.name || '').padEnd(38)}â”‚`);
-    console.log(`  â”‚  Location  : ${((s.world||{}).current_location||'Unknown').slice(0,38).padEnd(38)}â”‚`);
-    console.log(`  â”‚  Time      : ${((s.world||{}).time||'').padEnd(38)}â”‚`);
+    console.log(`  ┌─ Saved Campaign ─────────────────────────────────────┐`);
+    console.log(`  │  Character : ${(r.name || '').padEnd(38)}│`);
+    console.log(`  │  Location  : ${((s.world||{}).current_location||'Unknown').slice(0,38).padEnd(38)}│`);
+    console.log(`  │  Time      : ${((s.world||{}).time||'').padEnd(38)}│`);
     const hpMax = r.hp_max || r.hp || 0;
-    console.log(`  â”‚  HP        : ${String(r.hp||0).padStart(2)} / ${hpMax}${' '.repeat(33)}â”‚`);
-    console.log(`  â”‚  Slots     : ${slots.padEnd(38)}â”‚`);
-    console.log(`  â”‚  CD        : ${String(cd.max-cd.used)+'/'+cd.max}${' '.repeat(35)}â”‚`);
+    console.log(`  │  HP        : ${String(r.hp||0).padStart(2)} / ${hpMax}${' '.repeat(33)}│`);
+    console.log(`  │  Slots     : ${slots.padEnd(38)}│`);
+    console.log(`  │  CD        : ${String(cd.max-cd.used)+'/'+cd.max}${' '.repeat(35)}│`);
     if (lastEvent) {
       const ev = lastEvent.event.slice(0,38);
-      console.log(`  â”‚  Last event: ${ev.padEnd(38)}â”‚`);
+      console.log(`  │  Last event: ${ev.padEnd(38)}│`);
     }
-    console.log(`  â””──────────────────────────────────────────────────────â”˜`);
+    console.log(`  └──────────────────────────────────────────────────────┘`);
     console.log('');
   } catch {}
 }
@@ -233,6 +233,7 @@ function estimateTokens(t){ return Math.ceil((t||'').length/4); }
 let _toolsJson = null;
 let _toolsTokenCount = 0;
 function getToolsJson() {
+  // Uses TOOLS_CACHED (defined after TOOLS) — same token count, cached variant sent to API
   if (!_toolsJson) { _toolsJson = JSON.stringify(TOOLS); _toolsTokenCount = estimateTokens(_toolsJson); }
   return { json: _toolsJson, tokens: _toolsTokenCount };
 }
@@ -268,7 +269,7 @@ function pruneSaves() {
       .sort((a,b) => b.mtime - a.mtime);
     const toDelete = files.slice(MAX_SAVES);
     for (const { f } of toDelete) {
-      try { fs.unlinkSync(path.join(SAVES_DIR,f)); console.log(`  âœ“ Pruned old save: ${f}`); } catch {}
+      try { fs.unlinkSync(path.join(SAVES_DIR,f)); console.log(`  ✓ Pruned old save: ${f}`); } catch {}
     }
   } catch {}
 }
@@ -293,7 +294,7 @@ function rollDice(expr) {
     rolls = [kept]; usedRolls = [r1, r2];
     const advLabel = hasAdv ? 'advantage' : 'disadvantage';
     const total = kept + mod;
-    const bd = `[${r1}, ${r2}] â†’ keep ${kept} (${advLabel})${mod!==0?(mod>=0?` + ${mod}`:` ${mod}`):''}  = **${total}**`;
+    const bd = `[${r1}, ${r2}] → keep ${kept} (${advLabel})${mod!==0?(mod>=0?` + ${mod}`:` ${mod}`):''}  = **${total}**`;
     return {total, rolls:[kept], modifier:mod, breakdown:bd, advDis: advLabel};
   }
   rolls = Array.from({length:num}, ()=>Math.floor(Math.random()*sides)+1);
@@ -428,6 +429,14 @@ const TOOLS = [
      required:['name','class','level','hp','stats']}}
 ];
 
+// Prompt-cache variant: last tool carries cache_control so Anthropic caches
+// the entire tools block on the first call each 5-minute window.
+// Saves ~2 000 cached-read tokens per subsequent loop iteration (cost only —
+// TPM rate limit still counts all tokens, but cost drops ~75% on cache hits).
+const TOOLS_CACHED = TOOLS.map((t, i) =>
+  i === TOOLS.length - 1 ? { ...t, cache_control: { type: 'ephemeral' } } : t
+);
+
 // ─── TOOL EXECUTOR ────────────────────────────────────────────────────────────
 function executeTool(name, input) {
   const state = loadState();
@@ -466,8 +475,8 @@ function executeTool(name, input) {
       }
       saveState(state); return {success:true,state_updated:true};
     }
-    case 'add_inventory_item': { const inv=state.party[0].inventory; const ex=inv.find(i=>i.name.toLowerCase()===input.name.toLowerCase()); if(ex)ex.quantity+=input.quantity;else inv.push({name:input.name,quantity:input.quantity,rarity:input.rarity}); state.history_log.push({timestamp:new Date().toISOString(),event:`Acquired: ${input.name} Ã—${input.quantity}`}); saveState(state); return {success:true,state_updated:true}; }
-    case 'remove_inventory_item': { const inv=state.party[0].inventory; const idx=inv.findIndex(i=>i.name.toLowerCase()===input.name.toLowerCase()); if(idx===-1)return {error:`"${input.name}" not in inventory`}; inv[idx].quantity-=input.quantity; if(inv[idx].quantity<=0)inv.splice(idx,1); state.history_log.push({timestamp:new Date().toISOString(),event:`Used/removed: ${input.name} Ã—${input.quantity}`}); saveState(state); return {success:true,state_updated:true}; }
+    case 'add_inventory_item': { const inv=state.party[0].inventory; const ex=inv.find(i=>i.name.toLowerCase()===input.name.toLowerCase()); if(ex)ex.quantity+=input.quantity;else inv.push({name:input.name,quantity:input.quantity,rarity:input.rarity}); state.history_log.push({timestamp:new Date().toISOString(),event:`Acquired: ${input.name} ×${input.quantity}`}); saveState(state); return {success:true,state_updated:true}; }
+    case 'remove_inventory_item': { const inv=state.party[0].inventory; const idx=inv.findIndex(i=>i.name.toLowerCase()===input.name.toLowerCase()); if(idx===-1)return {error:`"${input.name}" not in inventory`}; inv[idx].quantity-=input.quantity; if(inv[idx].quantity<=0)inv.splice(idx,1); state.history_log.push({timestamp:new Date().toISOString(),event:`Used/removed: ${input.name} ×${input.quantity}`}); saveState(state); return {success:true,state_updated:true}; }
     case 'complete_quest_step': {
       // Fuzzy match on quest title then step description
       const qtNeedle=(input.quest_title||input.quest_id||'').toLowerCase();
@@ -525,9 +534,9 @@ function executeTool(name, input) {
       if(input.notes)npc.notes=(npc.notes?npc.notes+' | ':'')+input.notes;
       if(input.location)npc.location=input.location;
       const changes=[];
-      if(input.disposition&&input.disposition!==old)changes.push(`disposition ${old}â†’${input.disposition}`);
+      if(input.disposition&&input.disposition!==old)changes.push(`disposition ${old}→${input.disposition}`);
       if(input.notes)changes.push(`notes: ${input.notes.slice(0,60)}`);
-      if(input.location)changes.push(`locationâ†’${input.location}`);
+      if(input.location)changes.push(`location→${input.location}`);
       state.history_log.push({timestamp:new Date().toISOString(),event:`${npc.name}: ${changes.join('; ')}.`});
       saveState(state); return {success:true,state_updated:true};
     }
@@ -777,8 +786,8 @@ function executeTool(name, input) {
         const saveName = `${slug}_${ts}.json`;
         const bundle = { meta: { campaign_id: campaignId, character: input.name, class: input.class, level: lvl, location: newState.world.current_location, saved_at: new Date().toISOString() }, state: newState, history: [] };
         fs.writeFileSync(path.join(SAVES_DIR, saveName), JSON.stringify(bundle, null, 2), 'utf8');
-        console.log(`  âœ“ Character created — saved as ${saveName}`);
-      } catch(e) { console.warn('  âš ï¸  Auto-save failed:', e.message); }
+        console.log(`  ✓ Character created — saved as ${saveName}`);
+      } catch(e) { console.warn('  ⚠️  Auto-save failed:', e.message); }
 
       return { success: true, campaign_id: campaignId, character: input.name, class: input.class, level: lvl, hp: input.hp, spell_slots: fullSlots, state_updated: true };
     }
@@ -802,12 +811,12 @@ function updateContextFile(state) {
     const hpTag=char.hp===hpMax?'full':hpPct>=75?'lightly wounded':hpPct>=40?'wounded':'critical';
     const slotNames={level_1:'1st',level_2:'2nd',level_3:'3rd',level_4:'4th',level_5:'5th',level_6:'6th',level_7:'7th',level_8:'8th',level_9:'9th'};
     const slots=char.spell_slots||{};
-    const slotParts=Object.entries(slots).filter(([k,v])=>k!=='cantrip'&&v.max>0).map(([k,v])=>`${v.max-v.used}Ã— ${slotNames[k]||k}`);
+    const slotParts=Object.entries(slots).filter(([k,v])=>k!=='cantrip'&&v.max>0).map(([k,v])=>`${v.max-v.used}× ${slotNames[k]||k}`);
     const allFull=slotParts.length===0||Object.entries(slots).filter(([k,v])=>k!=='cantrip'&&v.max>0).every(([,v])=>v.used===0);
     const slotsDisplay=slotParts.join(', ')+(allFull&&slotParts.length?' (full)':'');
     const cd=char.channel_divinity||{max:0,used:0};
     const recent=state.history_log.slice(-8).map(e=>`- ${e.event}`).join('\n');
-    const stateBlock=`## SESSION STATE — ${world.time}\n\n| Field | Value |\n|---|---|\n| Character | ${char.name} Â· ${char.class} Â· Level ${char.level} |\n| Location | ${world.current_location} |\n| HP | ${char.hp} / ${hpMax} (${hpTag}) |\n| Spell Slots | ${slotsDisplay||'none'} |${cd.max>0?`\n| Channel Divinity | ${cd.max-cd.used} / ${cd.max} available |`:''}\n\n*Last updated: ${now}*`;
+    const stateBlock=`## SESSION STATE — ${world.time}\n\n| Field | Value |\n|---|---|\n| Character | ${char.name} · ${char.class} · Level ${char.level} |\n| Location | ${world.current_location} |\n| HP | ${char.hp} / ${hpMax} (${hpTag}) |\n| Spell Slots | ${slotsDisplay||'none'} |${cd.max>0?`\n| Channel Divinity | ${cd.max-cd.used} / ${cd.max} available |`:''}\n\n*Last updated: ${now}*`;
     const notesBlock=recent?`\n\n## SESSION NOTES (auto-generated)\n\n${recent}`:'';
 
     if (fs.existsSync(CONTEXT_PATH)) {
@@ -821,15 +830,15 @@ function updateContextFile(state) {
       content=content.replace(/\*Last updated: \d{4}-\d{2}-\d{2}\*/g,`*Last updated: ${now}*`);
       if(recent){if(content.includes('## SESSION NOTES')){content=content.replace(/## SESSION NOTES[\s\S]*?(?=\n## |$)/,`## SESSION NOTES (auto-generated)\n\n${recent}\n`);}else{content+=notesBlock;}}
       fs.writeFileSync(CONTEXT_PATH,content,'utf8');
-      console.log('  âœ“ Context file synced ('+path.basename(CONTEXT_PATH)+')');
+      console.log('  ✓ Context file synced ('+path.basename(CONTEXT_PATH)+')');
     } else {
       // Write a generic auto-generated context file
       const autoPath=path.join(APP_DIR,`${state.campaign_id||'campaign'}-context.md`);
       const content=`# ${char.name} — Campaign Context\n\n${stateBlock}${notesBlock}\n`;
       fs.writeFileSync(autoPath,content,'utf8');
-      console.log('  âœ“ Auto context written to '+path.basename(autoPath));
+      console.log('  ✓ Auto context written to '+path.basename(autoPath));
     }
-  } catch(e){console.warn('  âš ï¸  Context sync failed:',e.message);}
+  } catch(e){console.warn('  ⚠️  Context sync failed:',e.message);}
 }
 
 // ─── AUTO-SAVE ─────────────────────────────────────────────────────────────────
@@ -840,7 +849,7 @@ function autoSave() {
     execSync('git add campaign_state.json claude_chat_history.json',{cwd:APP_DIR,stdio:'pipe'});
     const ts=new Date().toISOString().slice(0,16).replace('T',' ');
     execSync(`git commit -m "Auto-save: ${ts}"`,{cwd:APP_DIR,stdio:'pipe'});
-    console.log(`  âœ“ Auto-saved at ${ts}`);
+    console.log(`  ✓ Auto-saved at ${ts}`);
   } catch{}
   // Also write a save-file snapshot and prune old ones
   try { saveCurrentCampaign(); pruneSaves(); } catch {}
@@ -896,9 +905,9 @@ RULES:
   const hitDice = char.hit_dice_total ? `${char.hit_dice_total-(char.hit_dice_used||0)}/${char.hit_dice_total} HD` : '';
   const xpStr = char.xp != null ? `XP: ${char.xp}` : '';
   const ds = char.death_saves;
-  const dsStr = (char.hp===0&&ds) ? ` | Death Saves: ${ds.successes}âœ“ ${ds.failures}âœ—` : '';
+  const dsStr = (char.hp===0&&ds) ? ` | Death Saves: ${ds.successes}✓ ${ds.failures}✗` : '';
   // Last 5 history events only (not the full log — saves ~500 tokens per call)
-  const recentEvents = (state.history_log||[]).slice(-5).map(e=>`• ${e.event}`).join('\n');
+  const recentEvents = (state.history_log||[]).slice(-3).map(e=>`• ${e.event}`).join('\n'); // 3 events (was 5) — saves ~150 tokens/call
   return `You are the Dungeon Master for a solo D&D 5e campaign. Use tools for ALL mechanics.
 
 RULES:
@@ -981,7 +990,7 @@ function makeAPICall(bodyStr) {
 async function streamAgenticLoop(messages, systemPrompt, res) {
   let totalTokens=0;
   let apiError=null;
-  console.log(`  â–¶ Agentic loop start — ${messages.length} messages in context`);
+  console.log(`  ▶ Agentic loop start — ${messages.length} messages in context`);
   for (let loop=0;loop<6;loop++){
     // Estimate input tokens for this request and wait if we'd blow the per-minute budget
     const msgsTokens = messages.reduce((sum,m)=>{
@@ -993,14 +1002,18 @@ async function streamAgenticLoop(messages, systemPrompt, res) {
     const estInput = msgsTokens + sysTokens + toolsTokens;
     await waitForTokenCapacity(estInput);
 
-    const body=JSON.stringify({model:MODEL,max_tokens:1000,system:systemPrompt,tools:TOOLS,messages,stream:true});
+    // System prompt as a cacheable content block — Anthropic caches it for 5 min
+    // so subsequent loop iterations in the same turn pay only 10% of normal input cost.
+    const body=JSON.stringify({model:MODEL,max_tokens:1000,
+      system:[{type:'text',text:systemPrompt,cache_control:{type:'ephemeral'}}],
+      tools:TOOLS_CACHED,messages,stream:true});
     let apiRes;
     try {
       apiRes=await makeAPICall(body);
       recordTokenUsage(estInput);
     } catch(err) {
       apiError=err.message||String(err);
-      console.error(`  âœ— Loop ${loop} API call failed: ${apiError}`);
+      console.error(`  ✗ Loop ${loop} API call failed: ${apiError}`);
       res.write(`data: ${JSON.stringify({type:'error',error:apiError})}\n\n`);
       break;
     }
@@ -1011,7 +1024,7 @@ async function streamAgenticLoop(messages, systemPrompt, res) {
           if(!line.startsWith('data: '))continue;
           try{
             const d=JSON.parse(line.slice(6));
-            if(d.type==='error'){streamErr=d.error?.message||'Anthropic streaming error';console.error('  âœ— Stream error:',streamErr);res.write(`data: ${JSON.stringify({type:'error',error:streamErr})}\n\n`);}
+            if(d.type==='error'){streamErr=d.error?.message||'Anthropic streaming error';console.error('  ✗ Stream error:',streamErr);res.write(`data: ${JSON.stringify({type:'error',error:streamErr})}\n\n`);}
             if(d.type==='content_block_start'&&d.content_block.type==='tool_use'){currentTU={id:d.content_block.id,name:d.content_block.name};currentJson='';}
             if(d.type==='content_block_delta'){if(d.delta.type==='text_delta'){textTurn+=d.delta.text;res.write(`data: ${JSON.stringify({type:'text',content:d.delta.text})}\n\n`);}if(d.delta.type==='input_json_delta')currentJson+=d.delta.partial_json;}
             if(d.type==='content_block_stop'&&currentTU){try{currentTU.input=JSON.parse(currentJson);}catch{currentTU.input={};}toolUses.push(currentTU);currentTU=null;currentJson='';}
@@ -1022,7 +1035,7 @@ async function streamAgenticLoop(messages, systemPrompt, res) {
       apiRes.on('end',resolve);
       apiRes.on('error',e=>{streamErr=e.message;resolve();});
     });
-    console.log(`  âŸ³ Loop ${loop}: text=${textTurn.length}c, tools=${toolUses.length}${toolUses.length?` [${toolUses.map(t=>t.name).join(',')}]`:''}, stop=${stopReason}${streamErr?`, streamErr=${streamErr}`:''}`);
+    console.log(`  ⟳ Loop ${loop}: text=${textTurn.length}c, tools=${toolUses.length}${toolUses.length?` [${toolUses.map(t=>t.name).join(',')}]`:''}, stop=${stopReason}${streamErr?`, streamErr=${streamErr}`:''}`);
     if(streamErr){apiError=streamErr;break;}
     const assistantContent=[];
     if(textTurn)assistantContent.push({type:'text',text:textTurn});
@@ -1044,7 +1057,7 @@ async function streamAgenticLoop(messages, systemPrompt, res) {
     toolResults.push({type:'text',text:'Tools executed. You MUST now write DM narration — describe what happens next in the scene. Do not call any more tools in this response unless strictly required.'});
     messages.push({role:'user',content:toolResults});
   }
-  console.log(`  â–¶ Agentic loop end — totalTokens=${totalTokens}${apiError?`, apiError=${apiError}`:''}`);
+  console.log(`  ▶ Agentic loop end — totalTokens=${totalTokens}${apiError?`, apiError=${apiError}`:''}`);
   return {totalTokens, apiError};
 }
 
@@ -1114,7 +1127,7 @@ const relayServer = http.createServer((req,res)=>{
         // Token-budget windowing: keep most recent messages within a strict token budget.
         // Rate limit is 10K tokens/minute, so we cap conversational history well below that
         // to leave room for system prompt, tool calls, and the model's output.
-        const HISTORY_TOKEN_BUDGET = 4500;
+        const HISTORY_TOKEN_BUDGET = 2500; // reduced from 4500 — saves ~2K tokens/call
         const HARD_MAX_MESSAGES    = 30;
         const allMapped = history.messages.map(m => ({ role: m.role, content: m.content }));
         const tokCount = m => estimateTokens(typeof m.content === 'string' ? m.content : JSON.stringify(m.content));
@@ -1130,7 +1143,7 @@ const relayServer = http.createServer((req,res)=>{
         // Anthropic requires the first message to be 'user' — drop a leading assistant if windowing landed on one
         if (messagesForAPI[0]?.role === 'assistant') messagesForAPI = messagesForAPI.slice(1);
         const systemPrompt = buildSystemPrompt(loadState());
-        console.log(`\n  â”â”â” Chat request — history=${history.messages.length} msgs (sending last ${messagesForAPI.length}, ~${runningTokens} tokens) â”â”â”`);
+        console.log(`\n  ━━━ Chat request — history=${history.messages.length} msgs (sending last ${messagesForAPI.length}, ~${runningTokens} tokens) ━━━`);
         const msgStartIdx=messagesForAPI.length;
         const r1=await streamAgenticLoop(messagesForAPI,systemPrompt,res);
         let outTokens=r1.totalTokens, apiError=r1.apiError;
@@ -1139,7 +1152,7 @@ const relayServer = http.createServer((req,res)=>{
         // Emergency fallback: tools ran successfully but no narration produced (and no API error).
         // Skip fallback on API errors — retrying will just hit the same error.
         if(!apiError&&!finalText.trim()&&messagesForAPI.length>msgStartIdx+1){
-          console.warn('  âš ï¸  No narration after tools — forcing follow-up narration call');
+          console.warn('  ⚠️  No narration after tools — forcing follow-up narration call');
           messagesForAPI.push({role:'user',content:'You called tools but wrote no narration. Write your DM response now — describe what happens in the scene.'});
           const r2=await streamAgenticLoop(messagesForAPI,systemPrompt,res);
           outTokens+=r2.totalTokens;
@@ -1152,15 +1165,15 @@ const relayServer = http.createServer((req,res)=>{
           history.token_count+=estimateTokens(prompt)+(outTokens||estimateTokens(finalText));
           history.model=MODEL;
           saveHistory(history);
-          console.log(`  âœ“ Turn saved — ${finalText.length} chars of narration`);
+          console.log(`  ✓ Turn saved — ${finalText.length} chars of narration`);
         } else {
           // Failure — instead of silent rollback, surface a visible error message to the user.
           // This keeps history valid (alternating user/assistant) AND lets the user see what went wrong.
           let errMsg;
           if(apiError){
-            errMsg=`âš ï¸ **DM connection issue**\n\n\`${apiError}\`\n\n*Your message was kept. Try sending it again — if this is a rate limit or "overloaded" error, wait 10â€“20 seconds first.*`;
+            errMsg=`⚠️ **DM connection issue**\n\n\`${apiError}\`\n\n*Your message was kept. Try sending it again — if this is a rate limit or "overloaded" error, wait 10–20 seconds first.*`;
           } else {
-            errMsg=`âš ï¸ **No DM narration this turn**\n\nThe DM called tools but didn't write a response. Try rephrasing, or send "continue" to prompt narration.`;
+            errMsg=`⚠️ **No DM narration this turn**\n\nThe DM called tools but didn't write a response. Try rephrasing, or send "continue" to prompt narration.`;
           }
           history.messages.push({role:'assistant',content:errMsg});
           history.token_count+=estimateTokens(prompt);
@@ -1168,7 +1181,7 @@ const relayServer = http.createServer((req,res)=>{
           saveHistory(history);
           // Stream the error as text so the dashboard shows it in the chat bubble
           res.write(`data: ${JSON.stringify({type:'text',content:errMsg})}\n\n`);
-          console.error(`  âœ— Empty turn surfaced to user: ${apiError||'(no narration)'}`);
+          console.error(`  ✗ Empty turn surfaced to user: ${apiError||'(no narration)'}`);
         }
         res.write(`data: ${JSON.stringify({type:'done',token_count:history.token_count,model:MODEL})}\n\n`);
         res.end();
@@ -1210,9 +1223,9 @@ function startServers(onReady) {
   dashboardServer.listen(8080,   () => check());
 
   // Any listen error at this point is unexpected (ports were freed before calling this)
-  campaignApiServer.on('error', e => { console.error('  âœ— API server error:', e.message); });
-  relayServer.on('error',       e => { console.error('  âœ— Relay error:', e.message); });
-  dashboardServer.on('error',   e => { console.error('  âœ— Dashboard error:', e.message); });
+  campaignApiServer.on('error', e => { console.error('  ✗ API server error:', e.message); });
+  relayServer.on('error',       e => { console.error('  ✗ Relay error:', e.message); });
+  dashboardServer.on('error',   e => { console.error('  ✗ Dashboard error:', e.message); });
 }
 
 function openBrowser() {
@@ -1266,7 +1279,7 @@ function saveCurrentCampaign() {
     fs.writeFileSync(savePath, JSON.stringify({ meta, state, history }, null, 2), 'utf8');
     return filename;
   } catch (e) {
-    console.error('  âš ï¸  Save failed:', e.message);
+    console.error('  ⚠️  Save failed:', e.message);
     return null;
   }
 }
@@ -1296,8 +1309,8 @@ function loadSave(filename) {
   saveState(raw.state);
   saveHistory(raw.history || { messages: [], token_count: 0, model: MODEL });
   console.log('');
-  console.log(`  âœ“ Loaded: ${raw.meta.character} — ${raw.meta.time}`);
-  console.log(`  âœ“ Location: ${raw.meta.location}`);
+  console.log(`  ✓ Loaded: ${raw.meta.character} — ${raw.meta.time}`);
+  console.log(`  ✓ Location: ${raw.meta.location}`);
   console.log('');
 }
 
@@ -1305,14 +1318,14 @@ function loadSave(filename) {
 function importFromMd(callback) {
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
   console.log('');
-  console.log('  â”Œ─ Import Campaign from Markdown ─────────────────────────â”');
-  console.log('  â”‚  Enter the path to your .md file.                       â”‚');
-  console.log('  â”‚  Relative paths are resolved from:                      â”‚');
-  console.log(`  â”‚  ${APP_DIR.padEnd(56)}â”‚`);
-  console.log('  â”‚  Example:  my-campaign.md                               â”‚');
-  console.log('  â”‚            C:\\Users\\you\\Documents\\campaign.md           â”‚');
-  console.log('  â”‚  (Leave blank to cancel)                                â”‚');
-  console.log('  â””─────────────────────────────────────────────────────────â”˜');
+  console.log('  ┌─ Import Campaign from Markdown ─────────────────────────┐');
+  console.log('  │  Enter the path to your .md file.                       │');
+  console.log('  │  Relative paths are resolved from:                      │');
+  console.log(`  │  ${APP_DIR.padEnd(56)}│`);
+  console.log('  │  Example:  my-campaign.md                               │');
+  console.log('  │            C:\\Users\\you\\Documents\\campaign.md           │');
+  console.log('  │  (Leave blank to cancel)                                │');
+  console.log('  └─────────────────────────────────────────────────────────┘');
   console.log('');
   rl.question('  > ', answer => {
     rl.close();
@@ -1321,7 +1334,7 @@ function importFromMd(callback) {
 
     const builderPath = path.join(APP_DIR, 'scripts', 'build-campaign.js');
     if (!fs.existsSync(builderPath)) {
-      console.error('  âœ— scripts/build-campaign.js not found.');
+      console.error('  ✗ scripts/build-campaign.js not found.');
       callback(); return;
     }
 
@@ -1338,9 +1351,9 @@ function importFromMd(callback) {
         cwd: APP_DIR,
       });
       console.log(output);
-      console.log('  âœ“ Import complete. Choose [Load Campaign] to play it.\n');
+      console.log('  ✓ Import complete. Choose [Load Campaign] to play it.\n');
     } catch (e) {
-      console.error('  âœ— Import failed:', (e.stderr || e.message || '').split('\n')[0]);
+      console.error('  ✗ Import failed:', (e.stderr || e.message || '').split('\n')[0]);
     }
     callback();
   });
@@ -1352,22 +1365,22 @@ function showMenu(hasSave, callback) {
   const saves = listSaves();
   const hasSavedCampaigns = saves.length > 0;
 
-  console.log('  â”Œ─────────────────────────────────â”');
+  console.log('  ┌─────────────────────────────────┐');
   if (hasSave) {
-    console.log('  â”‚   [1]  Continue Campaign        â”‚');
+    console.log('  │   [1]  Continue Campaign        │');
   } else {
-    console.log('  â”‚   [1]  Start Campaign           â”‚');
+    console.log('  │   [1]  Start Campaign           │');
   }
-  console.log('  â”‚   [2]  New Campaign             â”‚');
+  console.log('  │   [2]  New Campaign             │');
   if (hasSavedCampaigns) {
-  console.log('  â”‚   [3]  Load Campaign            â”‚');
-  console.log('  â”‚   [4]  Import from .md file     â”‚');
-  console.log('  â”‚   [5]  Quit                     â”‚');
+  console.log('  │   [3]  Load Campaign            │');
+  console.log('  │   [4]  Import from .md file     │');
+  console.log('  │   [5]  Quit                     │');
   } else {
-  console.log('  â”‚   [3]  Import from .md file     â”‚');
-  console.log('  â”‚   [4]  Quit                     â”‚');
+  console.log('  │   [3]  Import from .md file     │');
+  console.log('  │   [4]  Quit                     │');
   }
-  console.log('  â””─────────────────────────────────â”˜');
+  console.log('  └─────────────────────────────────┘');
   console.log('');
 
   function ask() {
@@ -1390,19 +1403,19 @@ function showLoadMenu(callback) {
   if (!saves.length) { console.log('  No saved campaigns found.\n'); callback(null); return; }
 
   console.log('');
-  console.log('  â”Œ─ Saved Campaigns ─────────────────────────────────────────â”');
+  console.log('  ┌─ Saved Campaigns ─────────────────────────────────────────┐');
   saves.forEach((s, i) => {
     const m = s.meta;
     const date = m.saved_at ? m.saved_at.slice(0, 10) : '—';
-    const line = `[${i + 1}]  ${m.character} Â· ${m.class} Lv${m.level} Â· ${m.time}`;
-    const sub  = `     ${m.location} Â· Saved ${date}`;
-    console.log(`  â”‚  ${line.padEnd(58)}â”‚`);
-    console.log(`  â”‚  ${sub.padEnd(58)}â”‚`);
-    if (i < saves.length - 1) console.log('  â”‚                                                            â”‚');
+    const line = `[${i + 1}]  ${m.character} · ${m.class} Lv${m.level} · ${m.time}`;
+    const sub  = `     ${m.location} · Saved ${date}`;
+    console.log(`  │  ${line.padEnd(58)}│`);
+    console.log(`  │  ${sub.padEnd(58)}│`);
+    if (i < saves.length - 1) console.log('  │                                                            │');
   });
-  console.log('  â”‚                                                            â”‚');
-  console.log('  â”‚  [0]  Back                                                 â”‚');
-  console.log('  â””────────────────────────────────────────────────────────────â”˜');
+  console.log('  │                                                            │');
+  console.log('  │  [0]  Back                                                 │');
+  console.log('  └────────────────────────────────────────────────────────────┘');
   console.log('');
 
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
@@ -1435,7 +1448,7 @@ function resetToBrandNew() {
   const saved = saveCurrentCampaign();
   if (saved) {
     console.log('');
-    console.log(`  âœ“ Current campaign saved â†’ saves/${saved}`);
+    console.log(`  ✓ Current campaign saved → saves/${saved}`);
   }
 
   // Add journal divider so entries don't blur between campaigns
@@ -1460,8 +1473,8 @@ function resetToBrandNew() {
     }
   } catch {}
 
-  console.log('  âœ“ Campaign data cleared. Starting fresh...');
-  console.log('  âœ“ Claude will guide you through character creation.');
+  console.log('  ✓ Campaign data cleared. Starting fresh...');
+  console.log('  ✓ Claude will guide you through character creation.');
   console.log('');
 }
 
@@ -1471,7 +1484,7 @@ async function main() {
 
   // Check for API key
   if (!API_KEY) {
-    console.log('  âŒ  Missing API key!');
+    console.log('  ❌  Missing API key!');
     console.log('');
     console.log(`  Create a file called  .env  in:`);
     console.log(`  ${APP_DIR}`);
@@ -1517,7 +1530,7 @@ async function main() {
           loadSave(filename);
           launchGame();
         } catch (e) {
-          console.error('  âœ— Failed to load save:', e.message);
+          console.error('  ✗ Failed to load save:', e.message);
           setTimeout(() => main(), 800);
         }
       });
@@ -1543,9 +1556,9 @@ function launchGame() {
   freeAllPorts();
 
   startServers(() => {
-    console.log('  âœ“ Campaign API   â†’ localhost:3140');
-    console.log('  âœ“ Claude DM      â†’ localhost:3141');
-    console.log('  âœ“ Dashboard      â†’ localhost:8080');
+    console.log('  ✓ Campaign API   → localhost:3140');
+    console.log('  ✓ Claude DM      → localhost:3141');
+    console.log('  ✓ Dashboard      → localhost:8080');
     console.log('');
     console.log('  Opening dashboard in browser...');
     openBrowser();
@@ -1563,7 +1576,7 @@ function launchGame() {
 function emergencySave(reason) {
   try {
     const saved = saveCurrentCampaign();
-    if (saved) console.log(`\n  âœ“ Emergency save written â†’ saves/${saved}`);
+    if (saved) console.log(`\n  ✓ Emergency save written → saves/${saved}`);
   } catch {}
 }
 
@@ -1579,13 +1592,13 @@ process.on('SIGINT', () => {
 process.on('SIGTERM', () => { emergencySave('SIGTERM'); process.exit(0); });
 
 process.on('uncaughtException', (err) => {
-  console.error('\n  âœ— Uncaught exception:', err.message);
+  console.error('\n  ✗ Uncaught exception:', err.message);
   emergencySave('uncaughtException');
   process.exit(1);
 });
 
 process.on('unhandledRejection', (reason) => {
-  console.error('\n  âœ— Unhandled rejection:', reason);
+  console.error('\n  ✗ Unhandled rejection:', reason);
   // Don't exit — may be recoverable
 });
 
@@ -1599,7 +1612,7 @@ function pruneHistoryOnDisk() {
     if (h.messages.length > MAX_HISTORY_MESSAGES_ON_DISK) {
       h.messages = h.messages.slice(-MAX_HISTORY_MESSAGES_ON_DISK);
       saveHistory(h);
-      console.log(`  âœ“ History pruned to last ${MAX_HISTORY_MESSAGES_ON_DISK} messages`);
+      console.log(`  ✓ History pruned to last ${MAX_HISTORY_MESSAGES_ON_DISK} messages`);
     }
   } catch {}
 }
