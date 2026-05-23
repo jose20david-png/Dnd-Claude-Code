@@ -215,9 +215,57 @@
     {
       "role": "assistant",
       "content": "Thorne's eyes widen at the mention of the Order of the Ancients. \"I've heard whispers of that order, but nothing good. They're said to dabble in forbidden magic, the kind that can warp the mind and soul. As for Mira, yes, she passed through here a few weeks ago. She was asking about the same ruins you're interested in. She had an eye symbol on her robe, just like you described.\"\n\nHe leans back, crossing his arms. \"She was trouble, that one. Stirred up the villagers with her questions, then left just as suddenly. We haven't seen her since.\"\n\nHe looks at you, concern in his eyes. \"Are you sure you want to go looking for these ruins, Kel? If Mira's involved, it can't be safe.\""
+    },
+    {
+      "role": "user",
+      "content": "Well, I think Mira was just misunderstood perhaps. She's a colleague from wizard's school. We've been sent on the same task. But yes, I take it she is intense and relentless with her questioning. If she was here few days ago, it only means I'm way behind. I should leave for the ruins as fast as possible, can you tell me exactly where are they and how do they look? (Remember that the Dm should have a ull tone brief: literary prose, gritty consequences, tabletop energy, and dark mystery baked in from the first word. difference most in descriptions and NPC interactions. and give every character their own voice. I will always roleplay for Kel, you roleplay for everybody else)"
+    },
+    {
+      "role": "assistant",
+      "content": "Thorne's expression softens at your defense of Mira, but his eyes remain wary. \"I see,\" he says slowly. \"Well, if she's a colleague of yours, I hope you have better luck with those ruins than she did.\" He leans forward, lowering his voice. \"As for the ruins, they're not far from here, maybe a day's walk east. You'll know you're close when you see the trees start to thin out and the ground gets rocky. The ruins themselves are overgrown, covered in ivy and moss. There's a tower that still stands, tall and proud, but the rest is mostly crumbling walls and broken statues.\"\n\nHe pauses, then adds, \"Be careful, Kel. Those ruins are old, older than any of us. Older than this village, even. There's no telling what kind of danger might be lurking in there.\""
+    },
+    {
+      "role": "user",
+      "content": "Wait, what do you mean \"better luck than she did\". Did Mira never come back?"
+    },
+    {
+      "role": "assistant",
+      "content": "Thorne's expression turns grave. \"Mira left here in a hurry, saying she'd found something important at the ruins. She was pale, shaken. She said she'd be back, but... we haven't seen her since. That was a week ago.\" He looks at you, concern in his eyes. \"Be careful, Kel. Those ruins might be more dangerous than they seem.\""
+    },
+    {
+      "role": "user",
+      "content": "hm, she might still be at the ruins, trapped or maybe worse. I should make way inmediately."
+    },
+    {
+      "role": "assistant",
+      "content": "As you finish your meal, Thorne watches you with a mix of concern and respect. \"You're determined, I'll give you that,\" he says gruffly. \"But be careful, Kel. Those ruins... they're not right. The villagers say they're haunted.\"\n\nHe leans in closer, lowering his voice. \"I've heard strange noises coming from there at night. Like... whispers. And there are things moving in the woods around them, things that shouldn't be there.\"\n\nHe looks at you, his eyes serious. \"Are you sure you want to go alone, Kel? I could come with you, if you want. I've got my axe, and I know these woods better than most.\"\n\nWhat would you like to do?\n\n1. Accept Thorne's offer to accompany you.\n2. Decline Thorne's offer and set out alone.\n3. Ask Thorne if he knows of any other villagers who might want to join you.\n4. Something else (please specify)."
+    },
+    {
+      "role": "user",
+      "content": "Sure, you can come with."
+    },
+    {
+      "role": "assistant",
+      "content": "Thorne nods gruffly, \"Good. I've got my axe, and I know these woods better than most. We should get going, though. The day's wasting, and those ruins won't find themselves.\"\n\nHe stands up, grabbing his worn leather cloak from the back of his chair. \"Let's go, Kel. We've got a long walk ahead of us.\""
+    },
+    {
+      "role": "user",
+      "content": "Lets go then"
+    },
+    {
+      "role": "assistant",
+      "content": "As you and Thorne set out from the 'Laughing Lizard', the other patrons watch you go with a mix of curiosity and concern. The village is quiet, the villagers going about their daily chores with a sense of unease hanging heavy in the air. You can't shake the feeling that something is off, that the village is holding its breath, waiting for something to happen.\n\nThe forest surrounding the village is dense, the trees tall and ancient, their branches intertwining overhead to form a canopy that blocks out most of the sunlight. The air is cool and damp, the scent of earth and decay strong. As you and Thorne walk, the sound of your footsteps is swallowed up by the soft moss underfoot.\n\nAfter a while, Thorne breaks the silence. \"You know, I've been thinking,\" he says gruffly. \"Those ruins... they're not right. The villagers say they're haunted, and I believe them. We should be careful, Kel. We don't want to end up like Mira.\"\n\nWhat would you like to do?\n\n1. Ask Thorne what he knows about Mira's disappearance.\n2. Press Thorne for more information about the ruins.\n3. Continue walking in silence, keeping your senses on high alert.\n4. Something else (please specify)."
+    },
+    {
+      "role": "user",
+      "content": "What else do people say about this ruins?"
+    },
+    {
+      "role": "assistant",
+      "content": "As you and Thorne walk deeper into the forest, the trees growing denser around you, Thorne breaks the silence again. \"You know, there are rumors about those ruins,\" he says gruffly. \"The villagers say they're haunted, that strange things happen there at night. Whispers in the dark, they say. And there are creatures, things that shouldn't be there.\"\n\nHe looks at you, his eyes serious. \"Are you sure you want to go there, Kel? We could turn back, find another way to help Mira. There's no shame in that.\"\n\nWhat would you like to do?\n\n1. Press on towards the ruins.\n2. Ask Thorne if he knows of any other villagers who have been to the ruins and returned.\n3. Suggest turning back, as Thorne suggested.\n4. Something else (please specify)."
     }
   ],
   "created_at": "2026-05-23T22:04:30.255Z",
-  "token_count": 4717,
+  "token_count": 5940,
   "model": "open-mistral-nemo"
 }
