@@ -4144,14 +4144,50 @@ async function sendClaudePrompt() {
 }
 
 async function clearClaudeHistory() {
-  if (!confirm('Clear chat history?')) return;
+  if (!confirm('Summarize and clear chat history?\n\nThe DM will generate a summary of what happened before clearing so the story context is preserved.')) return;
+
+  // Show summarizing state in chat area
+  const histEl = document.getElementById('claude-history');
+  const spinner = document.createElement('div');
+  spinner.id = 'clear-spinner';
+  spinner.style.cssText = 'padding:20px;text-align:center;color:#d4af37;font-style:italic;font-size:13px;';
+  spinner.textContent = '⏳ Summarizing session before clearing…';
+  histEl.appendChild(spinner);
+
+  const statusEl = document.getElementById('dm-status');
+  const prevStatus = statusEl ? statusEl.innerHTML : '';
+  if (statusEl) statusEl.innerHTML = '<span style="color:#f59e0b">● saving…</span>';
+
   try {
-    await fetch('http://localhost:3141/api/chat/clear');
+    const res = await fetch('http://localhost:3141/api/chat/summarize-and-clear', { method: 'POST' });
+    const data = await res.json();
+
+    claudeMessages = [];
+    document.getElementById('claude-tokens').textContent = '0';
+
+    if (data.summary) {
+      // Show the summary briefly before clearing the view
+      claudeMessages.push({
+        role: 'assistant',
+        content: `📜 **Session summary saved to story notes** — the DM will remember this:\n\n${data.summary}`
+      });
+    }
+
+    renderClaudeHistory();
+    if (statusEl) statusEl.innerHTML = prevStatus;
+  } catch (err) {
+    console.error('Clear error:', err);
+    // Fallback: plain clear if server call fails
+    try {
+      await fetch('http://localhost:3141/api/chat/clear');
+    } catch {}
     claudeMessages = [];
     document.getElementById('claude-tokens').textContent = '0';
     renderClaudeHistory();
-  } catch (err) {
-    console.error('Clear error:', err);
+    if (statusEl) statusEl.innerHTML = prevStatus;
+  } finally {
+    const sp = document.getElementById('clear-spinner');
+    if (sp) sp.remove();
   }
 }
 

@@ -82,3 +82,16 @@ After the tense exchange in the Bent Quill's back room, Kel is escorted by Marta
 *The Brass Serpent Tavern - Dockside, Neverwinter*
 
 In the hidden chamber beneath Marta's shop, Kel delved into Aldous's journal with unyielding focus. He absorbed the scholar's meticulous observations, theories, and suspicions, piecing together the puzzle of the ancient tower, the mysterious fabrials, and the Circle's sinister machinations. The hours slipped away unnoticed as Kel's mind worked, connecting threads and drawing conclusions. By the time his body demanded rest, he had made significant progress, his understanding of the situation deepening. However, the middle section of the journal, with its dense web of connections and implications, proved too much for even Kel's formidable intellect to untangle in a single sitting. He marked his place and sought the refuge of sleep, his dreams haunted by whispers of ancient power and the shadow of the Circle's relentless pursuit.
+
+
+════════════════════════════════════════════════════════════
+  END OF CAMPAIGN — 2026-05-23
+════════════════════════════════════════════════════════════
+
+
+---
+
+## Day 1 — Morning | 2026-05-23
+*A small village nestled in the heart of a vast forest*
+
+Kel Stormblessed, the young elf wizard, entered the 'Laughing Lizard' inn, seeking warmth, food, and perhaps some information about the ancient Netherese ruins. The innkeeper, Old Man Grimsley, greeted him gruffly, and Kel considered his options for the morning.

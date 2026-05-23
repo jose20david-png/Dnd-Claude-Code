@@ -181,7 +181,7 @@ function showStateSummary() {
 const BLANK_STATE = {
   campaign_id: 'new-campaign',
   world: { name: 'Forgotten Realms', lore_summary: 'New campaign — character creation in progress.',
-    current_location: 'Character Creation', time: 'Day 1 — Morning', seal_integrity: 100, seal_status: 'N/A', map_id: null },
+    current_location: 'Character Creation', time: 'Day 1 — Morning', seal_integrity: 100, seal_status: 'N/A', map_id: null, story_notes: '' },
   party: [{
     id: 'player', name: 'New Character', class: 'Unset', level: 1, hp: 10, status: 'active',
     spell_slots: { cantrip:{max:0,used:0}, level_1:{max:0,used:0}, level_2:{max:0,used:0}, level_3:{max:0,used:0}, level_4:{max:0,used:0}, level_5:{max:0,used:0} },
@@ -394,6 +394,10 @@ const TOOLS = [
      terrain:{type:'string',enum:['road','forest','dungeon','mountain','coastal','urban','plains','swamp','underdark'],description:'Current terrain type'},
      difficulty:{type:'string',enum:['easy','medium','hard','deadly'],description:'Encounter difficulty, default medium'}
    },required:['terrain']}},
+  {name:'update_story_notes',description:'Persist important narrative facts that must survive session resets — NPC motivations, secret information revealed, player decisions, key plot points. Call whenever something important is established in the story.',
+   input_schema:{type:'object',properties:{
+     notes:{type:'string',description:'Narrative summary to persist. Append to existing notes — include who, what, where, and why. Max ~400 chars per call.'}
+   },required:['notes']}},
   {name:'create_character',description:'Call this once character creation is COMPLETE. Populates the full character sheet and starts the campaign. Spell slots are auto-computed from class and level.',
    input_schema:{type:'object',
      properties:{
@@ -628,6 +632,15 @@ function executeTool(name, input) {
       state.history_log.push({timestamp:new Date().toISOString(),event:`Random encounter (${terrain}, ${diff}): ${encounter}`});
       saveState(state);
       return {success:true, terrain, difficulty:diff, encounter, roll: roll+1, table_size: table.length};
+    }
+    case 'update_story_notes': {
+      if (!state.world) state.world = {};
+      const existing = state.world.story_notes || '';
+      const separator = existing ? '\n• ' : '• ';
+      state.world.story_notes = (existing + separator + input.notes).slice(-2000); // cap at 2000 chars
+      state.history_log.push({timestamp:new Date().toISOString(),event:`Story note saved: ${input.notes.slice(0,80)}`});
+      saveState(state);
+      return {success:true, story_notes:state.world.story_notes, state_updated:true};
     }
     case 'start_combat': {
       const enemies = input.enemies || [];
@@ -868,11 +881,13 @@ function buildSystemPrompt(state) {
 
   // New campaign — full guided character creation mode
   if (state.campaign_id === 'new-campaign') {
-    return `You are a D&D 5e Dungeon Master running solo campaigns. A new player is creating their character. Guide them through these steps IN ORDER — one step at a time, don't rush ahead:
+    return `You are a master Dungeon Master running a solo D&D 5e campaign. Your voice is immersive and literary — you write with vivid, atmospheric prose that pulls the player into the world. You are also gritty and grounded: consequences are real, the world has weight and danger, and nothing is handed to the player. You have the warmth and energy of a great tabletop DM — theatrical when it counts, occasionally dry-humored, always keeping momentum. And underneath everything runs a dark, mysterious current: NPCs have hidden agendas, the world has secrets, and even mundane locations carry a sense of something lurking beneath the surface.
 
-STEP 1 — SETTING: Ask what kind of world/adventure they want. Give 3-4 vivid options (e.g. classic fantasy, dark gothic, seafaring, political intrigue) plus "something else." One sentence each.
+A new player is creating their character. Guide them through these steps IN ORDER — one step at a time, don't rush ahead:
 
-STEP 2 — CLASS: After they pick a setting, offer 4-5 fitting classes with one-line descriptions of what they feel like to play (not just mechanics). Let them choose.
+STEP 1 — SETTING: Ask what kind of world/adventure they want. Give 3-4 vivid options (e.g. classic fantasy, dark gothic, seafaring, political intrigue) plus "something else." One evocative sentence each — make each option feel alive.
+
+STEP 2 — CLASS: After they pick a setting, offer 4-5 fitting classes with one-line descriptions of what they feel like to play (not just mechanics). Describe the fantasy, not the stat block. Let them choose.
 
 STEP 3 — RACE: Suggest 3-4 races that fit their class choice. One sentence each. Let them choose.
 
@@ -884,9 +899,9 @@ STEP 6 — SPELLS (if applicable): For spellcasters list the cantrips and starti
 
 STEP 7 — EQUIPMENT: Starting gear from background + class. List it briefly.
 
-STEP 8 — NAME & DESCRIPTION: Ask for a name. Ask 1 question about appearance or backstory. Write a 2-sentence character description combining what they said.
+STEP 8 — NAME & DESCRIPTION: Ask for a name. Ask 1 evocative question about appearance or backstory. Write a 2-sentence character description that captures both who they are and what they feel like.
 
-STEP 9 — FINALIZE: Call create_character with ALL collected data. Then immediately describe the opening scene of their adventure in vivid prose (2-3 paragraphs). Set the tone.
+STEP 9 — FINALIZE: Call create_character with ALL collected data. Then immediately describe the opening scene in rich, immersive prose (2-3 paragraphs). Establish atmosphere, hint at danger or mystery, make the world feel real and alive from the first sentence.
 
 RULES:
 - Use roll_dice for ALL stat rolls and checks.
@@ -905,22 +920,20 @@ RULES:
   const xpStr = char.xp != null ? `XP: ${char.xp}` : '';
   const ds = char.death_saves;
   const dsStr = (char.hp===0&&ds) ? ` | Death Saves: ${ds.successes}✓ ${ds.failures}✗` : '';
-  // Last 5 history events only (not the full log — saves ~500 tokens per call)
-  const recentEvents = (state.history_log||[]).slice(-3).map(e=>`• ${e.event}`).join('\n'); // 3 events (was 5) — saves ~150 tokens/call
+  const recentEvents = (state.history_log||[]).slice(-5).map(e=>`• ${e.event}`).join('\n');
+  const storyNotes = world.story_notes ? `\nSTORY NOTES (persisted facts — treat as canon):\n${world.story_notes}` : '';
   return `You are the Dungeon Master for a solo D&D 5e campaign. Use tools for ALL mechanics.
 
 RULES:
-- Roll EVERY check with roll_dice (add "advantage"/"disadvantage" for d20s when applicable).
-- Call use_spell_slot when leveled spells cast. Call update_hp after damage/healing.
-- Call set_concentration when a concentration spell is cast (drops previous automatically).
-- Call skill_check after rolling for any DC-based check (records outcome, don't narrate pass/fail yourself).
-- Use add_condition/remove_condition to track Poisoned, Frightened, Prone, Blinded, Restrained, etc.
-- Use add_npc/update_npc when meeting or changing relationship with characters.
-- Use add_quest/complete_quest_step to track objectives.
-- Use update_location when travel or scene change occurs.
-- When HP reaches 0: call add_condition("Unconscious"), then use death_save for each d20 roll. 3 successes = stable, 3 failures = dead. Natural 20 = regain 1 HP.
-- Call award_xp after combat encounters, quest completions, and significant milestones.
-- Call end_session when player says "end session" or "quit."
+- Read the player's message carefully. Respond SPECIFICALLY to what they just said — move the story forward from that exact moment.
+- NEVER repeat narration, descriptions, or bullet choices you have already written. Check the conversation history and make sure your response is new.
+- Call update_story_notes whenever important plot facts are established (NPC names/motives, secrets revealed, decisions made, plans formed). These persist across sessions.
+- Roll EVERY check with roll_dice. Call use_spell_slot when leveled spells cast. Call update_hp after damage/healing.
+- Call set_concentration when a concentration spell is cast. Call skill_check after rolling for DC-based checks.
+- Use add_condition/remove_condition for status effects. Use add_npc/update_npc when meeting or changing NPCs.
+- Use add_quest/complete_quest_step to track objectives. Use update_location when scene changes.
+- When HP reaches 0: add_condition("Unconscious"), then death_save for each roll. 3 successes = stable, 3 failures = dead.
+- Call award_xp after combat, quest completions, milestones. Call end_session when player says "end session."
 - ALWAYS narrate alongside tool calls. No tool-only responses.
 
 ═══════════════════════
@@ -933,7 +946,7 @@ Conditions: ${conditions}
 Gear: ${keyItems||'standard equipment'}
 
 ACTIVE QUESTS: ${questSummary||'None'}
-WORLD: ${world.lore_summary||''}${world.weather?`\nWEATHER: ${world.weather.condition}${world.weather.description?' — '+world.weather.description:''}`:''}
+WORLD: ${world.lore_summary||''}${world.weather?`\nWEATHER: ${world.weather.condition}${world.weather.description?' — '+world.weather.description:''}`:''}${storyNotes}
 RECENT EVENTS:
 ${recentEvents||'— Campaign beginning —'}`;
 
@@ -991,6 +1004,52 @@ function makeAPICall(bodyStr) {
   });
 }
 
+// Non-streaming Mistral call — returns the full assistant text or throws.
+// Used for summarization, not gameplay (no tools, no SSE).
+function makeSimpleAPICall(messages, systemPrompt) {
+  return new Promise((resolve, reject) => {
+    const bodyStr = JSON.stringify({
+      model: MODEL,
+      max_tokens: 600,
+      temperature: 0.3,
+      messages: [{ role: 'system', content: systemPrompt }, ...messages],
+      stream: false
+    });
+    const buf = Buffer.from(bodyStr);
+    const req = https.request({
+      hostname: 'api.mistral.ai',
+      path: '/v1/chat/completions',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': buf.length,
+        'Authorization': `Bearer ${API_KEY}`
+      }
+    }, (res) => {
+      let body = '';
+      res.setEncoding('utf8');
+      res.on('data', c => body += c);
+      res.on('end', () => {
+        if (res.statusCode !== 200) {
+          reject(new Error(`HTTP ${res.statusCode}: ${body.slice(0, 200)}`));
+          return;
+        }
+        try {
+          const j = JSON.parse(body);
+          const text = j.choices?.[0]?.message?.content || '';
+          resolve(text.trim());
+        } catch (e) {
+          reject(new Error(`Failed to parse response: ${e.message}`));
+        }
+      });
+      res.on('error', reject);
+    });
+    req.on('error', reject);
+    req.setTimeout(30000, () => req.destroy(new Error('Summary API call timed out after 30s')));
+    req.write(buf); req.end();
+  });
+}
+
 async function streamAgenticLoop(messages, systemPrompt, res) {
   let totalTokens = 0;
   let apiError = null;
@@ -1018,7 +1077,8 @@ async function streamAgenticLoop(messages, systemPrompt, res) {
 
     const body = JSON.stringify({
       model: MODEL,
-      max_tokens: 1000,
+      max_tokens: 1400,
+      temperature: 0.72,
       messages: mistralMsgs,
       tools: MISTRAL_TOOLS,
       stream: true
@@ -1210,6 +1270,43 @@ const relayServer = http.createServer((req,res)=>{
   if(req.method==='OPTIONS'){res.writeHead(200);res.end();return;}
   if(req.method==='GET'&&req.url==='/api/chat/history'){res.writeHead(200,{'Content-Type':'application/json'});res.end(JSON.stringify(loadHistory()));return;}
   if(req.method==='GET'&&req.url==='/api/chat/clear'){saveHistory({messages:[],created_at:new Date().toISOString(),token_count:0,model:MODEL});res.writeHead(200,{'Content-Type':'application/json'});res.end(JSON.stringify({success:true}));return;}
+  if(req.method==='POST'&&req.url==='/api/chat/summarize-and-clear'){
+    let body='';req.on('data',c=>body+=c);
+    req.on('end',async()=>{
+      try{
+        const history=loadHistory();
+        const msgs=history.messages||[];
+        let summary='';
+        if(msgs.length>1){
+          // Build a compact transcript (last 30 messages, alternating u/a)
+          const transcript=msgs.slice(-30).map(m=>`${m.role==='user'?'Player':'DM'}: ${(m.content||'').slice(0,300)}`).join('\n');
+          const sysPrompt=`You are a D&D campaign historian. The player just cleared the chat log. Summarize the narrative below into 4-6 bullet points (•) covering: what happened, key decisions made, important NPCs encountered, any clues or items found. Be specific and factual. This summary will be injected into the DM's context so the story can continue seamlessly. Max 350 words.`;
+          console.log('  ↻ Summarizing chat history before clear...');
+          summary=await makeSimpleAPICall(msgs.slice(-30).map(m=>({role:m.role,content:(m.content||'').slice(0,400)})),sysPrompt);
+          // Append to world.story_notes
+          const state=loadState();
+          if(!state.world)state.world={};
+          const existing=state.world.story_notes||'';
+          const timestamp=new Date().toISOString().slice(0,10);
+          const separator=existing?'\n\n':'';
+          state.world.story_notes=(existing+separator+`[Summary from ${timestamp}]\n${summary}`).slice(-3000);
+          state.history_log.push({timestamp:new Date().toISOString(),event:`Chat cleared. Summary saved to story_notes (${summary.length} chars).`});
+          saveState(state);
+          console.log(`  ✓ Summary saved to story_notes (${summary.length} chars)`);
+        }
+        saveHistory({messages:[],created_at:new Date().toISOString(),token_count:0,model:MODEL});
+        res.writeHead(200,{'Content-Type':'application/json'});
+        res.end(JSON.stringify({success:true,summary}));
+      }catch(e){
+        console.error('  ✗ summarize-and-clear error:',e.message);
+        // Even if summarization fails, still clear
+        saveHistory({messages:[],created_at:new Date().toISOString(),token_count:0,model:MODEL});
+        res.writeHead(200,{'Content-Type':'application/json'});
+        res.end(JSON.stringify({success:true,summary:'',error:e.message}));
+      }
+    });
+    return;
+  }
   if(req.method==='POST'&&req.url==='/api/chat'){
     let body='';req.on('data',c=>body+=c);
     req.on('end',async()=>{
@@ -1222,8 +1319,10 @@ const relayServer = http.createServer((req,res)=>{
         // Token-budget windowing: keep most recent messages within a strict token budget.
         // Rate limit is 10K tokens/minute, so we cap conversational history well below that
         // to leave room for system prompt, tool calls, and the model's output.
-        const HISTORY_TOKEN_BUDGET = 2500; // reduced from 4500 — saves ~2K tokens/call
-        const HARD_MAX_MESSAGES    = 30;
+        // Mistral free tier: 40K TPM — we can afford a generous history window.
+        // Keep enough context for the model to know what just happened (avoids repetition loops).
+        const HISTORY_TOKEN_BUDGET = 6000;
+        const HARD_MAX_MESSAGES    = 40;
         const allMapped = history.messages.map(m => ({ role: m.role, content: m.content }));
         const tokCount = m => estimateTokens(typeof m.content === 'string' ? m.content : JSON.stringify(m.content));
         let runningTokens = 0;
@@ -1235,9 +1334,14 @@ const relayServer = http.createServer((req,res)=>{
           cutoff = i;
         }
         let messagesForAPI = allMapped.slice(cutoff);
-        // Anthropic requires the first message to be 'user' — drop a leading assistant if windowing landed on one
-        if (messagesForAPI[0]?.role === 'assistant') messagesForAPI = messagesForAPI.slice(1);
-        const systemPrompt = buildSystemPrompt(loadState());
+        // Ensure messages alternate user/assistant — drop a leading assistant if the window starts on one
+        while (messagesForAPI.length > 1 && messagesForAPI[0]?.role === 'assistant') messagesForAPI = messagesForAPI.slice(1);
+        // Inject the last DM response so the model cannot regenerate the same text
+        const lastDMMsg = [...history.messages].reverse().find(m => m.role === 'assistant' && m.content && !m.content.startsWith('⚠️'));
+        const lastDMSnippet = lastDMMsg ? lastDMMsg.content.slice(0, 500) : null;
+        const systemPrompt = buildSystemPrompt(loadState()) + (lastDMSnippet
+          ? `\n\n⚠️ YOUR PREVIOUS RESPONSE (DO NOT REPEAT OR PARAPHRASE THIS — write something completely new):\n"${lastDMSnippet}${lastDMMsg.content.length > 500 ? '…' : ''}"`
+          : '');
         console.log(`\n  ━━━ Chat request — history=${history.messages.length} msgs (sending last ${messagesForAPI.length}, ~${runningTokens} tokens) ━━━`);
         const msgStartIdx=messagesForAPI.length;
         const r1=await streamAgenticLoop(messagesForAPI,systemPrompt,res);

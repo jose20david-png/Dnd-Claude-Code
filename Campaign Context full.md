@@ -12,12 +12,12 @@
 
 ---
 
-## SESSION STATE — Day 1 — Dusk
+## SESSION STATE — Day 1 — Morning
 
 | Field | Value |
 |---|---|
-| Character | Kel Stormblessed · Wizard (Conjuration) · Level 1 |
-| Location | The Brass Serpent Tavern - Dockside, Neverwinter |
+| Character | Elf Wizard · Wizard (Conjuration) · Level 1 |
+| Location | A small village nestled in the heart of a vast forest |
 | HP | 7 / 7 (full) |
 | Spell Slots | 2× 1 (full) |
 
@@ -105,8 +105,8 @@ python "C:\Users\jose2\Desktop\roll-dice-skill\scripts\roll.py" <sides> [mode] [
 Opens a browser animation, closes after 5 seconds. Results also printed to terminal.
 
 
+
+
 ## SESSION NOTES (auto-generated)
 
-- Kel Stormblessed created. Wizard (Conjuration) Level 1. Adventure begins.
-- Moved to The Brass Serpent Tavern - Dockside, Neverwinter — Day 1 — Dusk.
-- Kel enters deep study of Aldous's journal in Marta's hidden chamber. Achieves flow state, absorbing critical information about the tower, fabrials, and the Circle's movements. Makes substantial progress before exhaustion forces rest.
+- Elf Wizard created. Wizard (Conjuration) Level 1. Adventure begins.

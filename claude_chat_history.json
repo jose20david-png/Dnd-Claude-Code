@@ -151,9 +151,25 @@
     {
       "role": "assistant",
       "content": "The elderly woman nods sympathetically. \"I understand, dear. You seem like a capable young elf, and I wish you the best of luck in your search. As for an inn, yes, there's the 'Laughing Lizard' just down the road. It's not much, but it's the best we have here. The innkeeper, Old Man Grimsley, is a bit gruff, but he means well. You'll find a warm meal and a place to rest there.\"\n\nShe points you in the direction of the inn. \"Now, if you'll excuse me, I should get back to my chores. Good luck, Kel Stormblessed.\""
+    },
+    {
+      "role": "user",
+      "content": "thanks kind woman, I didn't get your name."
+    },
+    {
+      "role": "assistant",
+      "content": "The elderly woman smiles warmly. \"I'm Elowen, dear. Welcome to our little village. Now, go on, the 'Laughing Lizard' is just down the road to your left. Tell Old Man Grimsley I said hello.\""
+    },
+    {
+      "role": "user",
+      "content": "Alright, I go to the inn"
+    },
+    {
+      "role": "assistant",
+      "content": "As you push open the heavy wooden door, the warm, inviting scent of roasting meat and fresh bread greets you. The 'Laughing Lizard' is a cozy inn, with a large fireplace at the center, around which several patrons sit, nursing their drinks and chatting in low voices. Behind the bar, an older man with a thick beard and a gruff expression is polishing a tankard. He looks up as you enter, his eyes meeting yours.\n\n\"Morning,\" he grunts. \"What can I get for ya?\"\n\nWhat would you like to do?\n\n1. Ask him about the specials.\n2. Order a meal and some wine.\n3. Inquire about a room to rest.\n4. Something else (please specify)."
     }
   ],
   "created_at": "2026-05-23T22:04:30.255Z",
-  "token_count": 3522,
+  "token_count": 3748,
   "model": "open-mistral-nemo"
 }

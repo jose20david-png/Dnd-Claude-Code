@@ -2,7 +2,22 @@
 
 ---
 
-## [2026-05-23] — Build 16 (current)
+## [2026-05-23] — Build 17 (current)
+
+### Summarize-and-Clear — Session Context Persistence
+- **New feature:** Clicking "Clear" now summarizes the chat before wiping it.
+  - Dashboard sends `POST /api/chat/summarize-and-clear` instead of the old GET clear.
+  - Relay server calls Mistral (non-streaming) to generate a 4-6 bullet narrative summary of the last 30 messages.
+  - Summary is appended to `world.story_notes` in `campaign_state.json` (survives session resets).
+  - Logged to `history_log` with character count.
+  - Dashboard shows "⏳ Summarizing session…" spinner during the call, then displays the summary as the first message in the fresh chat.
+- **New function `makeSimpleAPICall()`** — non-streaming Mistral call for summarization. 30s timeout, temperature 0.3, max 600 tokens.
+- **Fallback safety:** If summarization fails (API error, timeout), the chat still clears and the error is logged. Never blocks the user.
+- **Story notes now survive chat clears** — the DM will always have campaign context even after the conversation is reset.
+
+---
+
+## [2026-05-23] — Build 16
 
 ### API Migration — Anthropic → Mistral AI
 - **Model changed** to `open-mistral-nemo` (Mistral free tier, 12B, function-calling capable).
