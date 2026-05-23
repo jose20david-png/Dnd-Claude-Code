@@ -3,7 +3,7 @@
   "world": {
     "name": "Faerûn (Forgotten Realms)",
     "lore_summary": "A weathered tavern near the docks where sailors, merchants, and those seeking anonymity gather. Dim lighting, thick ale, and few questions asked. Corvus has chosen this place deliberately—public enough to be safe, anonymous enough to hide secrets.\"",
-    "current_location": "Marta's safe house - Southern Neverwinter",
+    "current_location": "Marta's shop",
     "time": "Day 1 — Evening",
     "seal_integrity": 100,
     "seal_status": "N/A",
@@ -155,6 +155,14 @@
     {
       "timestamp": "2026-05-23T21:15:46.894Z",
       "event": "Moved to Marta's safe house - Southern Neverwinter — Day 1 — Evening."
+    },
+    {
+      "timestamp": "2026-05-23T21:26:42.361Z",
+      "event": "Kel studies Aldous's journal at Marta's safe house, learning about fabrials and the Circle's pursuit."
+    },
+    {
+      "timestamp": "2026-05-23T21:38:43.931Z",
+      "event": "Moved to Marta's shop — Day 1 — Evening."
     }
   ]
 }
