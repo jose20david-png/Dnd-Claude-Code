@@ -2,22 +2,8 @@
   "campaign_id": "new-campaign",
   "creation_step": 1,
   "creation_data": {},
-  "world": {
-    "name": "Forgotten Realms",
-    "lore_summary": "New campaign — character creation in progress.",
-    "current_location": "Character Creation",
-    "time": "Day 1 — Morning",
-    "seal_integrity": 100,
-    "seal_status": "N/A",
-    "map_id": null,
-    "story_notes": ""
-  },
-  "party": [{
-    "id": "player", "name": "New Character", "class": "Unset",
-    "level": 1, "hp": 10, "hp_max": 10, "status": "active",
-    "spell_slots": { "cantrip":{"max":0,"used":0}, "level_1":{"max":0,"used":0}, "level_2":{"max":0,"used":0}, "level_3":{"max":0,"used":0}, "level_4":{"max":0,"used":0}, "level_5":{"max":0,"used":0} },
-    "channel_divinity": {"max":0,"used":0}, "inventory": []
-  }],
+  "world": { "name": "Forgotten Realms", "lore_summary": "New campaign — character creation in progress.", "current_location": "Character Creation", "time": "Day 1 — Morning", "seal_integrity": 100, "seal_status": "N/A", "map_id": null, "story_notes": "" },
+  "party": [{ "id": "player", "name": "New Character", "class": "Unset", "level": 1, "hp": 10, "hp_max": 10, "status": "active", "spell_slots": { "cantrip":{"max":0,"used":0}, "level_1":{"max":0,"used":0}, "level_2":{"max":0,"used":0}, "level_3":{"max":0,"used":0}, "level_4":{"max":0,"used":0}, "level_5":{"max":0,"used":0} }, "channel_divinity": {"max":0,"used":0}, "inventory": [] }],
   "npcs": [], "quests": [], "encounters": [],
   "history_log": [{"timestamp": "2026-05-28T00:00:00.000Z", "event": "New campaign started. Begin character creation."}]
 }
