@@ -83,9 +83,25 @@
     {
       "role": "assistant",
       "content": "Almost done — let's bring your character to life.\n\n**1. What is your character's name?**\n\n**2. What does your Tiefling Sorcerer look like?** A scar, a striking feature, something that sets you apart.\n\n**3. (Optional but encouraged)** Who are they? Where do they come from? What drives them — a loss, a debt, a promise?\n\n*Share whatever feels right. This becomes the DM's bible for your character.*"
+    },
+    {
+      "role": "user",
+      "content": "1. Kel \n2. Average looking tifling, Average Height, dark brown hair, no protruding horns (this is weird). Dark blue eyes.\n3 Kel is a member of a long line of draconic sorcerer tieflings. He was sent to look for an artifact named the \"Mightstone\" which is supposed to contain the soul of an ancient powerful dragon. This is part of his quest to fulfill his sorcerer ceremony. It is said to be somewhere in the ancient netheril desert, but no one knows for sure. Hes interested in women, no previous romantic partners. Family is ok, but hes always been more of a loner. Has a nice way with people, he gets his way out of most situations where he can speak."
+    },
+    {
+      "role": "assistant",
+      "content": "✅ **Character sheet complete!**\n\n**Kel** — Sorcerer, Level 1 Tiefling\n**HP:** 9 | **AC:** 12 (with Mage Armor)\n**Skills:** Persuasion, Intimidation, Deception, Sleight of Hand\n**Background:** Charlatan\n\n*Your adventure begins...*"
+    },
+    {
+      "role": "user",
+      "content": "Roll out the events"
+    },
+    {
+      "role": "assistant",
+      "content": "⚠️ **DM connection issue**\n\n`Failed to call a function. Please adjust your prompt. See 'failed_generation' for more details.`\n\n*Your message was kept. Try sending it again — if this is a rate limit or \"overloaded\" error, wait 10–20 seconds first.*"
     }
   ],
   "created_at": "2026-05-28T23:07:21.361Z",
-  "token_count": 367,
+  "token_count": 807,
   "model": "llama-3.3-70b-versatile"
 }
