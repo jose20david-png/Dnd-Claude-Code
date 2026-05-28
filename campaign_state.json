@@ -1,10 +1,12 @@
 {
   "campaign_id": "new-campaign",
-  "creation_step": 3,
+  "creation_step": 4,
   "creation_data": {
     "setting": "Classic High Fantasy",
-    "class": "Rogue",
-    "_subclass_pending": true
+    "class": "Warlock (Great Old One)",
+    "_subclass_pending": false,
+    "subclass": "The Fiend",
+    "race": "Half-Elf"
   },
   "world": {
     "name": "Forgotten Realms",
@@ -62,20 +64,28 @@
   "encounters": [],
   "history_log": [
     {
-      "timestamp": "2026-05-28T20:15:09.984Z",
+      "timestamp": "2026-05-28T20:35:35.730Z",
       "event": "New campaign started. Begin character creation."
     },
     {
-      "timestamp": "2026-05-28T20:24:33.494Z",
+      "timestamp": "2026-05-28T20:36:07.293Z",
       "event": "Character creation step 1 complete. Moving to step 2."
     },
     {
-      "timestamp": "2026-05-28T20:24:40.659Z",
+      "timestamp": "2026-05-28T20:36:13.440Z",
       "event": "Character creation step 2 complete. Moving to step 3."
     },
     {
-      "timestamp": "2026-05-28T20:24:40.660Z",
-      "event": "Character creation step 2 complete. Showing subclass options for Rogue."
+      "timestamp": "2026-05-28T20:36:13.441Z",
+      "event": "Character creation step 2 complete. Showing subclass options for Warlock (Great Old One)."
+    },
+    {
+      "timestamp": "2026-05-28T20:36:23.983Z",
+      "event": "Character creation step 3 complete. Moving to step 4."
+    },
+    {
+      "timestamp": "2026-05-28T20:36:27.736Z",
+      "event": "Character creation step 3 complete. Moving to step 4."
     }
   ]
 }
