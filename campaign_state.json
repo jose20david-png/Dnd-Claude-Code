@@ -1,31 +1,19 @@
 {
   "campaign_id": "new-campaign",
-  "creation_step": 8,
+  "creation_step": 6,
   "creation_data": {
-    "setting": "Seafaring",
-    "class": "Sorcerer (1d6 [Charisma spellcaster]) — Magic isn't something you learned — it's in your blood. Raw, barely-controlled power inherited from something ancient.",
-    "_subclass_pending": false,
-    "subclass": "Runechild — The weave and flow of magic is mysterious and feared by many. Many study the nature of the arcane in hopes of learning to harness it, while sorcerers with this origin have been born with magic in their blood. They are the living embodiment of the magical energy that flows through the world, and their innate magic allows them to harness that power in ways that others cannot.",
+    "setting": "Classic High Fantasy",
+    "class": "Druid (1d8 [Wisdom spellcaster]) — The wild given consciousness — you speak for nature, shift into beasts, and call down storms.",
+    "_subclass_pending": true,
+    "subclass": "Circle of Ash",
     "background": "Outlander",
     "stats": {
-      "str": 6,
-      "dex": 18,
-      "con": 16,
-      "int": 14,
-      "wis": 15,
-      "cha": 15
-    },
-    "spells": {
-      "cantrips": [
-        "Firebolt",
-        "Prestigitation",
-        "Magehand",
-        "Light"
-      ],
-      "level_1": [
-        "Sleep",
-        "Thunderwave"
-      ]
+      "str": 16,
+      "dex": 17,
+      "con": 15,
+      "int": 15,
+      "wis": 18,
+      "cha": 14
     }
   },
   "world": {
@@ -84,40 +72,32 @@
   "encounters": [],
   "history_log": [
     {
-      "timestamp": "2026-05-28T19:07:29.608Z",
+      "timestamp": "2026-05-28T19:27:00.959Z",
       "event": "New campaign started. Begin character creation."
     },
     {
-      "timestamp": "2026-05-28T19:09:52.947Z",
+      "timestamp": "2026-05-28T19:27:39.471Z",
       "event": "Character creation step 1 complete. Moving to step 2."
     },
     {
-      "timestamp": "2026-05-28T19:09:58.142Z",
+      "timestamp": "2026-05-28T19:28:30.751Z",
       "event": "Character creation step 2 complete. Moving to step 3."
     },
     {
-      "timestamp": "2026-05-28T19:09:58.143Z",
-      "event": "Character creation step 2 complete. Showing subclass options for Sorcerer (1d6 [Charisma spellcaster]) — Magic isn't something you learned — it's in your blood. Raw, barely-controlled power inherited from something ancient.."
+      "timestamp": "2026-05-28T19:28:30.752Z",
+      "event": "Character creation step 2 complete. Showing subclass options for Druid (1d8 [Wisdom spellcaster]) — The wild given consciousness — you speak for nature, shift into beasts, and call down storms.."
     },
     {
-      "timestamp": "2026-05-28T19:10:33.067Z",
+      "timestamp": "2026-05-28T19:29:08.842Z",
       "event": "Character creation step 3 complete. Moving to step 4."
     },
     {
-      "timestamp": "2026-05-28T19:10:38.930Z",
+      "timestamp": "2026-05-28T19:29:20.419Z",
       "event": "Character creation step 4 complete. Moving to step 5."
     },
     {
-      "timestamp": "2026-05-28T19:10:51.843Z",
+      "timestamp": "2026-05-28T19:29:32.743Z",
       "event": "Character creation step 5 complete. Moving to step 6."
-    },
-    {
-      "timestamp": "2026-05-28T19:17:56.415Z",
-      "event": "Character creation step 6 complete. Moving to step 7."
-    },
-    {
-      "timestamp": "2026-05-28T19:18:01.705Z",
-      "event": "Character creation step 7 complete. Moving to step 8."
     }
   ]
 }
