@@ -1,9 +1,86 @@
 {
   "campaign_id": "new-campaign",
-  "creation_step": 1,
-  "creation_data": {},
-  "world": { "name": "Forgotten Realms", "lore_summary": "New campaign — character creation in progress.", "current_location": "Character Creation", "time": "Day 1 — Morning", "seal_integrity": 100, "seal_status": "N/A", "map_id": null, "story_notes": "" },
-  "party": [{ "id": "player", "name": "New Character", "class": "Unset", "level": 1, "hp": 10, "hp_max": 10, "status": "active", "spell_slots": { "cantrip":{"max":0,"used":0}, "level_1":{"max":0,"used":0}, "level_2":{"max":0,"used":0}, "level_3":{"max":0,"used":0}, "level_4":{"max":0,"used":0}, "level_5":{"max":0,"used":0} }, "channel_divinity": {"max":0,"used":0}, "inventory": [] }],
-  "npcs": [], "quests": [], "encounters": [],
-  "history_log": [{"timestamp": "2026-05-28T00:00:00.000Z", "event": "New campaign started. Begin character creation."}]
+  "creation_step": 5,
+  "creation_data": {
+    "setting": "Classic High Fantasy",
+    "class": "Wizard (Divination)",
+    "race": "Half-Elf",
+    "background": "Sage"
+  },
+  "world": {
+    "name": "Forgotten Realms",
+    "lore_summary": "New campaign — character creation in progress.",
+    "current_location": "Character Creation",
+    "time": "Day 1 — Morning",
+    "seal_integrity": 100,
+    "seal_status": "N/A",
+    "map_id": null,
+    "story_notes": ""
+  },
+  "party": [
+    {
+      "id": "player",
+      "name": "New Character",
+      "class": "Unset",
+      "level": 1,
+      "hp": 10,
+      "status": "active",
+      "spell_slots": {
+        "cantrip": {
+          "max": 0,
+          "used": 0
+        },
+        "level_1": {
+          "max": 0,
+          "used": 0
+        },
+        "level_2": {
+          "max": 0,
+          "used": 0
+        },
+        "level_3": {
+          "max": 0,
+          "used": 0
+        },
+        "level_4": {
+          "max": 0,
+          "used": 0
+        },
+        "level_5": {
+          "max": 0,
+          "used": 0
+        }
+      },
+      "channel_divinity": {
+        "max": 0,
+        "used": 0
+      },
+      "inventory": []
+    }
+  ],
+  "npcs": [],
+  "quests": [],
+  "encounters": [],
+  "history_log": [
+    {
+      "timestamp": "2026-05-28T18:37:43.945Z",
+      "event": "New campaign started. Begin character creation."
+    },
+    {
+      "timestamp": "2026-05-28T18:38:13.319Z",
+      "event": "Character creation step 1 complete. Moving to step 2."
+    },
+    {
+      "timestamp": "2026-05-28T18:38:19.022Z",
+      "event": "Character creation step 2 complete. Moving to step 3."
+    },
+    {
+      "timestamp": "2026-05-28T18:38:26.356Z",
+      "event": "Character creation step 3 complete. Moving to step 4."
+    },
+    {
+      "timestamp": "2026-05-28T18:38:37.169Z",
+      "event": "Character creation step 4 complete. Moving to step 5."
+    }
+  ]
 }
