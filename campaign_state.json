@@ -1,7 +1,11 @@
 {
   "campaign_id": "new-campaign",
-  "creation_step": 1,
-  "creation_data": {},
+  "creation_step": 3,
+  "creation_data": {
+    "setting": "Classic High Fantasy",
+    "class": "Rogue",
+    "_subclass_pending": true
+  },
   "world": {
     "name": "Forgotten Realms",
     "lore_summary": "New campaign — character creation in progress.",
@@ -60,6 +64,18 @@
     {
       "timestamp": "2026-05-28T20:15:09.984Z",
       "event": "New campaign started. Begin character creation."
+    },
+    {
+      "timestamp": "2026-05-28T20:24:33.494Z",
+      "event": "Character creation step 1 complete. Moving to step 2."
+    },
+    {
+      "timestamp": "2026-05-28T20:24:40.659Z",
+      "event": "Character creation step 2 complete. Moving to step 3."
+    },
+    {
+      "timestamp": "2026-05-28T20:24:40.660Z",
+      "event": "Character creation step 2 complete. Showing subclass options for Rogue."
     }
   ]
 }
