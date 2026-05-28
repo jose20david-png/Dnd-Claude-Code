@@ -18,10 +18,74 @@
     },
     {
       "role": "assistant",
-      "content": "Now let's choose your class. Here are all 12 options:\n\n1. **Barbarian** (1d12) — Raw fury made flesh — you hit harder than anyone and take hits that would kill lesser warriors.\n2. **Bard** (1d8 [Charisma spellcaster]) — Words, music, and magic woven together — a wandering performer who can talk their way out of anything and charm the world into cooperating.\n3. **Cleric** (1d8 [Wisdom spellcaster]) — A conduit for divine power — healer, warrior of faith, and voice of the gods. Your deity's domain shapes everything you do.\n4. **Druid** (1d8 [Wisdom spellcaster]) — The wild given consciousness — you speak for nature, shift into beasts, and call down storms.\n5. **Fighter** (1d10) — Unmatched martial discipline — the most versatile combatant alive, trained for every weapon and every battlefield.\n6. **Monk** (1d8) — A weapon without a weapon — you've turned your body into an instrument of precision and devastating speed.\n7. **Paladin** (1d10 [Charisma spellcaster]) — Holy warrior bound by a sacred oath — divine power, heavy armor, and an unshakeable moral code. The world bends or it breaks.\n8. **Ranger** (1d10 [Wisdom spellcaster]) — Hunter, tracker, survivor — deadly in the wilderness, with a bond to nature and an eye for ambush.\n9. **Rogue** (1d8) — Cunning over strength — you strike from shadow, pick every lock, know every secret, and disappear before anyone notices.\n10. **Sorcerer** (1d6 [Charisma spellcaster]) — Magic isn't something you learned — it's in your blood. Raw, barely-controlled power inherited from something ancient.\n11. **Warlock** (1d8 [Charisma spellcaster]) — You made a deal with something vast and terrible, and now you wield power that has a price. What did you give up?\n12. **Wizard** (1d6 [Intelligence spellcaster]) — The most powerful magic user alive — if you survive long enough to use it. Every spell a calculated investment, every battle a problem to be solved.\n\nWhich class calls to you?"
+      "content": "Now let's choose your class. Here are all 12 options:\n\n1. **Barbarian** (1d12) — Rage-fueled warrior. Hits the hardest, tanks the most.\n2. **Bard** (1d8 [Charisma spellcaster]) — Performer-mage. Spells, skills, and silver tongue.\n3. **Cleric** (1d8 [Wisdom spellcaster]) — Divine conduit. Healer or warrior depending on your god.\n4. **Druid** (1d8 [Wisdom spellcaster]) — Nature's voice. Shapeshifts, storms, and wild magic.\n5. **Fighter** (1d10) — Martial master. Every weapon, any battlefield.\n6. **Monk** (1d8) — Living weapon. Speed and precision, no armor needed.\n7. **Paladin** (1d10 [Charisma spellcaster]) — Sacred oath warrior. Heavy armor, divine spells, aura of protection.\n8. **Ranger** (1d10 [Wisdom spellcaster]) — Wilderness hunter. Tracking, archery, beast companion.\n9. **Rogue** (1d8) — Shadow striker. Sneak attacks, skills, and quick escapes.\n10. **Sorcerer** (1d6 [Charisma spellcaster]) — Born with magic in the blood. Raw power, limited spells.\n11. **Warlock** (1d8 [Charisma spellcaster]) — Pact-bound spellcaster. Few strong spells, recover on short rest.\n12. **Wizard** (1d6 [Intelligence spellcaster]) — Studied mage. Largest spell list, most versatile magic.\n\nWhich class calls to you?"
+    },
+    {
+      "role": "user",
+      "content": "Sorcerer"
+    },
+    {
+      "role": "assistant",
+      "content": "Sorcerer — now choose your archetype.\n*(This subclass takes effect immediately at level 1.)*\n\n• **Draconic Bloodline** — Your innate magic comes from draconic magic that was mingled with your blood or that of your ancestors.\n• **Wild Magic** — Your innate magic comes from the wild forces of chaos that underlie the order of creation.\n\nWhich path calls to you?"
+    },
+    {
+      "role": "user",
+      "content": "Draconic Bloodline"
+    },
+    {
+      "role": "assistant",
+      "content": "Now choose your race:\n\n1. **Human** — +1 all stats (or Variant: +1 two stats, bonus skill, feat).\n2. **Elf** — +2 DEX, darkvision, Fey Ancestry, Trance.\n3. **Dwarf** — +2 CON, darkvision, poison resistance, stonecunning.\n4. **Halfling** — +2 DEX, Halfling Luck (reroll nat 1s), Brave.\n5. **Half-Elf** — +2 CHA, +1 to two stats, darkvision, two free skills.\n6. **Half-Orc** — +2 STR, +1 CON, darkvision, Relentless Endurance, Savage Attacks.\n7. **Gnome** — +2 INT, darkvision, advantage on INT/WIS/CHA magic saves.\n8. **Tiefling** — +2 CHA, +1 INT, darkvision, fire resistance, innate spells.\n9. **Dragonborn** — +2 STR, +1 CHA, breath weapon, damage resistance.\n\nWhich race are you?"
+    },
+    {
+      "role": "user",
+      "content": "Tiefling"
+    },
+    {
+      "role": "assistant",
+      "content": "Choose your background:\n\n1. **Acolyte** — Temple servant. +Insight, Religion.\n2. **Charlatan** — Con artist. +Deception, Sleight of Hand.\n3. **Criminal** — Outlaw. +Deception, Stealth.\n4. **Entertainer** — Performer. +Acrobatics, Performance.\n5. **Folk Hero** — Common champion. +Animal Handling, Survival.\n6. **Hermit** — Recluse. +Medicine, Religion.\n7. **Noble** — Privileged. +History, Persuasion.\n8. **Outlander** — Wilderness wanderer. +Athletics, Survival.\n9. **Sage** — Scholar. +Arcana, History.\n10. **Sailor** — Sea veteran. +Athletics, Perception.\n11. **Soldier** — Military. +Athletics, Intimidation.\n12. **Urchin** — Street kid. +Sleight of Hand, Stealth.\n\nWhich fits your past?"
+    },
+    {
+      "role": "user",
+      "content": "Charlatan"
+    },
+    {
+      "role": "assistant",
+      "content": "Now choose your skill proficiencies.\n\nAs a **Sorcerer**, pick **2** from:\n\n• Arcana\n• ~~Deception~~ *(background)*\n• Insight\n• Intimidation\n• Persuasion\n• Religion\n\n*Your **Charlatan** background already grants: Deception, Sleight of Hand.*\n\nWhich 2 do you want?"
+    },
+    {
+      "role": "user",
+      "content": "Persuasion, intimidation"
+    },
+    {
+      "role": "assistant",
+      "content": "Rolling your stats — 4d6, drop lowest, for each ability score.\n\n**STR:** [1,4,4,5] → drop 1 = **13**\n**DEX:** [3,4,6,6] → drop 3 = **16**\n**CON:** [5,5,6,6] → drop 5 = **17**\n**INT:** [2,3,5,5] → drop 2 = **13**\n**WIS:** [1,2,5,6] → drop 1 = **13**\n**CHA:** [2,4,5,6] → drop 2 = **15**\n\n**Suggested assignment for Sorcerer:** CHA → CON → DEX → WIS → INT → STR\n\nYou have: **17, 16, 15, 13, 13, 13**. How would you like to assign these to STR / DEX / CON / INT / WIS / CHA?"
+    },
+    {
+      "role": "user",
+      "content": "CHA 17, CON 16, DEX 15, WIS 13, INT 13, STR 13"
+    },
+    {
+      "role": "assistant",
+      "content": "**Starting Spells for Sorcerer**\nSorcerers know their spells permanently. Your magic is instinctive — once you know a spell, it's yours.\n\n**Cantrips — choose 4:**\n1. Fire Bolt\n2. Chill Touch\n3. Ray of Frost\n4. Shocking Grasp\n5. Mage Hand\n6. Minor Illusion\n7. Prestidigitation\n8. True Strike\n9. Light\n10. Acid Splash\n11. Poison Spray\n12. Dancing Lights\n13. Blade Ward\n\n**Level 1 Spells — choose 2:**\n1. Burning Hands\n2. Charm Person\n3. Chromatic Orb\n4. Color Spray\n5. Detect Magic\n6. Disguise Self\n7. Expeditious Retreat\n8. False Life\n9. Feather Fall\n10. Fog Cloud\n11. Jump\n12. Mage Armor\n13. Magic Missile\n14. Ray of Sickness\n15. Shield\n16. Silent Image\n17. Sleep\n18. Thunderwave\n19. Witch Bolt\n\nTell me which you want — e.g. \"Cantrips: Vicious Mockery, Minor Illusion / Spells: Cure Wounds, Healing Word, Sleep, Faerie Fire\""
+    },
+    {
+      "role": "user",
+      "content": "Cantrips: Firebolt, Minor Ilussion\nSpells: Sleep, Thunderwave"
+    },
+    {
+      "role": "assistant",
+      "content": "Here is your starting equipment:\n\n**From your Sorcerer class:**\n- Light crossbow + 20 bolts\n- Two daggers\n- Dungeoneer's pack\n- Arcane focus (crystal)\n\n**From your Charlatan background:**\n- Fine clothes\n- Disguise kit\n- Con tools\n- Belt pouch (15 gp)\n\nReady to name your character?"
+    },
+    {
+      "role": "user",
+      "content": "Yes"
+    },
+    {
+      "role": "assistant",
+      "content": "Almost done — let's bring your character to life.\n\n**1. What is your character's name?**\n\n**2. What does your Tiefling Sorcerer look like?** A scar, a striking feature, something that sets you apart.\n\n**3. (Optional but encouraged)** Who are they? Where do they come from? What drives them — a loss, a debt, a promise?\n\n*Share whatever feels right. This becomes the DM's bible for your character.*"
     }
   ],
-  "created_at": "2026-05-28T22:51:04.776Z",
-  "token_count": 33,
+  "created_at": "2026-05-28T23:07:21.361Z",
+  "token_count": 367,
   "model": "llama-3.3-70b-versatile"
 }

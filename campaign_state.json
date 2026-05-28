@@ -1,8 +1,35 @@
 {
   "campaign_id": "new-campaign",
-  "creation_step": 2,
+  "creation_step": 10,
   "creation_data": {
-    "setting": "Classic High Fantasy"
+    "setting": "Classic High Fantasy",
+    "class": "Sorcerer",
+    "_subclass_pending": false,
+    "subclass": "Draconic Bloodline",
+    "race": "Tiefling",
+    "background": "Charlatan",
+    "skills": [
+      "Persuasion",
+      "Intimidation"
+    ],
+    "stats": {
+      "cha": 17,
+      "con": 16,
+      "dex": 15,
+      "int": 13,
+      "str": 13,
+      "wis": 13
+    },
+    "spells": {
+      "cantrips": [
+        "Firebolt",
+        "Minor Illusion"
+      ],
+      "level_1": [
+        "Sleep",
+        "Thunderwave"
+      ]
+    }
   },
   "world": {
     "name": "Forgotten Realms",
@@ -60,12 +87,48 @@
   "encounters": [],
   "history_log": [
     {
-      "timestamp": "2026-05-28T22:50:53.809Z",
+      "timestamp": "2026-05-28T23:07:19.237Z",
       "event": "New campaign started. Begin character creation."
     },
     {
-      "timestamp": "2026-05-28T22:53:26.554Z",
+      "timestamp": "2026-05-28T23:07:42.063Z",
       "event": "Character creation step 1 complete. Moving to step 2."
+    },
+    {
+      "timestamp": "2026-05-28T23:08:00.040Z",
+      "event": "Character creation step 2 complete. Moving to step 3."
+    },
+    {
+      "timestamp": "2026-05-28T23:08:00.041Z",
+      "event": "Character creation step 2 complete. Showing subclass options for Sorcerer."
+    },
+    {
+      "timestamp": "2026-05-28T23:08:09.940Z",
+      "event": "Character creation step 3 complete. Moving to step 4."
+    },
+    {
+      "timestamp": "2026-05-28T23:08:21.830Z",
+      "event": "Character creation step 3 complete. Moving to step 4."
+    },
+    {
+      "timestamp": "2026-05-28T23:08:45.057Z",
+      "event": "Character creation step 4 complete. Moving to step 5."
+    },
+    {
+      "timestamp": "2026-05-28T23:09:00.815Z",
+      "event": "Character creation step 5 complete. Moving to step 6."
+    },
+    {
+      "timestamp": "2026-05-28T23:09:37.176Z",
+      "event": "Character creation step 7 complete. Moving to step 8."
+    },
+    {
+      "timestamp": "2026-05-28T23:10:12.203Z",
+      "event": "Character creation step 8 complete. Moving to step 9."
+    },
+    {
+      "timestamp": "2026-05-28T23:10:17.495Z",
+      "event": "Character creation step 9 complete. Moving to step 10."
     }
   ]
 }
