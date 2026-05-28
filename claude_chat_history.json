@@ -55,9 +55,33 @@
     {
       "role": "assistant",
       "content": "**STR:** 14, **DEX:** 13, **CON:** 15, **INT:** 15, **WIS:** 12, **CHA:** 11"
+    },
+    {
+      "role": "user",
+      "content": "No, lets do it like this:\nCHA 15, CON 15, DEX 14, WIS 13, INT 12, STR 11"
+    },
+    {
+      "role": "assistant",
+      "content": "**Starting Spells for Warlock (Great Old One)**\nWarlocks know their spells permanently. All your spell slots refresh on a short rest.\n\n**Cantrips — choose 2:**\n1. Eldritch Blast\n2. Chill Touch\n3. Minor Illusion\n4. Prestidigitation\n5. Mage Hand\n6. True Strike\n7. Poison Spray\n8. Blade Ward\n\n**Level 1 Spells — choose 2:**\n1. Armor of Agathys\n2. Arms of Hadar\n3. Charm Person\n4. Comprehend Languages\n5. Expeditious Retreat\n6. Hellish Rebuke\n7. Hex\n8. Illusory Script\n9. Protection from Evil and Good\n10. Unseen Servant\n11. Witch Bolt\n\nTell me which you want — e.g. \"Cantrips: Vicious Mockery, Minor Illusion / Spells: Cure Wounds, Healing Word, Sleep, Faerie Fire\""
+    },
+    {
+      "role": "user",
+      "content": "Cantrips: Eldritch Blast, Minor Illusion\nSpells: Hex, Unseen Servant"
+    },
+    {
+      "role": "assistant",
+      "content": "Here is your starting equipment:\n\n**From your Warlock (Great Old One) class:**\n- Light crossbow + 20 bolts\n- Two daggers\n- Scholar's pack\n- Leather armor\n- Arcane focus\n\n**From your Charlatan background:**\n- Fine clothes\n- Disguise kit\n- Con tools\n- Belt pouch (15 gp)\n\nReady to name your character?"
+    },
+    {
+      "role": "user",
+      "content": "Yes"
+    },
+    {
+      "role": "assistant",
+      "content": "Almost done! Two quick questions:\n\n**1. What is your character's name?**\n\n**2. What does your Half-Elf Warlock look like?** Give me one detail — a scar, a striking feature, something that sets you apart from every other adventurer.\n\n*(Answer both in your next message.)*"
     }
   ],
   "created_at": "2026-05-28T20:35:38.535Z",
-  "token_count": 391,
+  "token_count": 597,
   "model": "open-mistral-nemo"
 }

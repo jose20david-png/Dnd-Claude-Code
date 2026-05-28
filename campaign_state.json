@@ -1,13 +1,31 @@
 {
   "campaign_id": "new-campaign",
-  "creation_step": 5,
+  "creation_step": 8,
   "creation_data": {
     "setting": "Classic High Fantasy",
     "class": "Warlock (Great Old One)",
     "_subclass_pending": false,
     "subclass": "The Fiend",
     "race": "Half-Elf",
-    "background": "Charlatan"
+    "background": "Charlatan",
+    "stats": {
+      "str": 11,
+      "dex": 14,
+      "con": 15,
+      "int": 12,
+      "wis": 13,
+      "cha": 15
+    },
+    "spells": {
+      "cantrips": [
+        "Eldritch Blast",
+        "Minor Illusion"
+      ],
+      "level_1": [
+        "Hex",
+        "Unseen Servant"
+      ]
+    }
   },
   "world": {
     "name": "Forgotten Realms",
@@ -91,6 +109,18 @@
     {
       "timestamp": "2026-05-28T20:44:52.069Z",
       "event": "Character creation step 4 complete. Moving to step 5."
+    },
+    {
+      "timestamp": "2026-05-28T20:45:55.894Z",
+      "event": "Character creation step 5 complete. Moving to step 6."
+    },
+    {
+      "timestamp": "2026-05-28T20:46:41.286Z",
+      "event": "Character creation step 6 complete. Moving to step 7."
+    },
+    {
+      "timestamp": "2026-05-28T20:46:49.640Z",
+      "event": "Character creation step 7 complete. Moving to step 8."
     }
   ]
 }
