@@ -79,9 +79,41 @@
     {
       "role": "assistant",
       "content": "Almost done! Two quick questions:\n\n**1. What is your character's name?**\n\n**2. What does your Half-Elf Warlock look like?** Give me one detail — a scar, a striking feature, something that sets you apart from every other adventurer.\n\n*(Answer both in your next message.)*"
+    },
+    {
+      "role": "user",
+      "content": "1. Kel Stormblessed\n2. Kel is average heighted, dark hair with a strip of silver in his right side. Hes got fair skin. Hes got deep brown eyes. His left eyes is marked by a scar that goes accross his eye. His tone is distrustfull from previous experiences and likes being around people. He likes women. Never had a romantic parter in his life, but looking forward to it. His town was massacred by a horde of devils, he swore vengeance and made a pact with the archdevil Mephistopheles. His life is always on the line, Mephistopheles is always looking to make his days misserable in exchange for power, but Kel rises through. Hi has family, but they live in Baldur's gate. The massacred town was a little town outside of neverwinter. He's now searching for a way to gain more power, ancient power, to avenge his people. But he is too weak, he needs to search for an artifact named \"The mightstone\" in the ancient netheril ruins in the dessert. Its said that whoever possesses the mightstone, can control his fiend patron and take over their powers."
+    },
+    {
+      "role": "assistant",
+      "content": "✅ **Character sheet complete!**\n\n**Kel Stormblessed** — Warlock (Great Old One), Level 1 Half-Elf\n**HP:** 10 | **AC:** 12–14 (varies by armor)\n**Background:** Charlatan\n\n*Your adventure begins...*"
+    },
+    {
+      "role": "user",
+      "content": "Alright"
+    },
+    {
+      "role": "assistant",
+      "content": "The sun is barely a whisper on the horizon, casting long, dancing shadows across the cobblestone streets of your small frontier town. The air is crisp, carrying the faintest hint of woodsmoke and the promise of a cold night. You stand at the edge of town, the weight of your past heavy on your shoulders, but a spark of determination in your eyes. Where do you go first, Kel?"
+    },
+    {
+      "role": "user",
+      "content": "before we continue, what is Kel's backstory"
+    },
+    {
+      "role": "assistant",
+      "content": "Kel Stormblessed was born in a small town outside of Neverwinter, the only child of a blacksmith and a weaver. His life was simple but happy, filled with the rhythm of the seasons and the love of his parents. However, everything changed when he was 16. A horde of devils descended upon their town, leaving no one alive in their wake. Kel's parents fought bravely, but they were no match for the otherworldly creatures. Kel himself was gravely injured, left for dead among the ruins of his home.\n\nHe was found by a mysterious figure who nursed him back to health and revealed himself to be a high-ranking archdevil named Mephistopheles. The devil offered Kel a bargain: his life in exchange for his service. Desperate for vengeance and with nothing left to lose, Kel agreed. He was taken to the archdevil's realm and trained in the ways of dark magic, learning to harness the power of his new patron.\n\nNow, Kel has returned to the world of the living, seeking a way to gain more power and exact his revenge on the devils who destroyed his life. He carries the weight of his past with him, a constant reminder of what he has lost and what he still has to gain. Despite his grim purpose, Kel is not without hope. He believes that there is a way to break the bonds of his pact with Mephistopheles and take control of his own destiny. But first, he must find a way to gain the power he needs to face his enemies."
+    },
+    {
+      "role": "user",
+      "content": "Ok, you start my voyage. Tell me where I begin"
+    },
+    {
+      "role": "assistant",
+      "content": "As you stand at the edge of town, the sun begins to peek over the horizon, casting long, dancing shadows across the cobblestone streets. The air is crisp, carrying the faintest hint of woodsmoke and the promise of a cold night. Where do you go first, Kel? The town is quiet this early, but there are a few options:\n\n1. **The local tavern** — The \"Laughing Griffin\" is always open, even at this hour. You might find some early risers or night owls still there, and the barkeep, Old Man Grimsley, knows everything that goes on in town.\n2. **The market** — The market stalls are starting to open. You could ask around about recent happenings or look for supplies.\n3. **The temple** — The town's priest, Father Thorne, might be up and about. He could offer guidance or insight into the recent events.\n4. **The town's edge** — You could walk the perimeter of the town, keeping an eye out for any signs of trouble or unusual activity.\n\nWhat would you like to do?"
     }
   ],
   "created_at": "2026-05-28T20:35:38.535Z",
-  "token_count": 597,
+  "token_count": 1652,
   "model": "open-mistral-nemo"
 }
