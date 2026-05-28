@@ -1,12 +1,13 @@
 {
   "campaign_id": "new-campaign",
-  "creation_step": 4,
+  "creation_step": 5,
   "creation_data": {
     "setting": "Classic High Fantasy",
     "class": "Warlock (Great Old One)",
     "_subclass_pending": false,
     "subclass": "The Fiend",
-    "race": "Half-Elf"
+    "race": "Half-Elf",
+    "background": "Charlatan"
   },
   "world": {
     "name": "Forgotten Realms",
@@ -86,6 +87,10 @@
     {
       "timestamp": "2026-05-28T20:36:27.736Z",
       "event": "Character creation step 3 complete. Moving to step 4."
+    },
+    {
+      "timestamp": "2026-05-28T20:44:52.069Z",
+      "event": "Character creation step 4 complete. Moving to step 5."
     }
   ]
 }

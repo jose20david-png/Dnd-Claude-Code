@@ -39,9 +39,25 @@
     {
       "role": "assistant",
       "content": "Now choose your background — this defines where you came from before the adventure began.\n\n1. **Acolyte** — You served a temple or religious order. Gain: Insight + Religion.\n2. **Charlatan** — You made a living deceiving people — false identities, rigged games, silver tongue. Gain: Deception + Sleight of Hand.\n3. **Criminal** — You operated outside the law, surviving by cunning and nerve. Gain: Deception + Stealth.\n4. **Entertainer** — Acrobat, bard, jester, or actor — you've always had an audience. Gain: Acrobatics + Performance.\n5. **Folk Hero** — You rose from common folk to champion a cause others wouldn't. Gain: Animal Handling + Survival.\n6. **Hermit** — You lived in seclusion — in a monastery, the wilderness, or a cave of your own making. Gain: Medicine + Religion.\n7. **Noble** — You were born to privilege — a title, a coat of arms, and enemies who resent both. Gain: History + Persuasion.\n8. **Outlander** — You grew up in the wild places of the world, far from city walls. Gain: Athletics + Survival.\n9. **Sage** — You studied in a library, wizard's academy, or under a learned master. Gain: Arcana + History.\n10. **Sailor** — You crewed ships, survived storms, and learned that the sea doesn't forgive. Gain: Athletics + Perception.\n11. **Soldier** — You served in an army, militia, or mercenary company. Gain: Athletics + Intimidation.\n12. **Urchin** — You grew up on the streets, surviving on scraps and quick wits. Gain: Sleight of Hand + Stealth.\n\nWhich fits your past?"
+    },
+    {
+      "role": "user",
+      "content": "Charlatan"
+    },
+    {
+      "role": "assistant",
+      "content": "Rolling your stats — 4d6, drop lowest, for each ability score.\n\n**STR:** [2,4,5,5] → drop 2 = **14**\n**DEX:** [2,4,4,5] → drop 2 = **13**\n**CON:** [3,3,6,6] → drop 3 = **15**\n**INT:** [2,3,6,6] → drop 2 = **15**\n**WIS:** [2,2,5,5] → drop 2 = **12**\n**CHA:** [2,2,4,5] → drop 2 = **11**\n\n**Suggested assignment for Warlock (Great Old One):** CHA → CON → DEX → WIS → INT → STR\n\nYou have: **15, 15, 14, 13, 12, 11**. How would you like to assign these scores to STR / DEX / CON / INT / WIS / CHA?"
+    },
+    {
+      "role": "user",
+      "content": "Suggested assignment"
+    },
+    {
+      "role": "assistant",
+      "content": "**STR:** 14, **DEX:** 13, **CON:** 15, **INT:** 15, **WIS:** 12, **CHA:** 11"
     }
   ],
   "created_at": "2026-05-28T20:35:38.535Z",
-  "token_count": 304,
+  "token_count": 391,
   "model": "open-mistral-nemo"
 }
