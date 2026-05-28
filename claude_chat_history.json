@@ -2,11 +2,11 @@
   "messages": [
     {
       "role": "user",
-      "content": "Hello"
+      "content": "Hi"
     },
     {
       "role": "user",
-      "content": "Hello"
+      "content": "Hi"
     },
     {
       "role": "assistant",
@@ -19,49 +19,9 @@
     {
       "role": "assistant",
       "content": "Now let's choose your class. Here are all 12 options:\n\n1. **Barbarian** (1d12) — Raw fury made flesh — you hit harder than anyone and take hits that would kill lesser warriors.\n2. **Bard** (1d8 [Charisma spellcaster]) — Words, music, and magic woven together — a wandering performer who can talk their way out of anything and charm the world into cooperating.\n3. **Cleric** (1d8 [Wisdom spellcaster]) — A conduit for divine power — healer, warrior of faith, and voice of the gods. Your deity's domain shapes everything you do.\n4. **Druid** (1d8 [Wisdom spellcaster]) — The wild given consciousness — you speak for nature, shift into beasts, and call down storms.\n5. **Fighter** (1d10) — Unmatched martial discipline — the most versatile combatant alive, trained for every weapon and every battlefield.\n6. **Monk** (1d8) — A weapon without a weapon — you've turned your body into an instrument of precision and devastating speed.\n7. **Paladin** (1d10 [Charisma spellcaster]) — Holy warrior bound by a sacred oath — divine power, heavy armor, and an unshakeable moral code. The world bends or it breaks.\n8. **Ranger** (1d10 [Wisdom spellcaster]) — Hunter, tracker, survivor — deadly in the wilderness, with a bond to nature and an eye for ambush.\n9. **Rogue** (1d8) — Cunning over strength — you strike from shadow, pick every lock, know every secret, and disappear before anyone notices.\n10. **Sorcerer** (1d6 [Charisma spellcaster]) — Magic isn't something you learned — it's in your blood. Raw, barely-controlled power inherited from something ancient.\n11. **Warlock** (1d8 [Charisma spellcaster]) — You made a deal with something vast and terrible, and now you wield power that has a price. What did you give up?\n12. **Wizard** (1d6 [Intelligence spellcaster]) — The most powerful magic user alive — if you survive long enough to use it. Every spell a calculated investment, every battle a problem to be solved.\n\nWhich class calls to you?"
-    },
-    {
-      "role": "user",
-      "content": "Wizard"
-    },
-    {
-      "role": "assistant",
-      "content": "Wizard — now choose your archetype.\n*(This archetype unlocks at level 3, but defines your character's path from the start.)*\n\n• **School of Abjuration** — The School of Abjuration emphasizes magic that blocks, banishes, or protects. Detractors of this school say that its tradition is about denial, negati\n• **School of Conjuration** — As a Conjurer, you favor spells that produce objects and creatures out of thin air. You can conjure billowing clouds of daggers, summon demons or ange\n• **School of Divination** — The counsel of a Diviner is sought by royalty and commoners alike, for all seek a clearer understanding of the past, present, and future. As a Diviner\n• **School of Enchantment** — As a member of the School of Enchantment, you have honed your ability to magically entrance and beguile other people and monsters. Enchanters enjoy wa\n• **School of Evocation** — You focus your study on magic that creates powerful elemental effects such as bitter cold, searing flame, rolling thunder, crackling lightning, and bu\n• **School of Illusion** — You focus your studies on magic that dazzles the senses, befuddles the mind, and tricks even the wisest folk. Your magic is subtle, but the illusions \n• **School of Necromancy** — The School of Necromancy explores the cosmic forces of life, death, and undeath. You delve into the taboo study of ripping souls from corpses to creat\n• **School of Transmutation** — You are a student of spells that modify energy and matter. To you, the world is not a fixed thing, but eminently mutable, and you delight in being an \n\nWhich path calls to you?"
-    },
-    {
-      "role": "user",
-      "content": "Conjuration"
-    },
-    {
-      "role": "assistant",
-      "content": "Now choose your race:\n\n1. **Human** — Adaptable, ambitious, and everywhere — an extra skill and feat reflects their relentless drive.\n2. **Elf** — Ancient, perceptive, graceful — immune to sleep magic, low-light vision, and a lifespan measured in centuries.\n3. **Dwarf** — Stout, stubborn, built to last — poison resistance, darkvision, and a chip on their shoulder about the surface world.\n4. **Halfling** — Small, lucky, and nearly impossible to rattle — their Halfling Luck trait lets them reroll natural 1s.\n5. **Half-Elf** — Human ambition meets elven perception — versatile stat bonuses, darkvision, and proficiency in any two skills.\n6. **Half-Orc** — Built for survival — when they should drop to 0 HP, they sometimes drop to 1 instead. Relentless Endurance keeps them standing.\n7. **Gnome** — Clever, curious, tinkerers by nature — advantage on all INT, WIS, and CHA saves against magic.\n8. **Tiefling** — Infernal heritage written on their skin — fire resistance, darkvision, and an innate connection to dark magic.\n9. **Dragonborn** — Draconic ancestry expressed in scale and breath — a breath weapon tied to their dragon bloodline, resistance to that damage type.\n\nWhich race are you?"
-    },
-    {
-      "role": "user",
-      "content": "Half elf"
-    },
-    {
-      "role": "assistant",
-      "content": "Now choose your background — this defines where you came from before the adventure began.\n\n1. **Acolyte** — You served a temple or religious order. Gain: Insight + Religion.\n2. **Charlatan** — You made a living deceiving people — false identities, rigged games, silver tongue. Gain: Deception + Sleight of Hand.\n3. **Criminal** — You operated outside the law, surviving by cunning and nerve. Gain: Deception + Stealth.\n4. **Entertainer** — Acrobat, bard, jester, or actor — you've always had an audience. Gain: Acrobatics + Performance.\n5. **Folk Hero** — You rose from common folk to champion a cause others wouldn't. Gain: Animal Handling + Survival.\n6. **Hermit** — You lived in seclusion — in a monastery, the wilderness, or a cave of your own making. Gain: Medicine + Religion.\n7. **Noble** — You were born to privilege — a title, a coat of arms, and enemies who resent both. Gain: History + Persuasion.\n8. **Outlander** — You grew up in the wild places of the world, far from city walls. Gain: Athletics + Survival.\n9. **Sage** — You studied in a library, wizard's academy, or under a learned master. Gain: Arcana + History.\n10. **Sailor** — You crewed ships, survived storms, and learned that the sea doesn't forgive. Gain: Athletics + Perception.\n11. **Soldier** — You served in an army, militia, or mercenary company. Gain: Athletics + Intimidation.\n12. **Urchin** — You grew up on the streets, surviving on scraps and quick wits. Gain: Sleight of Hand + Stealth.\n\nWhich fits your past?"
-    },
-    {
-      "role": "user",
-      "content": "Sage"
-    },
-    {
-      "role": "assistant",
-      "content": "Rolling your stats — 4d6, drop lowest, for each ability score.\n\n**STR:** [1,4,5,6] → drop 1 = **15**\n**DEX:** [3,3,5,6] → drop 3 = **14**\n**CON:** [2,2,4,6] → drop 2 = **12**\n**INT:** [1,2,3,6] → drop 1 = **11**\n**WIS:** [3,3,5,5] → drop 3 = **13**\n**CHA:** [1,3,6,6] → drop 1 = **15**\n\n**Suggested assignment for Wizard:** INT → DEX → CON → WIS → CHA → STR\n\nYou have: **15, 15, 14, 13, 12, 11**. How would you like to assign these scores to STR / DEX / CON / INT / WIS / CHA?"
-    },
-    {
-      "role": "user",
-      "content": "INT 15, DEX 15, CON 14, WIS 13, CHA, 12, STR 11"
-    },
-    {
-      "role": "assistant",
-      "content": "**Starting Spells for Wizard**\nWizards learn spells in their spellbook. You start with 6 level-1 spells plus Mage Armor and Magic Missile (already in your book).\n\n**Cantrips — choose 3:**\n1. Fire Bolt\n2. Ray of Frost\n3. Shocking Grasp\n4. Chill Touch\n5. Mage Hand\n6. Minor Illusion\n7. Prestidigitation\n8. Poison Spray\n9. True Strike\n10. Light\n11. Acid Splash\n12. Message\n13. Dancing Lights\n14. Blade Ward\n\n**Level 1 Spells — choose 6:**\n1. Sleep\n2. Burning Hands\n3. Charm Person\n4. Color Spray\n5. Comprehend Languages\n6. Detect Magic\n7. Disguise Self\n8. Expeditious Retreat\n9. False Life\n10. Feather Fall\n11. Find Familiar\n12. Fog Cloud\n13. Grease\n14. Identify\n15. Jump\n16. Longstrider\n17. Shield\n18. Silent Image\n19. Thunderwave\n20. Witch Bolt\n\nTell me which you want — e.g. \"Cantrips: Vicious Mockery, Minor Illusion / Spells: Cure Wounds, Healing Word, Sleep, Faerie Fire\""
     }
   ],
-  "created_at": "2026-05-28T22:25:00.152Z",
-  "token_count": 227,
+  "created_at": "2026-05-28T22:51:04.776Z",
+  "token_count": 33,
   "model": "llama-3.3-70b-versatile"
 }

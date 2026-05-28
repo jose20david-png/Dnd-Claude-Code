@@ -1,21 +1,8 @@
 {
   "campaign_id": "new-campaign",
-  "creation_step": 6,
+  "creation_step": 2,
   "creation_data": {
-    "setting": "Classic High Fantasy",
-    "class": "Wizard",
-    "_subclass_pending": false,
-    "subclass": "School of Conjuration",
-    "race": "Half-Elf",
-    "background": "Sage",
-    "stats": {
-      "cha": 12,
-      "con": 14,
-      "dex": 15,
-      "int": 15,
-      "str": 11,
-      "wis": 13
-    }
+    "setting": "Classic High Fantasy"
   },
   "world": {
     "name": "Forgotten Realms",
@@ -73,36 +60,12 @@
   "encounters": [],
   "history_log": [
     {
-      "timestamp": "2026-05-28T22:24:55.068Z",
+      "timestamp": "2026-05-28T22:50:53.809Z",
       "event": "New campaign started. Begin character creation."
     },
     {
-      "timestamp": "2026-05-28T22:25:43.942Z",
+      "timestamp": "2026-05-28T22:53:26.554Z",
       "event": "Character creation step 1 complete. Moving to step 2."
-    },
-    {
-      "timestamp": "2026-05-28T22:25:46.954Z",
-      "event": "Character creation step 2 complete. Moving to step 3."
-    },
-    {
-      "timestamp": "2026-05-28T22:25:46.955Z",
-      "event": "Character creation step 2 complete. Showing subclass options for Wizard."
-    },
-    {
-      "timestamp": "2026-05-28T22:25:50.405Z",
-      "event": "Character creation step 3 complete. Moving to step 4."
-    },
-    {
-      "timestamp": "2026-05-28T22:26:47.758Z",
-      "event": "Character creation step 3 complete. Moving to step 4."
-    },
-    {
-      "timestamp": "2026-05-28T22:28:55.269Z",
-      "event": "Character creation step 4 complete. Moving to step 5."
-    },
-    {
-      "timestamp": "2026-05-28T22:29:26.054Z",
-      "event": "Character creation step 5 complete. Moving to step 6."
     }
   ]
 }
