@@ -6,50 +6,10 @@
     },
     {
       "role": "assistant",
-      "content": "Welcome to Dungeon Master Assistant! Let's start creating your character.\n\nFirst, tell me about the world and adventure you'd like to have. Here are four options:\n\n1. **Classic High Fantasy** — Ancient kingdoms, dragon-haunted mountains, magic woven into the fabric of reality.\n2. **Dark Gothic** — Crumbling castles, cursed bloodlines, horrors that wear human faces.\n3. **Seafaring** — Uncharted oceans, buried treasure, storms that swallow ships whole.\n4. **Political Intrigue** — Courts of power, poisoned alliances, secrets that topple dynasties.\n\nPlease choose one."
-    },
-    {
-      "role": "user",
-      "content": "Classic High Fantasy"
-    },
-    {
-      "role": "assistant",
-      "content": "Now let's choose your class. Here are all 12 options:\n\n1. **Barbarian** (1d12) — Raw fury made flesh — you hit harder than anyone and take hits that would kill lesser warriors.\n2. **Bard** (1d8 [Charisma spellcaster]) — Words, music, and magic woven together — a wandering performer who can talk their way out of anything and charm the world into cooperating.\n3. **Cleric** (1d8 [Wisdom spellcaster]) — A conduit for divine power — healer, warrior of faith, and voice of the gods. Your deity's domain shapes everything you do.\n4. **Druid** (1d8 [Wisdom spellcaster]) — The wild given consciousness — you speak for nature, shift into beasts, and call down storms.\n5. **Fighter** (1d10) — Unmatched martial discipline — the most versatile combatant alive, trained for every weapon and every battlefield.\n6. **Monk** (1d8) — A weapon without a weapon — you've turned your body into an instrument of precision and devastating speed.\n7. **Paladin** (1d10 [Charisma spellcaster]) — Holy warrior bound by a sacred oath — divine power, heavy armor, and an unshakeable moral code. The world bends or it breaks.\n8. **Ranger** (1d10 [Wisdom spellcaster]) — Hunter, tracker, survivor — deadly in the wilderness, with a bond to nature and an eye for ambush.\n9. **Rogue** (1d8) — Cunning over strength — you strike from shadow, pick every lock, know every secret, and disappear before anyone notices.\n10. **Sorcerer** (1d6 [Charisma spellcaster]) — Magic isn't something you learned — it's in your blood. Raw, barely-controlled power inherited from something ancient.\n11. **Warlock** (1d8 [Charisma spellcaster]) — You made a deal with something vast and terrible, and now you wield power that has a price. What did you give up?\n12. **Wizard** (1d6 [Intelligence spellcaster]) — The most powerful magic user alive — if you survive long enough to use it. Every spell a calculated investment, every battle a problem to be solved.\n\nWhich class calls to you?"
-    },
-    {
-      "role": "user",
-      "content": "Druid"
-    },
-    {
-      "role": "assistant",
-      "content": "Druid (1d8 [Wisdom spellcaster]) — The wild given consciousness — you speak for nature, shift into beasts, and call down storms. — now choose your archetype.\n*(This archetype unlocks at level 3, but defines your character's path from the start.)*\n\n• **Circle of the Land** — The Circle of the Land is made up of mystics and sages who safeguard ancient knowledge and rites through a vast oral tradition. These druids meet with\n• **Circle of Ash** — Druids of the Circle of Ash believe in the power of rebirth and resurrection, both physical and spiritual. The ash they take as their namesake is the \n• **Circle of Bees** — Druids of the Circle of Bees are friends to all stinging insects but focus their attention on honeybees and other pollinating insects. When not advent\n• **Circle of Crystals** — Circle of Crystals druids first arose in subterranean environments, where they helped tend giant crystal gardens, but now they can be found most anywh\n• **Circle of Sand** — The Circle of Sand originally arose among the desert dunes, where druids forged an intimate connection with the sands that surrounded them. Now such c\n• **Circle of the Green** — Druids of the Circle of the Green devote themselves to the plants and green things of the world, recognizing the role of plants in giving life. By con\n• **Circle of the Shapeless** — Druids of the Circle of the Shapeless believe that oozes, puddings, and jellies serve an important and integral role in the natural world, particularl\n• **Circle of Wind** — Founded in deserts, badlands, and grasslands, where wind dominates and controls the landscape, the teachings of the Circle of Wind have spread far and\n• **Circle of the Many** — *Compare to the core book’s Circle of the Moon* Druids who feel particularly at ease in the beast form of their Wild Shape may join the Circle of the \n\nWhich path calls to you?"
-    },
-    {
-      "role": "user",
-      "content": "Circle of the Ash"
-    },
-    {
-      "role": "assistant",
-      "content": "Now choose your background — this defines where you came from before the adventure began.\n\n1. **Acolyte** — You served a temple. Gain: Insight + Religion. You carry a holy symbol and prayer book.\n2. **Sage** — You studied in a library or wizard's academy. Gain: Arcana + History. You carry ink, quill, and a book of notes.\n3. **Folk Hero** — You rose from common folk to champion a cause. Gain: Animal Handling + Survival. You carry a set of artisan's tools.\n4. **Criminal** — You operated outside the law, surviving by cunning. Gain: Deception + Stealth. You carry a crowbar and dark common clothes.\n5. **Soldier** — You served in an army or mercenary company. Gain: Athletics + Intimidation. You carry a rank insignia and a gaming set.\n6. **Outlander** — You grew up in the wild places of the world. Gain: Athletics + Survival. You carry a hunting trap and a staff.\n\nWhich fits your past?"
-    },
-    {
-      "role": "user",
-      "content": "Outlander"
-    },
-    {
-      "role": "assistant",
-      "content": "Rolling your stats — 4d6, drop lowest, for each ability score.\n\n**STR:** [2,4,6,6] → drop 2 = **16**\n**DEX:** [5,5,6,6] → drop 5 = **17**\n**CON:** [2,4,5,6] → drop 2 = **15**\n**INT:** [1,4,5,6] → drop 1 = **15**\n**WIS:** [1,6,6,6] → drop 1 = **18**\n**CHA:** [3,4,5,5] → drop 3 = **14**\n\n**Suggested assignment for Druid (1d8 [Wisdom spellcaster]) — The wild given consciousness — you speak for nature, shift into beasts, and call down storms.:** WIS → CON → DEX → INT → CHA → STR\n\nYou have: **18, 17, 16, 15, 15, 14**. How would you like to assign these scores to STR / DEX / CON / INT / WIS / CHA?"
-    },
-    {
-      "role": "user",
-      "content": "Use the suggested assignment"
-    },
-    {
-      "role": "assistant",
-      "content": "**Starting Spells for Druid (1d8 [Wisdom spellcaster]) — The wild given consciousness — you speak for nature, shift into beasts, and call down storms.**\nDruids prepare spells each long rest. At level 1 you can prepare WIS modifier + 1 spells. Choose your cantrips, then suggested prep:\n\n**Cantrips — choose 2:**\n1. Druidcraft\n2. Guidance\n3. Mending\n4. Poison Spray\n5. Produce Flame\n6. Resistance\n7. Shillelagh\n8. Thorn Whip\n\n**Level 1 Spell options:**\n1. Animal Friendship\n2. Charm Person\n3. Cure Wounds\n4. Detect Magic\n5. Detect Poison and Disease\n6. Entangle\n7. Faerie Fire\n8. Fog Cloud\n9. Goodberry\n10. Healing Word\n11. Jump\n12. Longstrider\n13. Speak with Animals\n14. Thunderwave\n\nTell me which you want — e.g. \"Cantrips: Vicious Mockery, Minor Illusion / Spells: Cure Wounds, Healing Word, Sleep, Faerie Fire\""
+      "content": "Welcome to Dungeon Master Assistant! Let's create your character. First, tell me about the world and adventure you're in the mood for. Here are four options:\n\n1. **Classic High Fantasy** — Ancient kingdoms, dragon-haunted mountains, magic woven into the fabric of reality.\n2. **Dark Gothic** — Crumbling castles, cursed bloodlines, horrors that wear human faces.\n3. **Seafaring** — Uncharted oceans, buried treasure, storms that swallow ships whole.\n4. **Political Intrigue** — Courts of power, poisoned alliances, secrets that topple dynasties.\n\nPlease choose a setting."
     }
   ],
-  "created_at": "2026-05-28T19:27:25.204Z",
-  "token_count": 406,
+  "created_at": "2026-05-28T20:15:14.806Z",
+  "token_count": 135,
   "model": "open-mistral-nemo"
 }
