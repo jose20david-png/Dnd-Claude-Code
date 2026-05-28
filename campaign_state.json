@@ -1,6 +1,6 @@
 {
   "campaign_id": "new-campaign",
-  "creation_step": 6,
+  "creation_step": 8,
   "creation_data": {
     "setting": "Seafaring",
     "class": "Sorcerer (1d6 [Charisma spellcaster]) — Magic isn't something you learned — it's in your blood. Raw, barely-controlled power inherited from something ancient.",
@@ -14,6 +14,18 @@
       "int": 14,
       "wis": 15,
       "cha": 15
+    },
+    "spells": {
+      "cantrips": [
+        "Firebolt",
+        "Prestigitation",
+        "Magehand",
+        "Light"
+      ],
+      "level_1": [
+        "Sleep",
+        "Thunderwave"
+      ]
     }
   },
   "world": {
@@ -98,6 +110,14 @@
     {
       "timestamp": "2026-05-28T19:10:51.843Z",
       "event": "Character creation step 5 complete. Moving to step 6."
+    },
+    {
+      "timestamp": "2026-05-28T19:17:56.415Z",
+      "event": "Character creation step 6 complete. Moving to step 7."
+    },
+    {
+      "timestamp": "2026-05-28T19:18:01.705Z",
+      "event": "Character creation step 7 complete. Moving to step 8."
     }
   ]
 }
