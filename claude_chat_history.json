@@ -139,9 +139,81 @@
     {
       "role": "assistant",
       "content": "Gorin's eyes light up with a warm smile as he leans in, his voice taking on a conspiratorial tone, \"Ah, the Netheril desert, you say? Well, my friend, you're in luck. I might have some information that can help you on your quest. But first, let's get you settled in and comfortable. You look like you could use a hot meal and a pint of our finest ale.\" He gestures towards the Cozy Stag Inn, the sign creaking in the gentle breeze as he continues, \"Come, join me for a bite to eat, and we'll talk more about the festival and... other matters.\" As he speaks, the aroma of roasting meats and freshly baked bread wafts from the inn, making your stomach growl with anticipation. The sound of laughter and clinking glasses carries from within, mingling with the distant clang of hammering on metal, as the town's blacksmith works on a new batch of festival decorations. \n\nAs you stand in the midst of the bustling town, the sweet scent of blooming wildflowers wafts through the air, mingling with the smell of freshly baked bread and roasting meats. The sound of hammering on metal and the chatter of the townspeople create a lively melody that fills your ears. Gorin's eyes, sparkling with curiosity, are fixed on you, awaiting your response. His hands, still wiping the apron, pause momentarily, as if the very act of cleaning has become an afterthought in the face of your impending tale.\n\nThe Cozy Stag Inn, just down the street, comes into view, its wooden sign creaking gently in the breeze. The building itself appears sturdy, with a thatched roof and smoke drifting lazily from the chimney. The door, adorned with a wreath of dried flowers, stands slightly ajar, inviting passersby to enter. As you ponder your response to Gorin's question, a group of townspeople, their faces flushed with excitement, hurry past, discussing the upcoming harvest festival in hushed tones.\n\nGorin's gaze never wavers, his interest in your story evident in the way he leans forward, his voice taking on a conspiratorial tone. \"Come, tell me, what brings a traveler such as yourself to our humble town of Brindlemark?\" The air seems to vibrate with anticipation, as if the very fate of your journey hangs in the balance, waiting for your response."
+    },
+    {
+      "role": "user",
+      "content": "Well, you see. I'm a sorcerer. My family is a part of a long dinasty descendants of dragons. I am part of the youngest generation of this dinasty. As part of my \"come of age ceremony\", I've been charged witht the quest of looking for an ancient stone called the \"Mighstone\" in the Netheril desert. But oh the information didn't come to me that way nonono. They told me: \"Make yourself a dragon Kel. When you find yourself a dragon, come back\". What does that even mean!?  How am I supposed to know how to \"make myself a dragon\". Ugh. Anyway, I'm looking for that thing you see."
+    },
+    {
+      "role": "assistant",
+      "content": "As you step into the Cozy Stag Inn, the warm aroma of roasting meat and freshly baked bread envelops you, immediately making your stomach growl with hunger. The atmosphere inside is lively, with patrons laughing and chatting over mugs of ale and plates of steaming food. Gorin leads you to a cozy corner table, where a fire crackles in a small hearth, casting a golden glow over the room. He signals to a serving maid, who hurries over to take your order. \"What can I get for you, traveler?\" she asks, her eyes sparkling with curiosity. Gorin leans back in his chair, a knowing glint in his eye, as if waiting for you to share more about your quest. The sounds of the inn - the clinking of glasses, the murmur of conversations, and the occasional burst of laughter - create a sense of comfort and camaraderie, making you feel like you've stumbled into a hidden gem. What do you do?"
+    },
+    {
+      "role": "user",
+      "content": "Hi, whats the meal of the day? Gorin did you hear what I said about my family's dinasty?"
+    },
+    {
+      "role": "assistant",
+      "content": "⚠️ **DM connection issue**\n\n`Groq hourly rate limit reached. Please wait ~58 minutes then try again.`\n\n*Your message was kept. Try sending it again — if this is a rate limit or \"overloaded\" error, wait 10–20 seconds first.*"
+    },
+    {
+      "role": "user",
+      "content": "Hi, whats the meal of the day? Gorin did you hear what I said about my family's dinasty?"
+    },
+    {
+      "role": "assistant",
+      "content": "⚠️ **No DM narration this turn**\n\nThe DM called tools but didn't write a response. Try rephrasing, or send \"continue\" to prompt narration."
+    },
+    {
+      "role": "user",
+      "content": "continue"
+    },
+    {
+      "role": "assistant",
+      "content": "⚠️ **No DM narration this turn**\n\nThe DM called tools but didn't write a response. Try rephrasing, or send \"continue\" to prompt narration."
+    },
+    {
+      "role": "user",
+      "content": "Continue"
+    },
+    {
+      "role": "assistant",
+      "content": "⚠️ **DM connection issue**\n\n`HTTP 400: [{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"* GenerateContentRequest.contents[0].parts[0].function_response.name: Name cannot be empty.\\n\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n]`\n\n*Your message was kept. Try sending it again — if this is a rate limit or \"overloaded\" error, wait 10–20 seconds first.*"
+    },
+    {
+      "role": "user",
+      "content": "COntinue"
+    },
+    {
+      "role": "assistant",
+      "content": "⚠️ **DM connection issue**\n\n`HTTP 400: [{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"* GenerateContentRequest.contents[0].parts[0].function_response.name: Name cannot be empty.\\n\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n]`\n\n*Your message was kept. Try sending it again — if this is a rate limit or \"overloaded\" error, wait 10–20 seconds first.*"
+    },
+    {
+      "role": "user",
+      "content": "Continue"
+    },
+    {
+      "role": "assistant",
+      "content": "⚠️ **DM connection issue**\n\n`HTTP 400: [{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"* GenerateContentRequest.contents[0].parts[0].function_response.name: Name cannot be empty.\\n\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n]`\n\n*Your message was kept. Try sending it again — if this is a rate limit or \"overloaded\" error, wait 10–20 seconds first.*"
+    },
+    {
+      "role": "user",
+      "content": "Hi, whats the meal of the day? Gorin did you hear what I said about my family's dinasty?"
+    },
+    {
+      "role": "assistant",
+      "content": "\"Today we've got a thick venison stew,\" the young maid answers with a bright, tired smile, wiping her hands on a flour-"
+    },
+    {
+      "role": "user",
+      "content": "continue"
+    },
+    {
+      "role": "assistant",
+      "content": "⚠️ **DM connection issue**\n\n`HTTP 400: [{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"* GenerateContentRequest.contents[0].parts[0].function_response.name: Name cannot be empty.\\n\",\n    \"status\": \"INVALID_ARGUMENT\"\n  }\n}\n]`\n\n*Your message was kept. Try sending it again — if this is a rate limit or \"overloaded\" error, wait 10–20 seconds first.*"
     }
   ],
   "created_at": "2026-05-28T23:07:21.361Z",
-  "token_count": 3303,
-  "model": "llama-3.3-70b-versatile"
+  "token_count": 4101,
+  "model": "gemini-3.5-flash"
 }
