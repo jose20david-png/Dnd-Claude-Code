@@ -8,7 +8,7 @@
     "seal_integrity": 100,
     "seal_status": "N/A",
     "map_id": "town_map",
-    "story_notes": "nce of protruding horns, a rare trait among his kind. With a charming demeanor and a silver tongue, Kel has a way with people, often talking his way out of sticky situations. His current quest is to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, which is said to be hidden somewhere in the ancient Netheril desert. This perilous journey is part of his sorcerer ceremony, a rite of passage to fulfill his destiny. Kel has always been a bit of a loner, with no previous romantic partners, but he does have a certain interest in women. His family, while important, has never been overly involved in his life, allowing him to forge his own path. As he ventures into the unknown, Kel's charisma and magical prowess will be put to the test, but with his quick wit and innate charm, he's ready to face whatever challenges come his way.\n• Kel arrives in a small frontier town, marking the beginning of his journey to find the fabled 'Mightstone'\n• Kel arrives in a small frontier town, marking the beginning of his journey to find the fabled 'Mightstone'\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel meets Gorin, the town's innkeeper\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.",
+    "story_notes": "', an artifact rumored to contain the soul of an ancient powerful dragon, which is said to be hidden somewhere in the ancient Netheril desert. This perilous journey is part of his sorcerer ceremony, a rite of passage to fulfill his destiny. Kel has always been a bit of a loner, with no previous romantic partners, but he does have a certain interest in women. His family, while important, has never been overly involved in his life, allowing him to forge his own path. As he ventures into the unknown, Kel's charisma and magical prowess will be put to the test, but with his quick wit and innate charm, he's ready to face whatever challenges come his way.\n• Kel arrives in a small frontier town, marking the beginning of his journey to find the fabled 'Mightstone'\n• Kel arrives in a small frontier town, marking the beginning of his journey to find the fabled 'Mightstone'\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel meets Gorin, the town's innkeeper\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel is looking for the Netheril desert, specifically the ancient stone, and Gorin offers to help with a map\n• Kel is looking for the Netheril desert and meets Gorin, the town's innkeeper, who offers to help with information",
     "weather": {
       "condition": "clear",
       "description": "A gentle breeze carries the sweet scent of blooming wildflowers through the town."
@@ -153,7 +153,16 @@
       ]
     }
   ],
-  "npcs": [],
+  "npcs": [
+    {
+      "id": "gorin",
+      "name": "Gorin",
+      "role": "Innkeeper",
+      "disposition": "friendly",
+      "notes": "Offers to help Kel with a map to find the Netheril desert | Offers to help Kel with information about the Netheril desert",
+      "location": "Brindlemark"
+    }
+  ],
   "quests": [],
   "encounters": [],
   "history_log": [
@@ -264,6 +273,22 @@
     {
       "timestamp": "2026-06-04T13:37:41.968Z",
       "event": "Story note saved: Kel arrives in a small frontier town, beginning his journey to find the fabled '"
+    },
+    {
+      "timestamp": "2026-06-04T13:41:56.231Z",
+      "event": "Story note saved: Kel is looking for the Netheril desert, specifically the ancient stone, and Gori"
+    },
+    {
+      "timestamp": "2026-06-04T13:41:56.232Z",
+      "event": "Met Gorin (Innkeeper) — friendly."
+    },
+    {
+      "timestamp": "2026-06-04T14:05:34.219Z",
+      "event": "Story note saved: Kel is looking for the Netheril desert and meets Gorin, the town's innkeeper, wh"
+    },
+    {
+      "timestamp": "2026-06-04T14:05:34.222Z",
+      "event": "Updated existing NPC: Gorin."
     }
   ]
 }
