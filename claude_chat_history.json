@@ -107,9 +107,25 @@
     {
       "role": "assistant",
       "content": "As you step into the small frontier town, the warm sunlight casts a golden glow over the thatched roofs and the bustling town square. The air is filled with the sweet scent of blooming wildflowers and the sound of hammering on metal, as the local blacksmith works tirelessly to prepare for the upcoming harvest festival. People of all shapes and sizes hurry about, their faces filled with a mix of excitement and concern, as they ready themselves for the celebrations. The town's central square is adorned with vibrant streamers and colorful banners, bearing the emblem of the town's founder, a long-forgotten hero who braved the unknown to settle this land. Amidst the chaos, a sense of community and camaraderie is palpable, as strangers become friends over mugs of frothy ale and plates of steaming hot food. Your eyes scan the crowd, taking in the sights and sounds, as you search for any hint of information that might lead you to the fabled 'Mightstone'. A gentle breeze carries the whisper of rumors and gossip, as the townspeople speak in hushed tones of strange occurrences and unexplained events, that have been plaguing the town of late. What would you like to do?"
+    },
+    {
+      "role": "user",
+      "content": "I'd like to start searching for an inn"
+    },
+    {
+      "role": "assistant",
+      "content": "As you weave through the crowd, the smell of freshly baked bread and roasting meats wafts through the air, enticing your senses and guiding you toward the town's hospitality. The sound of laughter and clinking glasses carries on the breeze, leading you to a sturdy-looking building with a wooden sign creaking in the gentle wind. The sign bears the image of a foaming mug and the words \"The Red Griffin Inn\" in bold, golden letters. The building itself appears well-maintained, with a thatched roof and wooden beams that seem to have withstood the test of time.\n\nAs you approach the entrance, a stout dwarf with a bushy beard and a warm smile greets you, his eyes twinkling with a mixture of curiosity and welcome. \"Ah, a traveler, eh? Come in, come in! We've got a room or two available, and a fire that's been burning bright all morning. What can I get for ye, lad?\" He eyes your gear, particularly the light crossbow and daggers, and his expression turns slightly more serious. \"You're not here for the festival, I reckon? We don't get many strangers in these parts, especially not ones armed for battle.\" His tone is friendly, but there's a hint of wariness beneath the surface, a sense that he's sizing you up and wondering what brings you to their quiet town."
+    },
+    {
+      "role": "user",
+      "content": "Festival? Sorry I've been wandering for a while, don't know the name of this town. Can you tell me more about it?"
+    },
+    {
+      "role": "assistant",
+      "content": "The festival, yes... The townspeople are abuzz with excitement, preparing for the upcoming Harvest Home celebration, a time-honored tradition to give thanks for the bounty of the land and the protection of the town's patron deity. As for the town itself, you've stumbled upon the charming settlement of Brindlemark, a rustic haven nestled between the rolling hills and dense forests of the countryside. Brindlemark is a humble place, home to farmers, hunters, and craftsmen, who live in harmony with the land and rely on the nearby woods for their livelihood. The town's history is steeped in tradition and folklore, with stories of ancient rituals and mystical happenings whispered around campfires and in hushed tones. <function=update_story_notes>{\"notes\": \"Kel arrives in Brindlemark, a small frontier town, on the eve of the Harvest Home celebration.\"}</function>"
     }
   ],
   "created_at": "2026-05-28T23:07:21.361Z",
-  "token_count": 1395,
+  "token_count": 1902,
   "model": "llama-3.3-70b-versatile"
 }
