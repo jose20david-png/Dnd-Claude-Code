@@ -123,9 +123,17 @@
     {
       "role": "assistant",
       "content": "The festival, yes... The townspeople are abuzz with excitement, preparing for the upcoming Harvest Home celebration, a time-honored tradition to give thanks for the bounty of the land and the protection of the town's patron deity. As for the town itself, you've stumbled upon the charming settlement of Brindlemark, a rustic haven nestled between the rolling hills and dense forests of the countryside. Brindlemark is a humble place, home to farmers, hunters, and craftsmen, who live in harmony with the land and rely on the nearby woods for their livelihood. The town's history is steeped in tradition and folklore, with stories of ancient rituals and mystical happenings whispered around campfires and in hushed tones. <function=update_story_notes>{\"notes\": \"Kel arrives in Brindlemark, a small frontier town, on the eve of the Harvest Home celebration.\"}</function>"
+    },
+    {
+      "role": "user",
+      "content": "When is this festival taking place ehmm... I'm sorry I didnt get your name?"
+    },
+    {
+      "role": "assistant",
+      "content": "The festival, my friend, is taking place on the autumnal equinox, just a few days from now. The townspeople are bustling about, making final preparations for the grand celebration. As for my name, I am Gorin, the town's humble innkeeper. I run the Cozy Stag Inn, just down the street from here. *wipes hands on apron* I've been watching you from afar, and I must say, you seem like a traveler with a story to tell. What brings you to Brindlemark, if I might ask? *eyes sparkle with curiosity* \n\nAs you make your way through the bustling streets of Brindlemark, the sound of hammering on metal and the smell of freshly baked bread waft through the air, enticing your senses. The townspeople, dressed in their finest attire, hurry about, preparing for the upcoming Harvest Home celebration. You notice a sense of excitement and joy emanating from the crowd, their faces filled with anticipation for the festivities to come. The town's inn, a sturdy-looking building with a wooden sign creaking in the gentle breeze, catches your eye. The sign bears the image of a golden wheat sheaf, and the words \"The Golden Sheaf Inn\" are etched in bold letters beneath it. The inn's door, adorned with a wreath of dried flowers and herbs, swings open, and a stout dwarf with a bushy beard and a warm smile greets you. \"Ah, welcome, traveler! Come in, come in! I'm Gorin, the innkeeper. What can I do for you on this fine day?\" he says, his voice booming through the doorway, as he eyes you with a mix of curiosity and hospitality."
     }
   ],
   "created_at": "2026-05-28T23:07:21.361Z",
-  "token_count": 1902,
+  "token_count": 2468,
   "model": "llama-3.3-70b-versatile"
 }

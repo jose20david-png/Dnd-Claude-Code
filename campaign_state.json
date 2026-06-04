@@ -8,7 +8,7 @@
     "seal_integrity": 100,
     "seal_status": "N/A",
     "map_id": "town_map",
-    "story_notes": "CHARACTER BACKSTORY — Kel: Kel is a Tiefling Sorcerer with a mysterious past, hailing from a long line of draconic sorcerer tieflings. He stands at average height with dark brown hair and dark blue eyes, but what sets him apart is the absence of protruding horns, a rare trait among his kind. With a charming demeanor and a silver tongue, Kel has a way with people, often talking his way out of sticky situations. His current quest is to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, which is said to be hidden somewhere in the ancient Netheril desert. This perilous journey is part of his sorcerer ceremony, a rite of passage to fulfill his destiny. Kel has always been a bit of a loner, with no previous romantic partners, but he does have a certain interest in women. His family, while important, has never been overly involved in his life, allowing him to forge his own path. As he ventures into the unknown, Kel's charisma and magical prowess will be put to the test, but with his quick wit and innate charm, he's ready to face whatever challenges come his way.\n• Kel arrives in a small frontier town, marking the beginning of his journey to find the fabled 'Mightstone'\n• Kel arrives in a small frontier town, marking the beginning of his journey to find the fabled 'Mightstone'\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.",
+    "story_notes": "nce of protruding horns, a rare trait among his kind. With a charming demeanor and a silver tongue, Kel has a way with people, often talking his way out of sticky situations. His current quest is to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, which is said to be hidden somewhere in the ancient Netheril desert. This perilous journey is part of his sorcerer ceremony, a rite of passage to fulfill his destiny. Kel has always been a bit of a loner, with no previous romantic partners, but he does have a certain interest in women. His family, while important, has never been overly involved in his life, allowing him to forge his own path. As he ventures into the unknown, Kel's charisma and magical prowess will be put to the test, but with his quick wit and innate charm, he's ready to face whatever challenges come his way.\n• Kel arrives in a small frontier town, marking the beginning of his journey to find the fabled 'Mightstone'\n• Kel arrives in a small frontier town, marking the beginning of his journey to find the fabled 'Mightstone'\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel meets Gorin, the town's innkeeper\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.",
     "weather": {
       "condition": "clear",
       "description": "A gentle breeze carries the sweet scent of blooming wildflowers through the town."
@@ -244,6 +244,26 @@
     {
       "timestamp": "2026-06-04T13:12:29.527Z",
       "event": "Kel arrives in a small frontier town, marking the beginning of his journey to find the fabled 'Mightstone'"
+    },
+    {
+      "timestamp": "2026-06-04T13:36:40.477Z",
+      "event": "Story note saved: Kel meets Gorin, the town's innkeeper"
+    },
+    {
+      "timestamp": "2026-06-04T13:36:40.479Z",
+      "event": "Kel arrives in Brindlemark and meets Gorin, the town's innkeeper"
+    },
+    {
+      "timestamp": "2026-06-04T13:37:41.965Z",
+      "event": "Weather changed to clear — A gentle breeze carries the sweet scent of blooming wildflowers through the town."
+    },
+    {
+      "timestamp": "2026-06-04T13:37:41.967Z",
+      "event": "Kel arrives in the small frontier town of Brindlemark, marking the beginning of his journey to find the fabled 'Mightstone'."
+    },
+    {
+      "timestamp": "2026-06-04T13:37:41.968Z",
+      "event": "Story note saved: Kel arrives in a small frontier town, beginning his journey to find the fabled '"
     }
   ]
 }
