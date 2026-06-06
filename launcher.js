@@ -25,17 +25,15 @@ const JOURNAL_PATH        = path.join(APP_DIR, 'journal.md');
 const ENV_PATH            = path.join(APP_DIR, '.env');
 const SAVES_DIR           = path.join(APP_DIR, 'saves');
 
-const MODEL                = 'open-mistral-nemo';
+const MODEL                = 'gemini-3.1-flash-lite';
 const AUTO_SAVE_INTERVAL_MS = 5 * 60 * 1000;
 const PORTS                = [3140, 3141, 8080];
 
 // ─── REQUEST THROTTLING & TOKEN RATE LIMITER ──────────────────────────────
 let lastRequestTime = 0;
-const REQUEST_DELAY_MS = 1500; // minimum delay between API calls
+const REQUEST_DELAY_MS = 3000; // 3s between requests — paces calls within Gemini's 20 RPM free tier
 
-// Mistral free tier is much more generous than Anthropic Tier 1.
-// We still guard against runaway loops but set a high ceiling.
-const TOKEN_LIMIT_PER_MIN = 40000;      // Mistral free tier: ~1 req/sec, high monthly quota
+const TOKEN_LIMIT_PER_MIN = 240000;     // Gemini free tier: 250,000 TPM (leave headroom)
 const TOKEN_WINDOW_MS     = 60 * 1000;
 const tokenUsage          = [];          // [{ time: ms, tokens: N }, ...]
 
@@ -66,9 +64,463 @@ function recordTokenUsage(tokens) {
 let API_KEY = '';
 try {
   const env = fs.readFileSync(ENV_PATH, 'utf8');
-  const m = env.match(/MISTRAL_API_KEY=(.+)/);
+  const m = env.match(/GEMINI_API_KEY=(.+)/);
   if (m) API_KEY = m[1].trim();
 } catch {}
+
+// ─── DAILY REQUEST COUNTER (Gemini free tier: ~100 RPD) ───────────────────────
+let dailyRequestCount = 0;
+const MAX_DAILY_REQUESTS = 900; // Gemini 3.1 Flash-Lite free tier is far higher than 3.5's 20 RPD.
+                                // This is only a soft warning threshold — Google's 429 is the real cap.
+                                // Adjust if you see 429s well before hitting this number.
+function trackDailyRequest(res) {
+  dailyRequestCount++;
+  if (dailyRequestCount === MAX_DAILY_REQUESTS - 2) {
+    console.warn(`  ⚠️  Daily request budget: ${dailyRequestCount}/${MAX_DAILY_REQUESTS} used — approaching limit`);
+    res && res.write(`data: ${JSON.stringify({ type: 'text', content: '\n\n*— Heads up: approaching daily AI request limit. Save your progress soon. —*\n\n' })}\n\n`);
+  }
+  if (dailyRequestCount >= MAX_DAILY_REQUESTS) {
+    console.warn(`  ❌  Daily request budget exhausted (${dailyRequestCount}/${MAX_DAILY_REQUESTS})`);
+  }
+}
+
+// ─── 5E GAME DATA (classes, races from 5ETOOLS MCP) ──────────────────────────
+// APP_DIR is defined later but we need DATA_DIR at load time — compute it the same way
+const DATA_DIR = path.join(
+  (typeof process !== 'undefined' && process.pkg) ? path.dirname(process.execPath) : path.resolve(__dirname),
+  '5ETOOLS MCP', 'data'
+);
+
+function loadGameData() {
+  const data = { classes: {}, races: {} };
+
+  // Load all 12 PHB classes
+  const classNames = ['barbarian','bard','cleric','druid','fighter','monk','paladin','ranger','rogue','sorcerer','warlock','wizard'];
+  for (const c of classNames) {
+    try {
+      const d = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'classes', c+'.json'), 'utf8'));
+      data.classes[c] = {
+        name: d.name,
+        hit_dice: d.hit_dice,
+        spellcasting: d.spellcasting_ability || null,
+        subtypes_name: d.subtypes_name || 'Subclasses',
+        prof_skills: d.prof_skills || '',
+        equipment: d.equipment || '',
+        desc_short: (d.desc || '').replace(/#+\s*/g,'').replace(/\n+/g,' ').trim().slice(0, 200),
+        archetypes: (d.archetypes || [])
+          .filter(a => !a.document__slug || a.document__slug === 'wotc-srd')
+          .map(a => ({
+            name: a.name,
+            desc_short: ((s) => s.split(/\.\s+/)[0] + '.')(((a.desc || '').replace(/#+\s*/g,'').replace(/\n+/g,' ').trim()))
+          }))
+      };
+    } catch (e) { /* file missing — skip */ }
+  }
+
+  // Load core PHB races
+  const coreRaces = ['human','elf','dwarf','halfling','half_elf','half_orc','gnome','tiefling','dragonborn'];
+  for (const r of coreRaces) {
+    try {
+      const d = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'races', r+'.json'), 'utf8'));
+      data.races[r] = {
+        name: d.name || r,
+        desc_short: (d.desc || '').replace(/#+\s*/g,'').replace(/\n+/g,' ').trim().slice(0, 180)
+      };
+    } catch (e) { /* file missing — skip */ }
+  }
+
+  return data;
+}
+
+const GAME_DATA = loadGameData();
+
+// Pre-built class list string for the character creation prompt
+function buildClassListStr() {
+  const classFlavorMap = {
+    barbarian: 'Rage-fueled warrior. Hits the hardest, tanks the most.',
+    bard:      'Performer-mage. Spells, skills, and silver tongue.',
+    cleric:    'Divine conduit. Healer or warrior depending on your god.',
+    druid:     'Nature\'s voice. Shapeshifts, storms, and wild magic.',
+    fighter:   'Martial master. Every weapon, any battlefield.',
+    monk:      'Living weapon. Speed and precision, no armor needed.',
+    paladin:   'Sacred oath warrior. Heavy armor, divine spells, aura of protection.',
+    ranger:    'Wilderness hunter. Tracking, archery, beast companion.',
+    rogue:     'Shadow striker. Sneak attacks, skills, and quick escapes.',
+    sorcerer:  'Born with magic in the blood. Raw power, limited spells.',
+    warlock:   'Pact-bound spellcaster. Few strong spells, recover on short rest.',
+    wizard:    'Studied mage. Largest spell list, most versatile magic.'
+  };
+
+  return Object.entries(GAME_DATA.classes).map(([key, c], i) => {
+    const spell = c.spellcasting ? ` [${c.spellcasting} spellcaster]` : '';
+    return `${i+1}. **${c.name}** (${c.hit_dice}${spell}) — ${classFlavorMap[key] || c.desc_short}`;
+  }).join('\n');
+}
+
+function buildRaceListStr() {
+  const raceFlavorMap = {
+    human:      '+1 all stats (or Variant: +1 two stats, bonus skill, feat).',
+    elf:        '+2 DEX, darkvision, Fey Ancestry, Trance.',
+    dwarf:      '+2 CON, darkvision, poison resistance, stonecunning.',
+    halfling:   '+2 DEX, Halfling Luck (reroll nat 1s), Brave.',
+    half_elf:   '+2 CHA, +1 to two stats, darkvision, two free skills.',
+    half_orc:   '+2 STR, +1 CON, darkvision, Relentless Endurance, Savage Attacks.',
+    gnome:      '+2 INT, darkvision, advantage on INT/WIS/CHA magic saves.',
+    tiefling:   '+2 CHA, +1 INT, darkvision, fire resistance, innate spells.',
+    dragonborn: '+2 STR, +1 CHA, breath weapon, damage resistance.'
+  };
+
+  return Object.entries(GAME_DATA.races).map(([key, r], i) => {
+    return `${i+1}. **${r.name}** — ${raceFlavorMap[key] || r.desc_short}`;
+  }).join('\n');
+}
+
+// ─── RAG: 5E KNOWLEDGE BASE ───────────────────────────────────────────────────
+// Builds a name→filename index at startup (filenames only — no file reads).
+// On each player message, scans for entity mentions and injects compact stat
+// blocks into the system prompt so Mistral has accurate D&D data to work with.
+
+const RAG_INDEX = { spells: {}, monsters: {}, items: {} };
+
+function buildRagIndex() {
+  const cats = [
+    { key: 'spells',   dir: path.join(DATA_DIR, 'spells') },
+    { key: 'monsters', dir: path.join(DATA_DIR, 'monsters') },
+    { key: 'items',    dir: path.join(DATA_DIR, 'items') },
+  ];
+  for (const { key, dir } of cats) {
+    try {
+      const files = fs.readdirSync(dir).filter(f => f.endsWith('.json'));
+      for (const f of files) {
+        // Convert filename to searchable name: "magic_missile.json" → "magic missile"
+        const name = f.replace(/\.json$/, '').replace(/_/g, ' ').toLowerCase();
+        RAG_INDEX[key][name] = path.join(dir, f);
+      }
+    } catch {}
+  }
+  const total = Object.values(RAG_INDEX).reduce((s, v) => s + Object.keys(v).length, 0);
+  console.log(`  ✓ RAG index built — ${total} entries (spells:${Object.keys(RAG_INDEX.spells).length} monsters:${Object.keys(RAG_INDEX.monsters).length} items:${Object.keys(RAG_INDEX.items).length})`);
+}
+
+// In-memory cache so we don't re-read the same file every message
+const _ragCache = {};
+function ragLoadFile(filepath) {
+  if (_ragCache[filepath]) return _ragCache[filepath];
+  try {
+    const d = JSON.parse(fs.readFileSync(filepath, 'utf8'));
+    _ragCache[filepath] = d;
+    return d;
+  } catch { return null; }
+}
+
+// Format a spell entry into a compact DM reference block
+function formatSpell(d) {
+  if (!d) return null;
+  const conc = d.requires_concentration ? ' [Concentration]' : '';
+  const ritual = d.ritual === 'yes' ? ' [Ritual]' : '';
+  const desc = (d.desc || '').replace(/\n+/g, ' ').trim().slice(0, 300);
+  const higher = d.higher_level ? ` | Upcast: ${d.higher_level.trim().slice(0, 100)}` : '';
+  return `SPELL: ${d.name} | Lv${d.level_int ?? d.spell_level ?? '?'} ${d.school || ''} | Cast: ${d.casting_time || '?'} | Range: ${d.range || '?'} | Duration: ${d.duration || '?'}${conc}${ritual} | Components: ${d.components || '?'}\n${desc}${higher}`;
+}
+
+// Format a monster entry into a compact DM reference block
+function formatMonster(d) {
+  if (!d) return null;
+  const scores = d.ability_scores || {};
+  const statsStr = ['str','dex','con','int','wis','cha'].map(s => `${s.toUpperCase()}:${scores[s]||'?'}`).join(' ');
+  const actions = (d.actions || []).slice(0, 3).map(a => `  • ${a.name}: ${(a.desc||'').slice(0,100)}`).join('\n');
+  const traits  = (d.traits  || []).slice(0, 2).map(t => `  • ${t.name}: ${(t.desc||'').slice(0,80)}`).join('\n');
+  return `MONSTER: ${d.name} | CR ${d.challenge_rating} | HP ${d.hit_points} | AC ${d.armor_class} | Speed ${d.speed?.walk ?? '?'}ft | XP ${d.experience_points || '?'}\n${statsStr}\n${traits ? 'Traits:\n'+traits+'\n' : ''}Actions:\n${actions}`;
+}
+
+// Format an item entry
+function formatItem(d) {
+  if (!d) return null;
+  const rarity = d.rarity || '';
+  const type   = d.type || '';
+  const desc   = (d.desc || '').replace(/\n+/g, ' ').trim().slice(0, 250);
+  return `ITEM: ${d.name} | ${type}${rarity ? ' | '+rarity : ''}\n${desc}`;
+}
+
+// ── Keyword association map ───────────────────────────────────────────────────
+// Maps natural language descriptions / partial terms to canonical entity names.
+// Handles plurals, adjectives, descriptive phrases, and common DM shorthand.
+const RAG_ALIASES = {
+  // ── Fire / flame spells
+  'fire spell': ['fireball','fire bolt','burning hands','scorching ray'],
+  'firespell':  ['fireball','fire bolt'],
+  'flame spell':['fireball','burning hands','fire bolt'],
+  'fire magic': ['fireball','fire bolt','burning hands','scorching ray'],
+  'fire attack':['fire bolt','scorching ray'],
+  'fireball':   ['fireball'],
+  'fire bolt':  ['fire bolt'],
+  'burning hands':['burning hands'],
+  // ── Ice / frost / cold
+  'ice spell':  ['ray of frost','ice storm','cone of cold'],
+  'frost spell':['ray of frost','ice storm'],
+  'cold spell': ['ray of frost','cone of cold'],
+  'ice magic':  ['ray of frost','ice storm','cone of cold'],
+  // ── Lightning / thunder
+  'lightning spell': ['lightning bolt','call lightning'],
+  'thunder spell':   ['thunderwave','shatter'],
+  'shock spell':     ['shocking grasp','lightning bolt'],
+  // ── Healing
+  'heal':         ['cure wounds','healing word'],
+  'healing spell':['cure wounds','healing word','mass cure wounds'],
+  'cure':         ['cure wounds'],
+  // ── Sleep / charm / mind
+  'sleep spell':  ['sleep'],
+  'charm spell':  ['charm person','hold person'],
+  'mind spell':   ['charm person','hold person','crown of madness'],
+  // ── Summon / conjure
+  'summon spell': ['conjure animals','find familiar','unseen servant'],
+  'conjure':      ['conjure animals','conjure elemental'],
+  // ── Shield / protection
+  'shield spell': ['shield','mage armor','protection from evil and good'],
+  'protect':      ['shield','mage armor'],
+  // ── Darkness / shadow
+  'darkness spell':['darkness','fog cloud'],
+  'shadow spell':  ['darkness','shadow blade'],
+  // ── Monsters — plurals + adjectives
+  'goblins':    ['goblin'],
+  'goblin group':['goblin'],
+  'tough goblin':['goblin'],
+  'orcs':       ['orc'],
+  'trolls':     ['troll'],
+  'skeletons':  ['skeleton'],
+  'zombies':    ['zombie'],
+  'bandits':    ['bandit'],
+  'wolves':     ['wolf'],
+  'spiders':    ['giant spider'],
+  'rats':       ['giant rat'],
+  'dragons':    ['dragon'],
+  'ogres':      ['ogre'],
+  'gnolls':     ['gnoll'],
+  'kobolds':    ['kobold'],
+  'hobgoblins': ['hobgoblin'],
+  'bugbears':   ['bugbear'],
+  'vampires':   ['vampire'],
+  'ghosts':     ['ghost'],
+  'wraiths':    ['wraith'],
+  // ── Creature types / concepts
+  'undead':     ['skeleton','zombie','ghoul','wight'],
+  'demon':      ['quasit','imp','balor'],
+  'devil':      ['imp','chain devil','pit fiend'],
+  'elemental':  ['air elemental','earth elemental','fire elemental','water elemental'],
+  'construct':  ['animated armor','shield guardian'],
+  'beast':      ['wolf','giant spider','brown bear'],
+  // ── Items — common descriptions
+  'magic sword':  ['sword of life stealing','flame tongue'],
+  'healing potion':['potion of healing'],
+  'health potion': ['potion of healing'],
+  'potion':        ['potion of healing'],
+  'magic armor':   ['adamantine armor','mithral armor'],
+};
+
+// Expand text using alias map — returns extra search terms
+function expandAliases(text) {
+  const lower = text.toLowerCase();
+  const extras = new Set();
+  for (const [alias, targets] of Object.entries(RAG_ALIASES)) {
+    if (lower.includes(alias)) {
+      for (const t of targets) extras.add(t);
+    }
+  }
+  return [...extras];
+}
+
+// Extract entity mentions from a text string, search index, return formatted blocks
+// maxEntries caps total injected entries to avoid context bloat
+function ragSearch(text, maxEntries = 5) {
+  // Combine original text + alias expansions into one search corpus
+  const aliasExpansions = expandAliases(text);
+  const searchCorpus = (text + ' ' + aliasExpansions.join(' ')).toLowerCase();
+  const results = [];
+  const seen = new Set();
+
+  // Search each category — longest match first to avoid "fire" before "fireball"
+  for (const [cat, index] of Object.entries(RAG_INDEX)) {
+    const names = Object.keys(index).sort((a, b) => b.length - a.length);
+    for (const name of names) {
+      if (results.length >= maxEntries) break;
+      if (seen.has(name)) continue;
+      const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp(`\\b${escaped}\\b`, 'i');
+      if (re.test(searchCorpus)) {
+        seen.add(name);
+        const d = ragLoadFile(index[name]);
+        let formatted = null;
+        if (cat === 'spells')   formatted = formatSpell(d);
+        if (cat === 'monsters') formatted = formatMonster(d);
+        if (cat === 'items')    formatted = formatItem(d);
+        if (formatted) results.push(formatted);
+      }
+    }
+    if (results.length >= maxEntries) break;
+  }
+
+  return results;
+}
+
+// Build compact spell list for the character's known/prepared spells
+function buildCharSpellContext(state) {
+  const party = state && state.party && state.party[0];
+  if (!party || !party.spells) return '';
+  const spells = party.spells;
+  const allNames = [
+    ...(spells.cantrips || []),
+    ...(spells.level_1  || []),
+    ...(spells.level_2  || []),
+    ...(spells.level_3  || []),
+  ];
+  if (allNames.length === 0) return '';
+
+  const blocks = [];
+  for (const name of allNames) {
+    const key = name.toLowerCase().replace(/\s+/g, ' ').trim();
+    const filepath = RAG_INDEX.spells[key];
+    if (filepath) {
+      const d = ragLoadFile(filepath);
+      const f = formatSpell(d);
+      if (f) blocks.push(f);
+    }
+  }
+  if (blocks.length === 0) return '';
+  return `\n\nCHARACTER SPELL REFERENCE (known/prepared spells — full stats):\n${blocks.join('\n\n')}`;
+}
+
+// Build the full RAG injection string to append to the system prompt
+function buildRagContext(playerMessage, dmContext, state) {
+  const searchText = playerMessage + ' ' + (dmContext || '');
+  const hits = ragSearch(searchText, 5);
+
+  // Always include the character's own spells (so DM always has accurate spell data)
+  const spellCtx = buildCharSpellContext(state);
+
+  // Deduplicate: remove any hits already covered in the character's spell list
+  const spellLines = new Set(spellCtx.split('\n').filter(l => l.startsWith('SPELL:')));
+  const filteredHits = hits.filter(h => !spellLines.has(h.split('\n')[0]));
+
+  const ragSection = filteredHits.length > 0
+    ? `\n\n📖 REFERENCE DATA (use this — do not guess or invent stats):\n${filteredHits.join('\n\n')}`
+    : '';
+
+  return spellCtx + ragSection;
+}
+
+function getClassEquipment(cls) {
+  const eq = {
+    barbarian: '- Greataxe\n- Two handaxes\n- Explorer\'s pack\n- Four javelins',
+    bard:      '- Rapier\n- Diplomat\'s pack\n- Lute\n- Leather armor\n- Dagger',
+    cleric:    '- Mace\n- Scale mail\n- Light crossbow + 20 bolts\n- Shield\n- Holy symbol\n- Priest\'s pack',
+    druid:     '- Wooden shield\n- Scimitar\n- Leather armor\n- Explorer\'s pack\n- Druidic focus (wooden staff)\n- Herbalism kit',
+    fighter:   '- Chain mail\n- Longsword and shield\n- Two handaxes\n- Dungeoneer\'s pack\n- 10 javelins',
+    monk:      '- Shortsword\n- Dungeoneer\'s pack\n- 10 darts',
+    paladin:   '- Chain mail\n- Holy symbol\n- Longsword and shield\n- Five javelins\n- Priest\'s pack',
+    ranger:    '- Scale mail\n- Longbow + 20 arrows\n- Two shortswords\n- Dungeoneer\'s pack\n- Favored enemy lore notes',
+    rogue:     '- Rapier\n- Shortbow + 20 arrows\n- Burglar\'s pack\n- Leather armor\n- Two daggers\n- Thieves\' tools',
+    sorcerer:  '- Light crossbow + 20 bolts\n- Two daggers\n- Dungeoneer\'s pack\n- Arcane focus (crystal)',
+    warlock:   '- Light crossbow + 20 bolts\n- Two daggers\n- Scholar\'s pack\n- Leather armor\n- Arcane focus',
+    wizard:    '- Quarterstaff\n- Spellbook (6 chosen spells + Mage Armor + Magic Missile)\n- Scholar\'s pack\n- Arcane focus\n- Component pouch',
+  };
+  const key = (cls||'').toLowerCase().split(/[\s(]/)[0];
+  return eq[key] || '- Standard adventurer\'s gear';
+}
+
+function getBackgroundEquipment(bg) {
+  const eq = {
+    acolyte:    '- Holy symbol\n- Prayer book\n- 5 sticks of incense\n- Vestments\n- Common clothes\n- Belt pouch (15 gp)',
+    sage:       '- Ink bottle\n- Ink pen\n- Small knife\n- Letter from a dead colleague\n- Common clothes\n- Belt pouch (10 gp)',
+    criminal:   '- Crowbar\n- Dark common clothes with hood\n- Belt pouch (15 gp)',
+    'folk hero':'- Artisan\'s tools (one type)\n- Shovel\n- Iron pot\n- Common clothes\n- Belt pouch (10 gp)',
+    soldier:    '- Rank insignia\n- A trophy from a fallen enemy\n- Bone dice or deck of cards\n- Common clothes\n- Belt pouch (10 gp)',
+    outlander:  '- Staff\n- Hunting trap\n- Trophy from an animal kill\n- Traveler\'s clothes\n- Belt pouch (10 gp)',
+    noble:      '- Fine clothes\n- Signet ring\n- Scroll of pedigree\n- Purse (25 gp)',
+    entertainer:'- Musical instrument\n- Favor from an admirer\n- Costume\n- Belt pouch (15 gp)',
+    hermit:     '- Scroll case with notes\n- Winter blanket\n- Common clothes\n- Herbalism kit\n- Belt pouch (5 gp)',
+    sailor:     '- Belaying pin (club)\n- Silk rope (50 ft)\n- Lucky charm\n- Common clothes\n- Belt pouch (10 gp)',
+    urchin:     '- Small knife\n- City map\n- Pet mouse\n- Token from parents\n- Common clothes\n- Belt pouch (10 gp)',
+    charlatan:  '- Fine clothes\n- Disguise kit\n- Con tools\n- Belt pouch (15 gp)',
+  };
+  const key = (bg||'').toLowerCase().replace(/\s+/g,' ').trim();
+  return eq[key] || '- Standard background gear';
+}
+
+// ─── STARTING SPELL LISTS ─────────────────────────────────────────────────────
+function buildSpellListMessage(cls) {
+  const c = (cls||'').toLowerCase().split(/[\s(]/)[0];
+  const LISTS = {
+    bard: {
+      note: 'Bards know their spells permanently (no preparation needed).',
+      cantrips_count: 2,
+      cantrips: ['Vicious Mockery','Minor Illusion','Prestidigitation','Mage Hand','Message','Light','Friends','Mending','True Strike','Dancing Lights'],
+      l1_count: 4,
+      l1: ['Charm Person','Cure Wounds','Detect Magic','Disguise Self','Dissonant Whispers','Faerie Fire','Healing Word','Heroism','Longstrider','Silent Image','Sleep','Thunderwave','Tasha\'s Hideous Laughter','Unseen Servant','Command','Animal Friendship','Comprehend Languages'],
+    },
+    wizard: {
+      note: 'Wizards learn spells in their spellbook. You start with 6 level-1 spells plus Mage Armor and Magic Missile (already in your book).',
+      cantrips_count: 3,
+      cantrips: ['Fire Bolt','Ray of Frost','Shocking Grasp','Chill Touch','Mage Hand','Minor Illusion','Prestidigitation','Poison Spray','True Strike','Light','Acid Splash','Message','Dancing Lights','Blade Ward'],
+      l1_count: 6,
+      l1: ['Sleep','Burning Hands','Charm Person','Color Spray','Comprehend Languages','Detect Magic','Disguise Self','Expeditious Retreat','False Life','Feather Fall','Find Familiar','Fog Cloud','Grease','Identify','Jump','Longstrider','Shield','Silent Image','Thunderwave','Witch Bolt'],
+    },
+    sorcerer: {
+      note: 'Sorcerers know their spells permanently. Your magic is instinctive — once you know a spell, it\'s yours.',
+      cantrips_count: 4,
+      cantrips: ['Fire Bolt','Chill Touch','Ray of Frost','Shocking Grasp','Mage Hand','Minor Illusion','Prestidigitation','True Strike','Light','Acid Splash','Poison Spray','Dancing Lights','Blade Ward'],
+      l1_count: 2,
+      l1: ['Burning Hands','Charm Person','Chromatic Orb','Color Spray','Detect Magic','Disguise Self','Expeditious Retreat','False Life','Feather Fall','Fog Cloud','Jump','Mage Armor','Magic Missile','Ray of Sickness','Shield','Silent Image','Sleep','Thunderwave','Witch Bolt'],
+    },
+    warlock: {
+      note: 'Warlocks know their spells permanently. All your spell slots refresh on a short rest.',
+      cantrips_count: 2,
+      cantrips: ['Eldritch Blast','Chill Touch','Minor Illusion','Prestidigitation','Mage Hand','True Strike','Poison Spray','Blade Ward'],
+      l1_count: 2,
+      l1: ['Armor of Agathys','Arms of Hadar','Charm Person','Comprehend Languages','Expeditious Retreat','Hellish Rebuke','Hex','Illusory Script','Protection from Evil and Good','Unseen Servant','Witch Bolt'],
+    },
+    cleric: {
+      note: 'Clerics prepare spells from the full cleric list each long rest. At level 1 you can prepare WIS modifier + 1 spells (minimum 1). Choose your starting prep:',
+      cantrips_count: 3,
+      cantrips: ['Guidance','Light','Mending','Resistance','Sacred Flame','Spare the Dying','Thaumaturgy','Toll the Dead','Word of Radiance'],
+      l1_count: 0, // prepared, so no fixed count — list suggestions
+      l1: ['Bane','Bless','Command','Cure Wounds','Detect Magic','Guiding Bolt','Healing Word','Inflict Wounds','Protection from Evil and Good','Sanctuary','Shield of Faith','Detect Evil and Good'],
+    },
+    druid: {
+      note: 'Druids prepare spells each long rest. At level 1 you can prepare WIS modifier + 1 spells. Choose your cantrips, then suggested prep:',
+      cantrips_count: 2,
+      cantrips: ['Druidcraft','Guidance','Mending','Poison Spray','Produce Flame','Resistance','Shillelagh','Thorn Whip'],
+      l1_count: 0,
+      l1: ['Animal Friendship','Charm Person','Cure Wounds','Detect Magic','Detect Poison and Disease','Entangle','Faerie Fire','Fog Cloud','Goodberry','Healing Word','Jump','Longstrider','Speak with Animals','Thunderwave'],
+    },
+    paladin: {
+      note: 'Paladins don\'t get spells until level 2. When you level up, you\'ll prepare spells from the paladin list.',
+      cantrips_count: 0, cantrips: [], l1_count: 0, l1: [], no_spells_yet: true,
+    },
+    ranger: {
+      note: 'Rangers don\'t get spells until level 2. When you reach it, you\'ll choose from the ranger spell list.',
+      cantrips_count: 0, cantrips: [], l1_count: 0, l1: [], no_spells_yet: true,
+    },
+  };
+  const data = LISTS[c];
+  if (!data) return null;
+  if (data.no_spells_yet) return `**${cls} — Spellcasting:** ${data.note}\n\nSkip ahead to equipment!`;
+  let msg = `**Starting Spells for ${cls}**\n${data.note}\n\n`;
+  if (data.cantrips_count > 0) {
+    msg += `**Cantrips — choose ${data.cantrips_count}:**\n`;
+    msg += data.cantrips.map((s,i)=>`${i+1}. ${s}`).join('\n') + '\n\n';
+  }
+  if (data.l1_count > 0) {
+    msg += `**Level 1 Spells — choose ${data.l1_count}:**\n`;
+    msg += data.l1.map((s,i)=>`${i+1}. ${s}`).join('\n') + '\n\n';
+  } else if (data.l1.length > 0) {
+    msg += `**Level 1 Spell options:**\n`;
+    msg += data.l1.map((s,i)=>`${i+1}. ${s}`).join('\n') + '\n\n';
+  }
+  msg += 'Tell me which you want — e.g. "Cantrips: Vicious Mockery, Minor Illusion / Spells: Cure Wounds, Healing Word, Sleep, Faerie Fire"';
+  return msg;
+}
+
+buildRagIndex(); // Run at startup
 
 // ─── PORT CLEANUP ─────────────────────────────────────────────────────────────
 function killPort(port) {
@@ -127,12 +579,12 @@ function showBanner() {
   const pad = (str) => str.slice(0, 50).padEnd(50);
 
   console.log('');
-  console.log('  ██████╗ ██╗   ██╗██████╗ ██╗██╗  ██╗');
-  console.log('  ██╔══██╗██║   ██║██╔══██╗██║██║ ██╔╝');
-  console.log('  ██████╔╝██║   ██║██████╔╝██║█████╔╝ ');
-  console.log('  ██╔══██╗██║   ██║██╔══██╗██║██╔═██╗ ');
-  console.log('  ██║  ██║╚██████╔╝██║  ██║██║██║  ██╗');
-  console.log('  ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝');
+  console.log('  ██████╗  ██╗    ██╗ ██████╗     ███████╗███████╗');
+  console.log('  ██╔══██╗ ███╗   ██║ ██╔══██╗    ██╔════╝██╔════╝');
+  console.log('  ██║  ██║ ██╔██╗ ██║ ██║  ██║    ███████╗█████╗  ');
+  console.log('  ██║  ██║ ██║╚██╗██║ ██║  ██║    ╚════██║██╔══╝  ');
+  console.log('  ██████╔╝ ██║ ╚████║ ██████╔╝    ███████║███████╗');
+  console.log('  ╚═════╝  ╚═╝  ╚═══╝ ╚═════╝     ╚══════╝╚══════╝');
   console.log('');
   console.log('  ╔══════════════════════════════════════════════════════╗');
   console.log('  ║                                                      ║');
@@ -180,6 +632,8 @@ function showStateSummary() {
 // ─── DEFAULT STATE ─────────────────────────────────────────────────────────────
 const BLANK_STATE = {
   campaign_id: 'new-campaign',
+  creation_step: 1,   // tracks which character creation step we're on (1-9)
+  creation_data: {},  // accumulates choices: { setting, class, subclass, race, background, stats, spells, name }
   world: { name: 'Forgotten Realms', lore_summary: 'New campaign — character creation in progress.',
     current_location: 'Character Creation', time: 'Day 1 — Morning', seal_integrity: 100, seal_status: 'N/A', map_id: null, story_notes: '' },
   party: [{
@@ -311,14 +765,12 @@ function profBonus(level) {
 
 // ─── TOOLS ────────────────────────────────────────────────────────────────────
 const TOOLS = [
-  {name:'roll_dice',description:'Roll dice for any D&D check. ALWAYS use this for every dice roll. Append "advantage" or "disadvantage" to a d20 expression (e.g. "d20 advantage") to roll 2d20 and keep highest/lowest.',
+  {name:'roll_dice',description:'Roll dice. ALWAYS call for every roll. Add "advantage"/"disadvantage" to d20 for 2d20 keep high/low.',
    input_schema:{type:'object',properties:{expression:{type:'string',description:'e.g. "d20", "2d6+3", "d20 advantage", "d20 disadvantage"'},purpose:{type:'string'}},required:['expression','purpose']}},
   {name:'update_hp',description:"Update the character's current HP after damage or healing.",
    input_schema:{type:'object',properties:{hp:{type:'number'},reason:{type:'string'}},required:['hp','reason']}},
   {name:'use_spell_slot',description:'Spend a spell slot when a leveled spell is cast.',
    input_schema:{type:'object',properties:{level:{type:'number'},spell_name:{type:'string'}},required:['level','spell_name']}},
-  {name:'use_channel_divinity',description:'Spend Channel Divinity.',
-   input_schema:{type:'object',properties:{ability:{type:'string'}},required:['ability']}},
   {name:'restore_resources',description:'Restore resources after a long or short rest. For short rest you can optionally spend hit dice for healing.',
    input_schema:{type:'object',properties:{rest_type:{type:'string',enum:['long_rest','short_rest']},hit_dice_spent:{type:'number',description:'Number of hit dice spent during short rest (optional)'}},required:['rest_type']}},
   {name:'add_inventory_item',description:"Add an item to the character's inventory.",
@@ -335,8 +787,6 @@ const TOOLS = [
    input_schema:{type:'object',properties:{event:{type:'string'}},required:['event']}},
   {name:'end_session',description:'End the session, write a narrative journal entry, sync context file, commit and push to GitHub.',
    input_schema:{type:'object',properties:{summary:{type:'string',description:'One-line session summary for the git commit message.'},recap:{type:'string',description:'2-3 paragraph narrative journal entry written in vivid prose from the DM perspective, describing what happened this session — key events, decisions, dramatic moments, and how it ends. Written like a campaign diary, not a bullet list.'}},required:['summary','recap']}},
-  {name:'set_music_scene',description:"Change the dashboard's background music to match the current narrative mood. Call this whenever the tone shifts: entering combat, arriving at a tavern, taking a rest, dramatic silence, etc.",
-   input_schema:{type:'object',properties:{scene:{type:'string',enum:['exploration','combat','rest','tavern','silence'],description:'exploration=travel/adventure, combat=battle/tension, rest=safe downtime/camp, tavern=social/inn, silence=dramatic pause'}},required:['scene']}},
   {name:'start_combat',description:'Initiate combat encounter. Opens combat tracker on dashboard with enemy list.',
    input_schema:{type:'object',properties:{enemies:{type:'array',items:{type:'object',properties:{name:{type:'string'},hp:{type:'number'},initiative:{type:'number'}},required:['name','hp','initiative']},description:'List of enemies in combat. Each enemy has name, hp (max), and initiative.'}},required:['enemies']}},
   {name:'add_npc',description:'Add a new NPC to the world tracker. Call whenever the player meets someone significant.',
@@ -364,7 +814,7 @@ const TOOLS = [
      lore:{type:'string',description:'Optional update to world lore summary'},
      map_id:{type:'string',description:'Optional dashboard map key to switch the map view (e.g. "campaign")'}
    },required:['location']}},
-  {name:'death_save',description:'Record a death saving throw result when the character is at 0 HP. The character needs 3 successes to stabilize or 3 failures to die. Roll 1d20 first (10+ = success).',
+  {name:'death_save',description:'Record a death save at 0 HP. 3 successes = stable, 3 failures = death.',
    input_schema:{type:'object',properties:{
      result:{type:'string',enum:['success','failure','nat20','nat1'],description:'success=rolled 10+, failure=rolled 9 or less, nat20=rolled 20 (regain 1HP), nat1=rolled 1 (counts as 2 failures)'}
    },required:['result']}},
@@ -379,25 +829,20 @@ const TOOLS = [
    input_schema:{type:'object',properties:{
      spell:{type:'string',description:'Spell name being concentrated on, or null/empty to clear concentration'},
    },required:[]}},
-  {name:'award_xp',description:'Award XP to the character and automatically level up if the XP threshold is reached. Call after combat victories, quest completions, or significant milestones.',
+  {name:'award_xp',description:'Award XP. Auto-levels if threshold reached. Call after combat, quest completions, milestones.',
    input_schema:{type:'object',properties:{
      amount:{type:'number',description:'XP to award'},
      reason:{type:'string',description:'Why the XP was earned'}
    },required:['amount','reason']}},
-  {name:'set_weather',description:'Set the current weather for the campaign world. Call when weather changes or is relevant to the scene. Displayed on the dashboard map overlay.',
-   input_schema:{type:'object',properties:{
-     condition:{type:'string',enum:['clear','cloudy','overcast','light_rain','heavy_rain','thunderstorm','fog','snow','blizzard','heatwave','magical'],description:'Weather condition'},
-     description:{type:'string',description:'Optional flavour text, e.g. "A cold drizzle patters on the cobblestones"'}
-   },required:['condition']}},
-  {name:'roll_encounter',description:'Roll a random encounter appropriate for the current terrain and party level. Call when players are traveling or when you want to add tension.',
-   input_schema:{type:'object',properties:{
-     terrain:{type:'string',enum:['road','forest','dungeon','mountain','coastal','urban','plains','swamp','underdark'],description:'Current terrain type'},
-     difficulty:{type:'string',enum:['easy','medium','hard','deadly'],description:'Encounter difficulty, default medium'}
-   },required:['terrain']}},
-  {name:'update_story_notes',description:'Persist important narrative facts that must survive session resets — NPC motivations, secret information revealed, player decisions, key plot points. Call whenever something important is established in the story.',
+  {name:'update_story_notes',description:'Persist important story facts (NPC secrets, player decisions, plot points) that must survive session resets.',
    input_schema:{type:'object',properties:{
      notes:{type:'string',description:'Narrative summary to persist. Append to existing notes — include who, what, where, and why. Max ~400 chars per call.'}
    },required:['notes']}},
+  {name:'advance_creation_step',description:'Call this after each character creation step is complete to move to the next step. Save any data the player just chose.',
+   input_schema:{type:'object',properties:{
+     step_completed:{type:'number',description:'The step number just completed (1-10)'},
+     data:{type:'object',description:'Data collected in this step. Keys: setting, class, subclass, race, background, skills (array of strings), variant_human (bool), variant_stat1 (str key), variant_stat2 (str key), variant_bonus_skill (string), variant_feat (string), stats (object with str/dex/con/int/wis/cha), spells (object with cantrips/level_1 arrays), name, description'}
+   },required:['step_completed']}},
   {name:'create_character',description:'Call this once character creation is COMPLETE. Populates the full character sheet and starts the campaign. Spell slots are auto-computed from class and level.',
    input_schema:{type:'object',
      properties:{
@@ -433,21 +878,36 @@ const TOOLS = [
      required:['name','class','level','hp','stats']}}
 ];
 
-// Mistral/OpenAI function-calling format wraps each tool in {type:'function', function:{...}}
-// and uses 'parameters' instead of 'input_schema'.
-const MISTRAL_TOOLS = TOOLS.map(t => ({
-  type: 'function',
-  function: { name: t.name, description: t.description, parameters: t.input_schema }
-}));
+// Strip property-level descriptions from a JSON schema to reduce token overhead.
+// Tool-level descriptions are kept; only parameter property descriptions are removed.
+function minifySchema(s) {
+  if (!s || typeof s !== 'object') return s;
+  const { description: _d, ...rest } = s;
+  const r = { ...rest };
+  if (r.properties) r.properties = Object.fromEntries(Object.entries(r.properties).map(([k,v]) => [k, minifySchema(v)]));
+  if (r.items) r.items = minifySchema(r.items);
+  return r;
+}
+
+// Groq uses OpenAI function-calling format: wrap each tool in {type:'function', function:{...}}
+// and rename input_schema → parameters.
+// Two tool sets: creation (advance_creation_step only) and gameplay (all others).
+const CREATION_TOOL_NAMES = new Set(['advance_creation_step', 'create_character']);
+// create_character is handled server-side at step 11 — model never calls it.
+const CREATION_TOOLS = TOOLS
+  .filter(t => t.name === 'advance_creation_step')
+  .map(t => ({ type: 'function', function: { name: t.name, description: t.description, parameters: minifySchema(t.input_schema) } }));
+const GAMEPLAY_TOOLS = TOOLS
+  .filter(t => !CREATION_TOOL_NAMES.has(t.name))
+  .map(t => ({ type: 'function', function: { name: t.name, description: t.description, parameters: minifySchema(t.input_schema) } }));
 
 // ─── TOOL EXECUTOR ────────────────────────────────────────────────────────────
 function executeTool(name, input) {
   const state = loadState();
   switch (name) {
-    case 'roll_dice': { const r=rollDice(input.expression); return {rolled:input.expression,purpose:input.purpose,result:r.breakdown,total:r.total,dice_rolled:true}; }
+    case 'roll_dice': { if (!input.expression) return {error:'Missing expression — e.g. "1d20"'}; const r=rollDice(input.expression); return {rolled:input.expression,purpose:input.purpose,result:r.breakdown,total:r.total,dice_rolled:true}; }
     case 'update_hp': { const hpMax=state.party[0].hp_max||state.party[0].hp||27; const hp=Math.max(0,Math.min(hpMax,Math.round(input.hp))); state.party[0].hp=hp; state.history_log.push({timestamp:new Date().toISOString(),event:input.reason}); saveState(state); return {success:true,hp,state_updated:true}; }
     case 'use_spell_slot': { const slots=state.party[0].spell_slots; const key=`level_${input.level}`; if(!slots[key]||slots[key].used>=slots[key].max) return {error:`No level ${input.level} slots remaining`}; slots[key].used++; state.history_log.push({timestamp:new Date().toISOString(),event:`Cast ${input.spell_name} (Lv${input.level}). ${slots[key].max-slots[key].used}/${slots[key].max} remaining.`}); saveState(state); return {success:true,remaining:slots[key].max-slots[key].used,state_updated:true}; }
-    case 'use_channel_divinity': { const cd=state.party[0].channel_divinity; if(cd.used>=cd.max) return {error:'No Channel Divinity remaining'}; cd.used++; state.history_log.push({timestamp:new Date().toISOString(),event:`Used Channel Divinity: ${input.ability}`}); saveState(state); return {success:true,remaining:cd.max-cd.used,state_updated:true}; }
     case 'restore_resources': {
       const r=state.party[0];
       const isWarlock=/warlock/i.test(r.class||'');
@@ -512,6 +972,7 @@ function executeTool(name, input) {
       saveState(state); return {success:true,conditions:char.conditions,state_updated:true};
     }
     case 'add_npc': {
+      if (!input.name) return { error: 'Missing required field: name' };
       const npcId=(input.name||'npc').toLowerCase().replace(/[^a-z0-9]+/g,'-');
       // Check for duplicate — update instead of creating a second copy
       const existing=state.npcs.find(n=>n.name.toLowerCase()===input.name.toLowerCase()||n.id===npcId);
@@ -604,40 +1065,15 @@ function executeTool(name, input) {
       saveState(state); return {success:true,xp:p.xp,level:p.level,leveled,state_updated:true};
     }
     case 'append_history_log': { state.history_log.push({timestamp:new Date().toISOString(),event:input.event}); saveState(state); return {success:true}; }
-    case 'set_music_scene': { return {success:true, scene:input.scene, music_scene:true}; }
-    case 'set_weather': {
-      if (!state.world) state.world = {};
-      state.world.weather = { condition: input.condition, description: input.description || '' };
-      state.history_log.push({timestamp:new Date().toISOString(),event:`Weather changed to ${input.condition}${input.description?' — '+input.description:''}`});
-      saveState(state);
-      return {success:true, weather:state.world.weather, state_updated:true};
-    }
-    case 'roll_encounter': {
-      const ENCOUNTERS = {
-        road:    ['Traveling merchants (3 guards)', 'Bandits demanding toll (roll Persuasion DC 14 or fight)', 'Injured traveler needing aid', 'Wandering beast: wolf pack (4)', 'Royal messenger on urgent errand', 'Broken-down cart blocking road'],
-        forest:  ['Giant spiders dropping from canopy (2)', 'Druid tending wounded animal — potential ally', 'Owlbear territory marker — fresh kills nearby', 'Pixie mischief — small items go missing', 'Ancient shrine, crumbling, faint magical aura', 'Goblin hunting party (5, including shaman)'],
-        dungeon: ['Gelatinous cube — silent and nearly invisible', 'Skeleton patrol (4)', 'Trapped chest with poison needle', 'Rival adventuring party — hostile or cooperative', 'Giant rats nesting in collapsed chamber (6)', 'Cultist ritual in progress'],
-        mountain:['Stone giant scouting territory', 'Harpy nest above a narrow pass', 'Avalanche risk — Dexterity DC 15 or 4d6 damage', 'Griffon hunting party', 'Mountain hermit with cryptic knowledge', 'Hidden dwarven outpost, abandoned'],
-        coastal: ['Sahuagin raid on fishing village', 'Merfolk warning of sea hag territory', 'Shipwreck with survivors — and a monster', 'Pirates seeking crew (or victims)', 'Giant crab emerging from surf (2)', 'Storm rolls in — find shelter or take damage'],
-        urban:   ['Pickpocket (Dexterity contest)', 'City watch patrol — papers check', 'Flash mob / riot breaking out', 'Assassination attempt on nearby noble', 'Black market dealer with rare item', 'Fire in a crowded district'],
-        plains:  ['Gnoll war band on the move (6)', 'Wild horse herd — potential mounts', 'Wyvern circling overhead', 'Merchant caravan willing to share camp', 'Ancient battlefield — restless spirits at night', 'Scarecrow that isn\'t quite right'],
-        swamp:   ['Will-o-wisp leading astray — Wisdom DC 13', 'Lizardfolk patrol (4) defending territory', 'Quicksand — Strength DC 12 to escape', 'Hag\'s cottage — smoke rising, door ajar', 'Zombie ambush from murky water (6)', 'Giant crocodile sunning on bank'],
-        underdark:['Drow patrol (4, hostile)', 'Myconid colony — peaceful but alien', 'Purple worm burrow crossing nearby — tremors', 'Aboleth psychic lure — Wisdom save DC 15', 'Duergar slavers with captured surface dwellers', 'Bioluminescent cave with hidden shrine']
-      };
-      const terrain = input.terrain || 'road';
-      const table = ENCOUNTERS[terrain] || ENCOUNTERS.road;
-      const roll = Math.floor(Math.random() * table.length);
-      const encounter = table[roll];
-      const diff = input.difficulty || 'medium';
-      state.history_log.push({timestamp:new Date().toISOString(),event:`Random encounter (${terrain}, ${diff}): ${encounter}`});
-      saveState(state);
-      return {success:true, terrain, difficulty:diff, encounter, roll: roll+1, table_size: table.length};
-    }
     case 'update_story_notes': {
       if (!state.world) state.world = {};
       const existing = state.world.story_notes || '';
+      // Dedup: skip if a very similar note already exists (first 60 chars match anything in existing)
+      const fingerprint = input.notes.trim().slice(0, 60).toLowerCase();
+      const alreadySaved = existing.toLowerCase().includes(fingerprint);
+      if (alreadySaved) return {success:true, skipped:'duplicate', story_notes:existing};
       const separator = existing ? '\n• ' : '• ';
-      state.world.story_notes = (existing + separator + input.notes).slice(-2000); // cap at 2000 chars
+      state.world.story_notes = (existing + separator + input.notes).slice(-3000);
       state.history_log.push({timestamp:new Date().toISOString(),event:`Story note saved: ${input.notes.slice(0,80)}`});
       saveState(state);
       return {success:true, story_notes:state.world.story_notes, state_updated:true};
@@ -650,7 +1086,7 @@ function executeTool(name, input) {
     }
     case 'end_session': {
       const messages = [];
-      // 1. Write journal entry
+      // 1. Write journal entry + save session recap for next-session injection
       try {
         if (input.recap) {
           const st=loadState(); const world=st.world; const char=st.party&&st.party[0];
@@ -661,6 +1097,9 @@ function executeTool(name, input) {
           if (!fs.existsSync(JOURNAL_PATH)) fs.writeFileSync(JOURNAL_PATH,`# ${charName} — Campaign Journal\n`,'utf8');
           fs.appendFileSync(JOURNAL_PATH,entry,'utf8');
           messages.push('Journal written.');
+          // Save recap to state so it's injected as "PREVIOUSLY IN YOUR ADVENTURE" next session
+          st.world.session_recap = input.recap.trim().slice(0, 2500);
+          saveState(st);
         }
       } catch(e) { messages.push(`Journal error: ${e.message}`); }
       // 2. Sync context file
@@ -685,6 +1124,284 @@ function executeTool(name, input) {
         } else { messages.push('No remote configured — skipped push.'); }
       } catch(e) { messages.push(`Push error: ${(e.stdout||e.stderr||'').toString().slice(0,100)}`); }
       return {success:true, message:messages.join(' ')};
+    }
+    case 'advance_creation_step': {
+      // Skill pools: player picks `count` from `pool` (SRD class proficiency options)
+      const CLASS_SKILL_POOLS = {
+        barbarian:{ count:2, pool:['Animal Handling','Athletics','Intimidation','Nature','Perception','Survival'] },
+        bard:     { count:3, pool:['Acrobatics','Animal Handling','Arcana','Athletics','Deception','History','Insight','Intimidation','Investigation','Medicine','Nature','Perception','Performance','Persuasion','Religion','Sleight of Hand','Stealth','Survival'] },
+        cleric:   { count:2, pool:['History','Insight','Medicine','Persuasion','Religion'] },
+        druid:    { count:2, pool:['Arcana','Animal Handling','Insight','Medicine','Nature','Perception','Religion','Survival'] },
+        fighter:  { count:2, pool:['Acrobatics','Animal Handling','Athletics','History','Insight','Intimidation','Perception','Survival'] },
+        monk:     { count:2, pool:['Acrobatics','Athletics','History','Insight','Religion','Stealth'] },
+        paladin:  { count:2, pool:['Athletics','Insight','Intimidation','Medicine','Persuasion','Religion'] },
+        ranger:   { count:3, pool:['Animal Handling','Athletics','Insight','Investigation','Nature','Perception','Stealth','Survival'] },
+        rogue:    { count:4, pool:['Acrobatics','Athletics','Deception','Insight','Intimidation','Investigation','Perception','Performance','Persuasion','Sleight of Hand','Stealth'] },
+        sorcerer: { count:2, pool:['Arcana','Deception','Insight','Intimidation','Persuasion','Religion'] },
+        warlock:  { count:2, pool:['Arcana','Deception','History','Intimidation','Investigation','Nature','Religion'] },
+        wizard:   { count:2, pool:['Arcana','History','Insight','Investigation','Medicine','Religion'] },
+      };
+      // Always-prepared spells auto-added at level 1 by subclass/domain/patron
+      const ALWAYS_PREPARED = {
+        'knowledge domain':{ level_1:['Command','Identify'] },      'knowledge':{ level_1:['Command','Identify'] },
+        'life domain':{ level_1:['Bless','Cure Wounds'] },           'life':{ level_1:['Bless','Cure Wounds'] },
+        'light domain':{ level_1:['Burning Hands','Faerie Fire'] },  'light':{ level_1:['Burning Hands','Faerie Fire'] },
+        'nature domain':{ level_1:['Animal Friendship','Speak with Animals'] }, 'nature':{ level_1:['Animal Friendship','Speak with Animals'] },
+        'tempest domain':{ level_1:['Fog Cloud','Thunderwave'] },     'tempest':{ level_1:['Fog Cloud','Thunderwave'] },
+        'trickery domain':{ level_1:['Charm Person','Disguise Self'] },'trickery':{ level_1:['Charm Person','Disguise Self'] },
+        'war domain':{ level_1:['Divine Favor','Shield of Faith'] },  'war':{ level_1:['Divine Favor','Shield of Faith'] },
+        'oath of devotion':{ level_1:['Protection from Evil and Good','Sanctuary'] }, 'devotion':{ level_1:['Protection from Evil and Good','Sanctuary'] },
+        'oath of the ancients':{ level_1:['Ensnaring Strike','Speak with Animals'] }, 'ancients':{ level_1:['Ensnaring Strike','Speak with Animals'] },
+        'oath of vengeance':{ level_1:['Bane',"Hunter's Mark"] },   'vengeance':{ level_1:['Bane',"Hunter's Mark"] },
+        'the archfey':{ level_1:['Faerie Fire','Sleep'] },            'archfey':{ level_1:['Faerie Fire','Sleep'] },
+        'the fiend':{ level_1:['Burning Hands','Command'] },          'fiend':{ level_1:['Burning Hands','Command'] },
+        'the great old one':{ level_1:['Dissonant Whispers',"Tasha's Hideous Laughter"] },
+        'great old one':{ level_1:['Dissonant Whispers',"Tasha's Hideous Laughter"] },
+        'great-old-one':{ level_1:['Dissonant Whispers',"Tasha's Hideous Laughter"] },
+      };
+      const state = loadState();
+      const nextStep = (input.step_completed || 1) + 1;
+      state.creation_step = nextStep;
+      if (input.data) {
+        state.creation_data = Object.assign(state.creation_data || {}, input.data);
+      }
+      state.history_log.push({ timestamp: new Date().toISOString(),
+        event: `Character creation step ${input.step_completed} complete. Moving to step ${nextStep}.` });
+      saveState(state);
+      const cd = state.creation_data;
+
+      // Build helper data
+      const classList  = buildClassListStr();
+      const raceList   = buildRaceListStr();
+      const chosenClass = (cd.class || '').toLowerCase();
+      const classKey    = chosenClass.split(/[\s(]/)[0];
+      const classData   = GAME_DATA.classes[classKey] || {};
+      const archetypes  = classData.archetypes || [];
+      const subclassOptions = archetypes.map(a => `• **${a.name}** — ${a.desc_short}`).join('\n');
+      const isNonCaster = /barbarian|fighter|monk|ranger|rogue/i.test(cd.class||'');
+
+      // ── Subclass injection: after class chosen (step 2→3), insert subclass step ──
+      // If class has archetypes and no subclass chosen yet, stay at step 3 and show subclass
+      if (input.step_completed === 2 && archetypes.length > 0 && !cd.subclass) {
+        state.creation_step = 3;  // advance to 3 so next call goes to race
+        state.creation_data._subclass_pending = true;
+        state.history_log.push({ timestamp: new Date().toISOString(), event: `Character creation step 2 complete. Showing subclass options for ${cd.class}.` });
+        saveState(state);
+        const l1Note = /cleric|sorcerer|warlock/i.test(cd.class||'')
+          ? '*(This subclass takes effect immediately at level 1.)*'
+          : '*(This archetype unlocks at level 3, but defines your character\'s path from the start.)*';
+        return {
+          success: true, state_updated: true,
+          direct_message: `${cd.class} — now choose your archetype.\n${l1Note}\n\n${subclassOptions}\n\nWhich path calls to you?`
+        };
+      }
+
+      // ── Race injection: step 3 completed but no race chosen yet ──────────────────
+      // Happens when a class has subclasses: step 3 was consumed by subclass selection,
+      // so race would be skipped entirely. Re-use step 3 for race before advancing to
+      // step 4 (background). The race list has already been sent via direct_message here.
+      if (input.step_completed === 3 && !cd.race) {
+        state.creation_step = 3;  // stay at 3 — next advance call from model will pick up race
+        saveState(state);
+        return {
+          success: true, state_updated: true,
+          direct_message: `Now choose your race:\n\n${raceList}\n\nWhich race are you?`
+        };
+      }
+
+      // ── Step 11: Handle server-side — call create_character directly ────────────
+      if (nextStep >= 11) {
+        const cls = cd.class || 'Fighter';
+        const lvl = 1;
+        const stats = { ...(cd.stats || { str:10, dex:10, con:10, int:10, wis:10, cha:10 }) };
+        const conMod = Math.floor((stats.con - 10) / 2);
+        const hitDie = /barbarian/i.test(cls)?12:/fighter|paladin|ranger/i.test(cls)?10:/bard|cleric|druid|monk|rogue|warlock/i.test(cls)?8:6;
+        const hp = hitDie + conMod;
+
+        // Apply racial stat bonuses
+        const isHuman = /^human$/i.test(cd.race || '');
+        if (isHuman && cd.variant_human) {
+          // Variant Human: +1 to two player-chosen stats (stored as flat keys)
+          for (const k of [cd.variant_stat1, cd.variant_stat2].filter(Boolean)) { if (stats[k] !== undefined) stats[k] += 1; }
+        } else if (isHuman) {
+          // Standard Human: +1 to all
+          for (const k of Object.keys(stats)) stats[k] += 1;
+        }
+
+        // Build inventory
+        const classEqStr = getClassEquipment(cls);
+        const bgEqStr = getBackgroundEquipment(cd.background||'');
+        const parseEq = str => str.split('\n').map(l => l.replace(/^-\s*/,'')).filter(Boolean).map(n => ({ name:n, quantity:1, rarity:'common' }));
+        const inventory = [...parseEq(classEqStr), ...parseEq(bgEqStr)];
+
+        // Skill proficiencies: player-chosen (step 5) + background bonus
+        const bgSkillMap = {
+          acolyte:['Insight','Religion'], sage:['Arcana','History'], criminal:['Deception','Stealth'],
+          'folk hero':['Animal Handling','Survival'], soldier:['Athletics','Intimidation'],
+          outlander:['Athletics','Survival'], noble:['History','Persuasion'], entertainer:['Acrobatics','Performance'],
+          hermit:['Medicine','Religion'], sailor:['Athletics','Perception'], urchin:['Sleight of Hand','Stealth'],
+          charlatan:['Deception','Sleight of Hand'],
+        };
+        const bgKey = (cd.background||'').toLowerCase().replace(/\s+/g,' ').trim();
+        const bgSkillList = bgSkillMap[bgKey] || [];
+        const chosenSkills = Array.isArray(cd.skills) ? cd.skills : [];
+        // Fallback if player somehow skipped skill step: use first N from pool
+        const fallbackPool = (CLASS_SKILL_POOLS[classKey] || { count:2, pool:[] });
+        const fallbackSkills = chosenSkills.length ? chosenSkills : fallbackPool.pool.slice(0, fallbackPool.count);
+        let skillProfs = [...new Set([...fallbackSkills, ...bgSkillList])];
+        // Variant Human bonus skill
+        if (cd.variant_human && cd.variant_bonus_skill) skillProfs.push(cd.variant_bonus_skill);
+        skillProfs = [...new Set(skillProfs)];
+
+        // Saving throw proficiencies
+        const savingThrows = {
+          barbarian:['str','con'], bard:['dex','cha'], cleric:['wis','cha'], druid:['int','wis'],
+          fighter:['str','con'], monk:['str','dex'], paladin:['wis','cha'], ranger:['str','dex'],
+          rogue:['dex','int'], sorcerer:['con','cha'], warlock:['wis','cha'], wizard:['int','wis'],
+        };
+
+        // Inject always-prepared spells from subclass/domain/patron
+        const subclassKey = (cd.subclass || '').toLowerCase().trim();
+        const alwaysPrepared = ALWAYS_PREPARED[subclassKey] || {};
+        const spells = { cantrips:[], level_1:[], ...(cd.spells || {}) };
+        if (alwaysPrepared.level_1) spells.level_1 = [...new Set([...spells.level_1, ...alwaysPrepared.level_1])];
+        if (alwaysPrepared.cantrips) spells.cantrips = [...new Set([...spells.cantrips, ...alwaysPrepared.cantrips])];
+
+        // Build traits list
+        const traits = [classData.name ? `${classData.name} features` : cls + ' features'];
+        if (cd.variant_human && cd.variant_feat) traits.push(`Feat: ${cd.variant_feat}`);
+
+        const ccInput = {
+          name: cd.name || 'Adventurer',
+          class: cls, race: cd.race || 'Human', background: cd.background || '',
+          level: lvl, hp, stats, spells,
+          description: cd.description || '',
+          alignment: 'Neutral Good',
+          skill_profs: skillProfs,
+          saving_throw_profs: savingThrows[classKey] || [],
+          traits,
+          campaign_setting: cd.setting || 'Forgotten Realms',
+          starting_location: cd.setting === 'Seafaring' ? 'A bustling port town' : cd.setting === 'Dark Gothic' ? 'A fog-shrouded village' : cd.setting === 'Political Intrigue' ? 'The capital city' : 'A small frontier town',
+          inventory
+        };
+
+        let ccResult;
+        try { ccResult = executeTool('create_character', ccInput); }
+        catch(e) { ccResult = { error: e.message }; }
+
+        if (ccResult.error) {
+          return { success: false, error: ccResult.error, direct_message: `⚠️ Character creation failed: ${ccResult.error}` };
+        }
+
+        const skillSummary = skillProfs.slice(0,4).join(', ') + (skillProfs.length > 4 ? ` +${skillProfs.length-4} more` : '');
+        const featNote = (cd.variant_human && cd.variant_feat) ? ` | **Feat:** ${cd.variant_feat}` : '';
+        const charSummary = `✅ **Character sheet complete!**\n\n**${ccInput.name}** — ${cls}, Level 1 ${ccInput.race}\n**HP:** ${hp} | **AC:** ${/wizard|sorcerer/i.test(cls)?'12 (with Mage Armor)':/barbarian/i.test(cls)?'13 + DEX mod + CON mod':'12–14 (varies by armor)'}\n**Skills:** ${skillSummary}${featNote}\n**Background:** ${cd.background}\n\n*Your adventure begins...*`;
+
+        return {
+          success: true, state_updated: true,
+          direct_message: charSummary
+        };
+      }
+
+      // ── Normal step advancement ──────────────────────────────────────────────────
+      const bgSkillMapForPrompt = {
+        acolyte:['Insight','Religion'], sage:['Arcana','History'], criminal:['Deception','Stealth'],
+        'folk hero':['Animal Handling','Survival'], soldier:['Athletics','Intimidation'],
+        outlander:['Athletics','Survival'], noble:['History','Persuasion'], entertainer:['Acrobatics','Performance'],
+        hermit:['Medicine','Religion'], sailor:['Athletics','Perception'], urchin:['Sleight of Hand','Stealth'],
+        charlatan:['Deception','Sleight of Hand'],
+      };
+      const bgKeyForPrompt = (cd.background||'').toLowerCase().replace(/\s+/g,' ').trim();
+      const bgGrantedSkills = bgSkillMapForPrompt[bgKeyForPrompt] || [];
+
+      function roll4d6dl() {
+        const dice = Array.from({length:4}, () => Math.floor(Math.random()*6)+1);
+        dice.sort((a,b)=>a-b);
+        return { total: dice[1]+dice[2]+dice[3], breakdown: `[${dice.join(',')}] → drop ${dice[0]} = **${dice[1]+dice[2]+dice[3]}**` };
+      }
+      const statsRollMsg = (() => {
+        const rolls = ['STR','DEX','CON','INT','WIS','CHA'].map(stat => ({ stat, ...roll4d6dl() }));
+        const sorted = [...rolls].sort((a,b)=>b.total-a.total).map(r=>r.total);
+        const cls2 = (cd.class||'').toLowerCase();
+        const suggestions = {
+          wizard:'INT → DEX → CON → WIS → CHA → STR', sorcerer:'CHA → CON → DEX → WIS → INT → STR',
+          warlock:'CHA → CON → DEX → WIS → INT → STR', bard:'CHA → DEX → CON → WIS → INT → STR',
+          cleric:'WIS → STR → CON → CHA → DEX → INT', druid:'WIS → CON → DEX → INT → CHA → STR',
+          paladin:'STR → CHA → CON → WIS → DEX → INT', fighter:'STR → CON → DEX → WIS → CHA → INT',
+          barbarian:'STR → CON → DEX → WIS → CHA → INT', ranger:'DEX → WIS → CON → STR → INT → CHA',
+          rogue:'DEX → INT → CON → CHA → WIS → STR', monk:'DEX → WIS → CON → STR → INT → CHA',
+        };
+        const suggestion = Object.entries(suggestions).find(([k]) => cls2.startsWith(k));
+        const suggStr = suggestion ? `\n\n**Suggested assignment for ${cd.class}:** ${suggestion[1]}` : '';
+        const lines = rolls.map(r => `**${r.stat}:** ${r.breakdown}`).join('\n');
+        return `Rolling your stats — 4d6, drop lowest, for each ability score.\n\n${lines}${suggStr}\n\nYou have: **${sorted.join(', ')}**. How would you like to assign these to STR / DEX / CON / INT / WIS / CHA?`;
+      })();
+
+      const nextPrompts = {
+        2: `Now let's choose your class. Here are all 12 options:\n\n${classList}\n\nWhich class calls to you?`,
+        3: cd._subclass_pending
+          ? `You chose **${cd.class}**. Now pick your subclass archetype:\n\n${subclassOptions}\n\nWhich path calls to you?`
+          : `Now choose your race:\n\n${raceList}\n\nWhich race are you?`,
+        4: `Choose your background:\n\n1. **Acolyte** — Temple servant. +Insight, Religion.\n2. **Charlatan** — Con artist. +Deception, Sleight of Hand.\n3. **Criminal** — Outlaw. +Deception, Stealth.\n4. **Entertainer** — Performer. +Acrobatics, Performance.\n5. **Folk Hero** — Common champion. +Animal Handling, Survival.\n6. **Hermit** — Recluse. +Medicine, Religion.\n7. **Noble** — Privileged. +History, Persuasion.\n8. **Outlander** — Wilderness wanderer. +Athletics, Survival.\n9. **Sage** — Scholar. +Arcana, History.\n10. **Sailor** — Sea veteran. +Athletics, Perception.\n11. **Soldier** — Military. +Athletics, Intimidation.\n12. **Urchin** — Street kid. +Sleight of Hand, Stealth.\n\nWhich fits your past?`,
+
+        5: (() => {
+          const info = CLASS_SKILL_POOLS[classKey] || { count:2, pool:['Perception','Insight','Athletics','Stealth'] };
+          const available = info.pool.filter(s => !bgGrantedSkills.includes(s));
+          const poolLines = info.pool.map(s => bgGrantedSkills.includes(s) ? `• ~~${s}~~ *(background)*` : `• ${s}`).join('\n');
+          const bgNote = bgGrantedSkills.length ? `\n\n*Your **${cd.background}** background already grants: ${bgGrantedSkills.join(', ')}.*` : '';
+          return `Now choose your skill proficiencies.\n\nAs a **${cd.class}**, pick **${info.count}** from:\n\n${poolLines}${bgNote}\n\nWhich ${info.count} do you want?`;
+        })(),
+
+        6: (() => {
+          const featList = [
+            '**Alert** — +5 initiative; can\'t be surprised while conscious.',
+            '**Durable** — +1 CON; recover more HP when spending hit dice.',
+            '**Lucky** — 3 luck points/day to reroll any d20 (attack, save, or ability check).',
+            '**Magic Initiate** — Learn 2 cantrips and 1 1st-level spell from any class.',
+            '**Mobile** — +10 ft. speed; Dash ignores difficult terrain; no opportunity attacks after melee.',
+            '**Resilient** — +1 to one ability score; gain proficiency in that saving throw.',
+            '**Sentinel** — Opportunity attacks halt movement; protect allies; advantage when target attacks others.',
+            '**Skilled** — Gain proficiency in any 3 skills or tools.',
+            '**Tavern Brawler** — Unarmed d4 damage; +1 STR or CON; bonus grapple after unarmed hit.',
+            '**Tough** — +2 max HP per level (and retroactively for past levels).',
+            '**War Caster** — Advantage on concentration saves; cast somatic spells while holding weapons/shield; cast a spell as an opportunity attack.',
+            '**Weapon Master** — +1 STR or DEX; proficiency with 4 weapons of your choice.',
+          ].join('\n');
+          return `As a **Human**, choose your variant:\n\n• **Standard Human** — +1 to all six ability scores.\n• **Variant Human** — +1 to two ability scores of your choice, one bonus skill, and one feat.\n\n**If you choose Variant Human**, tell me:\n1. Which two stats to +1 (e.g. INT and DEX)\n2. Which bonus skill (any skill you aren't already proficient in)\n3. Which feat:\n\n${featList}\n\nWhat's your choice?`;
+        })(),
+
+        7: statsRollMsg,
+
+        8: (() => {
+          if (isNonCaster) return `${cd.class} doesn't use spells — moving straight to equipment.\n\n*(Calling the next step...)*`;
+          const spellMsg = buildSpellListMessage(cd.class);
+          return spellMsg || `Choose your starting spells for ${cd.class}. What cantrips and level 1 spells would you like?`;
+        })(),
+
+        9: `Here is your starting equipment:\n\n**From your ${cd.class} class:**\n${getClassEquipment(cd.class)}\n\n**From your ${cd.background} background:**\n${getBackgroundEquipment(cd.background)}\n\nReady to name your character?`,
+
+        10: `Almost done — let's bring your character to life.\n\n**1. What is your character's name?**\n\n**2. What does your ${cd.race || 'character'} ${(cd.class||'adventurer').split(/[\s(]/)[0]} look like?** A scar, a striking feature, something that sets you apart.\n\n**3. (Optional but encouraged)** Who are they? Where do they come from? What drives them — a loss, a debt, a promise?\n\n*Share whatever feels right. This becomes the DM's bible for your character.*`,
+      };
+
+      // Non-human races skip the feat step (step 6) — jump straight to stats (step 7)
+      if (input.step_completed === 5) {
+        const isHumanRace = /^human$/i.test((cd.race || '').trim());
+        if (!isHumanRace) {
+          state.creation_step = 7;
+          saveState(state);
+          return { success: true, state_updated: true, direct_message: nextPrompts[7] };
+        }
+      }
+
+      const nextInstruction = nextPrompts[nextStep] || nextPrompts[10];
+
+      return {
+        success: true,
+        step_completed: input.step_completed,
+        next_step: nextStep,
+        state_updated: true,
+        direct_message: nextInstruction
+      };
     }
     case 'create_character': {
       // ── Spell slot table by class + level ──────────────────────
@@ -746,7 +1463,8 @@ function executeTool(name, input) {
           time: 'Day 1 — Morning',
           seal_integrity: 100,
           seal_status: 'N/A',
-          map_id: null
+          map_id: null,
+          story_notes: input.description ? `CHARACTER BACKSTORY — ${input.name}: ${input.description}` : ''
         },
         party: [{
           id: slug,
@@ -790,6 +1508,9 @@ function executeTool(name, input) {
       };
 
       saveState(newState);
+
+      // Clear chronicle so the new campaign starts fresh
+      try { fs.writeFileSync(path.join(APP_DIR, 'chronicle.txt'), `# Chronicle — ${input.name} (${input.class})\nStarted: ${new Date().toLocaleString()}\n`, 'utf8'); } catch {}
 
       // ── Auto-save to saves/ immediately ────────────────────────
       try {
@@ -870,48 +1591,110 @@ function autoSave() {
 // ─── SYSTEM PROMPT ────────────────────────────────────────────────────────────
 function buildSystemPrompt(state) {
   if (!state) return 'You are a D&D 5e Dungeon Master. Use tools for all dice rolls and state changes.';
-  const rurik=state.party[0]; const world=state.world;
-  const slots=Object.entries(rurik.spell_slots).filter(([,v])=>v.max>0).map(([k,v])=>`Lv${k.replace('level_','')}: ${v.max-v.used}/${v.max}`).join(', ');
-  const cd=rurik.channel_divinity;
+  const char=state.party[0]; const world=state.world;
+  const slots=Object.entries(char.spell_slots).filter(([,v])=>v.max>0).map(([k,v])=>`Lv${k.replace('level_','')}: ${v.max-v.used}/${v.max}`).join(', ');
+  const cd=char.channel_divinity;
   // OPTIMIZATION: List weapons, foci, armor, potions (first 5 items by priority)
   const KEY_CATEGORIES = /weapon|sword|axe|hammer|bow|staff|wand|dagger|rapier|mace|shield|armor|mail|focus|symbol|kit|potion/i;
-  const keyItems=(rurik.inventory||[]).filter(i=>KEY_CATEGORIES.test(i.name)).slice(0,5).map(i=>i.name).join(', ');
+  const keyItems=(char.inventory||[]).filter(i=>KEY_CATEGORIES.test(i.name)).slice(0,5).map(i=>i.name).join(', ');
   // OPTIMIZATION: Only include active quests with uncompleted steps (1-line summary)
   const questSummary=(state.quests||[]).filter(q=>q.status==='active'&&q.steps.some(s=>!s.completed)).map(q=>`${q.title}: ${q.steps.filter(s=>!s.completed).map(s=>s.description).join(', ')}`).join(' | ');
 
-  // New campaign — full guided character creation mode
+  // New campaign — state-tracked character creation (one step at a time)
   if (state.campaign_id === 'new-campaign') {
-    return `You are a master Dungeon Master running a solo D&D 5e campaign. Your voice is immersive and literary — you write with vivid, atmospheric prose that pulls the player into the world. You are also gritty and grounded: consequences are real, the world has weight and danger, and nothing is handed to the player. You have the warmth and energy of a great tabletop DM — theatrical when it counts, occasionally dry-humored, always keeping momentum. And underneath everything runs a dark, mysterious current: NPCs have hidden agendas, the world has secrets, and even mundane locations carry a sense of something lurking beneath the surface.
+    const step = state.creation_step || 1;
+    const cd   = state.creation_data || {};
+    const classList  = buildClassListStr();
+    const raceList   = buildRaceListStr();
+    const chosenClass = (cd.class || '').toLowerCase();
+    const classKey2   = chosenClass.split(/[\s(]/)[0];
+    const classData2  = GAME_DATA.classes[classKey2] || {};
+    const subclassOpts2 = (classData2.archetypes||[]).map(a => `• ${a.name} — ${a.desc_short}`).join('\n');
 
-A new player is creating their character. Guide them through these steps IN ORDER — one step at a time, don't rush ahead:
+    // Step 3 behaviour: if subclass pending, wait for subclass; otherwise wait for race
+    // In both cases the server already sent the list via direct_message — do NOT re-present it.
+    const step3Instruction = cd._subclass_pending
+      ? `The player chose **${cd.class}**. The subclass options were already shown above.
+Wait for their pick. When they choose: call advance_creation_step({step_completed: 3, data: {subclass: "<their choice>", _subclass_pending: false}})`
+      : `Class chosen: ${cd.class}${cd.subclass ? ' ('+cd.subclass+')' : ''}.
+The race list has already been shown to the player above — do NOT re-present it.
+Wait for the player's race pick. When they choose: call advance_creation_step({step_completed: 3, data: {race: "<their choice>"}})`;
 
-STEP 1 — SETTING: Ask what kind of world/adventure they want. Give 3-4 vivid options (e.g. classic fantasy, dark gothic, seafaring, political intrigue) plus "something else." One evocative sentence each — make each option feel alive.
+    const stepInstructions = {
+      1: `The adventure-type options were already shown. The player is responding now.
+Read their choice and call advance_creation_step({step_completed: 1, data: {setting: "<their choice>"}})`,
 
-STEP 2 — CLASS: After they pick a setting, offer 4-5 fitting classes with one-line descriptions of what they feel like to play (not just mechanics). Describe the fantasy, not the stat block. Let them choose.
+      2: `Setting: "${cd.setting || ''}". The class list was already shown to the player.
+Read their class choice and call advance_creation_step({step_completed: 2, data: {class: "<their choice>"}})`,
 
-STEP 3 — RACE: Suggest 3-4 races that fit their class choice. One sentence each. Let them choose.
+      3: step3Instruction,
 
-STEP 4 — BACKGROUND: Offer 2-3 backgrounds that fit. Briefly explain what each gives (skills + flavor). Let them choose.
+      4: cd.background
+        ? `Background already chosen: ${cd.background}. Immediately call advance_creation_step({step_completed: 4, data: {background: "${cd.background}"}}).`
+        : `Race: ${cd.race || '(unknown)'}. The background list was already shown to the player.
+Read their pick and call advance_creation_step({step_completed: 4, data: {background: "<their choice>"}})`,
 
-STEP 5 — ABILITY SCORES: Tell them you'll roll 4d6 drop lowest for each stat. Use roll_dice("4d6", "STR roll") for each of the 6 stats in sequence. Show the results and suggest how to assign them based on their class. Let them adjust if they want.
+      5: `Background: "${cd.background || ''}". The skill list was already shown to the player.
+Read their chosen skills and call advance_creation_step({step_completed: 5, data: {skills: ["Skill1", "Skill2", ...]}})
+Include exactly the skills they named — do not add or remove any.`,
 
-STEP 6 — SPELLS (if applicable): For spellcasters list the cantrips and starting spells available. Let them pick. For martial classes skip this.
+      6: /^human$/i.test(cd.race||'')
+        ? `Race is Human. The Standard vs Variant Human options were shown.
+Standard Human: call advance_creation_step({step_completed: 6, data: {variant_human: false}})
+Variant Human: call advance_creation_step({step_completed: 6, data: {variant_human: true, variant_stat1: "str", variant_stat2: "dex", variant_bonus_skill: "Perception", variant_feat: "Lucky"}})
+Replace the example values with the player's actual choices. Stat keys are lowercase: str dex con int wis cha.`
+        : `Race is not Human — skip immediately. Call advance_creation_step({step_completed: 6, data: {}})`,
 
-STEP 7 — EQUIPMENT: Starting gear from background + class. List it briefly.
+      7: `Ability scores have been rolled and shown. Do NOT call roll_dice.
+Read the player's assignment (e.g. "INT 16, DEX 14..."). Confirm choices.
+When confirmed: call advance_creation_step({step_completed: 7, data: {stats: {str:N, dex:N, con:N, int:N, wis:N, cha:N}}})`,
 
-STEP 8 — NAME & DESCRIPTION: Ask for a name. Ask 1 evocative question about appearance or backstory. Write a 2-sentence character description that captures both who they are and what they feel like.
+      8: /barbarian|fighter|monk|ranger|rogue/i.test(cd.class||'')
+        ? `${cd.class} doesn't cast spells. Immediately call advance_creation_step({step_completed: 8, data: {}}).`
+        : `The spell list has been shown above. The player MUST choose their spells now — you CANNOT skip this step.
 
-STEP 9 — FINALIZE: Call create_character with ALL collected data. Then immediately describe the opening scene in rich, immersive prose (2-3 paragraphs). Establish atmosphere, hint at danger or mystery, make the world feel real and alive from the first sentence.
+YOUR STEPS:
+1. WAIT for the player to explicitly name their chosen spells.
+2. Do NOT advance until the player has actually chosen spells. Do NOT use empty arrays.
+3. Parse their choices carefully. Include spell names EXACTLY as they said them.
+4. When you have their spells, call: advance_creation_step({step_completed: 8, data: {spells: {cantrips: ["Spell Name", ...], level_1: ["Spell Name", ...]}}})
+5. If confused, re-show the spell list and explain the options again.`,
 
-RULES:
-- Use roll_dice for ALL stat rolls and checks.
-- Keep each step to 3-5 lines max. Be enthusiastic but concise.
-- Do NOT call create_character until you have: name, class, race, stats, and hp confirmed.
-- HP = class hit die + CON modifier (e.g. Fighter d10+CON mod, Wizard d6+CON mod).`;
+      9: `Equipment list shown to the player. Wait for acknowledgment. When they say ready/yes: call advance_creation_step({step_completed: 9, data: {}})`,
+
+      10: `The player will provide their character name, physical appearance, and optionally backstory/motivations in their NEXT message.
+
+YOUR STEPS:
+1. Read the player's message carefully. Extract: name, appearance, and any backstory/motivation details they share.
+2. If the name isn't stated, ask for it first: "I see them clearly — but what is their name?"
+3. If appearance is missing, ask: "And one physical detail that makes them recognizable?"
+4. Once you have name + appearance (backstory is bonus), write a rich 4-6 sentence character portrait that weaves together appearance, personality, backstory, motivations, and any relationships or quests they mentioned. Make it vivid and specific — this will be the DM's reference for the entire campaign.
+5. THEN call: advance_creation_step({step_completed: 10, data: {name: "<exact name they gave>", description: "<full 4-6 sentence portrait including everything they shared>"}})
+
+IMPORTANT: Capture EVERYTHING the player tells you. A grudge, a dead sibling, a stolen heirloom, a promised return — include it all in the description. Do NOT discard backstory details.`,
+    };
+
+    const currentInstruction = stepInstructions[step] || stepInstructions[10];
+
+    return `You are a Dungeon Master running character creation for a solo D&D 5e campaign.
+
+CREATION PROGRESS: ${JSON.stringify(cd)}
+Step: ${step}
+
+YOUR ONLY JOB RIGHT NOW:
+${currentInstruction}
+
+HARD RULES:
+- Do ONLY what the current step says. Nothing more.
+- Do NOT describe any location, scene, or NPC.
+- Do NOT skip ahead. Do NOT call create_character (server handles it at step 11).
+- Do NOT call roll_dice for stats — server rolls them.
+- Steps 1–9: OUTPUT NO TEXT. Your ONLY action is to call advance_creation_step.
+- Step 10 only: You may write a rich character portrait (4-6 sentences), then call advance_creation_step.`;
   }
 
   // Ongoing campaign — generic, reads from state
-  const char = rurik;
+  // char already defined above
   const hpMax = char.hp_max || char.hp;
   const pb = char.proficiency_bonus || profBonus(char.level||1);
   const spellDC = char.stats ? (8 + pb + Math.floor(((char.stats.int||char.stats.wis||char.stats.cha||10)-10)/2)) : '—';
@@ -920,21 +1703,61 @@ RULES:
   const xpStr = char.xp != null ? `XP: ${char.xp}` : '';
   const ds = char.death_saves;
   const dsStr = (char.hp===0&&ds) ? ` | Death Saves: ${ds.successes}✓ ${ds.failures}✗` : '';
-  const recentEvents = (state.history_log||[]).slice(-5).map(e=>`• ${e.event}`).join('\n');
+  const recentEvents = (state.history_log||[]).slice(-8).map(e=>`• ${e.event}`).join('\n');
   const storyNotes = world.story_notes ? `\nSTORY NOTES (persisted facts — treat as canon):\n${world.story_notes}` : '';
-  return `You are the Dungeon Master for a solo D&D 5e campaign. Use tools for ALL mechanics.
 
-RULES:
-- Read the player's message carefully. Respond SPECIFICALLY to what they just said — move the story forward from that exact moment.
-- NEVER repeat narration, descriptions, or bullet choices you have already written. Check the conversation history and make sure your response is new.
-- Call update_story_notes whenever important plot facts are established (NPC names/motives, secrets revealed, decisions made, plans formed). These persist across sessions.
+  // Session recap from previous session — injected as narrative continuity
+  const sessionRecap = world.session_recap
+    ? `\nPREVIOUSLY IN YOUR ADVENTURE:\n${world.session_recap}\n`
+    : '';
+
+  // Auto-chronicle: last ~1500 chars of this session's DM narration (cross-turn continuity)
+  let chronicleCtx = '';
+  try {
+    const cPath = path.join(APP_DIR, 'chronicle.txt');
+    if (fs.existsSync(cPath)) {
+      const raw = fs.readFileSync(cPath, 'utf8');
+      const tail = raw.slice(-1800);
+      const cut = tail.indexOf('\n---\n');
+      chronicleCtx = cut >= 0 ? tail.slice(cut) : tail;
+      if (chronicleCtx.trim()) chronicleCtx = `\nSESSION SO FAR (narrative log — treat as recent memory):\n${chronicleCtx.trim()}\n`;
+    }
+  } catch {}
+
+  return `You are the Dungeon Master for a solo D&D 5e campaign. Your voice has four qualities woven together at all times:
+
+TONE:
+- Immersive & literary: Write in vivid, atmospheric prose. Every location has a smell, a sound, a feeling. NPCs have distinct voices and mannerisms. Descriptions pull the player into the world rather than summarizing it.
+- Gritty & grounded: Consequences are real. The world doesn't bend to the player's will — it pushes back. Danger feels genuine. Resources matter. Not every problem has a clean solution.
+- Classic tabletop energy: Warm, theatrical, forward-moving. You keep momentum, reward player engagement, and match their energy. Occasional dry wit when the moment allows.
+- Dark & mysterious: Secrets run underneath everything. NPCs have agendas they don't reveal. Even quiet scenes carry a sense of something watching, waiting, or hidden. Mystery is a flavor, not a plot device.
+
+⛔ ABSOLUTE PROHIBITION — NEVER DO THIS:
+Do NOT present numbered or bulleted choice menus to the player. EVER.
+Examples of what is FORBIDDEN:
+  1. Go to the tavern
+  2. Ask the guard
+  3. Explore the ruins
+  "Would you like to: (a) fight (b) flee (c) negotiate?"
+  "You could: • Enter the building • Wait outside • Leave town"
+This is a tabletop RPG, not a video game. The player decides what they do. You narrate consequences. Period.
+If you produce a numbered or lettered option list, you have failed as a Dungeon Master.
+
+NARRATIVE RULES:
+- The player's words are the ONLY input that matters. Read their message, then respond DIRECTLY to it. If they ask "Is there an inn?" — show them the inn. If they say "I leave town" — they leave town. Do NOT have NPCs ignore or talk past what the player just said.
+- NPCs must react to the player character's ACTUAL words. If the player answered a question, the NPC heard that answer. Do NOT repeat questions the player already answered.
+- NEVER repeat narration, descriptions, or bullet choices you have already written. Every response must be new.
+- Reference the CHARACTER DESCRIPTION whenever it's relevant — their past shapes how NPCs treat them, what they notice, what haunts them.
+- Call update_story_notes for major permanent facts only: a character's true identity revealed, a quest-changing decision, a secret that must survive forever. The session chronicle and conversation history handle short-term memory automatically.
+- ALWAYS narrate alongside tool calls. No tool-only responses.
+
+MECHANICS RULES:
 - Roll EVERY check with roll_dice. Call use_spell_slot when leveled spells cast. Call update_hp after damage/healing.
 - Call set_concentration when a concentration spell is cast. Call skill_check after rolling for DC-based checks.
 - Use add_condition/remove_condition for status effects. Use add_npc/update_npc when meeting or changing NPCs.
 - Use add_quest/complete_quest_step to track objectives. Use update_location when scene changes.
 - When HP reaches 0: add_condition("Unconscious"), then death_save for each roll. 3 successes = stable, 3 failures = dead.
 - Call award_xp after combat, quest completions, milestones. Call end_session when player says "end session."
-- ALWAYS narrate alongside tool calls. No tool-only responses.
 
 ═══════════════════════
 CAMPAIGN: ${world.name||'Unknown World'}
@@ -943,23 +1766,125 @@ Location: ${world.current_location} | Time: ${world.time}
 CHARACTER: ${char.name} | ${char.class} L${char.level} | HP: ${char.hp}/${hpMax}${dsStr} | AC: ${char.ac||'—'} | Prof +${pb}${xpStr?' | '+xpStr:''}
 Spells: ${slots||'none'} | CD: ${cd.max-cd.used}/${cd.max} | Spell DC: ${spellDC}${hitDice?' | '+hitDice:''}
 Conditions: ${conditions}
-Gear: ${keyItems||'standard equipment'}
+Gear: ${keyItems||'standard equipment'}${char.description ? `\nCHARACTER DESCRIPTION: ${char.description}` : ''}
 
 ACTIVE QUESTS: ${questSummary||'None'}
-WORLD: ${world.lore_summary||''}${world.weather?`\nWEATHER: ${world.weather.condition}${world.weather.description?' — '+world.weather.description:''}`:''}${storyNotes}
+WORLD: ${world.lore_summary||''}${world.weather?`\nWEATHER: ${world.weather.condition}${world.weather.description?' — '+world.weather.description:''}`:''}${storyNotes}${sessionRecap}${chronicleCtx}
 RECENT EVENTS:
 ${recentEvents||'— Campaign beginning —'}`;
 
 }
 
-// ─── AGENTIC DM LOOP (Mistral AI) ─────────────────────────────────────────────
-function makeAPICall(bodyStr) {
+// ─── GEMINI NATIVE API HELPERS ────────────────────────────────────────────────
+
+// Convert OpenAI-format message array + tool list to a native Gemini request body.
+// OpenAI roles/shapes → Gemini roles/parts:
+//   system    → systemInstruction
+//   user      → {role:'user',  parts:[{text}]}            (consecutive merged)
+//   assistant → {role:'model', parts:[{text?},{functionCall?}]}
+//   tool      → merged into preceding/new user turn as    {functionResponse:{name,id,response}}
+// thoughtSignature stored on tc.thought_signature is replayed into functionCall parts
+// so Gemini 3 doesn't reject with "missing thought_signature" on the second loop.
+function toGeminiRequest(msgs, tools, { maxOutputTokens = 8192, temperature = 0.72 } = {}) {
+  let systemText = '';
+  const contents = [];
+  const missingThoughtSigIds = new Set(); // tracks tool call IDs serialized as text (no thoughtSignature)
+
+  const lastContent = () => contents[contents.length - 1];
+  const ensureRole = (role) => {
+    if (lastContent()?.role !== role) contents.push({ role, parts: [] });
+    return lastContent();
+  };
+
+  for (const msg of msgs) {
+    if (msg.role === 'system') {
+      systemText += (systemText ? '\n' : '') + (msg.content || '');
+      continue;
+    }
+
+    if (msg.role === 'user') {
+      const text = typeof msg.content === 'string' ? msg.content : JSON.stringify(msg.content || '');
+      ensureRole('user').parts.push({ text });
+      continue;
+    }
+
+    if (msg.role === 'assistant') {
+      const turn = ensureRole('model');
+      if (msg.content) turn.parts.push({ text: msg.content });
+      if (msg.tool_calls) {
+        for (const tc of msg.tool_calls) {
+          if (tc.thought_signature) {
+            // Has thoughtSignature — replay as proper functionCall
+            let args;
+            try { args = JSON.parse(tc.function?.arguments || '{}'); } catch { args = {}; }
+            const fc = { name: tc.function?.name || 'unknown', args };
+            if (tc.id) fc.id = tc.id;
+            fc.thoughtSignature = tc.thought_signature;
+            turn.parts.push({ functionCall: fc });
+          } else {
+            // No thoughtSignature (Gemini 3.5 Flash never returns it) — emit as text
+            // to avoid "missing thought_signature" HTTP 400 on replay.
+            missingThoughtSigIds.add(tc.id);
+            turn.parts.push({ text: `[used ${tc.function?.name || 'tool'}]` });
+          }
+        }
+      }
+      // Gemini rejects model turns with zero parts
+      if (turn.parts.length === 0) turn.parts.push({ text: '' });
+      continue;
+    }
+
+    if (msg.role === 'tool') {
+      if (missingThoughtSigIds.has(msg.tool_call_id)) {
+        // Matching tool result for a text-fallback call — emit as user text to preserve context
+        let result;
+        try { result = JSON.parse(msg.content); } catch { result = { result: msg.content }; }
+        ensureRole('user').parts.push({ text: `[${msg.name || 'tool'} result: ${JSON.stringify(result).slice(0, 300)}]` });
+        continue;
+      }
+      let response;
+      try { response = JSON.parse(msg.content); } catch { response = { result: msg.content }; }
+      const fr = { name: msg.name || 'tool', response };
+      if (msg.tool_call_id) fr.id = msg.tool_call_id;
+      ensureRole('user').parts.push({ functionResponse: fr });
+      continue;
+    }
+  }
+
+  const reqBody = {
+    // NOTE: Gemini 3.x (incl. 3.1-flash-lite) cannot disable thinking — the old
+    // thinkingBudget:0 (a 2.5-era field) is ignored or rejected, so it's removed.
+    // The model still emits thoughtSignatures; toGeminiRequest() handles that by
+    // serializing unsigned tool calls as text on replay (see assistant branch above).
+    generationConfig: { maxOutputTokens, temperature }
+  };
+  if (systemText) reqBody.systemInstruction = { parts: [{ text: systemText }] };
+  reqBody.contents = contents;
+
+  if (tools && tools.length > 0) {
+    reqBody.tools = [{
+      functionDeclarations: tools.map(t => ({
+        name: t.function.name,
+        description: t.function.description,
+        parameters: t.function.parameters
+      }))
+    }];
+    reqBody.toolConfig = { functionCallingConfig: { mode: 'AUTO' } };
+  }
+
+  return reqBody;
+}
+
+// ─── AGENTIC DM LOOP (Gemini native API) ──────────────────────────────────────
+
+// makeAPICall with automatic 429 retry.
+// onWait(seconds) is called so the agentic loop can notify the player.
+function makeAPICall(bodyStr, retryCount = 0, onWait = null) {
   return new Promise((resolve, reject) => {
-    // Enforce minimum delay between requests
     const now = Date.now();
     const timeSinceLastRequest = now - lastRequestTime;
     if (timeSinceLastRequest < REQUEST_DELAY_MS) {
-      setTimeout(() => makeAPICall(bodyStr).then(resolve).catch(reject),
+      setTimeout(() => makeAPICall(bodyStr, retryCount, onWait).then(resolve).catch(reject),
         REQUEST_DELAY_MS - timeSinceLastRequest);
       return;
     }
@@ -967,16 +1892,41 @@ function makeAPICall(bodyStr) {
 
     const buf = Buffer.from(bodyStr);
     const req = https.request({
-      hostname: 'api.mistral.ai',
-      path: '/v1/chat/completions',
+      hostname: 'generativelanguage.googleapis.com',
+      path: `/v1beta/models/${MODEL}:streamGenerateContent?key=${API_KEY}&alt=sse`,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Content-Length': buf.length,
-        'Authorization': `Bearer ${API_KEY}`
+        'Content-Length': buf.length
       }
     }, (res) => {
-      // Non-200 = error body (not SSE). Parse and reject so the caller can log it properly.
+      // 429 — rate limit hit. Read Retry-After and retry automatically (up to 6 times).
+      if (res.statusCode === 429 && retryCount < 6) {
+        let body = '';
+        res.setEncoding('utf8');
+        res.on('data', c => body += c);
+        res.on('end', () => {
+          // Gemini returns Retry-After in seconds (parse from body too, header may be absent)
+          let retryAfterSec = parseInt(res.headers['retry-after'] || '0', 10);
+          if (!retryAfterSec) {
+            const m = body.match(/retry[_ ]in[^0-9]*([0-9.]+)s/i);
+            retryAfterSec = m ? Math.ceil(parseFloat(m[1])) : 20;
+          }
+          // If wait > 2 minutes it's a daily/hourly cap — fail fast rather than freezing
+          if (retryAfterSec > 120) {
+            const mins = Math.ceil(retryAfterSec / 60);
+            reject(new Error(`Gemini daily rate limit reached. Please wait ~${mins} minutes then try again.`));
+            return;
+          }
+          const waitMs = retryAfterSec * 1000 + 1500; // honour full Retry-After + 1.5s buffer
+          console.log(`  ⏳ Rate limit — waiting ${(waitMs/1000).toFixed(1)}s then retrying (attempt ${retryCount+1}/6)`);
+          if (onWait) onWait(Math.ceil(waitMs / 1000));
+          setTimeout(() => makeAPICall(bodyStr, retryCount + 1, onWait).then(resolve).catch(reject), waitMs);
+        });
+        res.on('error', reject);
+        return;
+      }
+
       if (res.statusCode !== 200) {
         let body = '';
         res.setEncoding('utf8');
@@ -985,10 +1935,13 @@ function makeAPICall(bodyStr) {
           let errMsg = `HTTP ${res.statusCode}`;
           try {
             const j = JSON.parse(body);
-            if (j.message) errMsg = `HTTP ${res.statusCode} — ${j.message}`;
-            else if (j.error?.message) errMsg = `HTTP ${res.statusCode} — ${j.error.message}`;
+            if (j.error?.message) errMsg = `HTTP ${res.statusCode} — ${j.error.message}`;
           } catch {}
           if (errMsg === `HTTP ${res.statusCode}`) errMsg += `: ${body.slice(0, 300)}`;
+          if (res.statusCode === 400) {
+            try { fs.writeFileSync(path.join(APP_DIR, 'last_400_body.json'), bodyStr); } catch {}
+            console.error('  📝 Wrote failing request to last_400_body.json');
+          }
           const err = new Error(errMsg);
           err.statusCode = res.statusCode;
           reject(err);
@@ -996,29 +1949,124 @@ function makeAPICall(bodyStr) {
         res.on('error', reject);
         return;
       }
+      trackDailyRequest();
       resolve(res);
     });
     req.on('error', reject);
-    req.setTimeout(90000, () => req.destroy(new Error('Mistral API request timed out after 90s')));
+    req.setTimeout(90000, () => req.destroy(new Error('Gemini API request timed out after 90s')));
     req.write(buf); req.end();
   });
 }
 
-// Non-streaming Mistral call — returns the full assistant text or throws.
-// Used for summarization, not gameplay (no tools, no SSE).
+// Non-streaming Gemini call for tool loops.
+// Returns the parsed response object with full thoughtSignature support.
+// Used when tools are enabled — we need the full response including thoughtSignature.
+function makeAPICallNonStreaming(bodyStr, retryCount = 0, onWait = null) {
+  return new Promise((resolve, reject) => {
+    const now = Date.now();
+    const timeSinceLastRequest = now - lastRequestTime;
+    if (timeSinceLastRequest < REQUEST_DELAY_MS) {
+      setTimeout(() => makeAPICallNonStreaming(bodyStr, retryCount, onWait).then(resolve).catch(reject),
+        REQUEST_DELAY_MS - timeSinceLastRequest);
+      return;
+    }
+    lastRequestTime = Date.now();
+
+    const buf = Buffer.from(bodyStr);
+    const req = https.request({
+      hostname: 'generativelanguage.googleapis.com',
+      path: `/v1beta/models/${MODEL}:generateContent?key=${API_KEY}`,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': buf.length
+      }
+    }, (res) => {
+      // 429 — rate limit hit. Read Retry-After and retry automatically (up to 6 times).
+      if (res.statusCode === 429 && retryCount < 6) {
+        let body = '';
+        res.setEncoding('utf8');
+        res.on('data', c => body += c);
+        res.on('end', () => {
+          let retryAfterSec = parseInt(res.headers['retry-after'] || '0', 10);
+          if (!retryAfterSec) {
+            const m = body.match(/retry[_ ]in[^0-9]*([0-9.]+)s/i);
+            retryAfterSec = m ? Math.ceil(parseFloat(m[1])) : 20;
+          }
+          if (retryAfterSec > 120) {
+            const mins = Math.ceil(retryAfterSec / 60);
+            reject(new Error(`Gemini daily rate limit reached. Please wait ~${mins} minutes then try again.`));
+            return;
+          }
+          const waitMs = retryAfterSec * 1000 + 1500;
+          console.log(`  ⏳ Rate limit — waiting ${(waitMs/1000).toFixed(1)}s then retrying (attempt ${retryCount+1}/6)`);
+          if (onWait) onWait(Math.ceil(waitMs / 1000));
+          setTimeout(() => makeAPICallNonStreaming(bodyStr, retryCount + 1, onWait).then(resolve).catch(reject), waitMs);
+        });
+        res.on('error', reject);
+        return;
+      }
+
+      if (res.statusCode !== 200) {
+        let body = '';
+        res.setEncoding('utf8');
+        res.on('data', c => body += c);
+        res.on('end', () => {
+          let errMsg = `HTTP ${res.statusCode}`;
+          try {
+            const j = JSON.parse(body);
+            if (j.error?.message) errMsg = `HTTP ${res.statusCode} — ${j.error.message}`;
+          } catch {}
+          if (errMsg === `HTTP ${res.statusCode}`) errMsg += `: ${body.slice(0, 300)}`;
+          if (res.statusCode === 400) {
+            try { fs.writeFileSync(path.join(APP_DIR, 'last_400_body.json'), bodyStr); } catch {}
+            console.error('  📝 Wrote failing request to last_400_body.json');
+          }
+          const err = new Error(errMsg);
+          err.statusCode = res.statusCode;
+          reject(err);
+        });
+        res.on('error', reject);
+        return;
+      }
+
+      trackDailyRequest();
+      let body = '';
+      res.setEncoding('utf8');
+      res.on('data', c => body += c);
+      res.on('end', () => {
+        try {
+          const parsed = JSON.parse(body);
+          resolve(parsed);
+        } catch (e) {
+          reject(new Error(`Failed to parse Gemini response: ${e.message}`));
+        }
+      });
+    });
+    req.on('error', reject);
+    req.setTimeout(90000, () => req.destroy(new Error('Gemini API request timed out after 90s')));
+    req.write(buf); req.end();
+  });
+}
+
+// Non-streaming Groq call — returns the full assistant text or throws.
+// Used for summarization (no tools, no SSE).
 function makeSimpleAPICall(messages, systemPrompt) {
   return new Promise((resolve, reject) => {
     const bodyStr = JSON.stringify({
       model: MODEL,
-      max_tokens: 600,
+      max_tokens: 4096,
       temperature: 0.3,
-      messages: [{ role: 'system', content: systemPrompt }, ...messages],
+      messages: [{ role: 'system', content: systemPrompt }, ...messages.map(m => ({
+        role: m.role,
+        content: typeof m.content === 'string' ? m.content : JSON.stringify(m.content)
+      }))],
       stream: false
     });
     const buf = Buffer.from(bodyStr);
     const req = https.request({
-      hostname: 'api.mistral.ai',
-      path: '/v1/chat/completions',
+      hostname: 'generativelanguage.googleapis.com',
+      path: '/v1beta/openai/chat/completions',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1050,14 +2098,16 @@ function makeSimpleAPICall(messages, systemPrompt) {
   });
 }
 
-async function streamAgenticLoop(messages, systemPrompt, res) {
+
+async function streamAgenticLoop(messages, systemPrompt, res, opts = {}) {
+  const isCreation = opts.isCreation || false;
   let totalTokens = 0;
   let apiError = null;
 
-  // Mistral uses OpenAI-compatible chat format: system goes as the first message.
-  // We maintain mistralMsgs separately so the caller's `messages` array stays simple
-  // (plain {role, content:string} pairs) for history tracking.
-  const mistralMsgs = [
+  // Groq uses OpenAI-compatible format: system as first message in array.
+  // contextMsgs is maintained separately so messages (caller's array) stays as
+  // simple {role, content:string} pairs for history persistence.
+  const contextMsgs = [
     { role: 'system', content: systemPrompt },
     ...messages.map(m => ({
       role: m.role,
@@ -1067,149 +2117,292 @@ async function streamAgenticLoop(messages, systemPrompt, res) {
 
   console.log(`  ▶ Agentic loop start — ${messages.length} messages in context`);
 
-  for (let loop = 0; loop < 6; loop++) {
-    // Token estimation for rate guard
-    const msgsTokens = mistralMsgs.reduce((s, m) =>
-      s + estimateTokens(typeof m.content === 'string' ? m.content : JSON.stringify(m.content)), 0);
-    const { tokens: toolsTokens } = getToolsJson();
-    const estInput = msgsTokens + toolsTokens;
-    await waitForTokenCapacity(estInput);
-
-    const body = JSON.stringify({
-      model: MODEL,
-      max_tokens: 1400,
-      temperature: 0.72,
-      messages: mistralMsgs,
-      tools: MISTRAL_TOOLS,
-      stream: true
-    });
-
-    let apiRes;
-    try {
-      apiRes = await makeAPICall(body);
-      recordTokenUsage(estInput);
-    } catch (err) {
-      apiError = err.message || String(err);
-      console.error(`  ✗ Loop ${loop} API call failed: ${apiError}`);
-      res.write(`data: ${JSON.stringify({ type: 'error', error: apiError })}\n\n`);
-      break;
+  // Trim oldest non-system messages when context grows too large for Groq's TPM budget.
+  // Target: system prompt + history ≤ 2,000 tokens (leaves budget for tools + 800 output).
+  function pruneContext() {
+    const MAX_MSG_TOKENS = 6000; // was 1000 — Gemini charges per request not per token, so larger context is free
+    while (contextMsgs.length > 2) {
+      const total = contextMsgs.reduce((s, m) =>
+        s + estimateTokens(typeof m.content === 'string' ? m.content : JSON.stringify(m.content || '')), 0);
+      if (total <= MAX_MSG_TOKENS) break;
+      // Remove oldest non-system message. If it's an assistant turn with tool_calls,
+      // also remove all immediately following 'tool' result messages to avoid leaving
+      // orphaned functionResponse parts that Gemini would reject.
+      let removeCount = 1;
+      if (contextMsgs[1]?.tool_calls?.length) {
+        let i = 2;
+        while (i < contextMsgs.length && contextMsgs[i].role === 'tool') i++;
+        removeCount = i - 1;
+      }
+      contextMsgs.splice(1, removeCount);
     }
+  }
 
-    // ── Parse Mistral's OpenAI-compatible SSE stream ───────────────────────────
-    // Text arrives in: choices[0].delta.content
-    // Tool calls arrive in: choices[0].delta.tool_calls[{index,id,function:{name,arguments}}]
-    // Stop signals: choices[0].finish_reason = 'stop' | 'tool_calls'
-    // Stream ends with: data: [DONE]
+  let goto_end = false;
+  let funcCallFailures = 0;
+  let consecutiveToolLoops = 0;
+  let hasCalledToolsThisTurn = false;
+  pruneContext(); // prune once before loop — never prune messages added mid-loop (prevents orphaned tool results)
+  for (let loop = 0; loop < 6; loop++) {
+    const msgsTokens = contextMsgs.reduce((s, m) =>
+      s + estimateTokens(typeof m.content === 'string' ? m.content : JSON.stringify(m.content)), 0);
+    const activeTools = isCreation ? CREATION_TOOLS : GAMEPLAY_TOOLS;
+    const toolsTokens = estimateTokens(JSON.stringify(activeTools));
+    await waitForTokenCapacity(msgsTokens + toolsTokens);
+
+    // Narration passes omit tools entirely so Gemini cannot attempt function calls.
+    const forceNarration = hasCalledToolsThisTurn || funcCallFailures > 0 || consecutiveToolLoops >= 2;
+    const body = JSON.stringify(toGeminiRequest(
+      contextMsgs,
+      forceNarration ? null : activeTools,
+      { maxOutputTokens: 8192, temperature: 0.72 }
+    ));
+
+    // onWait: called when a 429 retry is triggered — sends a status notice to the player
+    const onWait = (seconds) => {
+      res.write(`data: ${JSON.stringify({ type: 'text', content: `\n\n*— Rate limit reached. Resuming in ~${seconds}s… —*\n\n` })}\n\n`);
+    };
+
     let textTurn = '';
-    let toolCalls = [];        // [{id, name, argsStr}]
+    let toolCalls = [];
     let stopReason = 'stop';
     let stateUpdated = false;
-    let streamErr = null;
+    let apiErr = null;
 
-    await new Promise(resolve => {
-      let buf = '';
-      apiRes.on('data', chunk => {
-        buf += chunk.toString();
-        const lines = buf.split('\n');
-        buf = lines.pop(); // keep incomplete last line
-        for (const line of lines) {
-          if (!line.startsWith('data: ')) continue;
-          const data = line.slice(6).trim();
-          if (data === '[DONE]') { resolve(); return; }
-          try {
-            const d = JSON.parse(data);
-            if (d.error) {
-              streamErr = d.error.message || 'Mistral streaming error';
-              console.error('  ✗ Stream error:', streamErr);
-              res.write(`data: ${JSON.stringify({ type: 'error', error: streamErr })}\n\n`);
-            }
-            const delta = d.choices?.[0]?.delta;
-            if (!delta) { if (d.choices?.[0]?.finish_reason) stopReason = d.choices[0].finish_reason; continue; }
-
-            // Text content
-            if (delta.content) {
-              textTurn += delta.content;
-              res.write(`data: ${JSON.stringify({ type: 'text', content: delta.content })}\n\n`);
-            }
-
-            // Tool call streaming — Mistral sends incremental argument JSON chunks
-            if (delta.tool_calls) {
-              for (const tc of delta.tool_calls) {
-                // tc.index identifies which parallel tool call this chunk belongs to
-                const idx = tc.index ?? 0;
-                if (!toolCalls[idx]) toolCalls[idx] = { id: '', name: '', argsStr: '' };
-                if (tc.id)               toolCalls[idx].id      = tc.id;
-                if (tc.function?.name)   toolCalls[idx].name    = tc.function.name;
-                if (tc.function?.arguments) toolCalls[idx].argsStr += tc.function.arguments;
+    // Option A fix: Use non-streaming for tool loops (to capture thoughtSignature),
+    // streaming for narration-only (for real-time player feedback).
+    if (!forceNarration) {
+      // Tool loop: use non-streaming generateContent to get full response with thoughtSignature
+      try {
+        const fullResponse = await makeAPICallNonStreaming(body, 0, onWait);
+        if (fullResponse.error) {
+          apiErr = fullResponse.error.message || 'Gemini API error';
+        } else {
+          if (fullResponse.usageMetadata) totalTokens += fullResponse.usageMetadata.candidatesTokenCount || 0;
+          const candidate = fullResponse.candidates?.[0];
+          if (candidate) {
+            if (candidate.finishReason) stopReason = candidate.finishReason;
+            for (const part of (candidate.content?.parts || [])) {
+              if (part.thought) continue; // skip internal thinking tokens
+              if (part.text) {
+                textTurn += part.text;
+                if (!isCreation || opts.creationStep === 8) {
+                  res.write(`data: ${JSON.stringify({ type: 'text', content: part.text })}\n\n`);
+                }
+              }
+              if (part.functionCall) {
+                const fc = part.functionCall;
+                toolCalls.push({
+                  id:              fc.id || `call_${loop}_${toolCalls.length}_${Date.now()}`,
+                  name:            fc.name || '',
+                  argsStr:         JSON.stringify(fc.args || {}),
+                  thought_signature: fc.thoughtSignature || null  // captured from full response
+                });
               }
             }
-
-            const finish = d.choices?.[0]?.finish_reason;
-            if (finish) stopReason = finish;
-            if (d.usage) totalTokens += d.usage.completion_tokens || 0;
-          } catch {}
+          }
         }
-      });
-      apiRes.on('end', resolve);
-      apiRes.on('error', e => { streamErr = e.message; resolve(); });
-    });
+        recordTokenUsage(msgsTokens + toolsTokens);
+      } catch (err) {
+        apiErr = err.message || String(err);
+      }
+    } else {
+      // Narration loop: use streaming streamGenerateContent for real-time feedback
+      let apiRes;
+      try {
+        apiRes = await makeAPICall(body, 0, onWait);
+      } catch (err) {
+        apiErr = err.message || String(err);
+      }
 
-    // Filter out any sparse slots left by non-contiguous indices
-    toolCalls = toolCalls.filter(Boolean);
+      if (!apiErr) {
+        // ── Parse Gemini native SSE stream ────────────────────────────────────────
+        // Each SSE event is a complete JSON object (not deltas like OpenAI).
+        let streamErr = null;
+        await new Promise(resolve => {
+          let buf = '';
+          apiRes.on('data', chunk => {
+            buf += chunk.toString();
+            const lines = buf.split('\n');
+            buf = lines.pop();
+            for (const line of lines) {
+              if (!line.startsWith('data: ')) continue;
+              const data = line.slice(6).trim();
+              if (data === '[DONE]') { resolve(); return; }
+              try {
+                const d = JSON.parse(data);
+                if (d.error) {
+                  streamErr = d.error.message || 'Gemini streaming error';
+                  console.error('  ✗ Stream error:', streamErr);
+                  continue;
+                }
+                if (d.usageMetadata) totalTokens += d.usageMetadata.candidatesTokenCount || 0;
+                const candidate = d.candidates?.[0];
+                if (!candidate) continue;
+                if (candidate.finishReason) stopReason = candidate.finishReason;
 
-    console.log(`  ⟳ Loop ${loop}: text=${textTurn.length}c, tools=${toolCalls.length}${toolCalls.length ? ` [${toolCalls.map(t => t.name).join(',')}]` : ''}, stop=${stopReason}${streamErr ? `, streamErr=${streamErr}` : ''}`);
-    if (streamErr) { apiError = streamErr; break; }
+                for (const part of (candidate.content?.parts || [])) {
+                  if (part.thought) continue; // skip internal thinking tokens
 
-    // ── Add assistant turn to Mistral context ──────────────────────────────────
+                  if (part.text) {
+                    textTurn += part.text;
+                    if (!isCreation || opts.creationStep === 8) {
+                      res.write(`data: ${JSON.stringify({ type: 'text', content: part.text })}\n\n`);
+                    }
+                  }
+                }
+              } catch {}
+            }
+          });
+          apiRes.on('end', resolve);
+          apiRes.on('error', e => { streamErr = e.message; resolve(); });
+        });
+
+        if (streamErr) {
+          apiErr = streamErr;
+        } else {
+          recordTokenUsage(msgsTokens + toolsTokens);
+        }
+      }
+    }
+
+    console.log(`  ⟳ Loop ${loop}: text=${textTurn.length}c, tools=${toolCalls.length}${toolCalls.length ? ` [${toolCalls.map(t => t.name).join(',')}]` : ''}, stop=${stopReason}${apiErr ? `, apiErr=${apiErr}` : ''}`);
+    if (apiErr) {
+      // Retry without tools on function-call-related errors
+      if ((apiErr.includes('Failed to call a function') || apiErr.includes('MALFORMED_FUNCTION_CALL') || apiErr.includes('thought_signature')) && funcCallFailures < 2) {
+        funcCallFailures++;
+        console.log(`  ↻ Function call failure — retrying without tools (attempt ${funcCallFailures})`);
+        await new Promise(r => setTimeout(r, 1500));
+        continue;
+      }
+      apiError = apiErr; break;
+    }
+    // Gemini MALFORMED_FUNCTION_CALL arrives as a stop reason (not an error):
+    // model tried to call a function but mangled it, produced no text, no tool calls.
+    // Treat it like a function-call failure and retry without tools.
+    if (stopReason && stopReason.includes('MALFORMED_FUNCTION_CALL') && funcCallFailures < 2) {
+      funcCallFailures++;
+      console.log(`  ↻ MALFORMED_FUNCTION_CALL — retrying without tools (attempt ${funcCallFailures})`);
+      await new Promise(r => setTimeout(r, 500));
+      continue;
+    }
+    funcCallFailures = 0; // reset on successful stream
+
+    // ── Add assistant turn to context ──────────────────────────────────────────
+    // Now using native Gemini API we capture thoughtSignature from the stream and
+    // replay it here. toGeminiRequest() injects it into the functionCall part so
+    // Gemini 3 never sees a "missing thought_signature" error on loop 1+.
     if (toolCalls.length > 0) {
-      mistralMsgs.push({
+      contextMsgs.push({
         role: 'assistant',
         content: textTurn || null,
         tool_calls: toolCalls.map(tc => ({
           id: tc.id,
           type: 'function',
-          function: { name: tc.name, arguments: tc.argsStr }
+          function: { name: tc.name, arguments: tc.argsStr || '{}' },
+          thought_signature: tc.thought_signature   // preserved for toGeminiRequest
         }))
       });
     } else {
-      mistralMsgs.push({ role: 'assistant', content: textTurn });
+      if (textTurn) contextMsgs.push({ role: 'assistant', content: textTurn });
     }
-
-    // Keep caller's messages array up-to-date (used by collectFinalText)
     if (textTurn) messages.push({ role: 'assistant', content: textTurn });
 
-    if (stopReason !== 'tool_calls' || toolCalls.length === 0) break;
+    // ── Creation mode: stream buffered step 8 text if not already streamed ──────
+    if (isCreation && textTurn.trim() && opts.creationStep !== 8) {
+      // Steps 1-7: text was suppressed above — only show if there's no tool call
+      // (shouldn't happen if model follows instructions, but show as fallback)
+      if (toolCalls.length === 0) {
+        res.write(`data: ${JSON.stringify({ type: 'text', content: textTurn })}\n\n`);
+      }
+    }
 
-    // ── Execute tools, push results back as 'tool' messages ───────────────────
-    // Mistral expects one {role:'tool'} message per tool call (not batched like Anthropic).
+    // Gemini returns finish_reason='stop' even when tool calls are present.
+    // Use toolCalls.length as the authoritative signal — not stopReason.
+    if (toolCalls.length === 0) {
+      consecutiveToolLoops = 0; // narration produced — reset counter
+      break;
+    }
+
+    // After 2 consecutive tool-call loops with no narration, force narration next iteration
+    consecutiveToolLoops++;
+    if (consecutiveToolLoops >= 2) {
+      console.log(`  ⚠️  ${consecutiveToolLoops} consecutive tool loops — forcing narration next`);
+      funcCallFailures = Math.max(funcCallFailures, 1);
+    }
+
+    // ── Execute tools, push native functionResponse messages ───────────────────
+    // With the native Gemini API + thoughtSignature in context, Gemini 3 accepts
+    // the full functionCall/functionResponse round-trip without errors.
     for (const tc of toolCalls) {
       let input = {};
-      try { input = JSON.parse(tc.argsStr); } catch {}
+      try { input = JSON.parse(tc.argsStr || '{}'); } catch {}
       console.log(`    🔧 ${tc.name}`, JSON.stringify(input).slice(0, 80));
       let result;
       try { result = executeTool(tc.name, input); } catch (e) { result = { error: e.message }; }
       console.log(`    ✓`, JSON.stringify(result).slice(0, 120));
 
-      // Emit SSE events for real-time dashboard updates
       if (result.state_updated) stateUpdated = true;
-      if (result.dice_rolled)   res.write(`data: ${JSON.stringify({ type: 'dice_roll',     expression: result.rolled, purpose: result.purpose, breakdown: result.result, total: result.total })}\n\n`);
-      if (result.music_scene)   res.write(`data: ${JSON.stringify({ type: 'music_scene',   scene: result.scene })}\n\n`);
-      if (result.combat_started)res.write(`data: ${JSON.stringify({ type: 'combat_started',enemies: result.enemies })}\n\n`);
-      if (result.leveled)       res.write(`data: ${JSON.stringify({ type: 'level_up',      level: result.level })}\n\n`);
-      if (result.weather)       res.write(`data: ${JSON.stringify({ type: 'weather_update',weather: result.weather })}\n\n`);
+      if (result.dice_rolled)   res.write(`data: ${JSON.stringify({ type: 'dice_roll',      expression: result.rolled, purpose: result.purpose, breakdown: result.result, total: result.total })}\n\n`);
+      if (result.combat_started)res.write(`data: ${JSON.stringify({ type: 'combat_started', enemies: result.enemies })}\n\n`);
+      if (result.leveled)       res.write(`data: ${JSON.stringify({ type: 'level_up',       level: result.level })}\n\n`);
 
-      // One tool message per call (Mistral/OpenAI format)
-      mistralMsgs.push({ role: 'tool', tool_call_id: tc.id, content: JSON.stringify(result) });
+      // Native tool result — toGeminiRequest converts to functionResponse part
+      contextMsgs.push({ role: 'tool', tool_call_id: tc.id, name: tc.name, content: JSON.stringify(result) });
+
+      if (result.direct_message) {
+        const msg = result.direct_message;
+        res.write(`data: ${JSON.stringify({ type: 'text', content: msg })}\n\n`);
+        messages.push({ role: 'assistant', content: msg });
+        if (stateUpdated || result.state_updated) {
+          const ns = loadState();
+          if (ns) {
+            console.log(`  📡 Sending state_update SSE event (campaign_id=${ns.campaign_id})`);
+            res.write(`data: ${JSON.stringify({ type: 'state_update', state: ns })}\n\n`);
+          }
+        }
+        console.log(`  ✓ direct_message streamed (${msg.length} chars) — skipping model`);
+        goto_end = true;
+        break;
+      }
+    }
+
+    if (goto_end) break;
+
+    hasCalledToolsThisTurn = true; // tools ran — next loop gets narration-only (no tool schemas)
+
+    // ── 1-call-per-turn optimisation ──────────────────────────────────────────
+    // If the model already produced narration text alongside the tool calls AND
+    // none of those tools involved dice (whose result must shape the narration),
+    // we're done — skip the second API call entirely. This halves quota usage on
+    // turns where the model narrates while it acts (state updates, NPC beats, etc.)
+    const hadDiceRoll = toolCalls.some(tc => tc.name === 'roll_dice');
+    if (textTurn.trim() && !hadDiceRoll) {
+      console.log('  ⚡ Narration + tools in one pass — skipping narration loop');
+      consecutiveToolLoops = 0;
+      break;
     }
 
     if (stateUpdated) {
       const ns = loadState();
       if (ns) res.write(`data: ${JSON.stringify({ type: 'state_update', state: ns })}\n\n`);
     }
+  }
 
-    // Narration nudge: ask the model to write DM prose now that tools are done
-    mistralMsgs.push({ role: 'user', content: 'Tools executed. Write your DM narration now — describe what happens in the scene. No more tool calls unless strictly necessary.' });
-    toolCalls = [];
+  // ── Auto-chronicle: silently append this turn to chronicle.txt ───────────────
+  // Gives the DM a persistent narrative memory of everything said this session.
+  // No API call needed — pure server-side file write.
+  if (!apiError && !isCreation) {
+    try {
+      const narration = messages.filter(m => m.role === 'assistant').slice(-1)[0]?.content || '';
+      const playerMsg = messages.filter(m => m.role === 'user').slice(-1)[0]?.content || '';
+      if (narration && playerMsg) {
+        const cPath = path.join(APP_DIR, 'chronicle.txt');
+        const ts = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        const entry = `\n---\n[${ts}] ${playerMsg.slice(0, 120)}\n${narration.slice(0, 600)}\n`;
+        fs.appendFileSync(cPath, entry, 'utf8');
+      }
+    } catch {}
   }
 
   console.log(`  ▶ Agentic loop end — totalTokens=${totalTokens}${apiError ? `, apiError=${apiError}` : ''}`);
@@ -1339,21 +2532,45 @@ const relayServer = http.createServer((req,res)=>{
         // Inject the last DM response so the model cannot regenerate the same text
         const lastDMMsg = [...history.messages].reverse().find(m => m.role === 'assistant' && m.content && !m.content.startsWith('⚠️'));
         const lastDMSnippet = lastDMMsg ? lastDMMsg.content.slice(0, 500) : null;
-        const systemPrompt = buildSystemPrompt(loadState()) + (lastDMSnippet
+        const currentState=loadState();
+        // RAG: only during active campaigns — stat blocks are useless during creation
+        const ragCtx = (currentState && currentState.campaign_id !== 'new-campaign')
+          ? buildRagContext(prompt, lastDMSnippet || '', currentState) : '';
+        if (ragCtx) console.log(`  📖 RAG: injected data (${ragCtx.length} chars)`);
+        const systemPrompt = buildSystemPrompt(currentState) + ragCtx + (lastDMSnippet
           ? `\n\n⚠️ YOUR PREVIOUS RESPONSE (DO NOT REPEAT OR PARAPHRASE THIS — write something completely new):\n"${lastDMSnippet}${lastDMMsg.content.length > 500 ? '…' : ''}"`
           : '');
         console.log(`\n  ━━━ Chat request — history=${history.messages.length} msgs (sending last ${messagesForAPI.length}, ~${runningTokens} tokens) ━━━`);
         const msgStartIdx=messagesForAPI.length;
-        const r1=await streamAgenticLoop(messagesForAPI,systemPrompt,res);
+        const isCreation=currentState.campaign_id==='new-campaign';
+        const creationStep=currentState.creation_step||1;
+
+        // Step 1 is server-sent like all other creation steps — model only handles the response.
+        // If we're at step 1 and no assistant has spoken yet, send the adventure-type question directly.
+        const noAssistantYet = !messagesForAPI.some(m => m.role === 'assistant');
+        if (isCreation && creationStep === 1 && noAssistantYet) {
+          const step1Msg = `Welcome, adventurer. Before we begin — what kind of world do you want to enter?\n\n1. **Classic High Fantasy** — Ancient kingdoms, dragon-haunted mountains, magic woven into the fabric of reality.\n2. **Dark Gothic** — Crumbling castles, cursed bloodlines, horrors that wear human faces.\n3. **Seafaring** — Uncharted oceans, buried treasure, storms that swallow ships whole.\n4. **Political Intrigue** — Courts of power, poisoned alliances, secrets that topple dynasties.\n\nWhich calls to you?`;
+          res.write(`data: ${JSON.stringify({ type: 'text', content: step1Msg })}\n\n`);
+          res.write(`data: ${JSON.stringify({ type: 'done' })}\n\n`);
+          messagesForAPI.push({ role: 'assistant', content: step1Msg });
+          history.messages.push({ role: 'user', content: prompt });
+          history.messages.push({ role: 'assistant', content: step1Msg });
+          saveHistory(history);
+          res.end();
+          return;
+        }
+
+        const r1=await streamAgenticLoop(messagesForAPI,systemPrompt,res,{isCreation,creationStep});
         let outTokens=r1.totalTokens, apiError=r1.apiError;
         const collectFinalText=()=>{let t='';for(let i=msgStartIdx;i<messagesForAPI.length;i++){const m=messagesForAPI[i];if(m.role==='assistant'){if(Array.isArray(m.content))t+=m.content.filter(b=>b.type==='text').map(b=>b.text).join('');else if(typeof m.content==='string')t+=m.content;}}return t;};
         let finalText=collectFinalText();
         // Emergency fallback: tools ran successfully but no narration produced (and no API error).
         // Skip fallback on API errors — retrying will just hit the same error.
-        if(!apiError&&!finalText.trim()&&messagesForAPI.length>msgStartIdx+1){
+        // Skip in creation mode — direct_message handles the response there.
+        if(!isCreation&&!apiError&&!finalText.trim()&&messagesForAPI.length>msgStartIdx+1){
           console.warn('  ⚠️  No narration after tools — forcing follow-up narration call');
           messagesForAPI.push({role:'user',content:'You called tools but wrote no narration. Write your DM response now — describe what happens in the scene.'});
-          const r2=await streamAgenticLoop(messagesForAPI,systemPrompt,res);
+          const r2=await streamAgenticLoop(messagesForAPI,systemPrompt,res,{isCreation,creationStep});
           outTokens+=r2.totalTokens;
           if(r2.apiError)apiError=r2.apiError;
           finalText=collectFinalText();
@@ -1492,6 +2709,8 @@ function listSaves() {
       .map(f => {
         try {
           const raw = JSON.parse(fs.readFileSync(path.join(SAVES_DIR, f), 'utf8'));
+          // Only accept proper save files that have meta.character — raw state dumps don't
+          if (!raw.meta || !raw.meta.character) return null;
           return { filename: f, meta: raw.meta };
         } catch { return null; }
       })
@@ -1689,7 +2908,7 @@ async function main() {
     console.log(`  ${APP_DIR}`);
     console.log('');
     console.log('  Containing exactly this line:');
-    console.log('  MISTRAL_API_KEY=your-mistral-key-here');
+    console.log('  GEMINI_API_KEY=your-gemini-key-here');
     console.log('');
     console.log('  Press Enter to exit.');
     await new Promise(r => process.stdin.once('data', r));

@@ -1,0 +1,140 @@
+
+---
+[10:57 AM] Hello
+The young barmaid finishes her sentence with a quick nod, "-spiced with wild sage, and a crust of rye bread to drag through the bowl. I'll fetch you a piping hot trencher, traveler." She scurries off toward the kitchen, her apron-strings fluttering behind her like a pair of pale moths. 
+
+Gorin, who had been leaning heavily over the scarred oak bar with his eyes half-closed, suddenly blinks. The heavy, sweet scent of roasting meat and spill-stale ale hangs thick between you. For a moment, you might have thought the old dwarf was asleep on his feet, but his bushy eyebrows knit together as your w
+
+---
+[11:01 AM] Yeah, the thing with the horns... its somewhat strange isnt it? All my family has them but me... I've been treated like 
+[used skill_check]Gorin’s heavy, calloused hand pauses beneath the counter. For a long, silent moment, the only sound between you is the crackle of the hearth fire and the distant, rhythmic thud of a woodcutter's axe outside. The old dwarf studies your face, his gaze lingering on the smooth brow where thick, curling horns should be. 
+
+When you mention the "punishment" and the sting of being cast out, something shifts in his weathered features. The hard, calculating edge in his eyes softens, replaced by the quiet, solemn understanding of an old soldier who has seen his own share of exile. Your 
+
+---
+[11:14 AM] Kel scratches his head when he hears "hornless" the he says: We have a bargain Gorin. I'll do it
+Gorin’s thick beard twitches with what might be a grin, though on his weathered face, it looks more like a warning. He slides the heavy iron key across the grease-stained wood of the bar. It is cold to the touch, pitted with age and smelling faintly of damp earth and old iron. 
+
+"Good lad," the dwarf rumbles, leaning back and gesturing toward a narrow, low-ceilinged hallway behind the bar. "The cellar door is at the end of the passage. Mind your step—the stairs are steep, slick with condensation, and the air down there is heavy enough to choke a horse. If you hear a clicking sound... don't wai
+
+---
+[11:16 AM] What spells do I have at my disposal?
+In the sudden rush of adrenaline, your mind scrambles, but the panic of the moment drowns out any scholarly lore you might have heard about these subterranean pests. You don't know what their weaknesses are, only that those clicking mandibles look sharp enough to take off a finger.
+
+Fortunately, your magic doesn't require book-learning—it flows directly from the draconic blood in your veins. 
+
+Here are the spells you have ready to unleash:
+
+### **Cantrips (At-Will — You can cast these as many times as you want):**
+*   **Minor Illusion:** You can create a sound (like a terrifying roar) or an im
+
+---
+[11:17 AM] I will put the to sleep. I cast sleep and roll 5d8 → **30** [(8+8+3+6+5)]
+[used_spell_slot][skill_check]You reach into your pouch, pulling out a pinch of fine, glittering sand. As the two chitinous horrors lung forward, their mandibles clicking in anticipation of a feast, you whisper a soft, draconic lullaby. The words sound like the rustle of dry leaves in an ancient forest. 
+
+With a swift flick of your wrist, you blow the sand into the damp cellar air. It catches an unseen updraft, glowing with a soft, pale blue light as it drifts over the scuttling kruthik hatchlings. 
+
+The glittering dust settles over their segmented heads. Instantly, their frantic, clicking man
+
+---
+[11:18 AM] I will check if there are more of this creatures around
+[skill_check]Standing at the base of the stairs, you hold your breath, straining your ears against the heavy, damp silence of the cellar. The only sound is the soft, rhythmic *hiss-shhh* of the two sleeping hatchlings and the slow drip of spilled mead pooling on the stone. 
+
+You peer into the yawning, jagged breach in the foundation. The dark tunnel beyond seems to swallow the dim light. You look for any glint of chitin or the twitch of an antenna, but the shadows play tricks on your eyes in the gloom. The smell of wet earth and musk is thick, but everything remains still. 
+
+You don't hear or 
+
+---
+[11:19 AM] I need a way to seal the tunnel, whats around?
+[skill_check] You quickly scan the damp, shadow-drenched cellar, your eyes darting from the sleeping hatchlings to the dark corners of the room. The panic of the situation and the heavy, musky stench of the beasts makes it hard to focus. 
+
+Your eyes linger on the smashed mead casks, but they are splintered into useless, wet shards of oak—hardly enough to block a stiff breeze, let alone burrowing monsters. There are heavier, intact barrels stacked against the far wall, but they are incredibly heavy, filled to the brim with liquid, and you'd have to heave them across the slippery, mud-slick floo
+
+---
+[11:21 AM] Lets try to despose of the sleeping things. Can I execute them while sleeping?
+[roll_dice] You step quietly over the damp, mud-slick floor, drawing one of your daggers. The polished steel catches the dim light of the cellar as you look down at the two sleeping horrors. Under the magical influence of your spell, they are completely incapacitated, their soft underbellies and the joints in their chitinous armor exposed as they breathe slowly.
+
+You kneel beside the first hatchling (A). Holding your breath, you aim for the soft, pale flesh just beneath its head joint—where the armored plates meet—and drive the blade home with a swift, downward thrust. 
+
+The dagger sinks deep 
+
+---
+[11:39 AM] what's the last thing that happened?
+The last thing that happened was that you stood over the two sleeping Kruthik hatchlings in the cellar. You had just successfully executed the first one by driving your dagger into its neck—it let out a bubbling hiss, leaked foul-smelling green ichor, and went limp. 
+
+The second hatchling (B) remained fast asleep right next to you, completely oblivious, though the sharp, stinging scent of its sibling's blood now filled the air. You had confirmed your intention to dispatch the second one in the same manner.
+
+You are standing in the damp cellar, dagger in hand, with the second creature still vul
+
+---
+[11:40 AM] I dispatch the other hatchling, same as the first one
+Your nerves, usually steady, betray you at the final moment. As you raise your dagger to strike the second hatchling, the slick, mud-covered floor beneath your boot shifts unexpectedly. Your heel slips into the pool of acidic green ichor leaking from the first creature, and your balance vanishes.
+
+Instead of a clean, lethal plunge into the creature's neck, your blade skitters off the thick, hardened chitin of its shoulder with a harsh, grating *screech* of metal on stone. The impact isn't deep enough to kill, but it is violent enough to jar the creature awake.
+
+The hatchling’s eyes—multi-facet
+
+---
+[11:41 AM] I plunge torwards the creature with my to daggers, try to fight it off
+[skill_check]Your strike is desperate, fueled by the sting of the acidic air and the frantic need to end the threat before it can call for others. You lunge forward, both daggers held low, aiming to pin the creature against the cellar wall.
+
+But the hatchling is faster than your blade. As you commit your weight to the strike, the creature skitters to the side with a rhythmic *click-click-click*, its segmented body folding in a way that seems anatomically impossible. Your daggers bite only into the cold, damp stone of the cellar wall, sparks flying as the steel rings against the rock.
+
+The crea
+
+---
+[11:42 AM] I cast thunderwave towards the creature
+[use_spell_slot] 
+*Wait—a flicker of realization hits you as you reach for the arcane energy in your blood.* You have already burned through your reserve of magic today. The *Sleep* spell drained the first of your two slots, and the second was spent in the initial scuffle. There is nothing left to draw upon. The air around your fingertips, usually humming with the potential of a storm, remains stubbornly still.
+
+The hatchling senses your hesitation. It let out a triumphant, chittering shriek, its mandibles wide and ready to clamp down on your throat. 
+
+You are wounded, your magic is spent, and
+
+---
+[11:43 AM] I cast minor illusion in the other corner of the room, try to dissuade the hatcling to lunge torwards the illusion
+[skill_check] You weave the arcane threads of your blood, focusing your intent on the far corner of the cellar behind the creature. You don't have the power for a grand display, so you conjure a sharp, visceral sound: the rhythmic, aggressive clicking of a much larger, more dominant kruthik. It echoes against the damp stone, sounding as though a massive predator has just emerged from the earth to challenge the hatchling.
+
+The effect is instantaneous. The hatchling, mid-lunge, pauses. Its head snaps toward the corner, its antennae twitching violently as it registers the sound of a superior. It 
+
+---
+[11:44 AM] I try to execute it, try to penetrate the exposed neck
+[skill_check] Your movement is silent, a desperate grace born of survival. As the kruthik hisses at the phantom clicking in the corner, you lunge. You don't aim for the armor; you aim for the vulnerability you saw moments ago. 
+
+Your lead dagger finds the soft, pale membrane where the neck meets the torso. With a grunt of exertion, you drive the blade deep, twisting it upward toward the creature's central nervous cluster. The hatchling lets out a sound that is less of a hiss and more of a wet, tearing pop. It thrashes, its claws raking uselessly against the stone floor, spraying green, acidic 
+
+---
+[11:46 AM] I stand over the two bodies, I see the opening in the cellar. Is there any barrels that can block it?
+You wipe the dark, acidic ichor from your blade onto the damp cellar floor, your hand trembling slightly from the adrenaline spike. With the immediate threat neutralized, you turn your attention to the source of the infestation. The breach is jagged, a fist-sized hole in the foundation that has been widened by the beasts to the size of a man’s torso.
+
+You scan the perimeter of the cellar once more. Your eyes land on a stack of heavy, salt-pork barrels tucked away in the shadows of the far corner. They are sturdy, oak-bound, and filled with enough weight to make them difficult to shift, but the
+
+---
+[11:48 AM] I head upstairs and fetch Gorin, show him what I found and that it was dealt with. I tell him about the tunnel, about wh
+You climb the cellar stairs, your boots heavy and slick, and emerge back into the main room of the inn. The transition from the suffocating, acidic air of the cellar to the warm, yeasty scent of the common room is jarring. The morning sun filters through the dusty windows, illuminating the dust motes dancing in the air, a stark contrast to the darkness you just left behind.
+
+Gorin is wiping down the counter, his brow furrowed as he hums a low, tuneless melody. When he looks up and sees you—disheveled, bleeding from the arm, and smelling faintly of insectile rot—his song cuts off abruptly. The 
+
+---
+[11:54 AM] Sure, some rest will be fine. I'll wait for you in he back
+Gorin nods, his heavy brow still knitted in concern, and gestures toward the narrow, creaking door behind the bar. "Take a seat, lad. The air in there is cooler, and there's a flagon of water on the desk. I need to make a quick call to the town mason—this can't wait until tomorrow."
+
+You push through the door, finding yourself in a cramped, windowless study that smells intensely of old parchment, pipe tobacco, and dried herbs. The room is dominated by a heavy oak desk cluttered with ledger books, a few half-finished maps, and a collection of rusted iron keys hanging on the wall. A single lante
+
+---
+[11:56 AM] I try to stop my bleeding and catch my breath.
+You lean back into the velvet chair, closing your eyes and letting the tension bleed out of your muscles. The room is quiet, save for the faint, steady ticking of a clock somewhere behind the shelves. 
+
+You focus on your breathing, slowing the ragged rhythm until it matches the soft, rhythmic hum of the tavern outside. You unwrap the stained cloth Gorin gave you, carefully inspecting the gash on your arm. It’s a clean, ugly wound, but the bleeding has slowed to a sluggish trickle. You find a basin of water on a side table, dampen a clean rag, and press it firmly against the injury. The cold wa
+
+---
+[11:58 AM] Aye, I thought the vellum was just that but I didn't look into it. Do you know a cleric? maybe a life cleric? Those wome
+Gorin lets out a dry, rasping chuckle that turns into a cough, his expression softening with a mix of amusement and pity. He walks over to a small cabinet, pulls out a jar of thick, pungent salve, and slides it toward you.
+
+"A life cleric, eh? You’ve got a taste for the finer things, Kel. We don't have a temple here—just a small shrine to Lathander tucked behind the village hall. There’s a woman there, Sister Elara. She’s kind enough, but she’s spent her life tending to farmers with blistered hands and children with the croup. She’s not exactly the adventuring type, and she’s got no love for t
+
+---
+[12:00 PM] Thanks for the map gorin. And the salve. I'll sleep here today if you dont mind and make a long rest. Tomorrow I'll head
+Gorin nods, a slow, satisfied expression crossing his face as he sees you finally settling in. "Sleep is the best medicine for the soul, and you've earned your share of it, lad. The room is yours for the night—on the house, considering you saved my cellar from becoming a breeding ground for those nightmares."
+
+He leaves you to the quiet sanctuary of his study. You find a heavy wool blanket in the corner, and the velvet chair, while not a bed, offers enough comfort to let your body finally surrender to exhaustion. As you drift off, the sounds of the town outside begin to swell—the rhythmic thum

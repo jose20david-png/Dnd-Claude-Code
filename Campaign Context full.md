@@ -12,16 +12,16 @@
 
 ---
 
-## SESSION STATE — Day 1 — Morning
+## SESSION STATE — Next Morning
 
 | Field | Value |
 |---|---|
-| Character | Elf Wizard · Wizard (Conjuration) · Level 1 |
-| Location | A small village nestled in the heart of a vast forest |
-| HP | 7 / 7 (full) |
+| Character | Kel · Sorcerer · Level 1 |
+| Location | Gorin's Inn, back study |
+| HP | 9 / 9 (full) |
 | Spell Slots | 2× 1 (full) |
 
-*Last updated: 2026-05-23*
+*Last updated: 2026-06-06*
 
 ---
 
@@ -107,6 +107,15 @@ Opens a browser animation, closes after 5 seconds. Results also printed to termi
 
 
 
+
+
 ## SESSION NOTES (auto-generated)
 
-- Elf Wizard created. Wizard (Conjuration) Level 1. Adventure begins.
+- Updated existing NPC: Gorin.
+- Story note saved: Kel shares his family's legacy and the cryptic message from his family about 'ma
+- Quest added: "The Dragon's Legacy" (4 steps).
+- Deception/Performance check DC12: rolled 15 — SUCCESS.
+- Investigation check DC12: rolled 14 — SUCCESS.
+- Long rest — all resources restored, HP full.
+- Full recovery after long rest.
+- Moved to Gorin's Inn, back study — Next Morning.

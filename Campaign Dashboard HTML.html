@@ -33,10 +33,6 @@ body {
 }
 #header .htitle { color: #ffd700; font-weight: bold; font-size: 13px; letter-spacing: 2px; }
 #header .hday   { color: #666; font-size: 12px; }
-#header .hbread { margin-left: auto; color: #555; }
-#header .hbread .crumb { cursor: pointer; color: #666; }
-#header .hbread .crumb:hover { color: #ffd700; }
-#header .hbread .crumb.active { color: #aaa; cursor: default; }
 #header .back-btn {
   background: none; border: 1px solid #2a2a2a; color: #555;
   padding: 1px 8px; cursor: pointer; font-family: 'Courier New', monospace;
@@ -77,112 +73,6 @@ body {
 .tab-panel { display: none; flex: 1; overflow: hidden; flex-direction: column; }
 .tab-panel.active { display: flex; }
 
-/* ══════════════════════ MAP TAB ══════════════════════ */
-#tab-map { flex-direction: column; }
-#main {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-}
-#map-wrap {
-  flex: 1;
-  overflow: auto;
-  padding: 12px;
-  background: #0e0e0e;
-  position: relative;
-}
-#map-canvas {
-  display: block;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-}
-
-/* ── Info panel ── */
-#panel {
-  width: 240px;
-  background: #121212;
-  border-left: 1px solid #222;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-.panel-hdr {
-  background: #1a1a1a;
-  padding: 6px 10px;
-  border-bottom: 1px solid #222;
-  font-size: 9px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: #555;
-}
-#info-body {
-  padding: 10px;
-  overflow-y: auto;
-  flex: 1;
-  font-size: 13px;
-  line-height: 1.55;
-}
-.iname  { color: #ffd700; font-size: 14px; font-weight: bold; margin-bottom: 4px; }
-.ibadge {
-  display: inline-block; font-size: 11px; letter-spacing: 1px;
-  padding: 2px 9px; border-radius: 2px; margin-bottom: 8px;
-  text-transform: uppercase;
-}
-.s-safe     { background: rgba(74,222,128,.1); color: #4ade80; border: 1px solid rgba(74,222,128,.25); }
-.s-fortified{ background: rgba(130,100,255,.1); color: #a080ff; border: 1px solid rgba(130,100,255,.25); }
-.s-threat   { background: rgba(250,204,21,.1);  color: #facc15; border: 1px solid rgba(250,204,21,.25); }
-.s-hostile  { background: rgba(248,113,113,.2); color: #f87171; border: 1px solid rgba(248,113,113,.4); }
-.s-unknown  { background: rgba(150,150,150,.1); color: #888;    border: 1px solid rgba(150,150,150,.25); }
-.isect { margin-top: 9px; }
-.isect-title {
-  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
-  color: #444; border-bottom: 1px solid #1e1e1e; padding-bottom: 2px; margin-bottom: 4px;
-}
-.q-item { color: #c9a227; font-size: 12px; padding: 2px 0; }
-.q-item::before { content: '◆ '; color: #6b5000; }
-.n-item { color: #8aaacc; font-size: 12px; padding: 2px 0; }
-.n-item::before { content: '@ '; color: #3a5a78; }
-.inote { color: #777; font-size: 12px; font-style: italic; margin-top: 6px; line-height: 1.5; }
-.zoom-btn {
-  display: block; width: 100%; margin-top: 10px;
-  background: #1a2a1a; border: 1px solid #2a3a2a; color: #4ade80;
-  padding: 6px 10px; cursor: pointer; font-family: 'Courier New', monospace;
-  font-size: 12px; text-align: left;
-}
-.zoom-btn:hover { background: #223022; }
-.idle-note { color: #666; font-size: 12px; font-style: italic; margin-top: 6px; }
-
-/* ── Tracker ── */
-#tracker {
-  border-top: 1px solid #1e1e1e;
-  padding: 10px 12px;
-  display: flex; flex-direction: column; gap: 6px;
-}
-.tr-row { display: flex; justify-content: space-between; font-size: 12px; }
-.tr-lbl { color: #444; }
-.tr-val { color: #888; }
-.tr-val.warn { color: #facc15; }
-.tr-val.danger { color: #f87171; }
-.bar { height: 4px; background: #1a1a1a; border: 1px solid #222; margin-top: 1px; }
-.bar-fill { height: 100%; transition: width .3s; }
-
-/* ── Legend ── */
-#legend {
-  background: #0e0e0e;
-  border-top: 1px solid #1e1e1e;
-  padding: 6px 12px;
-  display: flex; flex-wrap: wrap; gap: 6px 16px;
-  font-size: 12px; align-items: center; flex-shrink: 0;
-}
-.leg-lbl { color: #333; letter-spacing: 2px; margin-right: 2px; font-size: 11px; }
-.leg-item { display: flex; align-items: center; gap: 4px; color: #555; }
-.leg-swatch {
-  width: 14px; height: 14px;
-  display: inline-block;
-  image-rendering: pixelated;
-  border: 1px solid #2a2a2a;
-}
 
 /* ══════════════════════ SHARED PANEL STYLES ══════════════════════ */
 .scroll-panel { flex: 1; overflow-y: auto; padding: 20px 28px; }
@@ -438,40 +328,6 @@ body {
   #header .htitle { font-size: 11px; letter-spacing: 1px; }
 }
 
-/* ── Music controls ── */
-#music-controls {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-left: auto;
-  flex-shrink: 0;
-}
-#music-btn {
-  background: none;
-  border: 1px solid #2a2a2a;
-  color: #555;
-  font-size: 13px;
-  width: 26px;
-  height: 22px;
-  cursor: pointer;
-  border-radius: 3px;
-  line-height: 1;
-  padding: 0;
-  transition: color 0.15s, border-color 0.15s;
-}
-#music-btn:hover { color: #aaa; border-color: #555; }
-#music-btn.on { color: #a78bfa; border-color: #6d4fc2; }
-#music-label {
-  font-size: 10px;
-  font-family: 'Courier New', monospace;
-  color: #444;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: color 0.2s;
-  user-select: none;
-  min-width: 60px;
-}
-#music-label:hover { color: #888; }
 
 /* ── HP Bar ── */
 #hp-display {
@@ -670,7 +526,6 @@ body {
 <div id="header">
   <div class="htitle" id="header-title">◈ RURIK STORMHAMMER</div>
   <div class="hday" id="hday">Day 7 — Morning</div>
-  <div class="hbread" id="hbread"></div>
   <div id="hp-display">
     <div id="hp-bar-container">
       <div id="hp-bar-fill"></div>
@@ -678,16 +533,11 @@ body {
     <div id="hp-text">27 / 27</div>
   </div>
   <div id="session-timer" title="Session elapsed time" style="font-family:'Courier New',monospace;font-size:10px;color:#3a3a58;letter-spacing:1px;cursor:default;">00:00</div>
-  <div id="music-controls">
-    <button id="music-btn" onclick="musicToggle()" title="Toggle background music">🔇</button>
-    <span id="music-label" onclick="musicCycleScene()" title="Click to change scene">OFF</span>
-  </div>
 </div>
 
 <!-- ══════ TABS ══════ -->
 <div id="tab-bar">
-  <button class="tab-btn active" onclick="switchTab('map')">Map</button>
-  <button class="tab-btn" onclick="switchTab('character')">Character</button>
+  <button class="tab-btn active" onclick="switchTab('character')">Character</button>
   <button class="tab-btn" onclick="switchTab('quests')">Quests</button>
   <button class="tab-btn" onclick="switchTab('events')">Events</button>
   <button class="tab-btn" onclick="switchTab('npcs')">NPCs</button>
@@ -708,36 +558,8 @@ body {
 <!-- ══════ CONTENT ══════ -->
 <div id="content">
 
-  <!-- ── MAP ── -->
-  <div id="tab-map" class="tab-panel active">
-    <div id="main">
-      <div id="map-wrap">
-        <div id="map-location-label" style="position:absolute;top:8px;left:8px;z-index:10;background:rgba(0,0,0,0.72);border:1px solid #1e1e3a;border-radius:3px;padding:4px 10px;font-size:11px;font-family:'Courier New',monospace;color:#8888cc;letter-spacing:1px;pointer-events:none;display:none;">📍</div>
-        <div id="map-weather-label" style="position:absolute;top:8px;right:8px;z-index:10;background:rgba(0,0,0,0.72);border:1px solid #1e1e3a;border-radius:3px;padding:4px 10px;font-size:11px;font-family:'Courier New',monospace;color:#8888aa;letter-spacing:1px;pointer-events:none;display:none;"></div>
-        <canvas id="map-canvas"></canvas>
-      </div>
-      <div id="panel">
-        <div class="panel-hdr">Location</div>
-        <div id="info-body">
-          <div class="idle-note">Click a marked location for details.</div>
-        </div>
-        <div id="tracker">
-          <div class="tr-row"><span class="tr-lbl">WORLD</span><span class="tr-val" id="tr-world" style="font-size:10px">—</span></div>
-          <div class="tr-row"><span class="tr-lbl">LOCATION</span><span class="tr-val" id="tr-location" style="font-size:10px">—</span></div>
-          <div class="tr-row"><span class="tr-lbl">TIME</span><span class="tr-val" id="tr-days">—</span></div>
-          <div id="tr-seal-row" style="display:none">
-            <div class="tr-row" style="margin-top:8px"><span class="tr-lbl">SEAL</span><span class="tr-val" id="tr-seal">100%</span></div>
-            <div class="bar"><div class="bar-fill" id="seal-bar" style="width:100%;background:#4ade80"></div></div>
-            <div class="tr-row"><span class="tr-lbl">STATUS</span><span class="tr-val" id="tr-seal-status">Stable</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="legend"></div>
-  </div>
-
   <!-- ── CHARACTER ── -->
-  <div id="tab-character" class="tab-panel">
+  <div id="tab-character" class="tab-panel active">
     <div class="scroll-panel" id="character-tab-content">
       <!-- Rendered by renderCharacterTab() -->
     </div>
@@ -811,7 +633,6 @@ body {
       <div id="spell-compendium"></div>
     </div>
   </div>
-
   <!-- ── COMBAT TRACKER ── -->
   <div id="tab-combat" class="tab-panel" style="display:none; flex-direction: column;">
     <div style="padding:12px;background:#0c0f1a;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center;">
@@ -924,10 +745,27 @@ let combatState = {
   ]
 };
 
-async function loadGameState() {
+async function loadGameState(retries = 5, delayMs = 1200) {
+  // Retry a few times before alerting — handles the race where the browser
+  // opens before the API server has fully started.
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const res = await fetch('http://localhost:3140/api/state');
+      if (!res.ok) throw new Error('API error: ' + res.status);
+      return await _loadGameStateInner(res);
+    } catch (err) {
+      console.warn(`loadGameState attempt ${attempt}/${retries} failed:`, err.message);
+      if (attempt < retries) {
+        await new Promise(r => setTimeout(r, delayMs));
+      } else {
+        alert('Could not load from API after ' + retries + ' attempts. Is the server running on port 3140?');
+      }
+    }
+  }
+}
+
+async function _loadGameStateInner(res) {
   try {
-    const res = await fetch('http://localhost:3140/api/state');
-    if (!res.ok) throw new Error('API error: ' + res.status);
     const data = await res.json();
     campaignState = data;
 
@@ -940,14 +778,6 @@ async function loadGameState() {
       time:  (data.world.time||'').match(/(Morning|Afternoon|Evening|Night)/)?.[1] || '',
       sealPct:    data.world.seal_integrity ?? 100,
       sealStatus: data.world.seal_status    || 'Stable',
-      // Map: prefer world.map_id if set, else match campaign_id against GRIDS, else no map
-      currentMap: (() => {
-        if (isNew) return null;
-        const mid = data.world && data.world.map_id;
-        if (mid && typeof GRIDS !== 'undefined' && GRIDS[mid]) return mid;
-        if (typeof GRIDS !== 'undefined' && GRIDS[data.campaign_id]) return data.campaign_id;
-        return null;
-      })(),
       charHpCurrent: party.hp,
       charHpMax:     party.hp_max || party.hp || 10,
       charLevel:     party.level || 1,
@@ -967,9 +797,6 @@ async function loadGameState() {
     if (claudeTabLbl && !isNew && party.name && party.name !== 'New Character')
       claudeTabLbl.textContent = party.name.split(' ')[0];
 
-    // ── Campaign status panel ──────────────────────────
-    updateCampaignStatusPanel(data, isNew);
-
     // ── All tabs ───────────────────────────────────────
     if (isNew) {
       clearAllTabsForNewCampaign();
@@ -986,86 +813,13 @@ async function loadGameState() {
       syncSpellStatuses(party.spells, party.class);
     }
 
-    updateCampaignStatusPanel(data, isNew);
-    updateMapLocationLabel(data);
     console.log(`✓ Game state loaded — ${isNew ? 'NEW CAMPAIGN (character creation)' : data.campaign_id}`);
   } catch (err) {
     console.error('Failed to load state:', err);
-    alert('Could not load from API. Is the server running on port 3140?');
+    throw err; // bubble up to retry loop
   }
 }
 
-// ─── CAMPAIGN STATUS PANEL (map sidebar) ─────────────
-function updateCampaignStatusPanel(state, isNew) {
-  const world = state && state.world;
-  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || '—'; };
-  if (isNew || !world) {
-    set('tr-world', '—'); set('tr-location', '—'); set('tr-days', '—');
-    const sealRow = document.getElementById('tr-seal-row');
-    if (sealRow) sealRow.style.display = 'none';
-    return;
-  }
-  set('tr-world', world.name || '—');
-  const loc = (world.current_location || '').slice(0, 28);
-  set('tr-location', loc || '—');
-  set('tr-days', world.time || '—');
-  // Only show seal row if campaign tracks seal_integrity below 100 (or seal_status is set)
-  const sealRow = document.getElementById('tr-seal-row');
-  const sealPct = world.seal_integrity ?? 100;
-  const hasSeal = sealPct < 100 || (world.seal_status && world.seal_status !== 'N/A' && world.seal_status !== 'Stable');
-  if (sealRow) sealRow.style.display = hasSeal ? 'block' : 'none';
-  if (hasSeal) {
-    set('tr-seal', `${sealPct}%`);
-    set('tr-seal-status', world.seal_status || 'Unknown');
-    const bar = document.getElementById('seal-bar');
-    if (bar) { bar.style.width = `${sealPct}%`; bar.style.background = sealPct >= 100 ? '#4ade80' : sealPct > 50 ? '#facc15' : '#f87171'; }
-  }
-}
-
-// ─── MAP LOCATION LABEL ───────────────────────────────
-function updateMapLocationLabel(state) {
-  const el = document.getElementById('map-location-label');
-  if (!el) return;
-  if (!state || state.campaign_id === 'new-campaign') {
-    el.style.display = 'none';
-    return;
-  }
-  const loc = (state.world && state.world.current_location) || '';
-  const time = (state.world && state.world.time) || '';
-  if (loc) {
-    el.textContent = `📍 ${loc}${time ? '  ·  ' + time : ''}`;
-    el.style.display = 'block';
-  } else {
-    el.style.display = 'none';
-  }
-}
-
-// Wipe the map canvas and show a "character creation" placeholder
-function clearMapForNewCampaign() {
-  const canvas = document.getElementById('map-canvas');
-  if (!canvas) return;
-  canvas.width  = 480;
-  canvas.height = 320;
-  const ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#0a0a12';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = '#2a2a40';
-  ctx.strokeStyle = '#1a1a2e';
-  ctx.lineWidth = 1;
-  for (let x = 0; x < canvas.width; x += 24)  { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke(); }
-  for (let y = 0; y < canvas.height; y += 24) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke(); }
-  ctx.fillStyle = '#333355';
-  ctx.font = 'bold 14px "Courier New"';
-  ctx.textAlign = 'center';
-  ctx.fillText('[ MAP UNLOCKED AFTER CHARACTER CREATION ]', canvas.width / 2, canvas.height / 2 - 10);
-  ctx.fillStyle = '#444466';
-  ctx.font = '11px "Courier New"';
-  ctx.fillText('Speak to the DM to begin your adventure', canvas.width / 2, canvas.height / 2 + 14);
-  ctx.textAlign = 'left';
-  // Also blank out the info panel
-  const infoBody = document.getElementById('info-body');
-  if (infoBody) infoBody.innerHTML = '<div style="color:#444;font-size:12px;padding:8px;text-align:center;line-height:1.8">No location data.<br>Complete character creation first.</div>';
-}
 
 // Wipe all campaign-specific tabs and inject a new-campaign welcome state
 function clearAllTabsForNewCampaign() {
@@ -1088,9 +842,6 @@ function clearAllTabsForNewCampaign() {
   if (npcsEl)  npcsEl.innerHTML  = ph('👥', 'No NPCs Yet');
   document.getElementById('tab-spells').innerHTML    = ph('✨', 'No Spells Yet');
   document.getElementById('tab-inventory').innerHTML = ph('🎒', 'No Inventory Yet');
-
-  // Wipe map
-  clearMapForNewCampaign();
 
   // Wipe quick-roll bar (Rurik-specific rolls)
   const qrBar = document.getElementById('quick-roll-bar');
@@ -1126,7 +877,6 @@ function clearAllTabsForNewCampaign() {
         <div style="color:#555;font-size:10px;letter-spacing:2px;margin-bottom:8px;font-family:'Courier New',monospace;">YOUR DASHBOARD</div>
         <div style="font-size:11px;color:#666;line-height:1.9;">
           📋 <span style="color:#888">Character</span> — full sheet, spells, stats<br>
-          🗺️ <span style="color:#888">Map</span> — your current location<br>
           ⚔️ <span style="color:#888">Combat</span> — initiative &amp; HP tracker<br>
           🎲 <span style="color:#888">Dice</span> — quick rolls anytime<br>
           📜 <span style="color:#888">Events</span> — campaign timeline<br>
@@ -1143,678 +893,6 @@ function clearAllTabsForNewCampaign() {
 
   // Switch to Claude tab
   switchTab('claude');
-}
-
-// ══════════════════════════════════════════════════════
-//  TERRAIN LABEL DEFINITIONS (used for legend only)
-// ══════════════════════════════════════════════════════
-const T = {
-  'f': { label: 'Forest' },
-  'F': { label: 'Dense Forest' },
-  'g': { label: 'Grassland' },
-  '~': { label: 'Open Field' },
-  'r': { label: 'Road' },
-  'm': { label: 'Mountain' },
-  'M': { label: 'High Peak' },
-  'c': { label: 'Cave' },
-  'w': { label: 'Water' },
-  'p': { label: 'Town' },
-};
-
-// ══════════════════════════════════════════════════════
-//  LOCATIONS
-// ══════════════════════════════════════════════════════
-const LOCS = {
-  campaign: [
-    { id:'phandalin', x:16, y:8, char:'P', fg:'#d4af37',
-      name:'Phandalin', status:'threat', zoomTo:'phandalin',
-      quests:['Neutralize the Redbrands','Hunt the Mind Flayer'],
-      npcs:['Silga (hostile — Redbrand commander)','Civilians under Redbrand control'],
-      note:'Redbrands still control the town. Silga has full command. Harpers ~2 days out. Three families shaken down for protection coin this week.' },
-    { id:'shrine', x:18, y:9, char:'†', fg:'#a080ff',
-      name:'Shrine of Luck (Selûne)', status:'fortified', zoomTo:'phandalin',
-      quests:[],
-      npcs:[],
-      note:'Artifacts remain in blessed catacombs. Party moved to Marta\'s cabin. Staff recharging.' },
-    { id:'manor', x:20, y:10, char:'!', fg:'#f87171',
-      name:'Tresendar Manor', status:'hostile', zoomTo:null,
-      quests:['Neutralize the Redbrands'],
-      npcs:['Silga (field commander)','Redbrand thugs (~8-12 active)'],
-      note:'Redbrand HQ. Silga in full command. Cellar tunnels unexplored.' },
-    { id:'wave_echo', x:34, y:3, char:'C', fg:'#4ade80',
-      name:'Wave Echo Cave', status:'safe', zoomTo:'wave_echo',
-      quests:[],
-      npcs:['The Witness (CONTAINED)'],
-      note:'Seal reinforced. Stable for years or decades. Breeding chamber collapsed and buried. Miners\' passage intact.' },
-    { id:'marta', x:10, y:5, char:'Ω', fg:'#ffd700',
-      name:"Old Marta's Cabin", status:'safe', zoomTo:null,
-      quests:[],
-      npcs:['Rurik (YOU — Bearer of the Seal)','Old Marta','Sister Garaele','Sildar Hallwinter','Gundren Rockseeker','Iarno Albrek','Toblen Stonehill','Borik Stonehammer','Qelline','4 recovering former-thralls'],
-      note:'Full party regrouped here. Long rest complete. Day 7 Morning. Planning next move — three escape routes on the table.' },
-    { id:'south_road', x:20, y:18, char:'↓', fg:'#888',
-      name:"South Road — Triboar Trail → Baldur's Gate", status:'unknown', zoomTo:null,
-      quests:['Manage Civilian Safety'], npcs:[],
-      note:'Potential evacuation route. Qelline confirmed a 2-hour patrol gap at 3–5am. Outriders present.' },
-  ],
-  phandalin: [
-    { id:'shrine_t', x:26, y:9, char:'†', fg:'#a080ff',
-      name:'Shrine of Luck', status:'fortified', zoomTo:null,
-      quests:[], npcs:[],
-      note:'Artifacts in blessed catacombs. Party has moved to Marta\'s cabin. Staff recharging.' },
-    { id:'manor_t', x:28, y:14, char:'!', fg:'#f87171',
-      name:'Tresendar Manor', status:'hostile', zoomTo:null,
-      quests:['Neutralize the Redbrands'],
-      npcs:['Silga (commander)','Redbrand thugs (~8–12 active)'],
-      note:'Increased patrols. Silga brutalizing civilians. Cellars connect to deeper tunnels.' },
-    { id:'inn_t', x:8, y:2, char:'I', fg:'#c0a050',
-      name:'Stonehill Inn', status:'safe', zoomTo:null,
-      quests:[], npcs:['Toblen Stonehill (ally)'],
-      note:'Local gossip hub. One of few Redbrand-free spaces in town.' },
-    { id:'provisions_t', x:18, y:2, char:'B', fg:'#a08040',
-      name:"Barthen's Provisions", status:'safe', zoomTo:null,
-      quests:[], npcs:["Elmar Barthen (merchant)"],
-      note:'Supplies and goods. Elmar cooperative — knows the trade roads south.' },
-    { id:'townmaster_t', x:22, y:6, char:'H', fg:'#7080b0',
-      name:"Townmaster's Hall", status:'unknown', zoomTo:null,
-      quests:[], npcs:['Harbin Wester (passive, afraid)'],
-      note:'Officially neutral. Townmaster too afraid to act. Will follow whoever holds power.' },
-    { id:'lionshield_t', x:8, y:7, char:'L', fg:'#4090d0',
-      name:'Lionshield Coster', status:'safe', zoomTo:null,
-      quests:[], npcs:['Linene Graywind (merchant)'],
-      note:'Weapons and armor trader. Actively opposed to Redbrands. Potential supply source.' },
-  ],
-  wave_echo: [
-    { id:'cave_entrance_wec', x:10, y:2, char:'▼', fg:'#888',
-      name:'Miners\' Passage (Back Entrance)', status:'safe', zoomTo:null,
-      quests:[], npcs:[],
-      note:'Used on Day 6 to bypass Redbrand scouts on the ridge. Passage intact and clear.' },
-    { id:'seal_chamber', x:22, y:14, char:'◈', fg:'#4ade80',
-      name:'The Seal Chamber', status:'safe', zoomTo:null,
-      quests:[],
-      npcs:['The Witness (CONTAINED — bound beneath)'],
-      note:'The obsidian seal is whole, glowing steady. Ritual complete. Rurik is the Bearer — permanently connected. The second heartbeat.' },
-    { id:'artifact_alcove', x:24, y:12, char:'□', fg:'#666',
-      name:'Artifact Alcove', status:'safe', zoomTo:null,
-      quests:[], npcs:[],
-      note:'Empty. All five artifacts secured in shrine catacombs.' },
-    { id:'breeding_chamber', x:14, y:6, char:'✖', fg:'#444',
-      name:'Breeding Chamber (Collapsed)', status:'safe', zoomTo:null,
-      quests:[], npcs:[],
-      note:'7 ceremorphosis pods destroyed by Shatter. Passage collapsed under 100+ tons of rock. The Mind Flayer\'s army is buried.' },
-  ],
-};
-
-// ══════════════════════════════════════════════════════
-//  MAP GRIDS (tileW/tileH = 32 for 2x pixel art scaling)
-// ══════════════════════════════════════════════════════
-const GRIDS = {
-  campaign: {
-    tileW: 32, tileH: 32,
-    rows: [
-      'ffffffffffffffffffffffffffffffmmmmmmmmmffffff',
-      'ffffffffffffffffffffffffffffmmmmmmmmmmmffffff',
-      'fffffffffffffffffffffffffffmmmmmmmmmmmmffffff',
-      'ffffffffffffffffffffffffffmmmmmmmmmmmmmffffff',
-      'fffffffffffffffffffffffffmmmmmmmmmmmmmfffffff',
-      'ffffffffff ffffffffffffff mmmmmmmmmmmmfffffff',
-      'ffffffffff.fffffffffffff  mmmmmmmmmmmmfffffff',
-      'ffffffffff.fffffffffffff  mmmmmmmmmmmffffffff',
-      'fffffffffff..fffpppppffffffffffffffffffff     ',
-      'fffffffffff...ffpppppffffffffffffffffffff     ',
-      'fffffffffff....fpppppffffffffffffffffffff     ',
-      'fffffffffff.....rrrrrrrrrrrrrffffffffffff     ',
-      'ggggggggggrrrrrrrrrrrrrrrrrrrggggggggggg     ',
-      'ggggggggggrrrrrrrrrrrrrrrrrrrggggggggggg     ',
-      'ggggggggggrrrrrrrrrrrrrrrrrrrggggggggggg     ',
-      'ggggggggggrrrrrrrrrrrrrrrrrrrggggggggggg     ',
-      '~~~~~~~~~~rrrrrrrrrrrrrrrrrrr~~~~~~~~~~~~~   ',
-      '~~~~~~~~~~rrrrrrrrrrrrrrrrrrr~~~~~~~~~~~~~   ',
-      '~~~~~~~~~~rrrrrrrrrrrrrrrrrrr~~~~~~~~~~~~~   ',
-      '~~~~~~~~~~rrrrrrrrrrrrrrrrrrr~~~~~~~~~~~~~   ',
-    ],
-  },
-  phandalin: {
-    tileW: 32, tileH: 32,
-    rows: [
-      'gggggggggggggggggggggggggggggggggggg',
-      'ggggg   ggggggg   ggggggg   gggggggg',
-      'ggggg   ggggggg   ggggggg   gggggggg',
-      'ggggg   ggggggg   ggggggg   gggggggg',
-      'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr',
-      'ggggggggrrrrrrggggggggggrrrrrrgggggg',
-      'ggggg   rrrrrrgg   gggg   ggggggggg',
-      'ggggg   rrrrrrgg   gggg   ggggggggg',
-      'ggggg   rrrrrrgg   gggg   ggggggggg',
-      'ggggg   rrrrrrgg   gggg   ggg   ggg',
-      'ggggg   rrrrrrgg   gggg   ggg   ggg',
-      'ggggggggrrrrrrgggggggggggggggggggggg',
-      'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr',
-      'ggggggggrrrrrrggggggggggggg   gggggg',
-      'ggggg   rrrrrrggggggggggggg   gggggg',
-      'ggggg   rrrrrrggggggggggggg   gggggg',
-      'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr',
-      'gggggggggggggggggggggggggggggggggggg',
-      'gggggggggggggggggggggggggggggggggggg',
-      'gggggggggggggggggggggggggggggggggggg',
-    ],
-  },
-  wave_echo: {
-    tileW: 32, tileH: 32,
-    rows: [
-      'MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM',
-      'MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM',
-      'MM        MMMMMMMMMMMMMMMMMMMMMM',
-      'MM        MMMMMMMMMMMMMMMMMMMMMM',
-      'MM        MM   MMMMMMMMMMMMMMMMM',
-      'MM        MM   MMMMMMMMMMMMMMMMM',
-      'MMMMM  MMMM    MMMMMMMMMMMMMMMMM',
-      'MMMMM  MMMM    MMMMMMMMMMMMMMMMM',
-      'MMMMM  MMMM    MMMMMMMM  MMMMMMM',
-      'MMMMM  MMMMMM  MMMMMMMM  MMMMMMM',
-      'MMMMM  MMMMMM  MMMMMMMM  MMMMMMM',
-      'MMMMM          MMMMMMMM  MMMMMMM',
-      'MMMMM          MMMMMMMM  MMMMMMM',
-      'MMMMM          MM         MMMMMM',
-      'MMMMM          MM         MMMMMM',
-      'MMMMMMMMMMMMMMMM          MMMMMM',
-      'MMMMMMMMMMMMMMMM          MMMMMM',
-      'MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM',
-    ],
-  },
-};
-
-// ══════════════════════════════════════════════════════
-//  PIXEL ART TILE ENGINE
-// ══════════════════════════════════════════════════════
-const TILE_PX = 16;
-const tileCache = {};
-const spriteCache = {};
-let animTick = 0;
-let animHandle = null;
-let lastAnimTime = 0;
-let selectedLocId = null;
-let locMapData = {};
-let curMapId = W.currentMap;
-let mapStack = [];
-
-// ── Terrain tile drawing functions (16×16 canvas) ──
-const TILE_DRAW = {
-  g(ctx) {
-    ctx.fillStyle = '#2e5c10'; ctx.fillRect(0,0,16,16);
-    ctx.fillStyle = '#3a7018';
-    [[1,1],[4,5],[7,3],[10,0],[13,4],[0,8],[3,10],[6,7],[9,11],[12,8],[15,5],[2,13],[5,11],[8,14],[11,12],[14,10]].forEach(([x,y]) => ctx.fillRect(x,y,1,2));
-    ctx.fillStyle = '#254a0c';
-    [[2,3],[6,1],[11,2],[14,7],[1,9],[7,13],[13,11]].forEach(([x,y]) => ctx.fillRect(x,y,1,2));
-  },
-  '~'(ctx) {
-    ctx.fillStyle = '#3a6818'; ctx.fillRect(0,0,16,16);
-    ctx.fillStyle = '#4a8820';
-    [[2,2],[6,6],[10,1],[14,5],[0,10],[4,13],[8,9],[12,12]].forEach(([x,y]) => ctx.fillRect(x,y,1,1));
-    ctx.fillStyle = '#2a5010';
-    [[4,4],[8,8],[12,3],[1,12],[5,9],[9,14]].forEach(([x,y]) => ctx.fillRect(x,y,1,1));
-  },
-  f(ctx) {
-    ctx.fillStyle = '#0b160b'; ctx.fillRect(0,0,16,16);
-    ctx.fillStyle = '#3a1e08'; ctx.fillRect(7,11,2,5);
-    ctx.fillStyle = '#1a4018'; ctx.fillRect(2,8,12,4);
-    ctx.fillStyle = '#224e20'; ctx.fillRect(3,8,10,3);
-    ctx.fillStyle = '#1c4a1a'; ctx.fillRect(4,5,8,4);
-    ctx.fillStyle = '#2a5c28'; ctx.fillRect(5,5,6,3);
-    ctx.fillStyle = '#1e5020'; ctx.fillRect(5,2,6,4);
-    ctx.fillStyle = '#2e6a2c'; ctx.fillRect(6,2,4,3);
-    ctx.fillStyle = '#3a7a38'; ctx.fillRect(7,0,2,3);
-  },
-  F(ctx) {
-    ctx.fillStyle = '#080e08'; ctx.fillRect(0,0,16,16);
-    ctx.fillStyle = '#2a1808'; ctx.fillRect(2,13,2,3);
-    ctx.fillStyle = '#133010'; ctx.fillRect(0,9,7,4);
-    ctx.fillStyle = '#1a4018'; ctx.fillRect(1,6,6,4);
-    ctx.fillStyle = '#204818'; ctx.fillRect(2,3,4,4);
-    ctx.fillStyle = '#286028'; ctx.fillRect(3,1,2,3);
-    ctx.fillStyle = '#2a1808'; ctx.fillRect(12,12,2,4);
-    ctx.fillStyle = '#133010'; ctx.fillRect(9,7,7,5);
-    ctx.fillStyle = '#1a4018'; ctx.fillRect(10,4,6,4);
-    ctx.fillStyle = '#204818'; ctx.fillRect(11,2,4,3);
-    ctx.fillStyle = '#286028'; ctx.fillRect(12,0,2,3);
-  },
-  m(ctx) {
-    ctx.fillStyle = '#181818'; ctx.fillRect(0,0,16,16);
-    ctx.fillStyle = '#202028'; ctx.fillRect(0,11,16,5);
-    ctx.fillStyle = '#384040';
-    for(let i=0;i<=11;i++){const w=Math.round((i/11)*14);ctx.fillRect(8-w/2,i+1,w,1);}
-    ctx.fillStyle = '#485060';
-    for(let i=2;i<=9;i++){const w=Math.round(((i-2)/7)*5);ctx.fillRect(8,i,w,1);}
-    ctx.fillStyle = '#c8cce0'; ctx.fillRect(7,1,2,1); ctx.fillRect(6,2,4,1); ctx.fillRect(5,3,6,2);
-    ctx.fillStyle = '#a0a8c0'; ctx.fillRect(5,4,3,1); ctx.fillRect(9,4,1,1);
-  },
-  M(ctx) {
-    ctx.fillStyle = '#101010'; ctx.fillRect(0,0,16,16);
-    ctx.fillStyle = '#181820'; ctx.fillRect(0,9,16,7);
-    ctx.fillStyle = '#2a2a38';
-    for(let i=0;i<=14;i++){const w=Math.max(1,Math.round((i/14)*12));ctx.fillRect(8-w/2,i,w,1);}
-    ctx.fillStyle = '#383848';
-    for(let i=3;i<=11;i++){const w=Math.round(((i-3)/8)*4);ctx.fillRect(8,i,w,1);}
-    ctx.fillStyle = '#d0d8f0'; ctx.fillRect(7,0,2,1); ctx.fillRect(6,1,4,1); ctx.fillRect(5,2,6,2); ctx.fillRect(4,3,8,1);
-    ctx.fillStyle = '#a8b0d0'; ctx.fillRect(4,4,3,1); ctx.fillRect(9,4,2,1);
-  },
-  r(ctx) {
-    ctx.fillStyle = '#1c1408'; ctx.fillRect(0,0,16,16);
-    ctx.fillStyle = '#5a4028'; ctx.fillRect(2,0,12,16);
-    ctx.fillStyle = '#7a5838'; ctx.fillRect(3,0,10,16);
-    ctx.fillStyle = '#8a6840'; ctx.fillRect(4,0,8,16);
-    ctx.fillStyle = '#5a4020'; ctx.fillRect(5,0,2,4); ctx.fillRect(5,7,2,4); ctx.fillRect(9,3,2,4); ctx.fillRect(9,10,2,4);
-    ctx.fillStyle = '#4a3018'; ctx.fillRect(5,1,1,2); ctx.fillRect(9,4,1,2); ctx.fillRect(5,8,1,2); ctx.fillRect(9,11,1,2);
-  },
-  c(ctx) {
-    ctx.fillStyle = '#200800'; ctx.fillRect(0,0,16,16);
-    ctx.fillStyle = '#383028'; ctx.fillRect(0,4,16,12);
-    ctx.fillStyle = '#484038'; ctx.fillRect(1,3,14,11);
-    ctx.fillStyle = '#585048'; ctx.fillRect(2,2,12,8);
-    ctx.fillStyle = '#080404'; ctx.fillRect(4,7,8,9); ctx.fillRect(5,5,6,4); ctx.fillRect(6,4,4,2);
-    ctx.fillStyle = '#200800'; ctx.fillRect(5,8,6,8);
-    ctx.fillStyle = '#100400'; ctx.fillRect(6,9,4,6);
-    ctx.fillStyle = '#686058'; ctx.fillRect(2,2,2,1); ctx.fillRect(12,3,2,1); ctx.fillRect(2,2,1,2);
-  },
-  w(ctx, frame) {
-    const f = frame || 0;
-    ctx.fillStyle = '#060e18'; ctx.fillRect(0,0,16,16);
-    ctx.fillStyle = '#0a1c30'; ctx.fillRect(0,0,16,5);
-    ctx.fillStyle = '#0c2040'; ctx.fillRect(0,4,16,6);
-    ctx.fillStyle = '#0e2848'; ctx.fillRect(0,8,16,8);
-    if(f===0){
-      ctx.fillStyle='#1848a0';
-      [[0,3,4],[4,6,3],[8,2,5],[13,5,3],[1,11,3],[6,9,4],[11,12,4]].forEach(([x,y,l])=>ctx.fillRect(x,y,l,1));
-      ctx.fillStyle='#2060c8';
-      [[0,2,2],[4,5,1],[8,1,2],[14,4,1],[2,10,1],[7,8,2],[12,11,1]].forEach(([x,y,l])=>ctx.fillRect(x,y,l,1));
-    } else {
-      ctx.fillStyle='#1848a0';
-      [[2,4,4],[7,1,3],[11,5,4],[0,8,3],[4,10,5],[10,13,3]].forEach(([x,y,l])=>ctx.fillRect(x,y,l,1));
-      ctx.fillStyle='#2060c8';
-      [[2,3,2],[7,0,2],[12,4,1],[0,7,2],[5,9,1],[11,12,2]].forEach(([x,y,l])=>ctx.fillRect(x,y,l,1));
-    }
-  },
-  p(ctx) {
-    ctx.fillStyle = '#181008'; ctx.fillRect(0,0,16,16);
-    ctx.fillStyle = '#1e1408'; ctx.fillRect(0,7,16,2); ctx.fillRect(7,0,2,16);
-    [[1,1,5,5,'#4a3820'],[10,1,5,5,'#504030'],[1,10,5,5,'#453520'],[10,10,5,5,'#4a3828']].forEach(([x,y,w,h,col])=>{
-      ctx.fillStyle=col; ctx.fillRect(x,y,w,h);
-      ctx.fillStyle='#5a4828'; ctx.fillRect(x,y,w,1); ctx.fillRect(x,y,1,h);
-    });
-  },
-  ' '(ctx) {
-    ctx.fillStyle = '#0d0f0d'; ctx.fillRect(0,0,16,16);
-    ctx.fillStyle = '#121412'; ctx.fillRect(0,0,8,8); ctx.fillRect(8,8,8,8);
-    ctx.fillStyle = '#0a0c0a'; ctx.fillRect(8,0,8,8); ctx.fillRect(0,8,8,8);
-  },
-};
-
-// ── Location sprite drawing functions (16×16 canvas) ──
-const SPRITE_DRAW = {
-  P(ctx) {
-    ctx.fillStyle='#1a1408'; ctx.fillRect(0,0,16,16);
-    // Left building
-    ctx.fillStyle='#7a5830'; ctx.fillRect(1,9,6,7);
-    ctx.fillStyle='#c0901c'; ctx.fillRect(1,7,6,1); ctx.fillRect(2,6,4,1); ctx.fillRect(3,5,2,1);
-    ctx.fillStyle='#d4af37'; ctx.fillRect(2,6,3,1);
-    ctx.fillStyle='#ffe890'; ctx.fillRect(3,10,2,2);
-    ctx.fillStyle='#4a2810'; ctx.fillRect(3,13,2,3);
-    // Right building (taller)
-    ctx.fillStyle='#6a4820'; ctx.fillRect(9,7,6,9);
-    ctx.fillStyle='#c0901c'; ctx.fillRect(9,5,6,1); ctx.fillRect(10,4,4,1); ctx.fillRect(11,3,2,1);
-    ctx.fillStyle='#ffe890'; ctx.fillRect(10,8,2,2);
-    ctx.fillStyle='#4a2810'; ctx.fillRect(10,13,2,3);
-    // Chimney
-    ctx.fillStyle='#383028'; ctx.fillRect(13,4,2,4);
-  },
-  '†'(ctx) {
-    ctx.fillStyle='#0d0620'; ctx.fillRect(0,0,16,16);
-    ctx.fillStyle='#180840'; ctx.fillRect(4,1,8,14); ctx.fillRect(2,5,12,6);
-    ctx.fillStyle='#7050c0'; ctx.fillRect(7,2,2,12); ctx.fillRect(4,6,8,2);
-    ctx.fillStyle='#c0a0ff'; ctx.fillRect(7,2,1,4); ctx.fillRect(4,6,3,1);
-    ctx.fillStyle='#e0d0ff'; ctx.fillRect(7,2,2,1);
-    ctx.fillStyle='rgba(160,128,255,0.5)'; ctx.fillRect(13,7,1,1); ctx.fillRect(2,7,1,1); ctx.fillRect(8,13,1,1);
-  },
-  '!'(ctx) {
-    ctx.fillStyle='#1a0606'; ctx.fillRect(0,0,16,16);
-    ctx.fillStyle='#402828'; ctx.fillRect(1,6,14,10);
-    ctx.fillStyle='#503030'; ctx.fillRect(1,6,14,7);
-    ctx.fillStyle='#503030'; ctx.fillRect(1,4,3,3); ctx.fillRect(6,4,3,3); ctx.fillRect(11,4,3,3);
-    ctx.fillStyle='#402828'; ctx.fillRect(1,4,3,2); ctx.fillRect(6,4,3,2); ctx.fillRect(11,4,3,2);
-    ctx.fillStyle='#382020'; ctx.fillRect(5,2,6,14);
-    ctx.fillStyle='#402828'; ctx.fillRect(6,2,4,12);
-    ctx.fillStyle='#100808'; ctx.fillRect(6,10,4,6); ctx.fillRect(7,8,2,4);
-    ctx.fillStyle='#aa1818'; ctx.fillRect(2,5,1,3); ctx.fillRect(3,5,3,2);
-    ctx.fillStyle='#200808'; ctx.fillRect(6,3,2,2);
-  },
-  C(ctx) {
-    const pulse = animTick === 1;
-    ctx.fillStyle='#060e06'; ctx.fillRect(0,0,16,16);
-    ctx.fillStyle='#282e28'; ctx.fillRect(0,5,16,11);
-    ctx.fillStyle='#383e38'; ctx.fillRect(1,4,14,9);
-    ctx.fillStyle='#404840'; ctx.fillRect(2,3,12,6);
-    ctx.fillStyle='#040a04'; ctx.fillRect(4,7,8,9); ctx.fillRect(5,5,6,4); ctx.fillRect(6,4,4,2);
-    // Seal glow — heartbeat pulse (dim → bright on animTick)
-    ctx.fillStyle = pulse ? '#005030' : '#002818'; ctx.fillRect(5,8,6,8);
-    ctx.fillStyle = pulse ? '#007848' : '#004028'; ctx.fillRect(6,9,4,6);
-    ctx.fillStyle = pulse ? '#00b870' : '#006040'; ctx.fillRect(7,10,2,3);
-    ctx.fillStyle = pulse ? '#00ff9a' : '#009060'; ctx.fillRect(7,11,2,1);
-    // Outer glow halo on pulse
-    if (pulse) {
-      ctx.fillStyle='rgba(0,255,128,0.18)'; ctx.fillRect(4,7,8,9);
-      ctx.fillStyle='rgba(0,255,128,0.10)'; ctx.fillRect(3,6,10,11);
-    }
-    // Rock edge highlights
-    ctx.fillStyle='#505848'; ctx.fillRect(2,3,2,1); ctx.fillRect(12,4,2,1);
-    // Bearer bond spark — appears on pulse
-    if (pulse) {
-      ctx.fillStyle='#a0ffd8'; ctx.fillRect(7,11,1,1);
-      ctx.fillStyle='rgba(160,255,216,0.6)'; ctx.fillRect(6,10,1,1); ctx.fillRect(9,10,1,1);
-    }
-  },
-  'Ω'(ctx) {
-    ctx.fillStyle='#070f07'; ctx.fillRect(0,0,16,16);
-    // Cabin
-    ctx.fillStyle='#50381a'; ctx.fillRect(2,9,12,7);
-    // Log lines
-    ctx.fillStyle='#3a2810'; ctx.fillRect(2,10,12,1); ctx.fillRect(2,12,12,1); ctx.fillRect(2,14,12,1);
-    // Roof
-    ctx.fillStyle='#3a2818'; ctx.fillRect(0,8,16,2); ctx.fillRect(1,6,14,3); ctx.fillRect(2,4,12,3); ctx.fillRect(3,3,10,2); ctx.fillRect(5,2,6,2); ctx.fillRect(6,1,4,2);
-    ctx.fillStyle='#302010'; ctx.fillRect(0,8,2,8); ctx.fillRect(14,8,2,8);
-    // Chimney
-    ctx.fillStyle='#484038'; ctx.fillRect(11,0,3,5);
-    ctx.fillStyle='#282020'; ctx.fillRect(11,0,3,2);
-    // Lit windows (warm gold — player is here)
-    ctx.fillStyle='#ffe890'; ctx.fillRect(3,10,3,3); ctx.fillRect(10,10,3,3);
-    ctx.fillStyle='#ffcc40'; ctx.fillRect(4,11,1,1); ctx.fillRect(11,11,1,1);
-    // Door
-    ctx.fillStyle='#2a1808'; ctx.fillRect(6,12,4,4);
-    ctx.fillStyle='#180e04'; ctx.fillRect(7,12,2,3);
-    // Player marker — gold chevron above cabin
-    ctx.fillStyle='#ffd700'; ctx.fillRect(6,0,4,1); ctx.fillRect(7,1,2,1);
-  },
-  '↓'(ctx) {
-    ctx.fillStyle='#1c1408'; ctx.fillRect(0,0,16,16);
-    ctx.fillStyle='#7a5838'; ctx.fillRect(5,0,6,16);
-    ctx.fillStyle='#8a6840'; ctx.fillRect(6,0,4,16);
-    ctx.fillStyle='#c8a020'; ctx.fillRect(8,3,1,9); ctx.fillRect(6,8,5,1); ctx.fillRect(7,10,3,1); ctx.fillRect(8,12,1,1);
-    ctx.fillStyle='#ffd700'; ctx.fillRect(8,4,1,7);
-  },
-  // Fallback for unmapped sprite chars
-  '_default'(ctx, char, fg) {
-    ctx.fillStyle = '#1a1a2a'; ctx.fillRect(0,0,16,16);
-    ctx.fillStyle = fg || '#aaaacc';
-    ctx.fillRect(6,3,4,10); ctx.fillRect(3,6,10,4);
-  },
-};
-
-// ── Cache & rendering ──
-function getTileCanvas(ch) {
-  if (ch === 'w') {
-    const key = 'w' + animTick;
-    if (!tileCache[key]) {
-      const oc = document.createElement('canvas');
-      oc.width = oc.height = TILE_PX;
-      const c = oc.getContext('2d');
-      TILE_DRAW.w(c, animTick);
-      tileCache[key] = oc;
-    }
-    return tileCache[key];
-  }
-  if (!tileCache[ch]) {
-    const oc = document.createElement('canvas');
-    oc.width = oc.height = TILE_PX;
-    const c = oc.getContext('2d');
-    if (TILE_DRAW[ch]) TILE_DRAW[ch](c);
-    else { c.fillStyle='#0d0d0d'; c.fillRect(0,0,16,16); }
-    tileCache[ch] = oc;
-  }
-  return tileCache[ch];
-}
-
-function getSpriteCanvas(loc) {
-  const ch = loc.char;
-  if (!spriteCache[ch]) {
-    const oc = document.createElement('canvas');
-    oc.width = oc.height = TILE_PX;
-    const c = oc.getContext('2d');
-    if (SPRITE_DRAW[ch]) SPRITE_DRAW[ch](c);
-    else SPRITE_DRAW['_default'](c, ch, loc.fg);
-    spriteCache[ch] = oc;
-  }
-  return spriteCache[ch];
-}
-
-function drawMap() {
-  const grid = GRIDS[curMapId];
-  if (!grid) return;
-  const canvas = document.getElementById('map-canvas');
-  const ctx = canvas.getContext('2d');
-  ctx.imageSmoothingEnabled = false;
-  const tW = grid.tileW, tH = grid.tileH;
-  const maxCols = Math.max(...grid.rows.map(r => r.length));
-
-  // Draw terrain
-  for (let y = 0; y < grid.rows.length; y++) {
-    const row = grid.rows[y];
-    for (let x = 0; x < maxCols; x++) {
-      const ch = x < row.length ? row[x] : ' ';
-      ctx.drawImage(getTileCanvas(ch), x * tW, y * tH, tW, tH);
-    }
-  }
-
-  // Draw location sprites + overlays
-  const locs = LOCS[curMapId] || [];
-  for (const loc of locs) {
-    const px = loc.x * tW, py = loc.y * tH;
-    ctx.drawImage(getSpriteCanvas(loc), px, py, tW, tH);
-
-    // Selection ring
-    if (selectedLocId === loc.id) {
-      ctx.strokeStyle = '#ffd700';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(px + 1, py + 1, tW - 2, tH - 2);
-      ctx.strokeStyle = 'rgba(255,215,0,0.3)';
-      ctx.lineWidth = 4;
-      ctx.strokeRect(px + 2, py + 2, tW - 4, tH - 4);
-    }
-  }
-}
-
-// ── Animation loop ──
-function startAnim() {
-  if (animHandle) return;
-  function loop(ts) {
-    if (ts - lastAnimTime > 800) {
-      animTick ^= 1;
-      lastAnimTime = ts;
-      if (document.getElementById('tab-map').classList.contains('active')) drawMap();
-    }
-    animHandle = requestAnimationFrame(loop);
-  }
-  animHandle = requestAnimationFrame(loop);
-}
-
-function stopAnim() {
-  if (animHandle) { cancelAnimationFrame(animHandle); animHandle = null; }
-}
-
-// ══════════════════════════════════════════════════════
-//  TAB SWITCHING
-// ══════════════════════════════════════════════════════
-function autoScaleMap() {
-  const wrap = document.getElementById('map-wrap');
-  const canvas = document.getElementById('map-canvas');
-  if (!canvas.width) return;
-  const available = wrap.clientWidth - 24;
-  if (canvas.width > available) {
-    const ratio = available / canvas.width;
-    canvas.style.width  = available + 'px';
-    canvas.style.height = (canvas.height * ratio) + 'px';
-  } else {
-    canvas.style.width  = '';
-    canvas.style.height = '';
-  }
-}
-
-window.addEventListener('resize', () => {
-  if (document.getElementById('tab-map').classList.contains('active')) autoScaleMap();
-});
-
-let _journalLoaded = false;
-function switchTab(id) {
-  const ids = ['map','character','quests','events','npcs','spells','inventory','combat','journal','notes','claude'];
-  // Match button by data or position — use querySelectorAll on tab-btn; toggle active by id match
-  document.querySelectorAll('.tab-btn').forEach(b => {
-    const onclick = b.getAttribute('onclick') || '';
-    const match   = onclick.match(/switchTab\('([^']+)'\)/);
-    if (match) b.classList.toggle('active', match[1] === id);
-  });
-  document.querySelectorAll('.tab-panel').forEach(p => {
-    const show = p.id === 'tab-' + id;
-    p.classList.toggle('active', show);
-    // Combat tab uses display:none/flex directly
-    if (p.id === 'tab-combat') p.style.display = show ? 'flex' : 'none';
-  });
-  if (id === 'map') { updateBreadcrumb(); startAnim(); }
-  else { stopAnim(); document.getElementById('hbread').innerHTML = ''; }
-  if (id === 'spells' && !_spellsRendered) renderSpells();
-  if (id === 'inventory') renderInventoryTab();
-  if (id === 'claude') loadClaudeHistory();
-  if (id === 'journal' && !_journalLoaded) { loadJournalTab(); _journalLoaded = true; }
-}
-
-// ══════════════════════════════════════════════════════
-//  MAP RENDERER
-// ══════════════════════════════════════════════════════
-function locKey(x, y) { return x + ',' + y; }
-
-function renderMap(mapId) {
-  // New campaign has no map yet — keep the placeholder canvas
-  if (!mapId || campaignState?.campaign_id === 'new-campaign') {
-    clearMapForNewCampaign();
-    return;
-  }
-  curMapId = mapId;
-  const grid = GRIDS[mapId];
-  if (!grid) return;
-  const locs = LOCS[mapId] || [];
-
-  // Build location lookup
-  locMapData = {};
-  for (const loc of locs) locMapData[locKey(loc.x, loc.y)] = loc;
-
-  // Size the canvas
-  const tW = grid.tileW, tH = grid.tileH;
-  const maxCols = Math.max(...grid.rows.map(r => r.length));
-  const canvas = document.getElementById('map-canvas');
-  canvas.width  = maxCols * tW;
-  canvas.height = grid.rows.length * tH;
-
-  // Click handler
-  canvas.onclick = (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    const tx = Math.floor((e.clientX - rect.left) * scaleX / tW);
-    const ty = Math.floor((e.clientY - rect.top)  * scaleY / tH);
-    const loc = locMapData[locKey(tx, ty)];
-    if (loc) {
-      selectedLocId = loc.id;
-      showInfo(loc);
-    } else {
-      selectedLocId = null;
-      document.getElementById('info-body').innerHTML = '<div class="idle-note">Click a marked location for details.</div>';
-    }
-    drawMap();
-  };
-
-  selectedLocId = null;
-  document.getElementById('info-body').innerHTML = '<div class="idle-note">Click a marked location for details.</div>';
-  updateBreadcrumb();
-  buildLegend(grid, locs);
-  drawMap();
-  autoScaleMap();
-  startAnim();
-}
-
-function getStatusClass(s) {
-  return { safe:'s-safe', fortified:'s-fortified', threat:'s-threat', hostile:'s-hostile', unknown:'s-unknown' }[s] || 's-unknown';
-}
-function getStatusLabel(s) {
-  return { safe:'✓ Safe', fortified:'⊞ Fortified', threat:'⚠ Threat', hostile:'✖ Hostile', unknown:'? Unknown' }[s] || s;
-}
-
-function showInfo(loc) {
-  let html = `<div class="iname">${loc.name}</div>`;
-  html += `<span class="ibadge ${getStatusClass(loc.status)}">${getStatusLabel(loc.status)}</span>`;
-  if (loc.quests?.length) html += `<div class="isect"><div class="isect-title">Quests</div>${loc.quests.map(q=>`<div class="q-item">${q}</div>`).join('')}</div>`;
-  if (loc.npcs?.length)   html += `<div class="isect"><div class="isect-title">Present</div>${loc.npcs.map(n=>`<div class="n-item">${n}</div>`).join('')}</div>`;
-  if (loc.note)           html += `<div class="inote">${loc.note}</div>`;
-  if (loc.zoomTo)         html += `<button class="zoom-btn" onclick="zoomIn('${loc.zoomTo}')">[ Zoom In → ]</button>`;
-  document.getElementById('info-body').innerHTML = html;
-}
-
-const MAP_LABELS = { campaign:'Campaign', phandalin:'Phandalin', wave_echo:'Wave Echo Cave' };
-
-function zoomIn(mapId)  { mapStack.push(curMapId); renderMap(mapId); }
-function zoomOut()      { if (!mapStack.length) return; renderMap(mapStack.pop()); }
-
-function updateBreadcrumb() {
-  const all = [...mapStack, curMapId];
-  let html = all.map((id, i) => {
-    const lbl = MAP_LABELS[id] || id;
-    const isLast = i === all.length - 1;
-    const sep = i > 0 ? '<span style="color:#2a2a2a;margin:0 4px">›</span>' : '';
-    return isLast
-      ? `${sep}<span class="crumb active">${lbl}</span>`
-      : `${sep}<span class="crumb" onclick="jumpTo(${i})">${lbl}</span>`;
-  }).join('');
-  if (mapStack.length) html += `<button class="back-btn" onclick="zoomOut()">← back</button>`;
-  document.getElementById('hbread').innerHTML = html;
-}
-
-function jumpTo(idx) {
-  const target = mapStack[idx];
-  mapStack = mapStack.slice(0, idx);
-  renderMap(target);
-}
-
-function buildLegend(grid, locs) {
-  const leg = document.getElementById('legend');
-  leg.innerHTML = '<span class="leg-lbl">TERRAIN:</span>';
-  const used = new Set();
-  for (const row of grid.rows) for (const ch of row) { if (T[ch]) used.add(ch); }
-  for (const ch of used) {
-    const def = T[ch];
-    // Mini preview from tile cache
-    const tc = getTileCanvas(ch);
-    const previewCanvas = document.createElement('canvas');
-    previewCanvas.width = previewCanvas.height = 14;
-    previewCanvas.className = 'leg-swatch';
-    const pc = previewCanvas.getContext('2d');
-    pc.imageSmoothingEnabled = false;
-    pc.drawImage(tc, 0, 0, 14, 14);
-    const div = document.createElement('div');
-    div.className = 'leg-item';
-    div.appendChild(previewCanvas);
-    div.appendChild(document.createTextNode(def.label));
-    leg.appendChild(div);
-  }
-  if (locs.length) {
-    const sep = document.createElement('span');
-    sep.style.cssText = 'color:#222;margin:0 8px';
-    sep.textContent = '|';
-    leg.appendChild(sep);
-    const lbl = document.createElement('span');
-    lbl.className = 'leg-lbl'; lbl.textContent = 'STATUS:';
-    leg.appendChild(lbl);
-    [{fg:'#4ade80',label:'Safe'},{fg:'#a080ff',label:'Fortified'},{fg:'#facc15',label:'Threat'},{fg:'#f87171',label:'Hostile'},{fg:'#666',label:'Unknown'}].forEach(s => {
-      const div = document.createElement('div');
-      div.className = 'leg-item';
-      div.innerHTML = `<span style="color:${s.fg};font-size:14px;line-height:1">■</span>${s.label}`;
-      leg.appendChild(div);
-    });
-  }
 }
 
 // ══════════════════════════════════════════════════════
@@ -1848,7 +926,7 @@ async function toggleSlot(level, idx) {
   const newUsed = idx < oldUsed ? idx : Math.min(idx + 1, slotData.max);
   if (newUsed === oldUsed) return;
 
-  if (newUsed > oldUsed) try { SoundFX.spellCast(); } catch(e) {}
+  if (newUsed > oldUsed)
 
   slotData.used = newUsed;
   updateSpellSlots();
@@ -1888,7 +966,6 @@ function adjustHP(delta) {
 
   // Healing sound when HP increases
   if (W.charHpCurrent > oldHP) {
-    try { SoundFX.healing(); } catch(e) { console.log('healing sound failed:', e); }
   }
 
   updateHP();
@@ -1972,38 +1049,6 @@ function updateHP() {
 }
 
 // ══════════════════════════════════════════════════════
-//  CUSTOM CURSORS
-// ══════════════════════════════════════════════════════
-function makeCursor(svgStr, hx, hy) {
-  return `url("data:image/svg+xml;base64,${btoa(svgStr)}") ${hx} ${hy}, crosshair`;
-}
-
-const CURSOR_MAP = makeCursor(`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
-  <line x1="12" y1="2" x2="12" y2="9" stroke="#000" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
-  <line x1="12" y1="15" x2="12" y2="22" stroke="#000" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
-  <line x1="2" y1="12" x2="9" y2="12" stroke="#000" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
-  <line x1="15" y1="12" x2="22" y2="12" stroke="#000" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
-  <circle cx="12" cy="12" r="3.5" fill="none" stroke="#000" stroke-width="2.5" opacity="0.6"/>
-  <line x1="12" y1="2" x2="12" y2="9" stroke="#ffd700" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="12" y1="15" x2="12" y2="22" stroke="#ffd700" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="2" y1="12" x2="9" y2="12" stroke="#ffd700" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="15" y1="12" x2="22" y2="12" stroke="#ffd700" stroke-width="1.5" stroke-linecap="round"/>
-  <circle cx="12" cy="12" r="3.5" fill="none" stroke="#ffd700" stroke-width="1.5"/>
-  <circle cx="12" cy="12" r="1" fill="#ffd700"/>
-</svg>`, 12, 12);
-
-const CURSOR_LOC = makeCursor(`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
-  <line x1="10" y1="10" x2="22" y2="22" stroke="#000" stroke-width="5" stroke-linecap="round" opacity="0.4"/>
-  <line x1="10" y1="10" x2="22" y2="22" stroke="#3a1a08" stroke-width="4" stroke-linecap="round"/>
-  <line x1="10" y1="10" x2="22" y2="22" stroke="#6a3818" stroke-width="2" stroke-linecap="round"/>
-  <rect x="1" y="1" width="14" height="9" rx="2" fill="#000" opacity="0.4"/>
-  <rect x="0" y="0" width="14" height="9" rx="2" fill="#ffd700"/>
-  <rect x="1" y="1" width="12" height="7" rx="1.5" fill="#d4af37"/>
-  <rect x="0" y="1" width="4" height="7" rx="1" fill="#ffe060"/>
-  <polyline points="9,1.5 7,4.5 10,4.5 7,8" stroke="#8B5500" stroke-width="1" fill="none" stroke-linecap="round"/>
-</svg>`, 4, 4);
-
-// ══════════════════════════════════════════════════════
 //  DICE ROLLER
 // ══════════════════════════════════════════════════════
 let _lastRollArgs = null;
@@ -2023,9 +1068,7 @@ function roll(label, count, sides, modifier) {
   // Sound effects for nat20/nat1 on d20 rolls
   if (sides === 20) {
     if (rolls[0] === 20) {
-      try { SoundFX.nat20(); } catch(e) { console.log('nat20 sound failed:', e); }
     } else if (rolls[0] === 1) {
-      try { SoundFX.nat1(); } catch(e) { console.log('nat1 sound failed:', e); }
     }
   }
 
@@ -2091,9 +1134,8 @@ function showDMRoll(event) {
   document.getElementById('dice-breakdown').textContent = breakdown;
 
   // Nat20/nat1 sounds
-  if (total === 20) { try { SoundFX.nat20(); } catch(e) {} }
-  if (total === 1)  { try { SoundFX.nat1();  } catch(e) {} }
-
+  if (total === 20) {
+ }
   // Store as last roll result in case player hits "→ DM"
   _lastRollResult = { label: purpose || expr, total, breakdown };
   _lastRollArgs   = null; // can't re-roll DM's dice
@@ -2570,456 +1612,6 @@ const NPC_PORTRAITS = {
 
 // drawRurikPortrait() removed — replaced by description-driven drawCharacterPortrait()
 
-function initCursors() {
-  const canvas = document.getElementById('map-canvas');
-  canvas.style.cursor = CURSOR_MAP;
-  canvas.addEventListener('mousemove', (e) => {
-    const grid = GRIDS[curMapId];
-    if (!grid) return;
-    const rect = canvas.getBoundingClientRect();
-    const tW = grid.tileW, tH = grid.tileH;
-    const tx = Math.floor((e.clientX - rect.left) * (canvas.width  / rect.width)  / tW);
-    const ty = Math.floor((e.clientY - rect.top)  * (canvas.height / rect.height) / tH);
-    canvas.style.cursor = locMapData[locKey(tx, ty)] ? CURSOR_LOC : CURSOR_MAP;
-  });
-  canvas.addEventListener('mouseleave', () => { canvas.style.cursor = CURSOR_MAP; });
-}
-
-// ══════════════════════════════════════════════════════
-//  MUSIC ENGINE — Procedural Web Audio API ambient RPG
-// ══════════════════════════════════════════════════════
-const Music = (() => {
-  let ctx = null, master = null;
-  let playing = false, currentScene = 'exploration';
-  let drones = [], melodyTimer = null;
-
-  // ── Scene definitions ────────────────────────────────
-  // Each scene: layered oscillator drones + LFO tremolo + optional random melody pings
-  const SCENES = {
-    exploration: {
-      label: '♪ EXPLORE',
-      drones: [
-        { hz: 55.00,  gain: 0.070, type: 'sine',      detune: 0  }, // A1 root
-        { hz: 55.00,  gain: 0.050, type: 'sine',      detune: 6  }, // A1 chorus
-        { hz: 82.41,  gain: 0.040, type: 'sine',      detune: 0  }, // E2 fifth
-        { hz: 110.00, gain: 0.030, type: 'triangle',  detune: 0  }, // A2 octave
-        { hz: 130.81, gain: 0.020, type: 'sine',      detune: 0  }, // C3 minor 3rd
-      ],
-      filter: 700, lfoHz: 0.08, lfoDepth: 0.28,
-      melody: [110, 130.81, 146.83, 164.81, 196.0, 220.0], // A minor pentatonic
-      melodyGain: 0.044, melodyMs: [4000, 9000],
-    },
-    combat: {
-      label: '♪ COMBAT',
-      drones: [
-        { hz: 73.42,  gain: 0.090, type: 'sawtooth', detune: 0   }, // D2 root
-        { hz: 73.42,  gain: 0.060, type: 'sawtooth', detune: 12  }, // D2 chorus
-        { hz: 110.00, gain: 0.050, type: 'square',   detune: 0   }, // A2 fifth
-        { hz: 155.56, gain: 0.040, type: 'sawtooth', detune: 0   }, // G#2 tritone (tension)
-      ],
-      filter: 1100, lfoHz: 1.7, lfoDepth: 0.55,
-      melody: null, // no melody — pure rhythmic tension
-      melodyGain: 0, melodyMs: [0, 0],
-    },
-    rest: {
-      label: '♪ REST',
-      drones: [
-        { hz: 65.41,  gain: 0.050, type: 'sine',     detune: 0  }, // C2 root
-        { hz: 98.00,  gain: 0.040, type: 'sine',     detune: 3  }, // G2 fifth
-        { hz: 130.81, gain: 0.040, type: 'sine',     detune: 0  }, // C3 octave
-        { hz: 164.81, gain: 0.030, type: 'triangle', detune: 0  }, // E3 major 3rd (warmth)
-      ],
-      filter: 480, lfoHz: 0.04, lfoDepth: 0.14,
-      melody: [130.81, 146.83, 164.81, 196.0, 220.0, 261.63], // C major
-      melodyGain: 0.034, melodyMs: [6000, 13000],
-    },
-    tavern: {
-      label: '♪ TAVERN',
-      drones: [
-        { hz: 98.00,  gain: 0.045, type: 'triangle', detune: 0  }, // G2
-        { hz: 146.83, gain: 0.040, type: 'triangle', detune: 4  }, // D3
-        { hz: 196.00, gain: 0.040, type: 'sine',     detune: 0  }, // G3
-        { hz: 246.94, gain: 0.030, type: 'triangle', detune: 0  }, // B3 major 3rd
-      ],
-      filter: 1800, lfoHz: 0.20, lfoDepth: 0.18,
-      melody: [196.0, 220.0, 246.94, 293.66, 329.63, 392.0], // G major pentatonic
-      melodyGain: 0.055, melodyMs: [600, 1800],
-    },
-    silence: {
-      label: '♪ SILENCE',
-      drones: [], filter: 0, lfoHz: 0, lfoDepth: 0,
-      melody: null, melodyGain: 0, melodyMs: [0, 0],
-    },
-  };
-  const SCENE_ORDER = ['exploration', 'combat', 'rest', 'tavern', 'silence'];
-
-  // ── Audio context init ───────────────────────────────
-  function init() {
-    if (ctx) return;
-    ctx = new (window.AudioContext || window.webkitAudioContext)();
-    master = ctx.createGain();
-    master.gain.value = 0.55;
-    master.connect(ctx.destination);
-  }
-
-  // ── Stop all running drones (with fade) ─────────────
-  function stopDrones(fadeSec) {
-    clearTimeout(melodyTimer);
-    for (const d of drones) {
-      try {
-        const t = ctx.currentTime;
-        d.gain.gain.setValueAtTime(d.gain.gain.value, t);
-        d.gain.gain.linearRampToValueAtTime(0, t + fadeSec);
-        d.osc.stop(t + fadeSec + 0.1);
-        if (d.lfo) d.lfo.stop(t + fadeSec + 0.1);
-      } catch {}
-    }
-    drones = [];
-  }
-
-  // ── Start drones for a scene ────────────────────────
-  function startDrones(sceneName) {
-    const s = SCENES[sceneName];
-    if (!s || !s.drones.length) return;
-    for (const def of s.drones) {
-      const osc  = ctx.createOscillator();
-      const gain = ctx.createGain();
-      const filt = ctx.createBiquadFilter();
-      const lfo  = ctx.createOscillator();
-      const lfog = ctx.createGain();
-
-      osc.type = def.type;
-      osc.frequency.value = def.hz;
-      osc.detune.value = def.detune + (Math.random() - 0.5) * 5;
-
-      filt.type = 'lowpass';
-      filt.frequency.value = s.filter;
-      filt.Q.value = 0.7;
-
-      gain.gain.setValueAtTime(0, ctx.currentTime);
-      gain.gain.linearRampToValueAtTime(def.gain, ctx.currentTime + 3.5);
-
-      lfo.type = 'sine';
-      lfo.frequency.value = s.lfoHz;
-      lfog.gain.value = def.gain * s.lfoDepth;
-
-      lfo.connect(lfog);
-      lfog.connect(gain.gain);
-      osc.connect(filt);
-      filt.connect(gain);
-      gain.connect(master);
-
-      osc.start();
-      lfo.start();
-      drones.push({ osc, gain, lfo });
-    }
-  }
-
-  // ── One melodic ping (plucked note) ─────────────────
-  function ping(freqs, gainVal) {
-    if (!playing || !ctx) return;
-    const hz = freqs[Math.floor(Math.random() * freqs.length)];
-    const hz2 = Math.random() > 0.65 ? hz * 2 : hz;
-    const osc  = ctx.createOscillator();
-    const gain = ctx.createGain();
-    const filt = ctx.createBiquadFilter();
-    osc.type = 'triangle';
-    osc.frequency.value = hz2;
-    osc.detune.value = (Math.random() - 0.5) * 8;
-    filt.type = 'bandpass';
-    filt.frequency.value = hz2 * 1.4;
-    filt.Q.value = 1.8;
-    const dur = 0.5 + Math.random() * 1.6;
-    gain.gain.setValueAtTime(0, ctx.currentTime);
-    gain.gain.linearRampToValueAtTime(gainVal, ctx.currentTime + 0.04);
-    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
-    osc.connect(filt);
-    filt.connect(gain);
-    gain.connect(master);
-    osc.start();
-    osc.stop(ctx.currentTime + dur + 0.05);
-  }
-
-  // ── Schedule recurring melody pings ─────────────────
-  function scheduleMelody(sceneName) {
-    const s = SCENES[sceneName];
-    if (!playing || !s || !s.melody) return;
-    const [mn, mx] = s.melodyMs;
-    const delay = mn + Math.random() * (mx - mn);
-    melodyTimer = setTimeout(() => {
-      if (!playing || currentScene !== sceneName) return;
-      const count = 1 + Math.floor(Math.random() * 3);
-      for (let i = 0; i < count; i++) {
-        setTimeout(() => { if (playing) ping(s.melody, s.melodyGain); },
-          i * (110 + Math.random() * 260));
-      }
-      scheduleMelody(sceneName);
-    }, delay);
-  }
-
-  // ── Public API ───────────────────────────────────────
-  function play(scene) {
-    init();
-    if (ctx.state === 'suspended') ctx.resume();
-    playing = true;
-    currentScene = scene || currentScene;
-    stopDrones(0.1);
-    setTimeout(() => { startDrones(currentScene); scheduleMelody(currentScene); }, 220);
-  }
-
-  function stop() {
-    playing = false;
-    if (ctx) stopDrones(1.8);
-  }
-
-  function toggle() {
-    if (playing) { stop(); return false; }
-    play(); return true;
-  }
-
-  function setScene(sceneName) {
-    if (!SCENES[sceneName] || sceneName === currentScene) return;
-    currentScene = sceneName;
-    if (!playing) return;
-    stopDrones(1.5);
-    if (sceneName !== 'silence') {
-      setTimeout(() => { startDrones(sceneName); scheduleMelody(sceneName); }, 1700);
-    }
-  }
-
-  function cycleScene() {
-    const idx  = SCENE_ORDER.indexOf(currentScene);
-    const next = SCENE_ORDER[(idx + 1) % SCENE_ORDER.length];
-    if (playing) setScene(next); else currentScene = next;
-    return next;
-  }
-
-  function getLabel()    { return SCENES[currentScene]?.label || '♪ OFF'; }
-  function isPlaying()   { return playing; }
-  function getScene()    { return currentScene; }
-
-  return { play, stop, toggle, setScene, cycleScene, getLabel, isPlaying, getScene, SCENES };
-})();
-
-// ══════════════════════════════════════════════════════
-//  SOUND EFFECTS ENGINE — One-shot procedural SFX
-// ══════════════════════════════════════════════════════
-const SoundFX = (() => {
-  let ctx = null, master = null;
-  let sfxVolume = 0.4;
-
-  function init() {
-    if (ctx) return;
-    ctx = new (window.AudioContext || window.webkitAudioContext)();
-    if (ctx.state === 'suspended') ctx.resume();
-    master = ctx.createGain();
-    master.gain.value = sfxVolume;
-    master.connect(ctx.destination);
-  }
-
-  // ── NAT 20 (Success) — High bell chime ──────────────
-  function nat20() {
-    init();
-    const now = ctx.currentTime;
-    // Bell-like tone — harmonically rich, clear
-    const notes = [
-      { hz: 523.25, gain: 0.15, dur: 1.2 },  // C5
-      { hz: 523.25 * 1.25, gain: 0.12, dur: 0.9 },  // G5
-      { hz: 523.25 * 1.5, gain: 0.10, dur: 0.7 },   // E5 (major third up)
-    ];
-    for (const note of notes) {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      const filt = ctx.createBiquadFilter();
-
-      osc.type = 'sine';
-      osc.frequency.value = note.hz;
-
-      filt.type = 'highpass';
-      filt.frequency.value = 400;
-
-      gain.gain.setValueAtTime(note.gain, now);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + note.dur);
-
-      osc.connect(filt);
-      filt.connect(gain);
-      gain.connect(master);
-
-      osc.start(now);
-      osc.stop(now + note.dur + 0.1);
-    }
-  }
-
-  // ── NAT 1 (Failure) — Sad trombone descend ──────────
-  function nat1() {
-    init();
-    const now = ctx.currentTime;
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(250, now);
-    osc.frequency.exponentialRampToValueAtTime(80, now + 1.2);  // Slide down
-
-    gain.gain.setValueAtTime(0.2, now);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
-
-    osc.connect(gain);
-    gain.connect(master);
-
-    osc.start(now);
-    osc.stop(now + 1.3);
-  }
-
-  // ── Combat Start — Sharp percussion ─────────────────
-  function combatStart() {
-    init();
-    const now = ctx.currentTime;
-    // Kick-like punch at 60 Hz
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(180, now);
-    osc.frequency.exponentialRampToValueAtTime(50, now + 0.08);
-
-    gain.gain.setValueAtTime(0.4, now);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
-
-    osc.connect(gain);
-    gain.connect(master);
-    osc.start(now);
-    osc.stop(now + 0.35);
-
-    // High-pitched click at +50ms
-    setTimeout(() => {
-      const osc2 = ctx.createOscillator();
-      const gain2 = ctx.createGain();
-      const filt = ctx.createBiquadFilter();
-
-      osc2.type = 'square';
-      osc2.frequency.value = 2400;
-
-      filt.type = 'highpass';
-      filt.frequency.value = 1800;
-
-      gain2.gain.setValueAtTime(0.25, ctx.currentTime);
-      gain2.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.15);
-
-      osc2.connect(filt);
-      filt.connect(gain2);
-      gain2.connect(master);
-
-      osc2.start(ctx.currentTime);
-      osc2.stop(ctx.currentTime + 0.2);
-    }, 50);
-  }
-
-  // ── Spell Cast — Magical shimmer ────────────────────
-  function spellCast() {
-    init();
-    const now = ctx.currentTime;
-    // Multiple ascending shimmer notes
-    const notes = [
-      { hz: 800, delay: 0, dur: 0.4 },
-      { hz: 1200, delay: 0.08, dur: 0.35 },
-      { hz: 1600, delay: 0.15, dur: 0.3 },
-    ];
-
-    for (const note of notes) {
-      setTimeout(() => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        const filt = ctx.createBiquadFilter();
-
-        osc.type = 'sine';
-        osc.frequency.value = note.hz;
-        osc.detune.value = (Math.random() - 0.5) * 15;
-
-        filt.type = 'highpass';
-        filt.frequency.value = 600;
-
-        gain.gain.setValueAtTime(0.1, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + note.dur);
-
-        osc.connect(filt);
-        filt.connect(gain);
-        gain.connect(master);
-
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + note.dur + 0.05);
-      }, note.delay * 1000);
-    }
-  }
-
-  // ── Healing — Warm ascending tones ──────────────────
-  function healing() {
-    init();
-    const now = ctx.currentTime;
-    const notes = [
-      { hz: 264, gain: 0.12, dur: 0.5 },  // C4
-      { hz: 330, gain: 0.12, dur: 0.5 },  // E4
-      { hz: 396, gain: 0.12, dur: 0.6 },  // G4
-    ];
-
-    for (let i = 0; i < notes.length; i++) {
-      const note = notes[i];
-      setTimeout(() => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-
-        osc.type = 'sine';
-        osc.frequency.value = note.hz;
-
-        gain.gain.setValueAtTime(0, ctx.currentTime);
-        gain.gain.linearRampToValueAtTime(note.gain, ctx.currentTime + 0.05);
-        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + note.dur);
-
-        osc.connect(gain);
-        gain.connect(master);
-
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + note.dur + 0.05);
-      }, i * 150);
-    }
-  }
-
-  function setVolume(v) {
-    sfxVolume = Math.max(0, Math.min(1, v));
-    if (master) master.gain.value = sfxVolume;
-  }
-
-  return { nat20, nat1, combatStart, spellCast, healing, setVolume };
-})();
-
-function musicToggle() {
-  Music.toggle();
-  updateMusicUI();
-}
-
-function musicCycleScene() {
-  Music.cycleScene();
-  updateMusicUI();
-}
-
-function updateMusicUI() {
-  const btn = document.getElementById('music-btn');
-  const lbl = document.getElementById('music-label');
-  if (!btn || !lbl) return;
-  if (Music.isPlaying()) {
-    btn.textContent = '🎵';
-    btn.classList.add('on');
-    btn.title = 'Click to stop music';
-    lbl.textContent = Music.getLabel();
-    lbl.style.color = '#a78bfa';
-  } else {
-    btn.textContent = '🔇';
-    btn.classList.remove('on');
-    btn.title = 'Click to play music';
-    lbl.textContent = 'OFF';
-    lbl.style.color = '#444';
-  }
-}
 
 // ══════════════════════════════════════════════════════
 //  COMBAT TRACKER
@@ -3130,7 +1722,6 @@ function healInCombat(combatantId, amount) {
   if (combatant.isPlayer) {
     W.charHpCurrent = combatant.currentHP;
     updateHP();
-    try { SoundFX.healing(); } catch(e) {}
     // Persist player HP change to campaign state
     if (campaignState && campaignState.party[0]) {
       campaignState.party[0].hp = combatant.currentHP;
@@ -3162,7 +1753,7 @@ function endCombat() {
   const tabBtn = document.getElementById('combat-tab-btn');
   if (tabBtn) tabBtn.style.display = 'none';
 
-  switchTab('map');
+  switchTab('character');
 }
 
 function renderCombatTracker() {
@@ -3956,9 +2547,12 @@ function applyStateUpdate(state) {
 
   // Campaign just created — reload so all tabs come alive
   if (prevCampaignId === 'new-campaign' && state.campaign_id !== 'new-campaign') {
-    console.log('[State Update] Campaign created — reloading dashboard');
+    console.log(`[State Update] Campaign created: ${prevCampaignId} → ${state.campaign_id}. Reloading dashboard...`);
     location.reload();
     return;
+  }
+  if (prevCampaignId === 'new-campaign') {
+    console.log(`[State Update] Still in creation (campaign_id=${state.campaign_id}). Not reloading.`);
   }
 
   // Sync W object generically from state
@@ -3996,10 +2590,7 @@ function applyStateUpdate(state) {
   updateHP();
   updateSpellSlots();
   updateCD();
-  updateCampaignStatusPanel(state, false);
-  updateMapLocationLabel(state);
   buildQuickRollBar(char);
-  if (state.world?.weather) updateWeatherOverlay(state.world.weather);
   console.log(`[State Update] ${char.name} HP:${char.hp}/${W.charHpMax}`);
 }
 
@@ -4064,9 +2655,48 @@ async function sendClaudePrompt() {
 
     const histDiv = document.getElementById('claude-history');
     const msgDiv = document.createElement('div');
-    msgDiv.style.cssText = 'margin-bottom:12px;padding:8px;border-radius:3px;background:#1a1a3a;border-left:2px solid #888';
+    msgDiv.style.cssText = 'margin-bottom:12px;padding:8px;border-radius:3px;background:#1a1a3a;border-left:2px solid #888;cursor:pointer';
+    msgDiv.title = 'Click to skip';
     msgDiv.innerHTML = '<div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;font-weight:bold">⚔️ DM</div><div id="claude-streaming" style="font-size:13px;color:#c8c8e8;line-height:1.6;word-wrap:break-word"></div>';
     histDiv.appendChild(msgDiv);
+
+    // Typewriter: text appears character-by-character like a classic RPG dialogue box.
+    // The textarea stays disabled until the animation finishes, naturally pacing turns
+    // and giving the token-rate window time to breathe. Click the message to skip.
+    let twQueue = '';       // full text received from SSE so far
+    let twShown = '';       // text currently visible on screen
+    let twStreamDone = false;
+    let twComplete = false;
+    let twResolve = null;
+    const TW_MS = 10;       // ms per character (~100 chars/sec)
+    const streamingEl = document.getElementById('claude-streaming');
+
+    function twFinish() {
+      twComplete = true;
+      if (twResolve) twResolve();
+    }
+
+    const twTimerId = setInterval(() => {
+      if (twShown.length < twQueue.length) {
+        twShown = twQueue.slice(0, twShown.length + 1);
+        streamingEl.innerHTML = renderMarkdown(twShown);
+        msgDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } else if (twStreamDone) {
+        clearInterval(twTimerId);
+        twFinish();
+      }
+    }, TW_MS);
+
+    // Click anywhere on the DM message bubble to instantly reveal all text
+    msgDiv.addEventListener('click', () => {
+      if (twComplete) return;
+      clearInterval(twTimerId);
+      twShown = twQueue;
+      streamingEl.innerHTML = renderMarkdown(twQueue);
+      msgDiv.style.cursor = 'default';
+      if (twStreamDone) twFinish();
+      else twStreamDone = true; // stream may still be open — twFinish called when done event arrives or loop exits
+    });
 
     let buffer = '';
     while (true) {
@@ -4083,17 +2713,9 @@ async function sendClaudePrompt() {
             const event = JSON.parse(line.slice(6));
             if (event.type === 'text') {
               assistantMessage += event.content;
-              document.getElementById('claude-streaming').innerHTML = renderMarkdown(assistantMessage);
-              msgDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+              twQueue = assistantMessage; // feed the typewriter
             } else if (event.type === 'state_update') {
               applyStateUpdate(event.state);
-            } else if (event.type === 'music_scene') {
-              Music.setScene(event.scene);
-              updateMusicUI();
-              // Combat start sound when entering combat
-              if (event.scene === 'combat') {
-                try { SoundFX.combatStart(); } catch(e) { console.log('combat start sound failed:', e); }
-              }
             } else if (event.type === 'combat_started') {
               // Initialize combat tracker with enemies from the tool result
               startCombat(event.enemies || []);
@@ -4102,21 +2724,31 @@ async function sendClaudePrompt() {
               showDMRoll(event);
             } else if (event.type === 'level_up') {
               handleLevelUp(event.level);
-            } else if (event.type === 'weather_update') {
-              handleWeatherUpdate(event.weather);
             } else if (event.type === 'done') {
               document.getElementById('claude-tokens').textContent = event.token_count || 0;
+              twStreamDone = true;
             } else if (event.type === 'error') {
-              // Append error into assistantMessage so it persists after renderClaudeHistory()
-              // re-renders from the canonical claudeMessages array
               const errText = `\n\n⚠️ **API Error:** ${event.error}\n\n`;
               assistantMessage += errText;
-              document.getElementById('claude-streaming').innerHTML = renderMarkdown(assistantMessage);
+              // Show errors immediately — skip typewriter
+              clearInterval(twTimerId);
+              twShown = assistantMessage;
+              twQueue = assistantMessage;
+              streamingEl.innerHTML = renderMarkdown(assistantMessage);
+              twStreamDone = true;
+              twFinish();
             }
           } catch (e) {}
         }
       }
     }
+
+    // SSE connection closed — mark stream done and wait for typewriter to finish
+    twStreamDone = true;
+    if (!twComplete) {
+      await new Promise(resolve => { twResolve = resolve; });
+    }
+    msgDiv.style.cursor = 'default';
 
     // Use the captured reference — safe even if claudeMessages was replaced during streaming
     assistantEntry.content = assistantMessage;
@@ -4200,7 +2832,6 @@ function handleLevelUp(level) {
   toast.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1a1400;border:2px solid #ffd700;color:#ffd700;padding:20px 40px;font-size:22px;font-weight:bold;letter-spacing:3px;text-transform:uppercase;font-family:"Courier New",monospace;z-index:9999;pointer-events:none;text-align:center;border-radius:4px;';
   toast.innerHTML = `★ LEVEL UP ★<br><span style="font-size:14px;color:#c9a227">Now Level ${level}</span>`;
   document.body.appendChild(toast);
-  try { SoundFX.nat20(); } catch(e) {}
   setTimeout(() => toast.remove(), 3500);
 }
 
@@ -4230,16 +2861,23 @@ async function checkServerHealth() {
 // Poll every 15 seconds — cheap, no SSE required
 setInterval(checkServerHealth, 15000);
 
+
 // ══════════════════════════════════════════════════════
-//  MUSIC SCENE INDICATOR
+//  TAB SWITCHING
 // ══════════════════════════════════════════════════════
-function updateMusicUI() {
-  // Uses the existing music-label element (next to the music toggle button)
-  const el = document.getElementById('music-label');
-  if (!el) return;
-  const scene = Music && Music._currentScene ? Music._currentScene : (typeof currentScene !== 'undefined' ? currentScene : '');
-  const LABELS = { exploration:'♪ Explore', combat:'⚔ Combat', rest:'🌙 Rest', tavern:'🍺 Tavern', silence:'— Silence' };
-  el.textContent = Music && Music._on ? (LABELS[scene] || (scene ? `♪ ${scene}` : '♪ Music')) : 'OFF';
+let _journalLoaded = false;
+
+function switchTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById('tab-' + id);
+  if (panel) panel.classList.add('active');
+  // Highlight the matching button
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes(`'${id}'`)) {
+      b.classList.add('active');
+    }
+  });
 }
 
 // ══════════════════════════════════════════════════════
@@ -4335,23 +2973,6 @@ async function saveNotes() {
 }
 
 // ══════════════════════════════════════════════════════
-//  WEATHER OVERLAY
-// ══════════════════════════════════════════════════════
-const WEATHER_ICONS = {
-  clear:'☀️', cloudy:'⛅', overcast:'☁️', light_rain:'🌧', heavy_rain:'🌧🌧',
-  thunderstorm:'⛈', fog:'🌫', snow:'❄️', blizzard:'❄️❄️', heatwave:'🌡', magical:'✨'
-};
-
-function updateWeatherOverlay(weather) {
-  const el = document.getElementById('map-weather-label');
-  if (!el) return;
-  if (!weather || !weather.condition) { el.style.display = 'none'; return; }
-  const icon = WEATHER_ICONS[weather.condition] || '🌤';
-  el.textContent = `${icon} ${weather.condition.replace(/_/g,' ')}`;
-  el.style.display = 'block';
-}
-
-// ══════════════════════════════════════════════════════
 //  EXPORT JOURNAL
 // ══════════════════════════════════════════════════════
 async function exportJournal() {
@@ -4372,33 +2993,11 @@ async function exportJournal() {
 }
 
 // ══════════════════════════════════════════════════════
-//  WEATHER SSE EVENT HANDLER
-// ══════════════════════════════════════════════════════
-// Called from SSE stream parser when set_weather tool fires
-function handleWeatherUpdate(weather) {
-  updateWeatherOverlay(weather);
-  // Also update the tracker panel if visible
-  const trLocation = document.getElementById('tr-location');
-  if (trLocation && weather.description) {
-    // Add weather briefly to location display
-    const orig = trLocation.textContent;
-    trLocation.textContent = `${orig} · ${weather.condition.replace(/_/g,' ')}`;
-  }
-}
-
-// ══════════════════════════════════════════════════════
 //  INITIALIZE ON PAGE LOAD
 // ══════════════════════════════════════════════════════
 (async () => {
   await loadGameState();
-  renderMap(W.currentMap);
-  initCursors();
   checkServerHealth();
-  // Load weather from initial state
-  const weather = window.campaignState?.world?.weather;
-  if (weather) updateWeatherOverlay(weather);
-  // Portraits are now drawn dynamically inside renderCharacterTab() and renderNpcsTab()
-  // using description-driven procedural art.
 })();
 </script>
 </body>

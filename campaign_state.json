@@ -3,8 +3,8 @@
   "world": {
     "name": "Classic High Fantasy",
     "lore_summary": "The town is bustling with activity as the locals prepare for the upcoming harvest festival.",
-    "current_location": "small frontier town",
-    "time": "Day 1 — Morning",
+    "current_location": "Gorin's Inn, back study",
+    "time": "Next Morning",
     "seal_integrity": 100,
     "seal_status": "N/A",
     "map_id": "town_map",
@@ -12,7 +12,8 @@
     "weather": {
       "condition": "clear",
       "description": "A gentle breeze carries the sweet scent of blooming wildflowers through the town."
-    }
+    },
+    "session_recap": "After a harrowing encounter with the Kruthiks in the cellar, Kel secured the support of the innkeeper, Gorin, who promised to seal the breach. Kel spent a restorative night in the inn's study, waking up to the vibrant, bustling atmosphere of the town's Harvest Festival. With his health recovered and a plan to seek out Sister Elara at the shrine of Lathander to address his lingering wound and potential recruitment, Kel stands at a crossroads between the festive revelry and his arduous journey ahead."
   },
   "party": [
     {
@@ -335,6 +336,18 @@
     {
       "timestamp": "2026-06-06T16:46:22.562Z",
       "event": "Investigation check DC12: rolled 14 — SUCCESS."
+    },
+    {
+      "timestamp": "2026-06-06T17:00:29.074Z",
+      "event": "Long rest — all resources restored, HP full."
+    },
+    {
+      "timestamp": "2026-06-06T17:00:29.076Z",
+      "event": "Full recovery after long rest."
+    },
+    {
+      "timestamp": "2026-06-06T17:00:29.077Z",
+      "event": "Moved to Gorin's Inn, back study — Next Morning."
     }
   ]
 }
