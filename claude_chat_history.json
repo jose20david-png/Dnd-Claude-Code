@@ -363,9 +363,17 @@
     {
       "role": "assistant",
       "content": "[roll_dice] You step quietly over the damp, mud-slick floor, drawing one of your daggers. The polished steel catches the dim light of the cellar as you look down at the two sleeping horrors. Under the magical influence of your spell, they are completely incapacitated, their soft underbellies and the joints in their chitinous armor exposed as they breathe slowly.\n\nYou kneel beside the first hatchling (A). Holding your breath, you aim for the soft, pale flesh just beneath its head joint—where the armored plates meet—and drive the blade home with a swift, downward thrust. \n\nThe dagger sinks deep into the creature's neck. Because it was completely helpless, your strike hits with devastating, lethal precision. The kruthik lets out a sharp, bubbling hiss as green, foul-smelling ichor wells up around your blade. It twitches violently once, its legs kicking against the stone, and then goes entirely limp. \n\nOne down. \n\nThe second hatchling (B) lies just inches away, still snoring softly, completely unaware of its sibling's fate. However, the smell of the acidic green blood is sharp and stinging in the damp air.\n\nDo you want to quickly dispatch the second sleeping hatchling in the same manner?"
+    },
+    {
+      "role": "user",
+      "content": "yes"
+    },
+    {
+      "role": "assistant",
+      "content": "⚠️ **DM connection issue**\n\n`HTTP 429 — You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\nPlease retry in 57.824174608s.`\n\n*Your message was kept. Try sending it again — if this is a rate limit or \"overloaded\" error, wait 10–20 seconds first.*"
     }
   ],
   "created_at": "2026-05-28T23:07:21.361Z",
-  "token_count": 43640,
+  "token_count": 43641,
   "model": "gemini-3.5-flash"
 }
