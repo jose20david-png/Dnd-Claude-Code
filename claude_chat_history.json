@@ -371,9 +371,57 @@
     {
       "role": "assistant",
       "content": "⚠️ **DM connection issue**\n\n`HTTP 429 — You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\nPlease retry in 57.824174608s.`\n\n*Your message was kept. Try sending it again — if this is a rate limit or \"overloaded\" error, wait 10–20 seconds first.*"
+    },
+    {
+      "role": "user",
+      "content": "what's the last thing that happened?"
+    },
+    {
+      "role": "assistant",
+      "content": "The last thing that happened was that you stood over the two sleeping Kruthik hatchlings in the cellar. You had just successfully executed the first one by driving your dagger into its neck—it let out a bubbling hiss, leaked foul-smelling green ichor, and went limp. \n\nThe second hatchling (B) remained fast asleep right next to you, completely oblivious, though the sharp, stinging scent of its sibling's blood now filled the air. You had confirmed your intention to dispatch the second one in the same manner.\n\nYou are standing in the damp cellar, dagger in hand, with the second creature still vulnerable at your feet. What do you do?"
+    },
+    {
+      "role": "user",
+      "content": "I dispatch the other hatchling, same as the first one"
+    },
+    {
+      "role": "assistant",
+      "content": "Your nerves, usually steady, betray you at the final moment. As you raise your dagger to strike the second hatchling, the slick, mud-covered floor beneath your boot shifts unexpectedly. Your heel slips into the pool of acidic green ichor leaking from the first creature, and your balance vanishes.\n\nInstead of a clean, lethal plunge into the creature's neck, your blade skitters off the thick, hardened chitin of its shoulder with a harsh, grating *screech* of metal on stone. The impact isn't deep enough to kill, but it is violent enough to jar the creature awake.\n\nThe hatchling’s eyes—multi-faceted and cold—snap open, glowing with a dull, predatory malice. It doesn't even hiss; it simply scrambles backward with unnatural speed, its claws scrabbling for purchase against the stone floor. It is now wide awake, wounded, and cornered between you and the hole in the foundation. It cocks its head, mandibles clicking rapidly as it prepares to lunge at you.\n\nThe smell of the spilled ichor is overwhelming now, a bitter, chemical stench that burns the back of your throat. You are standing over the carcass of the first, with the second creature snarling and ready to fight. \n\nWhat is your move?"
+    },
+    {
+      "role": "user",
+      "content": "I plunge torwards the creature with my to daggers, try to fight it off"
+    },
+    {
+      "role": "assistant",
+      "content": "[skill_check]Your strike is desperate, fueled by the sting of the acidic air and the frantic need to end the threat before it can call for others. You lunge forward, both daggers held low, aiming to pin the creature against the cellar wall.\n\nBut the hatchling is faster than your blade. As you commit your weight to the strike, the creature skitters to the side with a rhythmic *click-click-click*, its segmented body folding in a way that seems anatomically impossible. Your daggers bite only into the cold, damp stone of the cellar wall, sparks flying as the steel rings against the rock.\n\nThe creature turns, its mandibles snapping inches from your hand. It lunges, its bladed forelimbs lashing out in a blur of motion.\n\n[roll_dice result: {\"rolled\":\"1d20+4\",\"purpose\":\"Kruthik attack against Kel\",\"result\":\"[14] + 4 = **18**\",\"total\":18,\"dice_rolled\":true}]\n\nThe creature’s claw catches you across the arm—a jagged, stinging tear that cuts through your tunic and draws a sharp line of blood. The pain is hot and biting, and you feel the creature’s strength as it tries to shove you backward toward the dark, gaping hole in the foundation.\n\n[update_hp result: {\"damage\": 5, \"new_hp\": 4}]\n\nYou are reeling, your arm throbbing, and the creature is pressing its advantage, its screeching hiss echoing off the low cellar ceiling. You are currently standing between the creature and the tunnel entrance. \n\nHow do you react to this assault?"
+    },
+    {
+      "role": "user",
+      "content": "I cast thunderwave towards the creature"
+    },
+    {
+      "role": "assistant",
+      "content": "[use_spell_slot] \n*Wait—a flicker of realization hits you as you reach for the arcane energy in your blood.* You have already burned through your reserve of magic today. The *Sleep* spell drained the first of your two slots, and the second was spent in the initial scuffle. There is nothing left to draw upon. The air around your fingertips, usually humming with the potential of a storm, remains stubbornly still.\n\nThe hatchling senses your hesitation. It let out a triumphant, chittering shriek, its mandibles wide and ready to clamp down on your throat. \n\nYou are wounded, your magic is spent, and the creature is coiled to strike again. You are currently standing in the center of the cellar, the beast before you, and the open tunnel at its back. \n\nWith no spell to fall back on, you are left with your daggers, your wits, and the heavy, metallic smell of your own blood. The creature is closing the distance—it’s going to lunge. \n\nWhat do you do?"
+    },
+    {
+      "role": "user",
+      "content": "I cast minor illusion in the other corner of the room, try to dissuade the hatcling to lunge torwards the illusion"
+    },
+    {
+      "role": "assistant",
+      "content": "[skill_check] You weave the arcane threads of your blood, focusing your intent on the far corner of the cellar behind the creature. You don't have the power for a grand display, so you conjure a sharp, visceral sound: the rhythmic, aggressive clicking of a much larger, more dominant kruthik. It echoes against the damp stone, sounding as though a massive predator has just emerged from the earth to challenge the hatchling.\n\nThe effect is instantaneous. The hatchling, mid-lunge, pauses. Its head snaps toward the corner, its antennae twitching violently as it registers the sound of a superior. It lets out a confused, high-pitched chitter, its predatory instincts warring with the fear of a larger threat. It hesitates, turning its back to you to face the source of the noise.\n\nIt's a fleeting moment of distraction, but it gives you exactly what you need: a clear opening. You are standing just feet away, your daggers in hand, and the creature’s soft, exposed neck is turned away from you as it hisses at the empty corner. \n\nThe creature is distracted, but it is still coiled and ready to pounce the moment it realizes the sound is a trick. You have one chance to end this before it turns back. What do you do?"
+    },
+    {
+      "role": "user",
+      "content": "I try to execute it, try to penetrate the exposed neck"
+    },
+    {
+      "role": "assistant",
+      "content": "[skill_check] Your movement is silent, a desperate grace born of survival. As the kruthik hisses at the phantom clicking in the corner, you lunge. You don't aim for the armor; you aim for the vulnerability you saw moments ago. \n\nYour lead dagger finds the soft, pale membrane where the neck meets the torso. With a grunt of exertion, you drive the blade deep, twisting it upward toward the creature's central nervous cluster. The hatchling lets out a sound that is less of a hiss and more of a wet, tearing pop. It thrashes, its claws raking uselessly against the stone floor, spraying green, acidic ichor across your boots, but the life is draining out of it rapidly. \n\nIt collapses, its mandibles clicking a final, erratic rhythm before it goes still. The cellar falls into a sudden, ringing silence, broken only by the sound of your own jagged, heavy breathing. The only thing remaining is the dark, open breach in the wall and the smell of ozone and insectile rot.\n\nYou are bloodied, your arm is throbbing from the earlier strike, and the silence of the room feels heavy, as if the earth itself is waiting to see what you will do next.\n\n[award_xp result: {\"xp\": 100}]\n\nYou have survived the encounter. What is your next move?"
     }
   ],
   "created_at": "2026-05-28T23:07:21.361Z",
-  "token_count": 43641,
-  "model": "gemini-3.5-flash"
+  "token_count": 53932,
+  "model": "gemini-3.1-flash-lite"
 }
