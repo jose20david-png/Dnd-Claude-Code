@@ -283,9 +283,41 @@
     {
       "role": "assistant",
       "content": "⚠️ **DM connection issue**\n\n`HTTP 429 — You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\nPlease retry in 58.155676779s.`\n\n*Your message was kept. Try sending it again — if this is a rate limit or \"overloaded\" error, wait 10–20 seconds first.*"
+    },
+    {
+      "role": "user",
+      "content": "hi"
+    },
+    {
+      "role": "assistant",
+      "content": "⚠️ **DM connection issue**\n\n`HTTP 400 — Function call is missing a thought_signature in functionCall parts. This is required for tools to work correctly, and missing thought_signature may lead to degraded model performance. Additional data, function call `default_api:add_quest` , position 40. Please refer to https://ai.google.dev/gemini-api/docs/thought-signatures for more details.`\n\n*Your message was kept. Try sending it again — if this is a rate limit or \"overloaded\" error, wait 10–20 seconds first.*"
+    },
+    {
+      "role": "user",
+      "content": "hi"
+    },
+    {
+      "role": "assistant",
+      "content": "⚠️ **DM connection issue**\n\n`HTTP 400 — Function call is missing a thought_signature in functionCall parts. This is required for tools to work correctly, and missing thought_signature may lead to degraded model performance. Additional data, function call `default_api:roll_dice` , position 40. Please refer to https://ai.google.dev/gemini-api/docs/thought-signatures for more details.`\n\n*Your message was kept. Try sending it again — if this is a rate limit or \"overloaded\" error, wait 10–20 seconds first.*"
+    },
+    {
+      "role": "user",
+      "content": "Hello"
+    },
+    {
+      "role": "assistant",
+      "content": "The young barmaid finishes her sentence with a quick nod, \"-spiced with wild sage, and a crust of rye bread to drag through the bowl. I'll fetch you a piping hot trencher, traveler.\" She scurries off toward the kitchen, her apron-strings fluttering behind her like a pair of pale moths. \n\nGorin, who had been leaning heavily over the scarred oak bar with his eyes half-closed, suddenly blinks. The heavy, sweet scent of roasting meat and spill-stale ale hangs thick between you. For a moment, you might have thought the old dwarf was asleep on his feet, but his bushy eyebrows knit together as your words sink in. He reaches up, scratching at the coarse, silver-threaded beard covering his jaw, and fixes you with a sharp, calculating look that belies his sleepy posture.\n\n\"Aye, lad. I heard you,\" Gorin grunts, his voice a low, gravelly rumble that carries underneath the clatter of wooden tankards and the roar of the hearth. He leans in closer, his broad shoulders blocking you from the view of the nearby tables. \"A 'dynasty,' is it? And a trial to 'make yourself a dragon'? You've got a silver tongue and a pretty face, but that's dangerous talk for a tiefling with no horns and a pocket full of secrets.\"\n\nHe reaches under the bar, his thick fingers brushing against a heavy parchment map, though he doesn't pull it out just yet. \n\n\"The Netheril desert doesn't care about bloodlines, Kel. It devours kings and beggars alike, and the sand doesn't leave bones to bury. If you're looking for the Mightstone, you're looking for a myth that has swallowed entire armies. But...\" He pauses, his dark eyes searching your face, looking for the steel beneath your charm. \"If your mind is set, I won't be the one to stand in your way. I have a map. It's old, and it's missing pieces, but it'll get you past the borderlands. The question is... what are you willing to trade for it? A map like this isn't given away for the price of a bowl of stew.\""
+    },
+    {
+      "role": "user",
+      "content": "Yeah, the thing with the horns... its somewhat strange isnt it? All my family has them but me... I've been treated like an outcast for it. Even my parent say its some \"Baal punishment on the family\". I disregard them most of the time.\n\nI know the desert can be punishing. Thing is, I don't have an option. Its either that or returning home with empty hands and stay an outcast... I'm willing to trade anything really. My life included haha. No but really, if theres anything I can do to win that map, just tell me what you need."
+    },
+    {
+      "role": "assistant",
+      "content": "[used skill_check]Gorin’s heavy, calloused hand pauses beneath the counter. For a long, silent moment, the only sound between you is the crackle of the hearth fire and the distant, rhythmic thud of a woodcutter's axe outside. The old dwarf studies your face, his gaze lingering on the smooth brow where thick, curling horns should be. \n\nWhen you mention the \"punishment\" and the sting of being cast out, something shifts in his weathered features. The hard, calculating edge in his eyes softens, replaced by the quiet, solemn understanding of an old soldier who has seen his own share of exile. Your laugh—light but carrying the unmistakable weight of a man with nothing left to lose—strikes a chord.\n\n\"Baal's punishment, they say?\" Gorin grunts, a low, humorless huff escaping his nose. \"Priests and fools. They always blame the gods for what they don't have the wits to understand. A tree doesn't complain when one branch grows straight while the others twist, lad.\"\n\nHe slowly pulls his hand back from under the bar, but instead of clutching the map, he brings up a heavy, iron key and lays it on the scarred wood between you with a dull *clink*. \n\n\"I like a man who knows the price of his own skin, Kel. And I like a man who doesn't whine when the world deals him a cold hand,\" Gorin says, leaning in so his voice stays below the din of the tavern. \"I won't ask for your life. A dead tiefling is no use to me, and it makes a terrible mess of the floor.\"\n\nHe taps the iron key with a thick, dirt-caked fingernail. \n\n\"There's a cellar beneath this very floor. Old stone, older than the town itself. A few nights back, something dug its way through the foundation from the deeper dark. I've had to bar the door, but I can hear 'em scratching. Chitin on stone. *Rats*, but not the kind you chase off with a broom. Burrowing horrors. They've already ruined two casks of my finest autumn mead, and if they chew through the support beams, this whole room will bury us.\"\n\nGorin looks you dead in the eye, his voice dropping to a gravelly whisper. \n\n\"Clear out whatever is nesting down there. Seal the breach so my mead stays safe and my roof stays up. Do that, and not only will I give you the map to the desert's edge, but I'll throw in a traveler's pack of rations and a flask of something strong enough to strip the rust off a plowshare. What say you, hornless? Do we have a bargain?\""
     }
   ],
   "created_at": "2026-05-28T23:07:21.361Z",
-  "token_count": 4198,
+  "token_count": 18196,
   "model": "gemini-3.5-flash"
 }
