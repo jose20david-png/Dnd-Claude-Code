@@ -531,9 +531,25 @@
     {
       "role": "assistant",
       "content": "The walk from the shrine to the inn is short, the air growing thicker with the scent of roasted meats and spiced ale as the festival preparations reach a fever pitch. You find Gorin behind the bar, his sleeves rolled up, scrubbing a tankard with grim determination. He looks up as you approach, his eyes narrowing slightly before he recognizes you. \n\n\"Back again, lad? You look like you’ve been talking to the Sister. She’s a hard woman to sway, but she knows the road better than any scout in these parts.\" \n\nHe doesn't ask what you spoke about, for which you are grateful. You trade a few coins for a week’s worth of salted pork, hardtack, and a skin of water—supplies that feel heavy and real in your pack. He claps a hand on your shoulder, his grip surprisingly strong. \"Watch yourself in the foothills. The wind out there carries voices that shouldn't be heard.\"\n\nYou leave the town behind, the festive noise fading into a dull hum until the only sound is the rhythmic crunch of your boots on the dry, parched earth. The Old Trade Road is little more than a suggestion of a path, cracked by time and heat, leading you toward the setting sun.\n\nBy the second day, the landscape begins to shift. The green of the valley gives way to dusty, yellow scrubland. The heat is a physical weight, pressing down on your shoulders, and the silence is absolute, save for the occasional skittering of a desert lizard or the distant, mournful whistle of the wind through the rocks.\n\nAs the sun begins to dip low, painting the sky in bruised purples and burnt oranges, the 'Broken Anvil' comes into view. It is an eerie sight: a cluster of jagged, obsidian-like pillars thrusting out of the earth at odd angles, resembling the anvil of some long-dead giant. The shadows they cast are long and distorted. \n\nNear the base of the largest pillar, you spot a splash of color that shouldn't be there—a patch of faded, sun-bleached cloth caught on a jagged outcropping. As you draw closer, the smell hits you: the metallic tang of old blood, faint but unmistakable, mingling with the dry scent of dust. A body lies partially obscured by the shifting sands, a spear-tip glinting nearby. \n\nThe satchel, tied with a cord of golden thread, rests just inches from the outstretched hand of the fallen guard. But as you move toward it, your ears prick up. A soft, wet clicking sound—the sound of mandibles working—echoes from the shadows behind the pillars. You are not alone."
+    },
+    {
+      "role": "user",
+      "content": "I crouch, trying to see what the wet clicking sound is coming from"
+    },
+    {
+      "role": "assistant",
+      "content": "The world seems to sharpen as you drop into a low crouch, your heart hammering against your ribs. With a 21, your senses are preternaturally keen. You ignore the immediate temptation of the satchel and press your back against the cool, rough surface of the obsidian pillar, peering into the long, stretching shadow cast by the setting sun.\n\nThe clicking isn't coming from one source—it’s coming from three. \n\nAbout thirty feet away, weaving through the jagged debris of the Anvil, are three chitinous horrors. They are Kruthiks, their segmented bodies coated in a layer of desert dust that acts as perfect camouflage. They move with an unsettling, fluid grace, their bladed limbs digging into the earth with every step. Their pale, multi-faceted eyes are currently fixed on the corpse, and their mandibles are clicking in a rhythmic, hungry cadence as they probe the air, tasting the scent of the blood you smelled earlier.\n\nThey haven't spotted you yet—you are currently downwind, and the shifting shadows of the pillars are obscuring your form. However, they are closing the distance to the body. If they reach the guard, they will likely tear through the remains—and the satchel—in seconds, potentially triggering a feeding frenzy that will draw even more of their kind from the surrounding burrows.\n\nOne of them, the largest of the trio with a jagged, scarred carapace, pauses, its head twitching toward your direction. It hasn't seen you, but it’s testing the air.\n\nupdate_location(\"The Broken Anvil - Foothills of the Netheril\")"
+    },
+    {
+      "role": "user",
+      "content": "whats the distance between the kruthiks and the body?"
+    },
+    {
+      "role": "assistant",
+      "content": "The largest Kruthik, the one that paused to test the air, is roughly ten feet from the body. Its two companions are slightly behind it, perhaps fifteen feet away, skittering over the uneven stone and sand with a jerky, erratic pace. \n\nThey are moving with intent. The large one’s mandibles are clicking rapidly now, and it has lowered its head, its bladed forelimbs digging into the ground as if preparing to tear into the sand and the remains of the guard. You have a very narrow window before they begin their feast."
     }
   ],
   "created_at": "2026-05-28T23:07:21.361Z",
-  "token_count": 84763,
+  "token_count": 87845,
   "model": "gemini-3.1-flash-lite"
 }
