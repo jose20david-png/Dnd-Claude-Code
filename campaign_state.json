@@ -417,6 +417,14 @@
     {
       "timestamp": "2026-06-13T18:03:08.276Z",
       "event": "Kel accepted Sister Elara's quest, visited Gorin's Inn for supplies, and set out toward the 'Broken Anvil' to recover the missing satchel."
+    },
+    {
+      "timestamp": "2026-06-13T18:55:19.967Z",
+      "event": "Kel handed over the satchel to Sister Elara after being coerced, believing it was the only way to fulfill his destiny and perhaps gain power, despite his deep reservations and fear of the 'ritual'."
+    },
+    {
+      "timestamp": "2026-06-13T18:56:17.016Z",
+      "event": "Kel surrendered to Sister Elara's ritual, approaching the altar to potentially become the conduit for the power within the satchel."
     }
   ]
 }
