@@ -547,9 +547,33 @@
     {
       "role": "assistant",
       "content": "The largest Kruthik, the one that paused to test the air, is roughly ten feet from the body. Its two companions are slightly behind it, perhaps fifteen feet away, skittering over the uneven stone and sand with a jerky, erratic pace. \n\nThey are moving with intent. The large one’s mandibles are clicking rapidly now, and it has lowered its head, its bladed forelimbs digging into the ground as if preparing to tear into the sand and the remains of the guard. You have a very narrow window before they begin their feast."
+    },
+    {
+      "role": "user",
+      "content": "I try to cast minor illusion, 30 ft away from the body in the opposite direction, trying to make the creatures run the opposite way as I try to sneak towards the boy"
+    },
+    {
+      "role": "assistant",
+      "content": "You raise your hand, focusing your intent on a point thirty feet behind the scavenging pack. With a subtle weave of your fingers and a whispered incantation, you conjure the sound of a frantic, wounded animal—a high-pitched, desperate squeal that echoes sharply against the obsidian pillars.\n\nThe Kruthiks freeze. Their mandibles snap shut in unison, and all three heads whip toward the source of the sound. The ruse works; the largest one lets out a chittering hiss and begins to scuttle toward the illusion, its bladed limbs churning the sand.\n\nHeart pounding, you push off from the pillar, intending to dart toward the body while their backs are turned. But as you move, your boot finds a patch of loose, unstable shale. It gives way with a sharp, echoing *clatter* that rings out like a gunshot in the oppressive silence of the foothills.\n\nThe lead Kruthik stops instantly. Its head snaps around with unnatural, jerky speed, its multi-faceted eyes locking onto your position. The illusion is forgotten. The creature lets out a shrill, piercing shriek that vibrates in your very teeth, and all three beasts turn their attention toward you, their mandibles clicking with renewed, predatory ferocity. They aren't going to the illusion anymore—they are coming for you.\n\nYou are exposed in the open, and the distance between you and the guard's body is still ten feet. The creatures are approximately twenty feet from you, and their speed is terrifying.\n\n[add_condition(\"Initiative\")]\n[update_location(\"The Broken Anvil - Combat Encounter\")]"
+    },
+    {
+      "role": "user",
+      "content": "I cast sleep on all three creatures"
+    },
+    {
+      "role": "assistant",
+      "content": "You reach into the depths of your arcane reservoir, your fingers tracing the familiar, humming patterns of your magic—but the well is dry. The exhaustion of your travel and the lingering toll of your recent brushes with danger leave you grasping at shadows. You feel the potential for the spell flicker and die in your mind, the weave refusing to bend to your will.\n\nThe Kruthiks, sensing your hesitation and the sudden lack of magical pressure, screech in triumph. The largest one lunges, its bladed forelimbs carving through the air, closing half the distance in a single, terrifying burst of speed. They are now less than ten feet away, their mandibles dripping with a viscous, translucent ichor as they prepare to swarm.\n\nYou are standing in the open, the satchel lying just beyond the reach of their skittering claws. You have no spells left to lull them, and the creatures have lost all interest in the dead guard—you are the prey now.\n\nWhat do you do?"
+    },
+    {
+      "role": "user",
+      "content": "Wait, why is this happening? I'm supposed to have a spellcasting pouch or focus. Also, I'm supposed to have 4 cantrips prepared, and 2 lvl 1 spells slots available and I long rested, which refills my spells slots"
+    },
+    {
+      "role": "assistant",
+      "content": "My apologies, Kel. You are absolutely right. I have miscalculated your resource tracking—my error, not yours. Let us reset the flow of the weave.\n\nThe memory of the inn’s comfort and the deep, restorative sleep you found in the study returns to you. You feel the familiar, vibrant hum of your draconic bloodline pulsing beneath your skin, untainted by the exhaustion I mistakenly attributed to you. The arcane reservoir is full, the patterns of the *Sleep* spell waiting at your fingertips like a coiled spring.\n\nThe Kruthiks are closing in, their chittering screams filling the air, but you stand firm, your hand steady as you grip your arcane focus.\n\n***\n\n**Mechanics Reset:**\n*   **HP:** 9/9\n*   **Spell Slots:** 2/2 (Level 1 slots restored)\n*   **Concentration:** None\n*   **Status:** Combat active.\n\n***\n\nYou weave the incantation, the air around your fingers shimmering with soft, violet light. You push the magic outward, a wave of lethargy and heavy-lidded slumber directed squarely at the three encroaching beasts.\n\nThe violet pulse of your magic washes over the three Kruthiks like a heavy, unseen tide. \n\nThe smallest of the trio, barely a moment removed from the burrow, lets out a strangled chitter before its bladed limbs buckle. It collapses into the sand, its mandibles clicking once more before falling silent in deep, magical slumber. The second one stumbles, its movements becoming sluggish and rhythmic, its head drooping until it, too, hits the dust with a soft thud. \n\nThe largest of the three, however, is a seasoned scavenger, its hide thick and its vitality hardened by the unforgiving desert. It staggers, its eyes glazing over for a heartbeat, but it fights the lethargy with a violent shake of its head, hissing as it forces itself to remain upright. It is clearly dazed, its movements jerky and uncoordinated, but it remains standing—and it is still hungry.\n\nThe spell has spent 16 hit points worth of life-force. Two of the monsters are out of the fight, but the hulking leader remains, hissing at you, its mandibles snapping just feet from your chest.\n\n**Status:**\n- Two Kruthiks: Unconscious.\n- One Large Kruthik: Conscious (Dazed).\n\nThe satchel lies within reach. The large beast is disoriented, but still dangerous. What is your next move?"
     }
   ],
   "created_at": "2026-05-28T23:07:21.361Z",
-  "token_count": 87845,
+  "token_count": 94412,
   "model": "gemini-3.1-flash-lite"
 }
