@@ -2,8 +2,8 @@
   "campaign_id": "kel-campaign",
   "world": {
     "name": "Classic High Fantasy",
-    "lore_summary": "The journey begins. The town's festivities fade behind you, replaced by the encroaching, dry silence of the foothills. The map provided by Sister Elara guides you toward the 'Broken Anvil', a landmark of jagged pillars where the trade road meets the salt flats.",
-    "current_location": "The deep desert, following the Mightstone's pull toward the obsidian beacon.",
+    "lore_summary": "You have crossed the threshold into the ancient, silent heart of the Netheril. The air here is thin, cold, and tastes of ozone and ancient dust. The architecture is impossibly large, built for beings of great stature. The emerald light from the Mightstone within you now serves as your only illumination, casting long, dancing shadows against the basalt walls.",
+    "current_location": "The subterranean ruins of the Netheril, beyond the obsidian veil.",
     "time": "Sunset, transitioning into night.",
     "seal_integrity": 100,
     "seal_status": "N/A",
@@ -465,6 +465,10 @@
     {
       "timestamp": "2026-06-13T20:37:18.198Z",
       "event": "Kel approached the obsidian fissure, choosing to trust the masked stranger's warning while seeking further knowledge."
+    },
+    {
+      "timestamp": "2026-06-13T20:49:54.139Z",
+      "event": "Moved to The subterranean ruins of the Netheril, beyond the obsidian veil.."
     }
   ]
 }
