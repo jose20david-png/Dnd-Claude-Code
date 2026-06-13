@@ -2,9 +2,9 @@
   "campaign_id": "kel-campaign",
   "world": {
     "name": "Classic High Fantasy",
-    "lore_summary": "The town is bustling with activity as the locals prepare for the upcoming harvest festival.",
-    "current_location": "Gorin's Inn, back study",
-    "time": "Next Morning",
+    "lore_summary": "A small, quiet shrine to the Morninglord, Lathander, tucked away from the noise of the Harvest Festival. It serves as a place of healing and light in the frontier town.",
+    "current_location": "Shrine of Lathander",
+    "time": "Morning of the Festival",
     "seal_integrity": 100,
     "seal_status": "N/A",
     "map_id": "town_map",
@@ -348,6 +348,10 @@
     {
       "timestamp": "2026-06-06T17:00:29.077Z",
       "event": "Moved to Gorin's Inn, back study — Next Morning."
+    },
+    {
+      "timestamp": "2026-06-13T17:36:59.556Z",
+      "event": "Moved to Shrine of Lathander — Morning of the Festival."
     }
   ]
 }
