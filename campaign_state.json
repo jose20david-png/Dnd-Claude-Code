@@ -433,6 +433,10 @@
     {
       "timestamp": "2026-06-13T19:17:05.218Z",
       "event": "Story note saved: Kel has reached Level 2. Current spells: Sleep, Thunderwave, Magic Missile. Cant"
+    },
+    {
+      "timestamp": "2026-06-13T19:34:57.530Z",
+      "event": "Arcana check DC14: rolled 16 — SUCCESS."
     }
   ]
 }
