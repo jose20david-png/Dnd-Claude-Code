@@ -21,12 +21,12 @@
       "name": "Kel",
       "race": "Tiefling",
       "class": "Sorcerer",
-      "level": 1,
+      "level": 3,
       "hp": 9,
       "hp_max": 9,
-      "hit_dice_total": 1,
+      "hit_dice_total": 3,
       "hit_dice_used": 0,
-      "xp": 0,
+      "xp": 900,
       "death_saves": {
         "successes": 0,
         "failures": 0,
@@ -437,6 +437,22 @@
     {
       "timestamp": "2026-06-13T19:34:57.530Z",
       "event": "Arcana check DC14: rolled 16 — SUCCESS."
+    },
+    {
+      "timestamp": "2026-06-13T20:18:52.692Z",
+      "event": "Awarded 500 XP — Absorbing the Mightstone and discovering his true heritage.. Total: 500 XP."
+    },
+    {
+      "timestamp": "2026-06-13T20:18:52.692Z",
+      "event": "LEVEL UP! Now Level 2. Proficiency bonus +2."
+    },
+    {
+      "timestamp": "2026-06-13T20:20:59.111Z",
+      "event": "Awarded 400 XP — Absorbing the Mightstone and completing the trial.. Total: 900 XP."
+    },
+    {
+      "timestamp": "2026-06-13T20:20:59.111Z",
+      "event": "LEVEL UP! Now Level 3. Proficiency bonus +2."
     }
   ]
 }
