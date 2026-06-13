@@ -162,6 +162,14 @@
       "disposition": "friendly",
       "notes": "Offers to help Kel with a map to find the Netheril desert | Offers to help Kel with information about the Netheril desert",
       "location": "Brindlemark"
+    },
+    {
+      "id": "sister-elara",
+      "name": "Sister Elara",
+      "role": "Cleric of Lathander",
+      "disposition": "neutral",
+      "notes": "A Lathanderian cleric, observant and intelligent. Looks after the local shrine.",
+      "location": "Shrine of Lathander"
     }
   ],
   "quests": [
@@ -352,6 +360,10 @@
     {
       "timestamp": "2026-06-13T17:36:59.556Z",
       "event": "Moved to Shrine of Lathander — Morning of the Festival."
+    },
+    {
+      "timestamp": "2026-06-13T17:38:59.913Z",
+      "event": "Met Sister Elara (Cleric of Lathander) — neutral."
     }
   ]
 }
