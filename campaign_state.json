@@ -2,9 +2,9 @@
   "campaign_id": "kel-campaign",
   "world": {
     "name": "Classic High Fantasy",
-    "lore_summary": "A small, quiet shrine to the Morninglord, Lathander, tucked away from the noise of the Harvest Festival. It serves as a place of healing and light in the frontier town.",
-    "current_location": "Shrine of Lathander",
-    "time": "Morning of the Festival",
+    "lore_summary": "The journey begins. The town's festivities fade behind you, replaced by the encroaching, dry silence of the foothills. The map provided by Sister Elara guides you toward the 'Broken Anvil', a landmark of jagged pillars where the trade road meets the salt flats.",
+    "current_location": "The town's western outskirts, beginning the journey to the 'Broken Anvil'.",
+    "time": "Morning of the Festival - Departure",
     "seal_integrity": 100,
     "seal_status": "N/A",
     "map_id": "town_map",
@@ -150,6 +150,11 @@
           "name": "Belt pouch (15 gp)",
           "quantity": 1,
           "rarity": "common"
+        },
+        {
+          "name": "Rations (5 days)",
+          "quantity": 5,
+          "rarity": "common"
         }
       ]
     }
@@ -198,6 +203,30 @@
         {
           "step_id": "the-dragon-s-legacy-4",
           "description": "Fulfill the trial to 'make yourself a dragon'",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "id": "the-morninglord-s-relic",
+      "title": "The Morninglord's Relic",
+      "description": "Sister Elara has tasked you with retrieving a satchel marked with the seal of the Morninglord from a fallen guard near the 'Broken Anvil' in the western foothills. Successfully returning it will grant you a map and potentially a companion for your journey.",
+      "giver": "Sister Elara",
+      "status": "active",
+      "steps": [
+        {
+          "step_id": "the-morninglord-s-relic-1",
+          "description": "Travel to the 'Broken Anvil' in the western foothills.",
+          "completed": true
+        },
+        {
+          "step_id": "the-morninglord-s-relic-2",
+          "description": "Retrieve the satchel from the fallen guard.",
+          "completed": false
+        },
+        {
+          "step_id": "the-morninglord-s-relic-3",
+          "description": "Return the satchel to Sister Elara at the shrine.",
           "completed": false
         }
       ]
@@ -364,6 +393,30 @@
     {
       "timestamp": "2026-06-13T17:38:59.913Z",
       "event": "Met Sister Elara (Cleric of Lathander) — neutral."
+    },
+    {
+      "timestamp": "2026-06-13T17:59:51.563Z",
+      "event": "Quest added: \"The Morninglord's Relic\" (3 steps)."
+    },
+    {
+      "timestamp": "2026-06-13T17:59:51.564Z",
+      "event": "Moved to The town's western outskirts, beginning the journey to the 'Broken Anvil'.."
+    },
+    {
+      "timestamp": "2026-06-13T18:03:08.257Z",
+      "event": "Moved to The town's western outskirts, beginning the journey to the 'Broken Anvil'. — Morning of the Festival - Departure."
+    },
+    {
+      "timestamp": "2026-06-13T18:03:08.258Z",
+      "event": "Acquired: Rations (5 days) ×5"
+    },
+    {
+      "timestamp": "2026-06-13T18:03:08.268Z",
+      "event": "Quest step completed: \"Travel to the 'Broken Anvil' in the western foothills.\" (The Morninglord's Relic)"
+    },
+    {
+      "timestamp": "2026-06-13T18:03:08.276Z",
+      "event": "Kel accepted Sister Elara's quest, visited Gorin's Inn for supplies, and set out toward the 'Broken Anvil' to recover the missing satchel."
     }
   ]
 }
