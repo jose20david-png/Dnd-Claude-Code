@@ -3,12 +3,12 @@
   "world": {
     "name": "Classic High Fantasy",
     "lore_summary": "The journey begins. The town's festivities fade behind you, replaced by the encroaching, dry silence of the foothills. The map provided by Sister Elara guides you toward the 'Broken Anvil', a landmark of jagged pillars where the trade road meets the salt flats.",
-    "current_location": "The town's western outskirts, beginning the journey to the 'Broken Anvil'.",
-    "time": "Morning of the Festival - Departure",
+    "current_location": "The deep desert, following the Mightstone's pull toward the obsidian beacon.",
+    "time": "Sunset, transitioning into night.",
     "seal_integrity": 100,
     "seal_status": "N/A",
     "map_id": "town_map",
-    "story_notes": "fulfill his destiny. Kel has always been a bit of a loner, with no previous romantic partners, but he does have a certain interest in women. His family, while important, has never been overly involved in his life, allowing him to forge his own path. As he ventures into the unknown, Kel's charisma and magical prowess will be put to the test, but with his quick wit and innate charm, he's ready to face whatever challenges come his way.\n• Kel arrives in a small frontier town, marking the beginning of his journey to find the fabled 'Mightstone'\n• Kel arrives in a small frontier town, marking the beginning of his journey to find the fabled 'Mightstone'\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel meets Gorin, the town's innkeeper\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel is looking for the Netheril desert, specifically the ancient stone, and Gorin offers to help with a map\n• Kel is looking for the Netheril desert and meets Gorin, the town's innkeeper, who offers to help with information\n• Kel shares his family's legacy and the cryptic message from his family about 'making himself a dragon' as part of his come of age ceremony, which seems to be connected to finding the Mightstone in the Netheril desert.\n• Kel has reached Level 2. Current spells: Sleep, Thunderwave, Magic Missile. Cantrips: Fire Bolt, Mage Hand, Minor Illusion, Blade Ward. Currently searching for the hermit or a sign in the desert.",
+    "story_notes": "fulfill his destiny. Kel has always been a bit of a loner, with no previous romantic partners, but he does have a certain interest in women. His family, while important, has never been overly involved in his life, allowing him to forge his own path. As he ventures into the unknown, Kel's charisma and magical prowess will be put to the test, but with his quick wit and innate charm, he's ready to face whatever challenges come his way.\n• Kel arrives in a small frontier town, marking the beginning of his journey to find the fabled 'Mightstone'\n• Kel arrives in a small frontier town, marking the beginning of his journey to find the fabled 'Mightstone'\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel meets Gorin, the town's innkeeper\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel is looking for the Netheril desert, specifically the ancient stone, and Gorin offers to help with a map\n• Kel is looking for the Netheril desert and meets Gorin, the town's innkeeper, who offers to help with information\n• Kel shares his family's legacy and the cryptic message from his family about 'making himself a dragon' as part of his come of age ceremony, which seems to be connected to finding the Mightstone in the Netheril desert.\n• Kel has reached Level 2. Current spells: Sleep, Thunderwave, Magic Missile. Cantrips: Fire Bolt, Mage Hand, Minor Illusion, Blade Ward. Currently searching for the hermit or a sign in the desert.\n• Kel is now Level 3 Sorcerer.\nHP: 21/21.\nSorcery Points: 3/3.\nMetamagic: Empowered Spell, Subtle Spell.\nLevel 2 Spell: Hold Person.\nThe Mightstone is now inside Kel, acting as a compass toward the Netheril ruins.",
     "weather": {
       "condition": "clear",
       "description": "A gentle breeze carries the sweet scent of blooming wildflowers through the town."
@@ -453,6 +453,14 @@
     {
       "timestamp": "2026-06-13T20:20:59.111Z",
       "event": "LEVEL UP! Now Level 3. Proficiency bonus +2."
+    },
+    {
+      "timestamp": "2026-06-13T20:24:15.716Z",
+      "event": "Story note saved: Kel is now Level 3 Sorcerer.\nHP: 21/21.\nSorcery Points: 3/3.\nMetamagic: Empowere"
+    },
+    {
+      "timestamp": "2026-06-13T20:25:26.798Z",
+      "event": "Moved to The deep desert, following the Mightstone's pull toward the obsidian beacon. — Sunset, transitioning into night.."
     }
   ]
 }
