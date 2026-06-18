@@ -152,8 +152,37 @@
       ]
     }
   ],
-  "npcs": [],
-  "quests": [],
+  "npcs": [
+    {
+      "id": "elara",
+      "name": "Elara",
+      "role": "Quest Giver",
+      "disposition": "friendly",
+      "notes": "A distressed laborer whose brother has gone missing near the Blackwood. She is terrified and believes there is something supernatural involved.",
+      "location": "The Broken Anvil"
+    }
+  ],
+  "quests": [
+    {
+      "id": "the-missing-brother",
+      "title": "The Missing Brother",
+      "description": "Elara's brother has gone missing in the Blackwood. She found a strange sigil on her doorstep and fears something sinister is at play.",
+      "giver": "Elara",
+      "status": "active",
+      "steps": [
+        {
+          "step_id": "the-missing-brother-1",
+          "description": "Investigate the Blackwood for signs of Elara's brother.",
+          "completed": false
+        },
+        {
+          "step_id": "the-missing-brother-2",
+          "description": "Determine the meaning of the weeping eye sigil.",
+          "completed": false
+        }
+      ]
+    }
+  ],
   "encounters": [],
   "history_log": [
     {
@@ -175,6 +204,14 @@
     {
       "timestamp": "2026-06-18T20:28:32.595Z",
       "event": "Insight check DC12: rolled 15 — SUCCESS."
+    },
+    {
+      "timestamp": "2026-06-18T20:31:03.437Z",
+      "event": "Met Elara (Quest Giver) — friendly."
+    },
+    {
+      "timestamp": "2026-06-18T20:31:03.439Z",
+      "event": "Quest added: \"The Missing Brother\" (2 steps)."
     }
   ]
 }

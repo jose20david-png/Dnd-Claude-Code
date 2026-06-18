@@ -139,9 +139,25 @@
     {
       "role": "assistant",
       "content": "You fix your gaze upon her, your grey eyes narrowing to assess the truth behind her frantic demeanor. You take a measured breath, letting the silence stretch just long enough to weigh her intent.\n\nShe is a woman of perhaps twenty-five, though the shadows under her eyes add years to her face. Her hair is matted and unkempt, shoved haphazardly beneath her hood, and her fingers—calloused, as you noted—are stained with the dark, pervasive grease of a laborer. Her cloak is thick, heavy wool, but it is torn at the hem and smells faintly of pine resin and old, damp earth. \n\nAs you study her, your perception catches the telltale signs: she isn't just tired; she is vibrating with a suppressed, icy terror. Her pulse point at her throat is hammering rhythmically, and she refuses to meet your gaze for more than a second at a time, her eyes constantly flicking to the door or the dark rafters above. She reeks of cheap, desperate fear, but there is no artifice in her grief. Her hands are shaking, not from the cold of the room, but from a deep-seated, marrow-chilling dread. She is not a liar, but she is a woman who has seen—or heard—something that has fundamentally broken her sense of safety.\n\n\"The Blackwood,\" you repeat, your voice low and steady, contrasting with her frantic energy. You look at the parchment, the weeping eye sigil seeming to pulse faintly in the dim light of the tavern. \n\n\"You didn't answer me,\" she whispers, her voice cracking. \"Are you a man of the cloth, or a man of the sword? Because if you're the latter, I need to know if you're going to stand between me and the dark, or if I'm just wasting my last bit of hope on a stranger.\"\n\nShe leans in, her breath hitching. \"Tell me—have you seen that mark before? You look at it like it’s a pestilence.\""
+    },
+    {
+      "role": "user",
+      "content": "Sit, Elara. You look like you need to talk for a moment. Take a seat (I offer her my spot). Inkeeper, an extra order of mutton and some ale please."
+    },
+    {
+      "role": "assistant",
+      "content": "⚠️ **No DM narration this turn**\n\nThe DM called tools but didn't write a response. Try rephrasing, or send \"continue\" to prompt narration."
+    },
+    {
+      "role": "user",
+      "content": "continue"
+    },
+    {
+      "role": "assistant",
+      "content": "Elara freezes for a heartbeat, her eyes wide with disbelief as you slide off the stool and gesture for her to take your place. She looks at the warm seat, then back at you, her trembling finally beginning to subside into a weary, fragile stillness. She sinks onto the stool, the heavy wool of her cloak rustling as she exhales a long, shuddering breath.\n\n\"Thank you,\" she whispers, her voice barely audible over the fire.\n\nThe barkeep, having witnessed your gesture, grunts again. He doesn't offer a smile, but he moves with a bit more purpose now, carving another thick slice of mutton and sliding a fresh, foaming tankard toward her. He wipes the counter clean where she stands, his eyes briefly meeting yours with a flicker of something like respect—or perhaps just pity for a man who invites trouble so readily.\n\nElara wraps her cold hands around the tankard, using the warmth to steady her tremors. She takes a long, slow swallow of the ale before finally meeting your gaze directly. Her grey eyes are clouded with exhaustion, but the frantic edge is gone, replaced by a desperate, focused clarity.\n\n\"My brother, Kaelen, was a woodcutter,\" she begins, her voice low and steady. \"He knew the Blackwood better than anyone. He wouldn't just get lost, and he wouldn't leave me behind. That mark...\" She gestures with her chin toward the parchment still lying on the bar. \"I found it pinned to our door with a splinter of bone. It wasn't there when I went to sleep. I think someone—or something—was watching the house.\"\n\nShe leans forward, her voice dropping to a conspiratorial hush. \"The trappers in the corner, they won't say it, but they've seen the lights in the trees at night. Pale, sickly green lights that don't flicker like a campfire. If you're going to help me, you need to know that whatever took Kaelen isn't just a bandit. It’s patient. And it’s hungry.\"\n\nShe looks at you, waiting to see if the weight of her words—and the reality of the danger—will cause you to pull back.\n\n\"Do you have a blade that can cut through shadows, Paladin?\"\n\n*update_story_notes: Elara's brother, Kaelen, has gone missing near the Blackwood. A mysterious sigil of a weeping eye was left on her door. The locals are terrified of strange lights in the forest.*\n\n*award_xp(50)*\n\nHow do you respond to her, and what is your next move?"
     }
   ],
   "created_at": "2026-06-18T19:55:22.831Z",
-  "token_count": 12579,
+  "token_count": 20194,
   "model": "gemini-3.1-flash-lite"
 }
