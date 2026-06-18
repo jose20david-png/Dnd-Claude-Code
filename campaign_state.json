@@ -254,6 +254,14 @@
     {
       "timestamp": "2026-06-18T22:05:06.861Z",
       "event": "Kel confronted a cultist in the secret tunnel beneath The Broken Anvil. The cultist knows of Kel's sister, Syl."
+    },
+    {
+      "timestamp": "2026-06-18T22:08:58.767Z",
+      "event": "Concentrating on Protection from Evil and Good."
+    },
+    {
+      "timestamp": "2026-06-18T22:08:58.768Z",
+      "event": "Condition applied: Concentrating on Protection from Evil and Good"
     }
   ]
 }
