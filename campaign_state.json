@@ -295,8 +295,8 @@
       "event": "CHARACTER PATCHED: Leveled to 2, AC set to 16 (chain mail), correct L2 paladin features and spell slots applied."
     },
     {
-      "timestamp": "2026-06-18T23:14:16.792Z",
-      "event": "Stealth check DC14: rolled 19 — SUCCESS."
+      "timestamp": "2026-06-18T23:24:13.554Z",
+      "event": "Short rest — Channel Divinity restored."
     }
   ]
 }
