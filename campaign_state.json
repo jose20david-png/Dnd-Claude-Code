@@ -8,7 +8,7 @@
     "seal_integrity": 100,
     "seal_status": "N/A",
     "map_id": null,
-    "story_notes": "CHARACTER BACKSTORY — Kel Stormblessed: Kel Stormblessed is a man in his early thirties of average height, possessing the fair skin and sharp, discerning grey eyes of his elven heritage. A jagged, silvered scar slices across his neck—a brutal souvenir from the day his village was razed and his younger sister, Syl, was stolen away. He carries himself with the quiet, rigid discipline of a soldier, his chain mail always polished and his gaze constantly scanning the horizon for any sign of disorder. Devoted to Tyr, the God of Justice, Kel operates with an uncompromising moral compass, viewing his paladinhood as a sacred duty to protect the vulnerable from the chaotic cruelty that claimed his family. Though he travels with the stoic resolve of a veteran, his heart is anchored by the persistent, unvoiced hope that he will one day track down the cultists who took Syl and finally secure the retribution she was denied.\n• Character Sheet Update:\n- Divine Sense: Detect celestial, fiend, or undead within 60ft.\n- Lay on Hands: Pool of 5 HP; can spend 5 HP to cure disease/neutralize poison."
+    "story_notes": "CHARACTER BACKSTORY — Kel Stormblessed: Kel Stormblessed is a man in his early thirties of average height, possessing the fair skin and sharp, discerning grey eyes of his elven heritage. A jagged, silvered scar slices across his neck—a brutal souvenir from the day his village was razed and his younger sister, Syl, was stolen away. He carries himself with the quiet, rigid discipline of a soldier, his chain mail always polished and his gaze constantly scanning the horizon for any sign of disorder. Devoted to Tyr, the God of Justice, Kel operates with an uncompromising moral compass, viewing his paladinhood as a sacred duty to protect the vulnerable from the chaotic cruelty that claimed his family. Though he travels with the stoic resolve of a veteran, his heart is anchored by the persistent, unvoiced hope that he will one day track down the cultists who took Syl and finally secure the retribution she was denied.\n• Character Sheet Update:\n- Divine Sense: Detect celestial, fiend, or undead within 60ft.\n- Lay on Hands: Pool of 5 HP; can spend 5 HP to cure disease/neutralize poison.\n• Kel Stormblessed: Level 2 Paladin. HP: 15/15. AC: 11 (Defense Fighting Style). Prepared Spells: Cure Wounds, Bless. Features: Divine Smite, Divine Sense, Lay on Hands.\n• Kel Stormblessed: Level 2 Paladin. HP: 15/15. AC: 12 (Defense Fighting Style). Spells Prepared: Bless, Cure Wounds. Divine Smite unlocked."
   },
   "party": [
     {
@@ -226,6 +226,18 @@
     {
       "timestamp": "2026-06-18T20:59:00.769Z",
       "event": "Religion check DC10: rolled 14 — SUCCESS."
+    },
+    {
+      "timestamp": "2026-06-18T21:07:15.834Z",
+      "event": "Story note saved: Kel Stormblessed: Level 2 Paladin. HP: 15/15. AC: 11 (Defense Fighting Style). P"
+    },
+    {
+      "timestamp": "2026-06-18T21:07:50.795Z",
+      "event": "Story note saved: Kel Stormblessed: Level 2 Paladin. HP: 15/15. AC: 12 (Defense Fighting Style). S"
+    },
+    {
+      "timestamp": "2026-06-18T21:08:21.397Z",
+      "event": "Investigation check DC12: rolled 16 — SUCCESS."
     }
   ]
 }
