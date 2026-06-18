@@ -1,88 +1,47 @@
 {
-  "campaign_id": "lucan-campaign",
+  "campaign_id": "new-campaign",
+  "creation_step": 10,
+  "creation_data": {
+    "setting": "Classic High Fantasy",
+    "class": "Paladin",
+    "_subclass_pending": false,
+    "subclass": "Oath of Devotion",
+    "race": "Half-elf",
+    "background": "Soldier",
+    "skills": [
+      "Persuasion",
+      "Insight"
+    ],
+    "stats": {
+      "str": 16,
+      "con": 13,
+      "int": 9,
+      "cha": 15,
+      "dex": 12,
+      "wis": 13
+    }
+  },
   "world": {
-    "name": "Classic High Fantasy",
-    "lore_summary": "A new adventure begins.",
-    "current_location": "A small frontier town",
+    "name": "Forgotten Realms",
+    "lore_summary": "New campaign — character creation in progress.",
+    "current_location": "Character Creation",
     "time": "Day 1 — Morning",
     "seal_integrity": 100,
     "seal_status": "N/A",
     "map_id": null,
-    "story_notes": "CHARACTER BACKSTORY — Lucan: Lucan is a weary soul of thirty-four, bearing the angular grace of his elven heritage softened by the rugged, scruffy build of his human father, all topped with a crown of perpetually unkempt, silver-streaked dark hair. His most arresting feature is his heterochromia; his sea-green eye reflects the present, while his cloudy, pale blue \"sight\" eye constantly flickers toward the shifting threads of the future. Clad in practical, ink-stained robes of deep blue and silver, he is never without his worn tarokka cards or a smooth obsidian orb, artifacts of a man who has traded his youth for the burden of foresight. Cast out from a prestigious academy for sabotaging an experiment to prevent a disaster only he could see, he now drifts as a cynical, detached investigator for hire. Haunted by a recurring vision of an encroaching shadow, Lucan tracks the party not out of altruism, but from a desperate, calculated necessity to ensure their survival, for he knows their fates are inextricably woven into the future of the realm."
+    "story_notes": ""
   },
   "party": [
     {
-      "id": "lucan",
-      "name": "Lucan",
-      "race": "Half-Elf",
-      "class": "Wizard",
+      "id": "player",
+      "name": "New Character",
+      "class": "Unset",
       "level": 1,
-      "hp": 7,
-      "hp_max": 7,
-      "hit_dice_total": 1,
-      "hit_dice_used": 0,
-      "xp": 0,
-      "death_saves": {
-        "successes": 0,
-        "failures": 0,
-        "stable": false
-      },
+      "hp": 10,
       "status": "active",
-      "background": "Sage",
-      "alignment": "Neutral Good",
-      "stats": {
-        "str": 10,
-        "dex": 12,
-        "con": 12,
-        "int": 17,
-        "wis": 11,
-        "cha": 12
-      },
-      "ac": 10,
-      "ac_notes": "",
-      "speed": 30,
-      "proficiency_bonus": 2,
-      "initiative_bonus": 1,
-      "passive_perception": 10.5,
-      "saving_throw_profs": [
-        "int",
-        "wis"
-      ],
-      "skill_profs": [
-        "Insight",
-        "Investigation",
-        "Arcana",
-        "History"
-      ],
-      "traits": [
-        "Wizard features"
-      ],
-      "conditions": [],
-      "description": "Lucan is a weary soul of thirty-four, bearing the angular grace of his elven heritage softened by the rugged, scruffy build of his human father, all topped with a crown of perpetually unkempt, silver-streaked dark hair. His most arresting feature is his heterochromia; his sea-green eye reflects the present, while his cloudy, pale blue \"sight\" eye constantly flickers toward the shifting threads of the future. Clad in practical, ink-stained robes of deep blue and silver, he is never without his worn tarokka cards or a smooth obsidian orb, artifacts of a man who has traded his youth for the burden of foresight. Cast out from a prestigious academy for sabotaging an experiment to prevent a disaster only he could see, he now drifts as a cynical, detached investigator for hire. Haunted by a recurring vision of an encroaching shadow, Lucan tracks the party not out of altruism, but from a desperate, calculated necessity to ensure their survival, for he knows their fates are inextricably woven into the future of the realm.",
-      "spells": {
-        "cantrips": [
-          "Fire bolt",
-          "Mage hand",
-          "Minor illusion"
-        ],
-        "level_1": [
-          "Sleep",
-          "Detect magic",
-          "Find familiar",
-          "Shield",
-          "Thunderwave",
-          "Fog cloud"
-        ],
-        "level_2": [],
-        "level_3": []
-      },
       "spell_slots": {
-        "1": {
-          "max": 2,
-          "used": 0
-        },
         "cantrip": {
-          "max": 3,
+          "max": 0,
           "used": 0
         },
         "level_1": {
@@ -110,97 +69,56 @@
         "max": 0,
         "used": 0
       },
-      "inventory": [
-        {
-          "name": "Quarterstaff",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Spellbook (6 chosen spells + Mage Armor + Magic Missile)",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Scholar's pack",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Arcane focus",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Component pouch",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Ink bottle",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Ink pen",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Small knife",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Letter from a dead colleague",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Common clothes",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Belt pouch (10 gp)",
-          "quantity": 1,
-          "rarity": "common"
-        }
-      ]
+      "inventory": []
     }
   ],
-  "npcs": [
-    {
-      "id": "elara",
-      "name": "Elara",
-      "role": "Scout / Potential contact",
-      "disposition": "neutral",
-      "notes": "A scout who seems unnerved by Lucan's foresight. She is investigating the notice board.",
-      "location": "Oakhaven Town Square"
-    }
-  ],
+  "npcs": [],
   "quests": [],
   "encounters": [],
   "history_log": [
     {
-      "timestamp": "2026-06-18T13:10:49.846Z",
-      "event": "Lucan created. Wizard Level 1. Adventure begins."
+      "timestamp": "2026-06-18T19:55:16.105Z",
+      "event": "New campaign started. Begin character creation."
     },
     {
-      "timestamp": "2026-06-18T13:15:11.592Z",
-      "event": "Met Elara (Scout / Potential contact) — neutral."
+      "timestamp": "2026-06-18T19:57:09.807Z",
+      "event": "Character creation step 1 complete. Moving to step 2."
     },
     {
-      "timestamp": "2026-06-18T13:19:35.147Z",
-      "event": "Investigation check DC12: rolled 15 — SUCCESS."
+      "timestamp": "2026-06-18T19:57:19.023Z",
+      "event": "Character creation step 2 complete. Moving to step 3."
     },
     {
-      "timestamp": "2026-06-18T13:45:50.734Z",
-      "event": "Perception check DC14: rolled 16 — SUCCESS."
+      "timestamp": "2026-06-18T19:57:19.029Z",
+      "event": "Character creation step 2 complete. Showing subclass options for Paladin."
     },
     {
-      "timestamp": "2026-06-18T13:48:09.467Z",
-      "event": "Nature check DC15: rolled 18 — SUCCESS."
+      "timestamp": "2026-06-18T19:57:29.565Z",
+      "event": "Character creation step 3 complete. Moving to step 4."
+    },
+    {
+      "timestamp": "2026-06-18T19:57:45.224Z",
+      "event": "Character creation step 3 complete. Moving to step 4."
+    },
+    {
+      "timestamp": "2026-06-18T19:57:51.927Z",
+      "event": "Character creation step 4 complete. Moving to step 5."
+    },
+    {
+      "timestamp": "2026-06-18T19:58:02.062Z",
+      "event": "Character creation step 5 complete. Moving to step 6."
+    },
+    {
+      "timestamp": "2026-06-18T19:59:22.882Z",
+      "event": "Character creation step 7 complete. Moving to step 8."
+    },
+    {
+      "timestamp": "2026-06-18T19:59:33.017Z",
+      "event": "Character creation step 8 complete. Moving to step 9."
+    },
+    {
+      "timestamp": "2026-06-18T19:59:38.413Z",
+      "event": "Character creation step 9 complete. Moving to step 10."
     }
   ]
 }
