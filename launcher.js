@@ -763,12 +763,51 @@ function profBonus(level) {
   return Math.floor((level - 1) / 4) + 2;
 }
 
+// Compute spell slot maximums from class + level. Returns {level_1:{max,used:0}, ...}.
+// Used by create_character, award_xp (on level-up), and restore_resources (to fix stale maxes).
+function computeSpellSlots(cls, level) {
+  const lvl = Math.min(level || 1, 20);
+  const FULL_CASTER = /wizard|sorcerer|bard|druid|cleric/i;
+  const HALF_CASTER = /paladin|ranger/i;
+  const WARLOCK = /warlock/i;
+  let rawTable = {};
+
+  if (WARLOCK.test(cls)) {
+    const wSlots = [[],[2],[2],[2],[2],[3],[3],[3],[3],[3],[4]];
+    const wLevel = lvl<=4?1:lvl<=6?2:lvl<=8?3:lvl<=9?4:5;
+    rawTable = { [`level_${wLevel}`]: wSlots[Math.min(lvl,10)] || 2 };
+  } else if (FULL_CASTER.test(cls)) {
+    const t = [
+      {},
+      {1:2},{1:3},{1:4,2:2},{1:4,2:3},{1:4,2:3,3:2},{1:4,2:3,3:3},
+      {1:4,2:3,3:3,4:1},{1:4,2:3,3:3,4:2},{1:4,2:3,3:3,4:3,5:1},{1:4,2:3,3:3,4:3,5:2}
+    ];
+    const row = t[Math.min(lvl,10)] || {};
+    for (const [k,v] of Object.entries(row)) rawTable[`level_${k}`] = v;
+  } else if (HALF_CASTER.test(cls)) {
+    const t = [
+      {},{},{1:2},{1:3},{1:3},{1:4,2:2},{1:4,2:2},{1:4,2:3},{1:4,2:3},{1:4,2:3,3:2},{1:4,2:3,3:2}
+    ];
+    const row = t[Math.min(lvl,10)] || {};
+    for (const [k,v] of Object.entries(row)) rawTable[`level_${k}`] = v;
+  }
+
+  const slots = {
+    cantrip:{max:0,used:0}, level_1:{max:0,used:0}, level_2:{max:0,used:0},
+    level_3:{max:0,used:0}, level_4:{max:0,used:0}, level_5:{max:0,used:0}
+  };
+  for (const [k, maxVal] of Object.entries(rawTable)) {
+    slots[k] = { max: maxVal, used: 0 };
+  }
+  return slots;
+}
+
 // ─── TOOLS ────────────────────────────────────────────────────────────────────
 const TOOLS = [
-  {name:'roll_dice',description:'Roll dice. ALWAYS call for every roll. Add "advantage"/"disadvantage" to d20 for 2d20 keep high/low.',
-   input_schema:{type:'object',properties:{expression:{type:'string',description:'e.g. "d20", "2d6+3", "d20 advantage", "d20 disadvantage"'},purpose:{type:'string'}},required:['expression','purpose']}},
-  {name:'update_hp',description:"Update the character's current HP after damage or healing.",
-   input_schema:{type:'object',properties:{hp:{type:'number'},reason:{type:'string'}},required:['hp','reason']}},
+  {name:'roll_dice',description:'Roll dice. ALWAYS call for every roll. Advantage=2d20kh1+X (keep highest). Disadvantage=2d20kl1+X (keep lowest). NEVER use kh1 for disadvantage.',
+   input_schema:{type:'object',properties:{expression:{type:'string',description:'e.g. "1d20+5", "2d6+3", "2d20kh1+4" (advantage), "2d20kl1+4" (disadvantage)'},purpose:{type:'string'}},required:['expression','purpose']}},
+  {name:'update_hp',description:"Update the character's current HP after damage or healing. Pass hp_max to raise the maximum (e.g. after leveling up and rolling a hit die).",
+   input_schema:{type:'object',properties:{hp:{type:'number',description:'New current HP'},hp_max:{type:'number',description:'New HP maximum — only set when raising the cap (level-up hit die roll)'},reason:{type:'string'}},required:['hp','reason']}},
   {name:'use_spell_slot',description:'Spend a spell slot when a leveled spell is cast.',
    input_schema:{type:'object',properties:{level:{type:'number'},spell_name:{type:'string'}},required:['level','spell_name']}},
   {name:'restore_resources',description:'Restore resources after a long or short rest. For short rest you can optionally spend hit dice for healing.',
@@ -829,11 +868,31 @@ const TOOLS = [
    input_schema:{type:'object',properties:{
      spell:{type:'string',description:'Spell name being concentrated on, or null/empty to clear concentration'},
    },required:[]}},
+  {name:'lay_on_hands',description:"Use Paladin's Lay on Hands. This is NOT a spell slot — it draws from a separate HP pool (5 × paladin level). Use this instead of use_spell_slot for Lay on Hands.",
+   input_schema:{type:'object',properties:{
+     amount:{type:'number',description:'HP to restore (cannot exceed pool remaining)'},
+     target:{type:'string',description:'Who is being healed (default: the character themselves)'}
+   },required:['amount']}},
+  {name:'update_ac',description:'Update the character AC when armor, shield, or fighting style changes. Call this whenever AC changes — do not rely on story_notes for AC.',
+   input_schema:{type:'object',properties:{
+     ac:{type:'number',description:'New total AC value'},
+     notes:{type:'string',description:'Formula breakdown, e.g. "Chain Mail 16 + Defense +1 + Shield +2 = 19"'}
+   },required:['ac']}},
   {name:'award_xp',description:'Award XP. Auto-levels if threshold reached. Call after combat, quest completions, milestones.',
    input_schema:{type:'object',properties:{
      amount:{type:'number',description:'XP to award'},
      reason:{type:'string',description:'Why the XP was earned'}
    },required:['amount','reason']}},
+  {name:'update_spells',description:'Add or remove a spell from the character\'s known/prepared spell list. Call once per spell after level-up or whenever a spell is learned or swapped.',
+   input_schema:{type:'object',properties:{
+     action:{type:'string',enum:['add','remove'],description:'add to or remove from the list'},
+     spell_name:{type:'string',description:'Spell name exactly as it appears in the rules, e.g. "Bless", "Shield of Faith"'},
+     level:{type:'string',enum:['cantrip','level_1','level_2','level_3','level_4','level_5','level_6','level_7','level_8','level_9'],description:'Slot level of the spell, or "cantrip"'}
+   },required:['action','spell_name','level']}},
+  {name:'add_trait',description:'Add a class feature, racial trait, or other permanent ability to the character sheet. Call after level-up for each new feature gained.',
+   input_schema:{type:'object',properties:{
+     trait:{type:'string',description:'Full name and brief description of the feature, e.g. "Divine Health — immune to disease (Paladin 3)"'}
+   },required:['trait']}},
   {name:'update_story_notes',description:'Persist important story facts (NPC secrets, player decisions, plot points) that must survive session resets.',
    input_schema:{type:'object',properties:{
      notes:{type:'string',description:'Narrative summary to persist. Append to existing notes — include who, what, where, and why. Max ~400 chars per call.'}
@@ -906,14 +965,23 @@ function executeTool(name, input) {
   const state = loadState();
   switch (name) {
     case 'roll_dice': { if (!input.expression) return {error:'Missing expression — e.g. "1d20"'}; const r=rollDice(input.expression); return {rolled:input.expression,purpose:input.purpose,result:r.breakdown,total:r.total,dice_rolled:true}; }
-    case 'update_hp': { const hpMax=state.party[0].hp_max||state.party[0].hp||27; const hp=Math.max(0,Math.min(hpMax,Math.round(input.hp))); state.party[0].hp=hp; state.history_log.push({timestamp:new Date().toISOString(),event:input.reason}); saveState(state); return {success:true,hp,state_updated:true}; }
+    case 'update_hp': { const ch=state.party[0]; if(input.hp_max!=null) ch.hp_max=Math.round(input.hp_max); const hpMax=ch.hp_max||ch.hp||27; const hp=Math.max(0,Math.min(hpMax,Math.round(input.hp))); ch.hp=hp; state.history_log.push({timestamp:new Date().toISOString(),event:input.reason}); saveState(state); return {success:true,hp,hp_max:hpMax,state_updated:true}; }
     case 'use_spell_slot': { const slots=state.party[0].spell_slots; const key=`level_${input.level}`; if(!slots[key]||slots[key].used>=slots[key].max) return {error:`No level ${input.level} slots remaining`}; slots[key].used++; state.history_log.push({timestamp:new Date().toISOString(),event:`Cast ${input.spell_name} (Lv${input.level}). ${slots[key].max-slots[key].used}/${slots[key].max} remaining.`}); saveState(state); return {success:true,remaining:slots[key].max-slots[key].used,state_updated:true}; }
     case 'restore_resources': {
       const r=state.party[0];
       const isWarlock=/warlock/i.test(r.class||'');
       if(input.rest_type==='long_rest'){
-        // Long rest: full restore for all classes
-        for(const k of Object.keys(r.spell_slots||{})) r.spell_slots[k].used=0;
+        // Long rest: full restore — recompute slot MAXES from class+level so stale zeroes are fixed
+        const freshSlots = computeSpellSlots(r.class||'', r.level||1);
+        const existingSlots = r.spell_slots || {};
+        for (const k of Object.keys(freshSlots)) {
+          if (freshSlots[k].max > 0) {
+            existingSlots[k] = { max: freshSlots[k].max, used: 0 };
+          } else if (existingSlots[k]) {
+            existingSlots[k].used = 0; // reset used even if max stays
+          }
+        }
+        r.spell_slots = existingSlots;
         if(r.channel_divinity) r.channel_divinity.used=0;
         // Restore hit dice (regain up to half max on long rest, min 1)
         if(r.hit_dice_total!=null){
@@ -921,8 +989,10 @@ function executeTool(name, input) {
           r.hit_dice_used=Math.max(0,(r.hit_dice_used||0)-regain);
         }
         r.hp=r.hp_max||r.hp;
+        r.lay_on_hands_used=0; // restore full Lay on Hands pool
         if(r.conditions) r.conditions=r.conditions.filter(c=>!/prone|frightened|invisible/i.test(c)); // clear short-duration conditions
-        state.history_log.push({timestamp:new Date().toISOString(),event:'Long rest — all resources restored, HP full.'});
+        const slotsStr = Object.entries(r.spell_slots).filter(([,v])=>v.max>0).map(([k,v])=>`L${k.replace('level_','')}:${v.max}`).join(' ');
+        state.history_log.push({timestamp:new Date().toISOString(),event:`Long rest — all resources restored, HP full. Slots: ${slotsStr||'none'}.`});
       } else {
         // Short rest: Warlocks recover ALL pact slots; others just CD
         if(isWarlock) for(const k of Object.keys(r.spell_slots||{})) r.spell_slots[k].used=0;
@@ -990,8 +1060,15 @@ function executeTool(name, input) {
     }
     case 'update_npc': {
       const needle=(input.name||'').toLowerCase();
-      const npc=state.npcs.find(n=>n.name.toLowerCase().includes(needle)||(n.id||'').includes(needle));
-      if(!npc)return {error:`NPC "${input.name}" not found. Known NPCs: ${state.npcs.map(n=>n.name).join(', ')||'none'}`};
+      let npc=state.npcs.find(n=>n.name.toLowerCase().includes(needle)||(n.id||'').includes(needle));
+      if(!npc){
+        // Auto-create (upsert) so update_npc never fails with "not found"
+        const npcId=(input.name||'npc').toLowerCase().replace(/[^a-z0-9]+/g,'-');
+        npc={id:npcId,name:input.name,role:input.role||'Unknown',disposition:input.disposition||'neutral',notes:input.notes||'',location:input.location||state.world.current_location};
+        state.npcs.push(npc);
+        state.history_log.push({timestamp:new Date().toISOString(),event:`Auto-created NPC: ${input.name} (via update_npc).`});
+        saveState(state); return {success:true,created:true,state_updated:true};
+      }
       const old=npc.disposition;
       if(input.disposition)npc.disposition=input.disposition;
       // Append notes — don't overwrite; use " | " as separator
@@ -1057,12 +1134,67 @@ function executeTool(name, input) {
       let leveled=false;
       if(nextLvl<=20 && p.xp>=XP_THRESHOLDS[nextLvl-1]){
         p.level=nextLvl; p.proficiency_bonus=profBonus(nextLvl);
-        // Recalculate hit dice
         if(p.hit_dice_total!=null) p.hit_dice_total=nextLvl;
-        state.history_log.push({timestamp:new Date().toISOString(),event:`LEVEL UP! Now Level ${nextLvl}. Proficiency bonus +${profBonus(nextLvl)}.`});
+        // Update spell slot MAXES for the new level, preserving used counts
+        const newSlots = computeSpellSlots(p.class||'', nextLvl);
+        for (const [k, v] of Object.entries(newSlots)) {
+          if (v.max > 0) {
+            const prev = (p.spell_slots||{})[k] || {used:0};
+            p.spell_slots = p.spell_slots || {};
+            p.spell_slots[k] = { max: v.max, used: Math.min(prev.used||0, v.max) };
+          }
+        }
+        // Update CD max (paladins/clerics get more uses at higher levels)
+        if(/paladin/i.test(p.class||'') && nextLvl>=6 && p.channel_divinity) p.channel_divinity.max=2;
+        state.history_log.push({timestamp:new Date().toISOString(),event:`LEVEL UP! Now Level ${nextLvl}. Proficiency bonus +${profBonus(nextLvl)}. Spell slots updated.`});
         leveled=true;
       }
-      saveState(state); return {success:true,xp:p.xp,level:p.level,leveled,state_updated:true};
+      const hitDie=(GAME_DATA.classes[(p.class||'').toLowerCase()]||{}).hit_dice||'d8';
+      const levelUpInstructions = leveled
+        ? `🎉 LEVEL UP! ${p.name||'The character'} is now Level ${p.level}! YOU MUST do ALL of the following: (1) Announce this loudly and dramatically in your narration — this is a big moment. (2) Tell the player their proficiency bonus is now +${profBonus(p.level)}. (3) Ask the player to roll a ${hitDie} and add their CON modifier — when they give you the number, add it to their current hp_max (${p.hp_max||p.hp}) and call update_hp with both the new current hp AND the new hp_max. (4) Tell the player every class feature/ability they gain at Level ${p.level}. (5) For each new feature, call add_trait with its name and a brief description. (6) If they can learn new spells, list their options and ask them to choose — then call update_spells once per chosen spell. Do not continue the story until all of these are resolved.`
+        : undefined;
+      saveState(state); return {success:true,xp:p.xp,level:p.level,leveled,level_up_instructions:levelUpInstructions,state_updated:true};
+    }
+    case 'update_spells': {
+      const p=state.party[0];
+      if(!p.spells) p.spells={};
+      const key=input.level==='cantrip'?'cantrips':input.level;
+      if(!p.spells[key]) p.spells[key]=[];
+      if(input.action==='add'){
+        if(!p.spells[key].some(s=>s.toLowerCase()===input.spell_name.toLowerCase()))
+          p.spells[key].push(input.spell_name);
+        state.history_log.push({timestamp:new Date().toISOString(),event:`Learned spell: ${input.spell_name} (${input.level})`});
+      } else {
+        p.spells[key]=p.spells[key].filter(s=>s.toLowerCase()!==input.spell_name.toLowerCase());
+        state.history_log.push({timestamp:new Date().toISOString(),event:`Removed spell: ${input.spell_name} (${input.level})`});
+      }
+      saveState(state); return {success:true,spells:p.spells,state_updated:true};
+    }
+    case 'add_trait': {
+      const p=state.party[0];
+      if(!p.traits) p.traits=[];
+      if(!p.traits.some(t=>t.toLowerCase()===input.trait.toLowerCase()))
+        p.traits.push(input.trait);
+      state.history_log.push({timestamp:new Date().toISOString(),event:`Trait added: ${input.trait.slice(0,60)}`});
+      saveState(state); return {success:true,traits:p.traits,state_updated:true};
+    }
+    case 'lay_on_hands': {
+      const p=state.party[0];
+      const poolMax=(p.level||1)*5;
+      const used=p.lay_on_hands_used||0;
+      const available=poolMax-used;
+      const amt=Math.min(input.amount||0, available);
+      if(amt<=0) return {error:`Lay on Hands pool empty (0/${poolMax} HP remaining)`};
+      p.lay_on_hands_used=(used+amt);
+      p.hp=Math.min(p.hp_max||p.hp, p.hp+amt);
+      state.history_log.push({timestamp:new Date().toISOString(),event:`Lay on Hands: restored ${amt} HP to ${input.target||'character'}. Pool: ${poolMax-(p.lay_on_hands_used)}/${poolMax} remaining.`});
+      saveState(state); return {success:true,healed:amt,hp:p.hp,pool_remaining:poolMax-p.lay_on_hands_used,state_updated:true};
+    }
+    case 'update_ac': {
+      state.party[0].ac=input.ac;
+      if(input.notes) state.party[0].ac_notes=input.notes;
+      state.history_log.push({timestamp:new Date().toISOString(),event:`AC updated to ${input.ac}${input.notes?' ('+input.notes+')':''}.`});
+      saveState(state); return {success:true,ac:input.ac,state_updated:true};
     }
     case 'append_history_log': { state.history_log.push({timestamp:new Date().toISOString(),event:input.event}); saveState(state); return {success:true}; }
     case 'update_story_notes': {
@@ -1440,11 +1572,9 @@ function executeTool(name, input) {
       if (cantripCount) slotTable.cantrip = { max: cantripCount, used: 0 };
 
       // ── Build full spell_slots object ───────────────────────────
-      const fullSlots = { cantrip:{max:0,used:0},level_1:{max:0,used:0},level_2:{max:0,used:0},level_3:{max:0,used:0},level_4:{max:0,used:0},level_5:{max:0,used:0} };
-      for (const [k,v] of Object.entries(slotTable)) {
-        if (fullSlots[k]) fullSlots[k] = v;
-        else fullSlots[k] = v;
-      }
+      // Use the shared helper so keys are always "level_1", "level_2", etc.
+      // (The old inline merge stored numeric keys like "1","2" which broke use_spell_slot.)
+      const fullSlots = computeSpellSlots(cls, lvl);
 
       // ── Proficiency bonus (correct 5e table) ───────────────────
       const prof = profBonus(lvl);
@@ -1486,8 +1616,8 @@ function executeTool(name, input) {
           ac_notes: input.ac_notes || '',
           speed: input.speed || 30,
           proficiency_bonus: prof,
-          initiative_bonus: Math.floor(((input.stats||{}).dex||10) - 10) / 2,
-          passive_perception: 10 + Math.floor(((input.stats||{}).wis||10) - 10) / 2 + ((input.skill_profs||[]).map(s=>s.toLowerCase()).includes('perception') ? prof : 0),
+          initiative_bonus: Math.floor((((input.stats||{}).dex||10) - 10) / 2),
+          passive_perception: 10 + Math.floor((((input.stats||{}).wis||10) - 10) / 2) + ((input.skill_profs||[]).map(s=>s.toLowerCase()).includes('perception') ? prof : 0),
           saving_throw_profs: input.saving_throw_profs || [],
           skill_profs: input.skill_profs || [],
           traits: input.traits || [],
@@ -1500,7 +1630,8 @@ function executeTool(name, input) {
             level_3: (input.spells||{}).level_3 || []
           },
           spell_slots: fullSlots,
-          channel_divinity: /cleric|paladin/i.test(cls) ? {max:1,used:0} : {max:0,used:0},
+          channel_divinity: (/cleric/i.test(cls) && lvl>=2) || (/paladin/i.test(cls) && lvl>=3) ? {max:1,used:0} : {max:0,used:0},
+          lay_on_hands_used: 0,
           inventory: input.inventory || []
         }],
         npcs: [], quests: [], encounters: [],
@@ -1697,12 +1828,28 @@ HARD RULES:
   // char already defined above
   const hpMax = char.hp_max || char.hp;
   const pb = char.proficiency_bonus || profBonus(char.level||1);
-  const spellDC = char.stats ? (8 + pb + Math.floor(((char.stats.int||char.stats.wis||char.stats.cha||10)-10)/2)) : '—';
+  const strMod = Math.floor(((char.stats?.str||10)-10)/2);
+  const dexMod = Math.floor(((char.stats?.dex||10)-10)/2);
+  const wisMod = Math.floor(((char.stats?.wis||10)-10)/2);
+  const chaMod = Math.floor(((char.stats?.cha||10)-10)/2);
+  // Melee attack bonus = higher of STR/DEX + prof; spell attack = highest mental + prof
+  const meleeAtk = Math.max(strMod, dexMod) + pb;
+  const spellAtk = Math.max(wisMod, chaMod) + pb;
+  const spellDC = 8 + spellAtk;
   const conditions = (char.conditions||[]).join(', ') || 'none';
   const hitDice = char.hit_dice_total ? `${char.hit_dice_total-(char.hit_dice_used||0)}/${char.hit_dice_total} HD` : '';
   const xpStr = char.xp != null ? `XP: ${char.xp}` : '';
   const ds = char.death_saves;
   const dsStr = (char.hp===0&&ds) ? ` | Death Saves: ${ds.successes}✓ ${ds.failures}✗` : '';
+  // Lay on Hands pool (paladins only)
+  const isPaladin = /paladin/i.test(char.class||'');
+  const lohMax = isPaladin ? (char.level||1)*5 : 0;
+  const lohRemain = lohMax - (char.lay_on_hands_used||0);
+  const lohStr = lohMax ? ` | LoH: ${lohRemain}/${lohMax}HP` : '';
+  // Active concentration spell effects
+  const concSpell = (char.conditions||[]).find(c=>/^concentrating on/i.test(c));
+  const protEvil = concSpell && /protection from evil/i.test(concSpell);
+  const protEvilNote = protEvil ? '\n⚡ Protection from Evil & Good ACTIVE: undead/aberrations/fiends/fey/elementals/celestials attack with DISADVANTAGE (2d20kl1). Character attacks them with ADVANTAGE (2d20kh1).' : '';
   const recentEvents = (state.history_log||[]).slice(-8).map(e=>`• ${e.event}`).join('\n');
   const storyNotes = world.story_notes ? `\nSTORY NOTES (persisted facts — treat as canon):\n${world.story_notes}` : '';
 
@@ -1758,14 +1905,27 @@ MECHANICS RULES:
 - Use add_quest/complete_quest_step to track objectives. Use update_location when scene changes.
 - When HP reaches 0: add_condition("Unconscious"), then death_save for each roll. 3 successes = stable, 3 failures = dead.
 - Call award_xp after combat, quest completions, milestones. Call end_session when player says "end session."
+- Call update_ac whenever AC changes (equip/remove armor or shield, fighting style active). Use the tool — do NOT rely on story_notes.
+- Lay on Hands is NOT a spell slot. Use the lay_on_hands tool, not use_spell_slot.
+- LEVEL UP: If award_xp returns leveled:true or level_up_instructions is set, you MUST stop the narrative and follow those instructions exactly — announce the level-up dramatically, list new features, ask the player to roll their HP die, call add_trait for each new feature, call update_spells for each new spell chosen, then continue the story.
+- Call update_spells (once per spell) when the player learns or swaps any spell. Call add_trait for each new class feature, racial ability, or permanent upgrade gained.
+
+⚔️ COMBAT RULES — READ CAREFULLY:
+- ADVANTAGE = 2d20kh1+X (keep highest). DISADVANTAGE = 2d20kl1+X (keep lowest). THESE ARE DIFFERENT. Never use kh1 for disadvantage.
+- When "Concentrating on Protection from Evil and Good" is in Conditions: aberrations, celestials, elementals, fey, fiends, and undead ALL have DISADVANTAGE on attack rolls against the character (2d20kl1). Apply this automatically every time those creature types attack.
+- Divine Smite: OPTIONAL — declare AFTER a hit is confirmed. Roll attack first. If it hits, narrate the opening and ask if the player smites. Only call use_spell_slot AFTER the player confirms. Never pre-spend the slot.
+- The character always attacks with ADVANTAGE against undead/aberrations when Protection from Evil is active.
+- NEVER roll dice to determine how many enemies are in a room — you decide that as DM.
+- NEVER call skill_check for Religion when a spell is being cast — casting a prepared spell is automatic, no check required.
 
 ═══════════════════════
 CAMPAIGN: ${world.name||'Unknown World'}
 Location: ${world.current_location} | Time: ${world.time}
 
-CHARACTER: ${char.name} | ${char.class} L${char.level} | HP: ${char.hp}/${hpMax}${dsStr} | AC: ${char.ac||'—'} | Prof +${pb}${xpStr?' | '+xpStr:''}
-Spells: ${slots||'none'} | CD: ${cd.max-cd.used}/${cd.max} | Spell DC: ${spellDC}${hitDice?' | '+hitDice:''}
-Conditions: ${conditions}
+CHARACTER: ${char.name} | ${char.class} L${char.level} | HP: ${char.hp}/${hpMax}${dsStr} | AC: ${char.ac||'(use update_ac)'} | Prof +${pb}${xpStr?' | '+xpStr:''}
+Attack bonus: +${meleeAtk} melee | Spell attack: +${spellAtk} | Spell DC: ${spellDC}${lohStr}
+Spells: ${slots||'none'} | CD: ${cd.max-cd.used}/${cd.max}${hitDice?' | '+hitDice:''}
+Conditions: ${conditions}${protEvilNote}
 Gear: ${keyItems||'standard equipment'}${char.description ? `\nCHARACTER DESCRIPTION: ${char.description}` : ''}
 
 ACTIVE QUESTS: ${questSummary||'None'}
@@ -2380,6 +2540,11 @@ async function streamAgenticLoop(messages, systemPrompt, res, opts = {}) {
     if (textTurn.trim() && !hadDiceRoll) {
       console.log('  ⚡ Narration + tools in one pass — skipping narration loop');
       consecutiveToolLoops = 0;
+      // Fast-exit skips the bottom-of-loop state_update send — do it here
+      if (stateUpdated) {
+        const ns = loadState();
+        if (ns) res.write(`data: ${JSON.stringify({ type: 'state_update', state: ns })}\n\n`);
+      }
       break;
     }
 

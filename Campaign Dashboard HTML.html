@@ -271,11 +271,17 @@ body {
 .spell-filter-btn:hover { color: #888; border-color: #333; }
 .spell-filter-btn.active { color: #ffd700; border-color: rgba(255,215,0,0.4); background: rgba(255,215,0,0.04); }
 .spell-comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 8px; margin-bottom: 28px; }
-.spell-comp-card { background: #0e0e14; border: 1px solid #1a1a22; padding: 11px 13px; position: relative; }
+.spell-comp-card { background: #0e0e14; border: 1px solid #1a1a22; padding: 11px 13px; position: relative; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+.spell-comp-card:hover { background: #13131c; }
 .spell-comp-card.sc-cantrip  { border-left: 2px solid #2a4a7a; }
 .spell-comp-card.sc-domain   { border-left: 2px solid #1a5a38; }
 .spell-comp-card.sc-prepared { border-left: 2px solid #4a2a7a; }
 .spell-comp-card.sc-available{ border-left: 2px solid #222; opacity: 0.6; }
+.spell-comp-card.sc-available:hover { opacity: 0.85; border-left-color: #4a2a7a; }
+.sc-toggle-hint { position: absolute; top: 8px; right: 10px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; opacity: 0; transition: opacity 0.15s; pointer-events: none; }
+.spell-comp-card:hover .sc-toggle-hint { opacity: 1; }
+.sc-toggle-hint.add    { color: #60d080; }
+.sc-toggle-hint.remove { color: #f87171; }
 .sc-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px; }
 .sc-name   { color: #d8d8e8; font-size: 13px; font-weight: bold; }
 .sc-school { color: #888890; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
@@ -811,6 +817,7 @@ async function _loadGameStateInner(res) {
       updateCD();
       buildQuickRollBar(party);
       syncSpellStatuses(party.spells, party.class);
+      renderSpells(); // pre-populate spell compendium so tab isn't blank on first open
     }
 
     console.log(`✓ Game state loaded — ${isNew ? 'NEW CAMPAIGN (character creation)' : data.campaign_id}`);
@@ -1408,6 +1415,47 @@ let _spellFilter = 'all';
 let _spellsRendered = false;
 let _spellSearchQuery = '';
 
+async function toggleSpellPrepared(spell) {
+  if (!campaignState || !campaignState.party[0]) return;
+  const char = campaignState.party[0];
+  if (!char.spells) char.spells = {};
+
+  const levelKey = spell.level === 0 ? 'cantrips' : `level_${spell.level}`;
+  if (!char.spells[levelKey]) char.spells[levelKey] = [];
+
+  const existing = char.spells[levelKey].findIndex(s => s.toLowerCase() === spell.name.toLowerCase());
+  if (existing === -1) {
+    char.spells[levelKey].push(spell.name);
+    spell.status = spell.level === 0 ? 'cantrip' : 'prepared';
+  } else {
+    char.spells[levelKey].splice(existing, 1);
+    spell.status = 'available';
+  }
+
+  // Optimistic re-render
+  syncSpellStatuses(char.spells, char.class);
+  renderSpells();
+  renderCharacterTab();
+
+  try {
+    const res = await fetch('http://localhost:3140/api/state', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(campaignState)
+    });
+    const result = await res.json();
+    if (result.success) {
+      campaignState = result.state;
+    } else {
+      // Revert
+      if (existing === -1) char.spells[levelKey].pop(); else char.spells[levelKey].splice(existing, 0, spell.name);
+      syncSpellStatuses(char.spells, char.class); renderSpells(); renderCharacterTab();
+      console.error('Spell toggle failed:', result.error);
+    }
+  } catch (err) {
+    console.error('Spell toggle network error:', err);
+  }
+}
+
 function filterSpellSearch(q) {
   _spellSearchQuery = q.toLowerCase().trim();
   renderSpells();
@@ -1457,8 +1505,12 @@ function renderSpells() {
     spells.forEach(spell => {
       const card = document.createElement('div');
       card.className = `spell-comp-card sc-${spell.status}`;
-      const lvlLabel = spell.level === 0 ? 'Cantrip' : `${['','1st','2nd','3rd'][spell.level]} Level`;
+      const lvlLabel = spell.level === 0 ? 'Cantrip' : `${['','1st','2nd','3rd','4th','5th','6th','7th','8th','9th'][spell.level]||spell.level+'th'} Level`;
+      const isKnown = spell.status === 'prepared' || spell.status === 'cantrip';
+      const hintClass = isKnown ? 'remove' : 'add';
+      const hintText  = isKnown ? '− Remove' : '+ Learn';
       card.innerHTML = `
+        <span class="sc-toggle-hint ${hintClass}">${hintText}</span>
         <div class="sc-header"><span class="sc-name">${spell.name}</span><span class="sc-school">${spell.school}</span></div>
         <span class="sc-badge ${group.badgeClass}">${lvlLabel}</span>
         <div class="sc-meta">${spell.time} &nbsp;·&nbsp; ${spell.range} &nbsp;·&nbsp; ${spell.duration} &nbsp;·&nbsp; ${spell.comp}</div>
@@ -1467,9 +1519,10 @@ function renderSpells() {
         const btn = document.createElement('button');
         btn.className = 'sc-roll-btn';
         btn.textContent = '⚄ Roll';
-        btn.onclick = spell.rollFn;
+        btn.onclick = (e) => { e.stopPropagation(); spell.rollFn(); };
         card.appendChild(btn);
       }
+      card.addEventListener('click', () => toggleSpellPrepared(spell));
       grid.appendChild(card);
     });
 
@@ -2591,6 +2644,9 @@ function applyStateUpdate(state) {
   updateSpellSlots();
   updateCD();
   buildQuickRollBar(char);
+  // Keep spell statuses in sync so the Spells tab reflects learned/prepared spells
+  syncSpellStatuses(char.spells, char.class);
+  if (_spellsRendered) renderSpells(); // only re-render if tab has been opened at least once
   console.log(`[State Update] ${char.name} HP:${char.hp}/${W.charHpMax}`);
 }
 
@@ -2894,6 +2950,8 @@ window.switchTab = function(id) {
     if (activeId) _tabScrollPos[activeId] = activePanel.scrollTop;
   }
   _origSwitchTab(id);
+  // Lazy-render the Spells tab the first time it's opened, or re-render if staleness flag set
+  if (id === 'spells') renderSpells();
   // Restore scroll for the newly activated tab
   requestAnimationFrame(() => {
     const newPanel = document.querySelector(`#tab-${id} .scroll-panel`);

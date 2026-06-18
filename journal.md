@@ -277,3 +277,10 @@ After a harrowing encounter with the Kruthiks in the cellar, Kel secured the sup
 *The edge of the Blackwood, near the collapsed entrance to the cultist's lair.*
 
 You escaped the collapsing cultist lair beneath the old mill, but not without a cost. After a brutal confrontation with the cultist leader, you extracted the location of your sister, Syl: the Silent Keep. You emerged into the Blackwood with Elara, carrying her to safety as the ground gave way. Though you are wounded and the forest feels increasingly hostile and watchful, you have secured the vital information you sought. You now stand at a crossroads: seek out Elara's supplies at the mill, or press forward toward the nightmarish Silent Keep.
+
+---
+
+## Morning, shortly after the collapse. | 2026-06-18
+*The path leading to the Silent Keep, deeper in the Blackwood.*
+
+You and Elara successfully bypassed the cultist ritual in the Blackwood, using the dense briars for cover while the cultists were distracted by their dark summoning. You reached the path toward the Silent Keep, now deeper within the forest where the atmosphere is even more oppressive and twisted. Elara has signaled that the Keep is only a few miles away, and you have paused to consider your approach before entering their den.

@@ -2,14 +2,14 @@
   "campaign_id": "kel-stormblessed-campaign",
   "world": {
     "name": "Classic High Fantasy",
-    "lore_summary": "The Blackwood is a dense, ancient forest known for its oppressive atmosphere and the feeling of being constantly watched. It is said to harbor many dark secrets and creatures of the night. The entrance to the tunnels you just escaped from is now a ruined mound of earth and stone, effectively sealed off forever.",
-    "current_location": "The edge of the Blackwood, near the collapsed entrance to the cultist's lair.",
+    "lore_summary": "You have successfully bypassed the cultist ritual. The air is still thick with malice, but the immediate threat of detection has passed. The Silent Keep looms somewhere ahead, hidden by the ancient trees.",
+    "current_location": "The path leading to the Silent Keep, deeper in the Blackwood.",
     "time": "Morning, shortly after the collapse.",
     "seal_integrity": 100,
     "seal_status": "N/A",
     "map_id": null,
     "story_notes": "CHARACTER BACKSTORY — Kel Stormblessed: Kel Stormblessed is a man in his early thirties of average height, possessing the fair skin and sharp, discerning grey eyes of his elven heritage. A jagged, silvered scar slices across his neck—a brutal souvenir from the day his village was razed and his younger sister, Syl, was stolen away. He carries himself with the quiet, rigid discipline of a soldier, his chain mail always polished and his gaze constantly scanning the horizon for any sign of disorder. Devoted to Tyr, the God of Justice, Kel operates with an uncompromising moral compass, viewing his paladinhood as a sacred duty to protect the vulnerable from the chaotic cruelty that claimed his family. Though he travels with the stoic resolve of a veteran, his heart is anchored by the persistent, unvoiced hope that he will one day track down the cultists who took Syl and finally secure the retribution she was denied.\n• Character Sheet Update:\n- Divine Sense: Detect celestial, fiend, or undead within 60ft.\n- Lay on Hands: Pool of 5 HP; can spend 5 HP to cure disease/neutralize poison.\n• Kel Stormblessed: Level 2 Paladin. HP: 15/15. AC: 11 (Defense Fighting Style). Prepared Spells: Cure Wounds, Bless. Features: Divine Smite, Divine Sense, Lay on Hands.\n• Kel Stormblessed: Level 2 Paladin. HP: 15/15. AC: 12 (Defense Fighting Style). Spells Prepared: Bless, Cure Wounds. Divine Smite unlocked.\n• Kel's AC calculation: Chain Mail (16) + Defense Fighting Style (1) + Shield (2) = 19. Corrected from previous session notes.",
-    "session_recap": "You escaped the collapsing cultist lair beneath the old mill, but not without a cost. After a brutal confrontation with the cultist leader, you extracted the location of your sister, Syl: the Silent Keep. You emerged into the Blackwood with Elara, carrying her to safety as the ground gave way. Though you are wounded and the forest feels increasingly hostile and watchful, you have secured the vital information you sought. You now stand at a crossroads: seek out Elara's supplies at the mill, or press forward toward the nightmarish Silent Keep."
+    "session_recap": "You and Elara successfully bypassed the cultist ritual in the Blackwood, using the dense briars for cover while the cultists were distracted by their dark summoning. You reached the path toward the Silent Keep, now deeper within the forest where the atmosphere is even more oppressive and twisted. Elara has signaled that the Keep is only a few miles away, and you have paused to consider your approach before entering their den."
   },
   "party": [
     {
@@ -297,6 +297,18 @@
     {
       "timestamp": "2026-06-18T23:24:13.554Z",
       "event": "Short rest — Channel Divinity restored."
+    },
+    {
+      "timestamp": "2026-06-18T23:26:40.036Z",
+      "event": "Stealth check DC14: rolled 15 — SUCCESS."
+    },
+    {
+      "timestamp": "2026-06-18T23:27:50.486Z",
+      "event": "Stealth check DC15: rolled 18 — SUCCESS."
+    },
+    {
+      "timestamp": "2026-06-18T23:28:59.168Z",
+      "event": "Moved to The path leading to the Silent Keep, deeper in the Blackwood.."
     }
   ]
 }
