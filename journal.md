@@ -252,3 +252,28 @@ Kel Stormblessed, the young elf wizard, entered the 'Laughing Lizard' inn, seeki
 *Gorin's Inn, back study*
 
 After a harrowing encounter with the Kruthiks in the cellar, Kel secured the support of the innkeeper, Gorin, who promised to seal the breach. Kel spent a restorative night in the inn's study, waking up to the vibrant, bustling atmosphere of the town's Harvest Festival. With his health recovered and a plan to seek out Sister Elara at the shrine of Lathander to address his lingering wound and potential recruitment, Kel stands at a crossroads between the festive revelry and his arduous journey ahead.
+
+
+════════════════════════════════════════════════════════════
+  END OF CAMPAIGN — 2026-06-13
+════════════════════════════════════════════════════════════
+
+
+
+════════════════════════════════════════════════════════════
+  END OF CAMPAIGN — 2026-06-18
+════════════════════════════════════════════════════════════
+
+
+
+════════════════════════════════════════════════════════════
+  END OF CAMPAIGN — 2026-06-18
+════════════════════════════════════════════════════════════
+
+
+---
+
+## Morning, shortly after the collapse. | 2026-06-18
+*The edge of the Blackwood, near the collapsed entrance to the cultist's lair.*
+
+You escaped the collapsing cultist lair beneath the old mill, but not without a cost. After a brutal confrontation with the cultist leader, you extracted the location of your sister, Syl: the Silent Keep. You emerged into the Blackwood with Elara, carrying her to safety as the ground gave way. Though you are wounded and the forest feels increasingly hostile and watchful, you have secured the vital information you sought. You now stand at a crossroads: seek out Elara's supplies at the mill, or press forward toward the nightmarish Silent Keep.

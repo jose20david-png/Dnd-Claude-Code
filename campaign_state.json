@@ -2,13 +2,14 @@
   "campaign_id": "kel-stormblessed-campaign",
   "world": {
     "name": "Classic High Fantasy",
-    "lore_summary": "The Broken Anvil is the local tavern and inn, a sanctuary of warmth and ale against the biting cold of the frontier. It smells of stale beer, roasting meat, and wet wool.",
-    "current_location": "The Broken Anvil, Oakhaven",
-    "time": "Morning",
+    "lore_summary": "The Blackwood is a dense, ancient forest known for its oppressive atmosphere and the feeling of being constantly watched. It is said to harbor many dark secrets and creatures of the night. The entrance to the tunnels you just escaped from is now a ruined mound of earth and stone, effectively sealed off forever.",
+    "current_location": "The edge of the Blackwood, near the collapsed entrance to the cultist's lair.",
+    "time": "Morning, shortly after the collapse.",
     "seal_integrity": 100,
     "seal_status": "N/A",
     "map_id": null,
-    "story_notes": "CHARACTER BACKSTORY — Kel Stormblessed: Kel Stormblessed is a man in his early thirties of average height, possessing the fair skin and sharp, discerning grey eyes of his elven heritage. A jagged, silvered scar slices across his neck—a brutal souvenir from the day his village was razed and his younger sister, Syl, was stolen away. He carries himself with the quiet, rigid discipline of a soldier, his chain mail always polished and his gaze constantly scanning the horizon for any sign of disorder. Devoted to Tyr, the God of Justice, Kel operates with an uncompromising moral compass, viewing his paladinhood as a sacred duty to protect the vulnerable from the chaotic cruelty that claimed his family. Though he travels with the stoic resolve of a veteran, his heart is anchored by the persistent, unvoiced hope that he will one day track down the cultists who took Syl and finally secure the retribution she was denied.\n• Character Sheet Update:\n- Divine Sense: Detect celestial, fiend, or undead within 60ft.\n- Lay on Hands: Pool of 5 HP; can spend 5 HP to cure disease/neutralize poison.\n• Kel Stormblessed: Level 2 Paladin. HP: 15/15. AC: 11 (Defense Fighting Style). Prepared Spells: Cure Wounds, Bless. Features: Divine Smite, Divine Sense, Lay on Hands.\n• Kel Stormblessed: Level 2 Paladin. HP: 15/15. AC: 12 (Defense Fighting Style). Spells Prepared: Bless, Cure Wounds. Divine Smite unlocked.\n• Kel's AC calculation: Chain Mail (16) + Defense Fighting Style (1) + Shield (2) = 19. Corrected from previous session notes."
+    "story_notes": "CHARACTER BACKSTORY — Kel Stormblessed: Kel Stormblessed is a man in his early thirties of average height, possessing the fair skin and sharp, discerning grey eyes of his elven heritage. A jagged, silvered scar slices across his neck—a brutal souvenir from the day his village was razed and his younger sister, Syl, was stolen away. He carries himself with the quiet, rigid discipline of a soldier, his chain mail always polished and his gaze constantly scanning the horizon for any sign of disorder. Devoted to Tyr, the God of Justice, Kel operates with an uncompromising moral compass, viewing his paladinhood as a sacred duty to protect the vulnerable from the chaotic cruelty that claimed his family. Though he travels with the stoic resolve of a veteran, his heart is anchored by the persistent, unvoiced hope that he will one day track down the cultists who took Syl and finally secure the retribution she was denied.\n• Character Sheet Update:\n- Divine Sense: Detect celestial, fiend, or undead within 60ft.\n- Lay on Hands: Pool of 5 HP; can spend 5 HP to cure disease/neutralize poison.\n• Kel Stormblessed: Level 2 Paladin. HP: 15/15. AC: 11 (Defense Fighting Style). Prepared Spells: Cure Wounds, Bless. Features: Divine Smite, Divine Sense, Lay on Hands.\n• Kel Stormblessed: Level 2 Paladin. HP: 15/15. AC: 12 (Defense Fighting Style). Spells Prepared: Bless, Cure Wounds. Divine Smite unlocked.\n• Kel's AC calculation: Chain Mail (16) + Defense Fighting Style (1) + Shield (2) = 19. Corrected from previous session notes.",
+    "session_recap": "You escaped the collapsing cultist lair beneath the old mill, but not without a cost. After a brutal confrontation with the cultist leader, you extracted the location of your sister, Syl: the Silent Keep. You emerged into the Blackwood with Elara, carrying her to safety as the ground gave way. Though you are wounded and the forest feels increasingly hostile and watchful, you have secured the vital information you sought. You now stand at a crossroads: seek out Elara's supplies at the mill, or press forward toward the nightmarish Silent Keep."
   },
   "party": [
     {
@@ -17,11 +18,11 @@
       "race": "Half-elf",
       "class": "Paladin",
       "level": 1,
-      "hp": 11,
+      "hp": 9,
       "hp_max": 11,
       "hit_dice_total": 1,
       "hit_dice_used": 0,
-      "xp": 0,
+      "xp": 250,
       "death_saves": {
         "successes": 0,
         "failures": 0,
@@ -266,6 +267,22 @@
     {
       "timestamp": "2026-06-18T22:11:19.396Z",
       "event": "Combat started with Cultist Leader, Shadow A, Shadow B"
+    },
+    {
+      "timestamp": "2026-06-18T22:25:27.985Z",
+      "event": "Used Lay on Hands to heal 5 HP (4+5=9)"
+    },
+    {
+      "timestamp": "2026-06-18T22:25:27.986Z",
+      "event": "Athletics check DC15: rolled 17 — SUCCESS."
+    },
+    {
+      "timestamp": "2026-06-18T22:27:03.060Z",
+      "event": "Moved to The edge of the Blackwood, near the collapsed entrance to the cultist's lair. — Morning, shortly after the collapse.."
+    },
+    {
+      "timestamp": "2026-06-18T22:28:50.744Z",
+      "event": "Awarded 250 XP — Escaping the collapsing cultist lair and learning the location of the Silent Keep.. Total: 250 XP."
     }
   ]
 }

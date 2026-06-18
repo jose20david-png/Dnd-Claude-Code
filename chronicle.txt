@@ -1,140 +1,462 @@
+# Chronicle — Kel Stormblessed (Paladin)
+Started: 6/18/2026, 3:05:30 PM
 
 ---
-[10:57 AM] Hello
-The young barmaid finishes her sentence with a quick nod, "-spiced with wild sage, and a crust of rye bread to drag through the bowl. I'll fetch you a piping hot trencher, traveler." She scurries off toward the kitchen, her apron-strings fluttering behind her like a pair of pale moths. 
+[03:05 PM] Hi
+The morning sun struggles to pierce the heavy, grey mist hanging over the frontier town of Oakhaven. The air here tastes of damp pine and woodsmoke, a bitter, biting cold that clings to your cloak. 
 
-Gorin, who had been leaning heavily over the scarred oak bar with his eyes half-closed, suddenly blinks. The heavy, sweet scent of roasting meat and spill-stale ale hangs thick between you. For a moment, you might have thought the old dwarf was asleep on his feet, but his bushy eyebrows knit together as your w
-
----
-[11:01 AM] Yeah, the thing with the horns... its somewhat strange isnt it? All my family has them but me... I've been treated like 
-[used skill_check]Gorin’s heavy, calloused hand pauses beneath the counter. For a long, silent moment, the only sound between you is the crackle of the hearth fire and the distant, rhythmic thud of a woodcutter's axe outside. The old dwarf studies your face, his gaze lingering on the smooth brow where thick, curling horns should be. 
-
-When you mention the "punishment" and the sting of being cast out, something shifts in his weathered features. The hard, calculating edge in his eyes softens, replaced by the quiet, solemn understanding of an old soldier who has seen his own share of exile. Your 
+You stand at the edge of the town square, a cluster of timber-framed buildings huddled together as if seeking warmth from one another. A few locals pass by, their heads bowed against the chill, eyes averted from the stranger in polished chain mail. The rhythmic *clack-thud* of your boots on the muddy cobblestones is the only sound you make, save for the occasional, distant lowing of cattle from th
 
 ---
-[11:14 AM] Kel scratches his head when he hears "hornless" the he says: We have a bargain Gorin. I'll do it
-Gorin’s thick beard twitches with what might be a grin, though on his weathered face, it looks more like a warning. He slides the heavy iron key across the grease-stained wood of the bar. It is cold to the touch, pitted with age and smelling faintly of damp earth and old iron. 
+[03:22 PM] I approach the door of the broken anvil, I fear no one as Tyr is watching over me.
+You step onto the threshold of *The Broken Anvil*, your hand momentarily brushing the holy symbol of Tyr resting against your chest. The wood of the door is rough, scarred by years of neglect and the harsh northern weather. As you push, the hinges groan in protest, a sharp, dissonant sound that cuts through the morning quiet.
 
-"Good lad," the dwarf rumbles, leaning back and gesturing toward a narrow, low-ceilinged hallway behind the bar. "The cellar door is at the end of the passage. Mind your step—the stairs are steep, slick with condensation, and the air down there is heavy enough to choke a horse. If you hear a clicking sound... don't wai
-
----
-[11:16 AM] What spells do I have at my disposal?
-In the sudden rush of adrenaline, your mind scrambles, but the panic of the moment drowns out any scholarly lore you might have heard about these subterranean pests. You don't know what their weaknesses are, only that those clicking mandibles look sharp enough to take off a finger.
-
-Fortunately, your magic doesn't require book-learning—it flows directly from the draconic blood in your veins. 
-
-Here are the spells you have ready to unleash:
-
-### **Cantrips (At-Will — You can cast these as many times as you want):**
-*   **Minor Illusion:** You can create a sound (like a terrifying roar) or an im
+The interior is a stark contrast to the biting cold outside. The air is thick with the scent of roasted root vegetables, stale ale, and the sharp, metallic tang of an extinguished hearth. It is dim inside, lit only by a few guttering tallow candles that cast long, dancin
 
 ---
-[11:17 AM] I will put the to sleep. I cast sleep and roll 5d8 → **30** [(8+8+3+6+5)]
-[used_spell_slot][skill_check]You reach into your pouch, pulling out a pinch of fine, glittering sand. As the two chitinous horrors lung forward, their mandibles clicking in anticipation of a feast, you whisper a soft, draconic lullaby. The words sound like the rustle of dry leaves in an ancient forest. 
+[03:23 PM] 1 pint of ale and some mutton please. Kel doesn't offer much explanation as to what he's doing here.
+The barkeep grunts, a sound that might pass for an acknowledgment, and turns to the iron spit slowly rotating over the hearth. He carves a thick, steaming slab of mutton with a notched blade, sliding it onto a wooden trencher along with a hunk of dark, crusty bread. He then fills a tankard from a barrel behind the bar; the ale is dark, murky, and topped with a foam that smells faintly of yeast and damp earth.
 
-With a swift flick of your wrist, you blow the sand into the damp cellar air. It catches an unseen updraft, glowing with a soft, pale blue light as it drifts over the scuttling kruthik hatchlings. 
-
-The glittering dust settles over their segmented heads. Instantly, their frantic, clicking man
+He thumps the meal down onto the scarred counter before you, his gaze still lingering on that silvered scar on your neck. He doesn't press for conversation, though his eyes remain narrow
 
 ---
-[11:18 AM] I will check if there are more of this creatures around
-[skill_check]Standing at the base of the stairs, you hold your breath, straining your ears against the heavy, damp silence of the cellar. The only sound is the soft, rhythmic *hiss-shhh* of the two sleeping hatchlings and the slow drip of spilled mead pooling on the stone. 
+[03:25 PM] I offer a prayer to tyr before eating, then I dig in. I keep my gaze forward. Does someone approach?
+You bow your head, your fingers tracing the familiar contours of the holy symbol beneath your tunic. You murmur the prayer of the Justicar, a quiet vow that your blade remains an instrument of order and your hand a shield for the weak. The words ground you, cutting through the low, uneasy hum of the room.
 
-You peer into the yawning, jagged breach in the foundation. The dark tunnel beyond seems to swallow the dim light. You look for any glint of chitin or the twitch of an antenna, but the shadows play tricks on your eyes in the gloom. The smell of wet earth and musk is thick, but everything remains still. 
+As you begin to eat, the mutton is tough but savory, the ale bitter and cold—a stark, honest meal for a morning in the north. You focus on the task, keeping your gaze fixed on the grain of the wooden bar.
 
-You don't hear or 
-
----
-[11:19 AM] I need a way to seal the tunnel, whats around?
-[skill_check] You quickly scan the damp, shadow-drenched cellar, your eyes darting from the sleeping hatchlings to the dark corners of the room. The panic of the situation and the heavy, musky stench of the beasts makes it hard to focus. 
-
-Your eyes linger on the smashed mead casks, but they are splintered into useless, wet shards of oak—hardly enough to block a stiff breeze, let alone burrowing monsters. There are heavier, intact barrels stacked against the far wall, but they are incredibly heavy, filled to the brim with liquid, and you'd have to heave them across the slippery, mud-slick floo
+For a time, the tavern remains as it was, a place of hushed murmurs and clinking pewte
 
 ---
-[11:21 AM] Lets try to despose of the sleeping things. Can I execute them while sleeping?
-[roll_dice] You step quietly over the damp, mud-slick floor, drawing one of your daggers. The polished steel catches the dim light of the cellar as you look down at the two sleeping horrors. Under the magical influence of your spell, they are completely incapacitated, their soft underbellies and the joints in their chitinous armor exposed as they breathe slowly.
+[03:27 PM] Just passing by, looking for someone.
+The woman lets out a sharp, jagged breath that sounds almost like a laugh—or a sob. She finally turns her face toward you. Beneath the shadow of her hood, her eyes are rimmed with red, and a deep, frantic exhaustion is etched into every line of her features. She leans in closer, her voice dropping to a near-whisper that barely carries over the crackle of the hearth.
 
-You kneel beside the first hatchling (A). Holding your breath, you aim for the soft, pale flesh just beneath its head joint—where the armored plates meet—and drive the blade home with a swift, downward thrust. 
+"Everyone here is looking for someone," she says, her gaze darting toward the two trappers in the corner, who have abruptly gone quiet. "But they don't look for them in the woods. They don't look for them in the dark."
 
-The dagger sinks deep 
-
----
-[11:39 AM] what's the last thing that happened?
-The last thing that happened was that you stood over the two sleeping Kruthik hatchlings in the cellar. You had just successfully executed the first one by driving your dagger into its neck—it let out a bubbling hiss, leaked foul-smelling green ichor, and went limp. 
-
-The second hatchling (B) remained fast asleep right next to you, completely oblivious, though the sharp, stinging scent of its sibling's blood now filled the air. You had confirmed your intention to dispatch the second one in the same manner.
-
-You are standing in the damp cellar, dagger in hand, with the second creature still vul
+She glance
 
 ---
-[11:40 AM] I dispatch the other hatchling, same as the first one
-Your nerves, usually steady, betray you at the final moment. As you raise your dagger to strike the second hatchling, the slick, mud-covered floor beneath your boot shifts unexpectedly. Your heel slips into the pool of acidic green ichor leaking from the first creature, and your balance vanishes.
+[03:28 PM] I  take a look at Elara, sharp eyes at her. How does she look like?
+You fix your gaze upon her, your grey eyes narrowing to assess the truth behind her frantic demeanor. You take a measured breath, letting the silence stretch just long enough to weigh her intent.
 
-Instead of a clean, lethal plunge into the creature's neck, your blade skitters off the thick, hardened chitin of its shoulder with a harsh, grating *screech* of metal on stone. The impact isn't deep enough to kill, but it is violent enough to jar the creature awake.
+She is a woman of perhaps twenty-five, though the shadows under her eyes add years to her face. Her hair is matted and unkempt, shoved haphazardly beneath her hood, and her fingers—calloused, as you noted—are stained with the dark, pervasive grease of a laborer. Her cloak is thick, heavy wool, but it is torn at the hem and smells faintly of pine resin and old, damp earth. 
 
-The hatchling’s eyes—multi-facet
-
----
-[11:41 AM] I plunge torwards the creature with my to daggers, try to fight it off
-[skill_check]Your strike is desperate, fueled by the sting of the acidic air and the frantic need to end the threat before it can call for others. You lunge forward, both daggers held low, aiming to pin the creature against the cellar wall.
-
-But the hatchling is faster than your blade. As you commit your weight to the strike, the creature skitters to the side with a rhythmic *click-click-click*, its segmented body folding in a way that seems anatomically impossible. Your daggers bite only into the cold, damp stone of the cellar wall, sparks flying as the steel rings against the rock.
-
-The crea
+As you study her, your per
 
 ---
-[11:42 AM] I cast thunderwave towards the creature
-[use_spell_slot] 
-*Wait—a flicker of realization hits you as you reach for the arcane energy in your blood.* You have already burned through your reserve of magic today. The *Sleep* spell drained the first of your two slots, and the second was spent in the initial scuffle. There is nothing left to draw upon. The air around your fingertips, usually humming with the potential of a storm, remains stubbornly still.
+[03:30 PM] Sit, Elara. You look like you need to talk for a moment. Take a seat (I offer her my spot). Inkeeper, an extra order of 
+You fix your gaze upon her, your grey eyes narrowing to assess the truth behind her frantic demeanor. You take a measured breath, letting the silence stretch just long enough to weigh her intent.
 
-The hatchling senses your hesitation. It let out a triumphant, chittering shriek, its mandibles wide and ready to clamp down on your throat. 
+She is a woman of perhaps twenty-five, though the shadows under her eyes add years to her face. Her hair is matted and unkempt, shoved haphazardly beneath her hood, and her fingers—calloused, as you noted—are stained with the dark, pervasive grease of a laborer. Her cloak is thick, heavy wool, but it is torn at the hem and smells faintly of pine resin and old, damp earth. 
 
-You are wounded, your magic is spent, and
-
----
-[11:43 AM] I cast minor illusion in the other corner of the room, try to dissuade the hatcling to lunge torwards the illusion
-[skill_check] You weave the arcane threads of your blood, focusing your intent on the far corner of the cellar behind the creature. You don't have the power for a grand display, so you conjure a sharp, visceral sound: the rhythmic, aggressive clicking of a much larger, more dominant kruthik. It echoes against the damp stone, sounding as though a massive predator has just emerged from the earth to challenge the hatchling.
-
-The effect is instantaneous. The hatchling, mid-lunge, pauses. Its head snaps toward the corner, its antennae twitching violently as it registers the sound of a superior. It 
+As you study her, your per
 
 ---
-[11:44 AM] I try to execute it, try to penetrate the exposed neck
-[skill_check] Your movement is silent, a desperate grace born of survival. As the kruthik hisses at the phantom clicking in the corner, you lunge. You don't aim for the armor; you aim for the vulnerability you saw moments ago. 
+[03:31 PM] continue
+Elara freezes for a heartbeat, her eyes wide with disbelief as you slide off the stool and gesture for her to take your place. She looks at the warm seat, then back at you, her trembling finally beginning to subside into a weary, fragile stillness. She sinks onto the stool, the heavy wool of her cloak rustling as she exhales a long, shuddering breath.
 
-Your lead dagger finds the soft, pale membrane where the neck meets the torso. With a grunt of exertion, you drive the blade deep, twisting it upward toward the creature's central nervous cluster. The hatchling lets out a sound that is less of a hiss and more of a wet, tearing pop. It thrashes, its claws raking uselessly against the stone floor, spraying green, acidic 
+"Thank you," she whispers, her voice barely audible over the fire.
 
----
-[11:46 AM] I stand over the two bodies, I see the opening in the cellar. Is there any barrels that can block it?
-You wipe the dark, acidic ichor from your blade onto the damp cellar floor, your hand trembling slightly from the adrenaline spike. With the immediate threat neutralized, you turn your attention to the source of the infestation. The breach is jagged, a fist-sized hole in the foundation that has been widened by the beasts to the size of a man’s torso.
-
-You scan the perimeter of the cellar once more. Your eyes land on a stack of heavy, salt-pork barrels tucked away in the shadows of the far corner. They are sturdy, oak-bound, and filled with enough weight to make them difficult to shift, but the
+The barkeep, having witnessed your gesture, grunts again. He doesn't offer a smile, but he moves with a bit more purpose now, carving another thick slice of mutton and sliding a
 
 ---
-[11:48 AM] I head upstairs and fetch Gorin, show him what I found and that it was dealt with. I tell him about the tunnel, about wh
-You climb the cellar stairs, your boots heavy and slick, and emerge back into the main room of the inn. The transition from the suffocating, acidic air of the cellar to the warm, yeasty scent of the common room is jarring. The morning sun filters through the dusty windows, illuminating the dust motes dancing in the air, a stark contrast to the darkness you just left behind.
+[03:35 PM] I take a sip of my ale and then settle the tankard on the table. I take her right hand with both of my hands, gently, an
+Elara’s hand is cold, her skin rough and calloused, but as your palms envelop hers, the frantic trembling finally ceases. She stares at your joined hands, her own eyes glassing over as the weight of your confession hits her. The tavern seems to fall away; the murmurs of the trappers and the crackle of the fire become distant, muted by the gravity of your shared bond.
 
-Gorin is wiping down the counter, his brow furrowed as he hums a low, tuneless melody. When he looks up and sees you—disheveled, bleeding from the arm, and smelling faintly of insectile rot—his song cuts off abruptly. The 
-
----
-[11:54 AM] Sure, some rest will be fine. I'll wait for you in he back
-Gorin nods, his heavy brow still knitted in concern, and gestures toward the narrow, creaking door behind the bar. "Take a seat, lad. The air in there is cooler, and there's a flagon of water on the desk. I need to make a quick call to the town mason—this can't wait until tomorrow."
-
-You push through the door, finding yourself in a cramped, windowless study that smells intensely of old parchment, pipe tobacco, and dried herbs. The room is dominated by a heavy oak desk cluttered with ledger books, a few half-finished maps, and a collection of rusted iron keys hanging on the wall. A single lante
+When you speak of Syl, her breath hitches. She looks up at you, and for the first time, she truly *sees* you—not as a wandering sellsword or a stoic stranger, but as a fellow traveler on a path paved with grief. The wall of suspi
 
 ---
-[11:56 AM] I try to stop my bleeding and catch my breath.
-You lean back into the velvet chair, closing your eyes and letting the tension bleed out of your muscles. The room is quiet, save for the faint, steady ticking of a clock somewhere behind the shelves. 
+[03:40 PM] Yes, lets leave inmeadiately. Let me just take a moment of prayer, pay the innkeeper and we can leave.
 
-You focus on your breathing, slowing the ragged rhythm until it matches the soft, rhythmic hum of the tavern outside. You unwrap the stained cloth Gorin gave you, carefully inspecting the gash on your arm. It’s a clean, ugly wound, but the bleeding has slowed to a sluggish trickle. You find a basin of water on a side table, dampen a clean rag, and press it firmly against the injury. The cold wa
+I grab Elara by 
+The tavern grows unnervingly quiet as you speak. Even the two trappers in the corner have ceased their whispering, their eyes drawn to the sight of a man in chain mail standing with his head bowed, the weight of his conviction filling the room like a physical presence. 
 
----
-[11:58 AM] Aye, I thought the vellum was just that but I didn't look into it. Do you know a cleric? maybe a life cleric? Those wome
-Gorin lets out a dry, rasping chuckle that turns into a cough, his expression softening with a mix of amusement and pity. He walks over to a small cabinet, pulls out a jar of thick, pungent salve, and slides it toward you.
-
-"A life cleric, eh? You’ve got a taste for the finer things, Kel. We don't have a temple here—just a small shrine to Lathander tucked behind the village hall. There’s a woman there, Sister Elara. She’s kind enough, but she’s spent her life tending to farmers with blistered hands and children with the croup. She’s not exactly the adventuring type, and she’s got no love for t
+Elara bows her head alongside you, her hand remaining in yours. As your voice resonates through the cramped, smoky space, the flickering light of the hearth seems to sharpen, casting long, clean shadows against the walls. For a moment, the grime and the smell of stale ale are forgotten; there is only the solemnity of your oath
 
 ---
-[12:00 PM] Thanks for the map gorin. And the salve. I'll sleep here today if you dont mind and make a long rest. Tomorrow I'll head
-Gorin nods, a slow, satisfied expression crossing his face as he sees you finally settling in. "Sleep is the best medicine for the soul, and you've earned your share of it, lad. The room is yours for the night—on the house, considering you saved my cellar from becoming a breeding ground for those nightmares."
+[03:44 PM] I walk in front of Elara, I will protect her with my life. Syl would've wanted me to... As we approach the blackwoods, I
+The air at the threshold of the Blackwood is unnaturally still, the kind of silence that rings in the ears. As you reach out to the weave of magic, you realize with a jolt that your reserves are already taxed—the intensity of your prayer and the sheer weight of your intent have left your spirit momentarily drained of its arcane fuel. You stand at the precipice of the forest, your blade drawn, your shield braced, but the protective ward you sought to weave remains just beyond your grasp for now.
 
-He leaves you to the quiet sanctuary of his study. You find a heavy wool blanket in the corner, and the velvet chair, while not a bed, offers enough comfort to let your body finally surrender to exhaustion. As you drift off, the sounds of the town outside begin to swell—the rhythmic thum
+"Kel?" Elara whispers, noticing the way your knuckles whiten against the hilt of your sword. "The w
+
+---
+[03:46 PM] Can you update my character sheet with divinse sense and lay on hands on it? Before we continue
+The forest seems to lean in closer, the canopy knitting together to choke out the sky. You stand over the scorched, oversized footprint, the air thick with the smell of wet rot and something metallic.
+
+I have updated your character records to reflect the core tenets of your order, which are now woven into your current capabilities.
+
+**CHARACTER UPDATE:**
+*   **Divine Sense:** You can use your action to open your awareness to detect powerful evil. Until the end of your next turn, you know the location of any celestial, fiend, or undead within 60 feet of you that is not behind total cover. You k
+
+---
+[03:46 PM] whats going on?
+The forest is holding its breath. 
+
+You are standing in a gully that feels less like a natural clearing and more like a throat. Ahead, the stone bridge spans a ravine that drops into absolute, impenetrable darkness. The air here has changed; it is no longer just cold, but heavy, pressing against your armor like water.
+
+When you look at the scorched footprint, you realize the ground isn't just burnt—it's *corrupted*. The soil around the edges of the print is turning to a grey, ash-like powder, and the smell of rot is intensifying, masked by that sharp, metallic scent of blood.
+
+Elara is trembli
+
+---
+[03:47 PM] I use Divine sense, offering a prayer to tyr: "Justicar, shine your light through this veil of shadow; reveal the taint 
+As your words echo against the gully’s stone walls, you close your eyes and reach inward, anchoring yourself to the unwavering principles of Tyr. You aren't merely looking; you are *demanding* that the truth reveal itself.
+
+The world tilts. 
+
+A cold, agonizing pressure blooms behind your eyes—a sensation like ice water being poured into your veins. When you open them, the world has bled of its color. The trees are no longer just wood and leaf; they are jagged silhouettes of deep, suffocating grey. And there, cutting through the gloom like a jagged wound, you see it.
+
+It isn't just one presence
+
+---
+[03:49 PM] I tell Elara what I see and tell her to stand back. This is an undead. I prepare for battle, Remember that I can cast in
+"Stay behind me, Elara! Do not let them touch you!" you bark, your voice cutting through the unnatural silence like a clarion call. You shove her firmly behind your armored frame, your shield raised high.
+
+You reach deep into your soul, calling upon the protection of the Justicar. "Lord of Justice, wrap me in your aegis!" you roar. A shimmering, golden barrier of light erupts around you, pushing back the oppressive, grey chill of the forest. The necrotic cold that radiated from the creature falters as it hits your holy ward; the creature hisses, a sound like dry leaves skittering over stone.
+
+
+
+---
+[03:51 PM] I roll 1d20+1 → **20** [19+1] for my iniciative. Then I draw my holy sword and offer a prayer to tyr as I attack the und
+Your blade, consecrated in the name of the Justicar, whistles through the cold air, but the shadow is a creature of smoke and malice. Your first swing passes harmlessly through its torso, meeting no more resistance than a passing breeze. You adjust your footing instantly, pivoting on the muddy path, and your second strike bites deep. The steel passes through the void-like substance of the creature, and where it makes contact, the shadow hisses, its form momentarily destabilizing, trailing wisps of vapor like torn silk.
+
+*roll_dice(expression="1d8+2", purpose="Damage against Shadow 1")*
+
+The cr
+
+---
+[03:53 PM] I will maintain a deffensive stance and counter attack, I pray to Tyr with hope that every strike misses: "Lord of Order
+Your strike is a masterclass in disciplined fury. As the first shadow attempts to coalesce into a shape solid enough to drain your strength, you pivot, your chain mail clinking softly against the damp air. You bring your longsword down in a precise, vertical arc, the blade singing with the resonance of your prayer to the Justicar. 
+
+The steel cleaves through the creature’s center, and this time, there is no mistaking the impact. The shadow lets out a sound that is not a scream, but a sudden, violent implosion of pressurized air. It shatters, its form unable to maintain cohesion against the rig
+
+---
+[03:54 PM] I stand at the center of both of them, watching them move and I time my strike at shadow 2. Praying to tyr as I strike: 
+*roll_dice(expression="1d8+2", purpose="Damage against Shadow 2")*
+
+Your blade moves with the precision of a guillotine. As the second shadow surges forward, its form elongating into a spear of concentrated gloom, you step into its path, your sword arm locking with the absolute certainty of an iron gate. The steel catches the creature mid-lunge, the consecrated edge shearing through its essence with a searing, golden light that smells of ozone and incense.
+
+The shadow doesn't just dissipate; it ruptures. A spray of cold, black mist erupts from the point of impact, coating your gauntlet in a li
+
+---
+[03:56 PM] I strike at this wretched creature, finalizing its fate with tyrs resolve: "Tyr, let this final blow be the absolute dec
+The air around the final shadow seems to curdle as you channel the weight of your conviction into your blade. You do not merely swing; you execute a sentence. With a guttural roar, you step forward, your boots digging into the soft, decay-ridden earth, and drive your longsword through the center of the creature’s weeping, hollow chest.
+
+The steel bites true. 
+
+The shadow freezes, the blue pinpricks of its eyes widening as the golden light of your faith surges from your blade, flooding its form. It tries to shriek, but the sound is choked off, silenced by the absolute authority of Tyr’s mandate
+
+---
+[03:59 PM] I put away my sword and shield. I look at Elara and put a hand on her shoulder and I say: "Tyr wanted this, Elara". Then
+You sheath your longsword and stow your shield, the heavy thud of the steel against your back providing a grounding, rhythmic comfort. You place a firm, reassuring hand on Elara’s shoulder. She flinches at first, but as the warmth of your palm meets the wool of her cloak, she leans into the touch, her breathing finally evening out. 
+
+"Tyr wanted this, Elara," you say, your voice a low, steady rumble of conviction. It is the truth as you know it—the Justicar does not permit such rot to fester in the light of day.
+
+You turn your attention to the masonry. The weeping eye is not merely a carving; 
+
+---
+[04:00 PM] Theres only one way to know Elara. Lets keep moving, keep close to me ok?
+
+What do I gain at level 2?
+"There's only one way to know, Elara," you say, your voice firm, anchoring her own fraying nerves. "Stay close. Whatever waits on the other side of this threshold, it will not find us unprepared."
+
+You turn your back on the bridge, your hand resting instinctively on the pommel of your sword, and begin to lead the way into the deeper, denser parts of the Blackwood. The forest here is older, the trees gnarled and twisted into shapes that defy natural growth, their branches intertwining like skeletal fingers.
+
+As you walk, you feel the shift in your own spirit. You are no longer the same man who 
+
+---
+[04:03 PM] As for hitpoints, roll the increase. I will choose Defense fighting style. 
+Which spells can I prepare?
+Your spirit hardens alongside your resolve, the exhaustion of the skirmish fading into a new, quiet strength. With those 4 additional hit points, your total stands at 15/15. You adjust the straps of your chain mail, feeling the steel sit more comfortably against your frame; by choosing the **Defense** style, you gain a +1 bonus to your Armor Class while wearing armor, bringing your AC to 11. It is a subtle, grounded improvement—a soldier’s choice, favoring the endurance required to survive the long, dark road ahead.
+
+As for your **Spellcasting**, your devotion to Tyr now allows you more flexib
+
+---
+[04:07 PM] Update my character sheet to reflect the changes. I will prepare cure wounds and bless.
+*update_story_notes(note="Kel Stormblessed: Level 2 Paladin. HP: 15/15. AC: 12 (Defense Fighting Style). Spells Prepared: Bless, Cure Wounds. Divine Smite unlocked.")*
+
+The notation of your growth is set, the ink of your journey drying on the parchment of your memory. Your armor feels heavier now, more reassuring, and the prayers for *Bless* and *Cure Wounds* sit ready on your tongue, a spiritual armament against the encroaching rot.
+
+"He did not leave on his own, Elara," you reply, your voice a low, steady anchor in the oppressive stillness of the clearing. You stand up, your chain mail shift
+
+---
+[04:07 PM] update my chartacter sheet, I will reload the page
+The record is secure; your history and your newfound strength are woven into the tapestry of this journey. The parchment of your legend is updated, and the reality of your current state—a Level 2 Paladin, armored in faith and steel—is firmly established.
+
+You stand before the wall of woven thorns, the sigil of the weeping eye staring back at you with its mute, judgmental gaze. The air around the barrier is thin and frigid, causing your breath to plume in front of you. Elara remains a step behind, her eyes wide as she stares at the unnatural construction. 
+
+"They've blocked the path," she whisp
+
+---
+[04:08 PM] I investigate the campfire, see if I can make something out of the remainings of the old campfire.
+*roll_dice(expression="1d20+2", purpose="Investigation check on the campsite")*
+
+You kneel by the cold, grey mound of ash, ignoring the way the freezing air bites at your exposed skin. You pull a small, iron-tipped dagger from your belt—not to fight, but to sift. With the methodical patience of a man who has tracked beasts across the tundra, you move the charred remnants aside. 
+
+Beneath the top layer of ash, you find something that makes your jaw tighten. It isn't just wood ash. Tucked into the center of the pit are the remains of a small, leather-bound journal, its pages mostly consumed by f
+
+---
+[04:10 PM] I draw my sword and shield, I pray to tyr to protect us, still concentrating on protection from evil and good:"Lord of J
+The air in the clearing grows heavy, thick with the metallic tang of ozone and the cloying, stagnant scent of a tomb. As you draw your longsword, the steel rings—a sharp, defiant note that cuts through the unnatural silence. You lock your shield into place, the familiar weight of it against your forearm a promise of stability.
+
+Your prayer to Tyr is not merely a plea; it is a declaration. As the words leave your lips, a faint, golden radiance hums to life along the edges of your blade, casting long, wavering shadows against the writhing thorns. You feel the strength of your oath anchoring you 
+
+---
+[04:12 PM] Stay behing me Elara. I walk descend into the tunnel
+"Stay behind me, Elara," you command, your voice low and steady, cutting through the unnatural, rhythmic whispering rising from the depths. "Do not break formation. Watch your footing, and keep your eyes on the light of my blade."
+
+You take the first step into the earth. The air in the tunnel is suffocatingly cold, thick with the scent of damp loam and the copper tang of old blood. As you descend, the transition from the dim forest light to the absolute, suffocating dark of the underworld is jarring. Your golden aura, a beacon of Tyr's justice, casts long, dancing shadows against the walls of 
+
+---
+[04:13 PM] does it look human?
+You squint into the gloom, the golden light of your blade flickering against the damp, subterranean walls. The creature is hunched, its spine unnaturally curved, and its limbs—too long, too thin—are folded in a way that suggests either extreme starvation or a complete lack of skeletal integrity.
+
+The skin is a translucent, sickly grey, stretched taut over protruding bones. As it shifts, you catch a glimpse of a profile: the jaw is slack, hanging open at an impossible angle, and the hair is a matted, colorless thatch. It wears the tattered remnants of what might have once been a traveler's tuni
+
+---
+[04:14 PM] I attempt to remain hidden and observe it further. I whisper to Elara: "how does your brother look like?"
+*roll_dice(expression="1d20+2", purpose="Stealth check to remain hidden")*
+
+You press your back against the damp, root-choked wall, pulling Elara into the deepest shadow of the ribcage-like formation. Your heart beats with steady, rhythmic force—a soldier's pulse—even as the creature’s head continues its sickening, slow rotation. The golden light of your blade, though muffled by your posture, still casts a faint, flickering halo around your boots.
+
+*skill_check(dc=12, outcome="success", roll_total=14, skill="Stealth")*
+
+The creature twitches, its milky, sightless eyes sweeping over the darknes
+
+---
+[04:16 PM] I whisper to her: its not your brother, and it shouldn't be alive either. I wait until the creature is close and suprise
+*roll_dice(expression="1d8+2", purpose="Longsword damage")*
+*roll_dice(expression="2d8", purpose="Divine Smite damage")*
+
+Your words are cold, final, and absolute—a sentence passed by the God of Justice himself. As the creature lurches closer, its milky eyes locking onto the source of your heat, you explode from the shadows. 
+
+Your timing is impeccable. The creature barely has time to let out a wet, gurgling hiss before your longsword—wreathed in the brilliant, searing luminescence of Tyr’s judgment—arcs through the gloom. The blade bites deep into the creature’s grey, necrotic shoulder, the d
+
+---
+[04:18 PM] I finisht he creature with a strike to the head
+*roll_dice(expression="1d8+2", purpose="Finishing strike damage")*
+
+Your blade moves with the cold, unerring precision of a headsman’s axe. As the creature claws at the air, trying to drag itself upright, you step forward, your boots crunching on the damp, debris-strewn floor. You do not hesitate. You do not offer mercy to that which has abandoned the natural order.
+
+The sword descends in a clean, silver arc. 
+
+*skill_check(dc=10, outcome="success", roll_total=21, skill="Attack")*
+
+The tip of your longsword pierces the creature's skull with a sickening crunch of brittle bone. The radiant light
+
+---
+[04:20 PM] I take Elara's hand and help her on her feet. I say "he's close Elara, I know it. Tyr, knows it." 
+
+Lets keep walking to
+You reach down, taking Elara’s hand in yours. Your gauntlet is cold, but your grip is firm—a pillar of stability in this wretched, suffocating place. As you pull her to her feet, you feel her trembling, yet she steadies herself against your armor, her gaze hardening with a desperate, frantic hope.
+
+"He's close, Elara," you say, your voice resonating against the damp earth, carrying the weight of your conviction. "I know it. Tyr knows it."
+
+She nods, clutching the scrap of blue cloth tightly against her chest, and steps in behind you, her presence a shadow at your back.
+
+You press forward. The 
+
+---
+[04:23 PM] How many are there?
+You count five of them. They are arranged in a loose semicircle around the pool, their elongated, skeletal frames swaying in perfect, eerie synchronization with the thrumming of the roots. Each one is hunched, their movements fluid yet unnatural, like puppets pulled by a master that only they can hear. 
+
+The man—Kaelen—is slumped barely ten feet away from the nearest of the creatures. He looks pale, his skin deathly grey in the flickering, sickly light, but the rise and fall of his chest is steady. 
+
+Elara sees him, too. She lets out a sharp, involuntary gasp, her hand flying to her mouth to s
+
+---
+[04:26 PM] These creatures are synchronized. If you strike them one by one, you will take damage from all of them on their turn. Us
+*roll_dice(expression="1d20+2", purpose="Initiative roll")*
+*start_combat(enemies=[{"hp": 15, "initiative": 12, "name": "Creature 1"}, {"hp": 15, "initiative": 10, "name": "Creature 2"}, {"hp": 15, "initiative": 8, "name": "Creature 3"}, {"hp": 15, "initiative": 7, "name": "Creature 4"}, {"hp": 15, "initiative": 5, "name": "Creature 5"}])*
+
+You move with the practiced efficiency of a soldier, your boots sliding silently across the slick stone until you wedge yourself into the narrow gap between a jagged outcropping and the edge of the pool. It is a perfect choke point. You are a barricade of s
+
+---
+[04:28 PM] Remember that I still have protection from evil and good on. Also some notes on AC, as it appears to be miscalculated:
+
+
+*update_story_notes(notes="Kel Stormblessed: Level 2 Paladin. HP: 15/15. AC: 19 (Chain Mail 16 + Defense Style 1 + Shield 2). Prepared Spells: Cure Wounds, Bless. Features: Divine Smite, Divine Sense, Lay on Hands.")*
+
+The realization settles in your mind with the clarity of a veteran soldier: your armor is sturdier than these desperate wretches could ever hope to penetrate. Your chain mail, heavy and cold, sits perfectly against your frame, and with your shield raised, you are an immovable bastion. 
+
+*Correction noted: Your current AC is 19. The creatures' claws rake against your armor, scree
+
+---
+[04:30 PM] I attack the one that seems to be the leader, using a counter attack as they fail to strike me. I use divine smite as I 
+The air in the cavern seems to thicken, heavy with the weight of your oath. You bring your longsword up in a shimmering, powerful arc, the steel singing with the promise of divine retribution. You swing with the full force of your righteous fury, the word "Justice!" ready to spill from your lips—
+
+But your boot finds a slick, hidden patch of the dark ichor dripping from the roots. 
+
+Your footing betrays you. The strike, meant to cleave the leader in two, whistles harmlessly through the stale, humid air, your blade slamming into the rocky outcropping instead with a jarring *clang* that sends sp
+
+---
+[04:30 PM] nope, reroll that. Remember that I strike with advantage
+*roll_dice(expression="1d8+3", purpose="Longsword damage")*
+*roll_dice(expression="2d8", purpose="Divine Smite radiant damage")*
+
+*use_spell_slot(level=1)*
+
+The moment of near-failure vanishes as your resolve snaps back into place. Your boot finds the stone, the leverage is corrected in a heartbeat, and your blade—freed from the rock—cleaves through the air with the authority of an executioner.
+
+"By the decree of the Justicar, your rhythm is broken! Your malice ends here, bound by the weight of eternal justice—be cast into the light and find no purchase in this world!"
+
+Your longsword bites de
+
+---
+[04:32 PM] As the holy energy dissipates, I stand at the front line facing this wretches, I infuse myself of divine prowess and det
+*roll_dice(expression="1d8+3", purpose="Longsword damage")*
+
+The dice favor the righteous. With a roar of defiance, you pivot, your blade a blur of polished steel. The critical strike lands with sickening precision, catching the nearest creature—a gaunt, grey-skinned horror—squarely across its exposed ribs. 
+
+The weight of your conviction behind the blow is absolute. Your longsword shears through the brittle, rotted bone as if it were parchment. The creature doesn't even have time to shriek; it is cleaved nearly in two, its form collapsing into a heap of twitching, necrotic matter before it hi
+
+---
+[04:34 PM] I take my longsword with both hands and I strike at them with the holy wrath of tyr. Nothing will stand in the way of th
+*roll_dice(expression="1d8+3", purpose="Longsword damage")*
+
+With a guttural roar, you abandon your shield, gripping the pommel of your longsword with both hands. You are no longer just a wall; you are the storm that breaks the cliffside. The steel whistles, a singular, terrifying note that cuts through the discordant thrumming of the cavern.
+
+Your blade catches the first of the remaining three creatures mid-lunge, the tip piercing its sternum and exiting through its spine. You don't stop there. You wrench the blade upward, tearing the creature apart in a spray of black, viscous ichor and dust
+
+---
+[04:38 PM] I put away my sword, and my shield as I say a prayer after this battle: "Lord of Justice, the storm has passed, and the 
+*roll_dice(expression="1d20+2", purpose="Medicine check on Kaelen")*
+*skill_check(skill="Medicine", dc=12, roll_total=14, outcome="success")*
+
+You sheath your steel with a practiced, rhythmic click and unbuckle your shield, the heavy weight sliding from your arm. As you kneel, the prayer leaves your lips, steady and resonant, cutting through the stagnant air of the cavern. It feels as though the very shadows retreat an inch at your words, unsettled by the invocation of Tyr’s cold, unyielding law.
+
+You place a gauntleted hand—carefully, gently—against Kaelen’s neck. His skin is clammy, unnatura
+
+---
+[04:40 PM] I stand there with my heart of my hands. I pocket the locket and then face Elara as I say: we have to go now, back to th
+*use_spell_slot(level=0)*
+*update_hp(hp=15, reason="Lay on Hands used on Kaelen")*
+
+You press your palm against Kaelen’s chest, closing your eyes and drawing upon the reserve of holy energy that flows through you—the very grace of Tyr. A soft, warm glow suffuses your gauntlet, seeping into the young man’s cold, pallid skin. You feel the necrotic drain loosening its grip, his heart rate steadying, his shallow breathing deepening into a natural rhythm. He gasps, his eyes snapping open—wide, frightened, and unfocused—as color begins to return to his cheeks.
+
+"Kel," Elara breathes, a sob of relief
+
+---
+[04:45 PM] I speak to the innkeeper, I request a room. Also, I tell Elara: "Lets rest for now, you both need it. I'm at your servic
+The innkeeper, a stout man with a heavy apron and a face mapped by years of pulling pints, looks from your blood-streaked chain mail to the pale, shivering Kaelen. He doesn't ask questions; in the frontier, some stories are best left unasked. He simply nods, tosses a heavy iron key onto the scarred wood of the bar, and gestures toward the stairs. "Top of the landing. Quietest one in the house."
+
+You turn to Elara. The firelight in the common room dances across her face, highlighting the exhaustion etched into her features. When you take her hand, her fingers are ice-cold, but she doesn't pull 
+
+---
+[04:49 PM] I pray to tyr, trying to strenghten my resolve: "Tyr, Lord of the Unyielding Scales, I am but a vessel for your truth. M
+*roll_dice(expression="1d20+2", purpose="Religion check for Divine Guidance")*
+*skill_check(skill="Religion", dc=12, roll_total=18, outcome="critical_success")*
+
+The air in the cramped room grows heavy, the temperature dropping until your breath mists in the candlelight. You kneel on the worn floorboards, your hands clasped so tightly your knuckles turn white. As you pour your spirit into the prayer, the silence of the room shifts. It is no longer empty; it feels expectant.
+
+A sensation of cold, absolute clarity washes over you—a mental sharpening that feels like the whetting of a blade. The f
+
+---
+[04:50 PM] I will wait until the morning, wait for Elara's answer
+The night passes in a fitful, shallow sleep. Every creak of the inn’s timber and every gust of wind against the shutter sounds like a footstep in the corridor. You keep your hand on the hilt of your sword even in your dreams, your mind never fully leaving the cold, damp dark of the cavern or the damning map etched into the locket.
+
+When the first grey light of dawn filters through the grimy window, you are already up. You have spent the hours in silent vigil, the locket tucked safely away, your gear polished and ready. You feel the residue of your prayer—a lingering, cold steel in your veins t
+
+---
+[04:53 PM] I grab Elara's hand and I say: "I knew Tyr wouldn't stray us from our path. I knew you'd help me". I let go of her hand 
+Elara’s eyes widen slightly at your whisper, the color draining from her cheeks, but she doesn't hesitate. She gives a sharp, almost imperceptible nod and follows you toward the stairs, keeping her head low and her footsteps light. The innkeeper stops sweeping for a fleeting second as you pass, his gaze lingering on your backs, but he says nothing, returning to his task with a rhythmic *scritch-scratch* of bristles against wood.
+
+Once you are inside your room, you kick the door shut and slide the heavy iron bolt into place. The morning light is thin here, struggling through the grime of the wi
+
+---
+[04:57 PM] I tell Elara: we need to find a way into the cellar, but we cant have the innkeeper following us everywhere, a backentra
+Elara nods, her eyes narrowing as she surveys the room, her mind racing. "The back entrance," she whispers, pointing toward the narrow window that overlooks the alleyway behind the inn. "There’s a coal chute that leads directly into the cellar for deliveries. It’s tight, and it’ll be filthy, but it bypasses the main floor entirely."
+
+She moves to the window, peering down into the shadowed, narrow passage between the inn and the neighboring stables. "The innkeeper is still in the common room; I can hear him moving the tables. If we go now, we can slip out through the window, drop into the alley
+
+---
+[04:58 PM] Lets take the chute angle
+You hoist yourself onto the sill, the cool morning air biting at your face as you squeeze through the narrow frame. You drop into the alley with a muffled *thud*, your chain mail clinking softly against the damp cobblestones. Elara follows, landing with practiced grace, her eyes instantly scanning the shadows for movement.
+
+The alley is a narrow, claustrophobic vein between the inn and the stables. The air here is thick with the scent of rotting straw, refuse, and the faint, unmistakable tang of sulfur. You find the coal chute—a rusted iron flap set low into the foundation, half-hidden by a st
+
+---
+[05:01 PM] I cast protection from evil and good on myself. Then I take point, I lead into the tunnel
+You pause, your hand hovering over your holy symbol. The realization hits you with the weight of a stone: your reserves are spent, your divine focus drained by the vigil you kept and the tension that has been gnawing at you since you arrived. You are a vessel of Tyr, yes, but even a vessel has its limits, and yours are currently pushed to the brink.
+
+You lower your hand, the cold metal of your symbol biting into your palm. You look at Elara, your expression unyielding. You don't need the spell to know that what lies ahead is unholy; your instincts, sharpened by the scars of your past, scream i
+
+---
+[05:09 PM] I think you didnt catch the part where I long rested at the inn. I address the figure: "I fear no "Eye", I fear no stran
+The realization washes over you—you have already poured your spirit into the defense of your soul. You feel the familiar, golden hum of the spell settling over your skin, a barrier of divine intent that makes the air in the chamber feel crisp and righteous. The oppressive weight of the room’s malice seems to recoil from you, unable to touch the sanctified space you now inhabit.
+
+You stand firm, your longsword held at the ready, the blade gleaming with a cold, pale light that seems to defy the subterranean gloom.
+
+The robed figure turns fully to face you. Their face is a ruin of pale skin stret
+
+---
+[05:11 PM] I stand myself at the ready, I brace for combat, making a prayer to tyr and I try to strike the leader with my holy smit
+The air in the chamber seems to thicken, the very shadows pressing against the edges of your divine protection as you lunge forward, your blade singing a prayer of judgment. Your strike is fierce, fueled by your righteous fury, but the Cultist Leader moves with an unnatural, fluid grace. They twist their emaciated frame, your longsword whistling through the space where their throat had been a split second before, the steel clattering harmlessly against the stone altar instead.
+
+The obsidian dagger in the leader's hand flashes toward your ribs, but your holy armor—blessed by your vigil—turns th
+
+---
+[05:13 PM] you are misscalculating the AC, again:  Chain Mail Base: 16 Defense Fighting Style: +1 bonus to AC (while wearing armor)
+The dice tumble across the table, the result mocking the sanctity of your vigil. That shadow—a lingering echo of some ancient, hateful demise—moves with a speed that defies the protection you’ve called upon. Even as your holy aura forces it to lash out twice, the second, more desperate strike finds the gap between your pauldrons, slipping through the divine barrier like a needle through silk.
+
+The cold is absolute. It is not merely a chill; it is the sensation of your life force being siphoned away into the void.
+
+`update_hp(8)` — *Your hit points drop from 15 to 8.*
+
+The shadow’s touch leaves
+
+---
+[05:16 PM] I take a stance, and strike agains the shadow with my blade
+The shadow, caught in the radiant tether of your holy protection, falters as you swing. Its form, normally a flickering void, seems to solidify for a split second as your steel bites into the darkness. Your blade, etched with the prayers of Tyr, carves a burning path through the creature's ethereal mass. There is a sound like a dying gasp—a hollow, wind-swept moan—as the shadow shudders, its edges fraying into wisps of black smoke that dissipate before they can touch the ground.
+
+The Cultist Leader’s amusement vanishes, replaced by a sharp, sudden hiss of irritation. "A lucky strike," they spi
+
+---
+[05:16 PM] I strike at the shadow
+Your blade whistles through the air, cutting a sharp arc in the gloom, but the shadow is as elusive as smoke in a gale. It seems to anticipate your movement, its form rippling and dissolving just as the steel reaches it, causing your sword to strike nothing but the cold, damp stone of the cavern floor with a jarring *clang* that echoes into the dark.
+
+The impact vibrates up your arm, sending a stinging jolt through your knuckles. You are overextended, the momentum of your swing leaving your side momentarily exposed.
+
+The shadow, now emboldened by your miss, undulates toward you, its form coale
+
+---
+[05:18 PM] instead of the lights, I make a sprint towards the leader trying to make haste and make the most out of the leader's cas
+`use_spell_slot("1st Level", "Divine Smite")`
+
+You don't just run; you explode into motion, your boots skidding against the damp cavern floor as you pivot around the confused, dissolving shadow. You ignore the cold, ignore the fatigue, and fix your gaze entirely on the robed figure. The leader’s eyes widen—the first genuine flash of fear you’ve seen—as they realize you aren't playing by the rules of the shadows anymore.
+
+Your blade hums, the metal glowing with a blinding, searing white light that peels back the gloom of the tunnel. You bring the steel down in a brutal, descending arc. The lead
+
+---
+[05:21 PM] I gloom over the Leader, standing over them with my hands on his neck, full of rage: "WHERE, IS , MY , SISTER" Kel's eye
+The air in the chamber is suffocating, thick with the smell of ozone and wet, rotting earth. You loom over the cultist, your gauntlets digging into the soft, exposed flesh of their throat. The light bleeding from your eyes isn't the soft, comforting radiance of Tyr; it is a harsh, incandescent white—a blinding, singular focus that burns away the very air around you. The man beneath you claws at your wrists, his face purpling, but his strength is nothing against the fury of a man who has carried a ghost for a decade.
+
+"Where... is... my... sister?" 
+
+The words are a low, guttural growl, strippe
+
+---
+[05:23 PM] I crack the leader's neck and then leave him to rot there. I take my shield and sword, take Elara into my arms (literall
+The snap of the leader’s neck is a dry, final sound, barely audible against the groaning of the earth. You leave him there, a broken vessel in the dust, and scoop Elara up. She is light as a bird, her armor clattering against your own, but your focus is entirely on the path ahead. The blinding white light of your fury acts as a beacon, guiding you through the encroaching darkness.
+
+But the earth is unforgiving. 
+
+As you sprint, a massive slab of limestone shears away from the ceiling, slamming into the path directly ahead. The impact sends a shockwave through the floor that sends you stumbling
+
+---
+[05:25 PM] I use Lay on hands quickly on myself as I scoop Elara again and rush to the exit with a prayer of fortitude:"Lord of the
+The air in your lungs burns, tasting of pulverized limestone and stale, ancient malice. As you press your palm against your own chest, the cool, tingling sensation of Tyr’s grace flows into your battered frame. The agony in your legs dulls to a manageable throb, and the warmth of the prayer seems to stiffen your very resolve, turning your fatigue into a singular, driving purpose.
+
+You heave yourself upward, the beam that pinned you groaning as you shove it aside with a roar that echoes the collapse of the ceiling. You scoop Elara up once more—she clings to your gorget, her breath hitching—and 
+
+---
+[05:27 PM] Where are we right now?
+The silence of the Blackwood is not the peaceful quiet of a sleeping forest; it is a predatory, expectant hush. You have emerged into a clearing a few hundred yards from the ruins of the old mill where you first tracked the cultist. The morning sun struggles to pierce the dense, interlocking canopy above, casting long, sickly-pale fingers of light across the forest floor.
+
+The air here is heavy with the scent of pine needles and something else—something metallic and sharp, like the tang of ozone that clings to your own armor. The trees around you are gnarled and ancient, their bark slick with 
+
+---
+[05:28 PM] did I level up?
+The weight of the experience you’ve just survived hangs heavy on your shoulders, but your internal fire—that divine connection to Tyr—has not yet crystallized into the next stage of your martial prowess. You are a Paladin of the Second Circle, battle-hardened and tempered by the fires of the Blackwood, but the path to further mastery remains just beyond your current horizon. You feel the potential there, a simmering pool of grace and strength, but for this moment, you are holding steady at your current level.
+
+Elara watches you, her eyes darting between the dark, silent thicket and your own st

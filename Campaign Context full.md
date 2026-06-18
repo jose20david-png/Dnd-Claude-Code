@@ -12,16 +12,17 @@
 
 ---
 
-## SESSION STATE — Next Morning
+## SESSION STATE — Morning, shortly after the collapse.
 
 | Field | Value |
 |---|---|
-| Character | Kel · Sorcerer · Level 1 |
-| Location | Gorin's Inn, back study |
-| HP | 9 / 9 (full) |
-| Spell Slots | 2× 1 (full) |
+| Character | Kel Stormblessed · Paladin · Level 1 |
+| Location | The edge of the Blackwood, near the collapsed entrance to the cultist's lair. |
+| HP | 9 / 11 (lightly wounded) |
+| Spell Slots | none |
+| Channel Divinity | 1 / 1 available |
 
-*Last updated: 2026-06-06*
+*Last updated: 2026-06-18*
 
 ---
 
@@ -109,13 +110,15 @@ Opens a browser animation, closes after 5 seconds. Results also printed to termi
 
 
 
+
+
 ## SESSION NOTES (auto-generated)
 
-- Updated existing NPC: Gorin.
-- Story note saved: Kel shares his family's legacy and the cryptic message from his family about 'ma
-- Quest added: "The Dragon's Legacy" (4 steps).
-- Deception/Performance check DC12: rolled 15 — SUCCESS.
-- Investigation check DC12: rolled 14 — SUCCESS.
-- Long rest — all resources restored, HP full.
-- Full recovery after long rest.
-- Moved to Gorin's Inn, back study — Next Morning.
+- Kel confronted a cultist in the secret tunnel beneath The Broken Anvil. The cultist knows of Kel's sister, Syl.
+- Concentrating on Protection from Evil and Good.
+- Condition applied: Concentrating on Protection from Evil and Good
+- Combat started with Cultist Leader, Shadow A, Shadow B
+- Used Lay on Hands to heal 5 HP (4+5=9)
+- Athletics check DC15: rolled 17 — SUCCESS.
+- Moved to The edge of the Blackwood, near the collapsed entrance to the cultist's lair. — Morning, shortly after the collapse..
+- Awarded 250 XP — Escaping the collapsing cultist lair and learning the location of the Silent Keep.. Total: 250 XP.
