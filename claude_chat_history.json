@@ -83,9 +83,25 @@
     {
       "role": "assistant",
       "content": "Almost done — let's bring your character to life.\n\n**1. What is your character's name?**\n\n**2. What does your Half-elf Paladin look like?** A scar, a striking feature, something that sets you apart.\n\n**3. (Optional but encouraged)** Who are they? Where do they come from? What drives them — a loss, a debt, a promise?\n\n*Share whatever feels right. This becomes the DM's bible for your character.*"
+    },
+    {
+      "role": "user",
+      "content": "1.Name: Kel Stormblessed\n2. Appearance: low 30s, average height, male, brown hair, a scar in his neck from a previous battle, devoted to Tyr. Fair skin, grey eyes.\n\n3. Born in the rugged northern reaches, Kel was never the strongest child, but he was the most observant. While other boys played at war, he spent his time watching the local temple of Tyr, fascinated by the quiet strength of the Justicar’s followers. His life was defined by the presence of his younger sister, Syl, whose laughter was the only thing that could pierce the grey skies of their homeland.\nThe Turning Point\n\nWhen Kel was twenty-five, a cult of chaotic marauders raided their village. During the chaos, Kel threw himself in front of a raiding party to buy the villagers time to reach the sanctuary of the local shrine. He fought with frantic desperation, but he was overwhelmed. A jagged blade tore across his throat—a wound that should have been fatal.\n\nAs he lay bleeding in the mud, gasping for air, he watched helplessly as the marauders dragged Syl into the treeline. He survived the night only because a wandering paladin of Tyr found him, drawn by the faint, desperate prayer Kel had whispered as his consciousness faded.\nThe Vow\n\nThe scar on his neck is more than a mark of battle; it is a constant, stinging reminder of his failure. When he recovered, he didn't seek revenge in the form of mindless violence. He sought the absolute order and justice that Tyr represents. He realized that the chaos which took his sister was a cancer that only the uncompromising light of the Justicar could burn away.\n\nHe took the Oath of Devotion not because he was born a hero, but because he refuses to let another soul suffer the absence of protection that Syl suffered. He is a man of few words, his grey eyes often scanning the horizon for signs of injustice. Every step he takes in his heavy plate armor is a step closer to finding the truth of what happened to his sister—and delivering the divine retribution she was denied.\nCurrent Motivation\n\nThough years have passed, the mystery of Syl’s fate remains his \"unspoken quest.\" He wanders the lands, serving the weak and upholding the law, hoping that one day he will find the trail of the cultists who took her. He does not seek fame or gold; he seeks to ensure that the world is a little more ordered, and a little less cruel, than it was the day the light went out of his life."
+    },
+    {
+      "role": "assistant",
+      "content": "Kel Stormblessed is a man in his early thirties of average height, possessing the fair skin and sharp, discerning grey eyes of his elven heritage. A jagged, silvered scar slices across his neck—a brutal souvenir from the day his village was razed and his younger sister, Syl, was stolen away. He carries himself with the quiet, rigid discipline of a soldier, his chain mail always polished and his gaze constantly scanning the horizon for any sign of disorder. Devoted to Tyr, the God of Justice, Kel operates with an uncompromising moral compass, viewing his paladinhood as a sacred duty to protect the vulnerable from the chaotic cruelty that claimed his family. Though he travels with the stoic resolve of a veteran, his heart is anchored by the persistent, unvoiced hope that he will one day track down the cultists who took Syl and finally secure the retribution she was denied.\n\n✅ **Character sheet complete!**\n\n**Kel Stormblessed** — Paladin, Level 1 Half-elf\n**HP:** 11 | **AC:** 12–14 (varies by armor)\n**Skills:** Persuasion, Insight, Athletics, Intimidation\n**Background:** Soldier\n\n*Your adventure begins...*"
+    },
+    {
+      "role": "user",
+      "content": "Hi"
+    },
+    {
+      "role": "assistant",
+      "content": "The morning sun struggles to pierce the heavy, grey mist hanging over the frontier town of Oakhaven. The air here tastes of damp pine and woodsmoke, a bitter, biting cold that clings to your cloak. \n\nYou stand at the edge of the town square, a cluster of timber-framed buildings huddled together as if seeking warmth from one another. A few locals pass by, their heads bowed against the chill, eyes averted from the stranger in polished chain mail. The rhythmic *clack-thud* of your boots on the muddy cobblestones is the only sound you make, save for the occasional, distant lowing of cattle from the nearby pens.\n\nA weathered wooden sign hangs precariously over the door of a nearby structure: *The Broken Anvil*. It is the only place in town showing signs of life, with a thin ribbon of grey smoke curling from its chimney.\n\nHow do you proceed?"
     }
   ],
   "created_at": "2026-06-18T19:55:22.831Z",
-  "token_count": 306,
+  "token_count": 1491,
   "model": "gemini-3.1-flash-lite"
 }
