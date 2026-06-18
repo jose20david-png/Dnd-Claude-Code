@@ -17,12 +17,12 @@
       "name": "Kel Stormblessed",
       "race": "Half-elf",
       "class": "Paladin",
-      "level": 1,
-      "hp": 9,
-      "hp_max": 11,
+      "level": 2,
+      "hp": 16,
+      "hp_max": 18,
       "hit_dice_total": 1,
       "hit_dice_used": 0,
-      "xp": 250,
+      "xp": 300,
       "death_saves": {
         "successes": 0,
         "failures": 0,
@@ -39,12 +39,12 @@
         "wis": 13,
         "cha": 15
       },
-      "ac": 10,
-      "ac_notes": "",
+      "ac": 16,
+      "ac_notes": "Chain mail",
       "speed": 30,
       "proficiency_bonus": 2,
       "initiative_bonus": 1,
-      "passive_perception": 11.5,
+      "passive_perception": 11,
       "saving_throw_profs": [
         "wis",
         "cha"
@@ -56,7 +56,11 @@
         "Intimidation"
       ],
       "traits": [
-        "Paladin features"
+        "Divine Sense — As an action, know the location of any celestial, fiend, or undead within 60 ft (not behind total cover). Also detect consecrated/desecrated ground. Uses: CHA mod +1 per long rest.",
+        "Lay on Hands — Pool of 10 HP (5 × level). As an action, restore HP to a touched creature, or spend 5 HP to cure a disease or poison.",
+        "Fighting Style: Defense — +1 AC while wearing armor.",
+        "Spellcasting — Paladin spellcasting using CHA. Spell attack +4, Spell Save DC 12. Spell slots refresh on long rest.",
+        "Divine Smite — After a melee hit, expend a spell slot for extra radiant damage: 2d8 (L1 slot), +1d8 per slot level above 1st. +1d8 vs undead or fiends."
       ],
       "conditions": [
         "Concentrating on Protection from Evil and Good"
@@ -66,7 +70,9 @@
         "cantrips": [],
         "level_1": [
           "Protection from Evil and Good",
-          "Sanctuary"
+          "Sanctuary",
+          "Bless",
+          "Thunderous Smite"
         ],
         "level_2": [],
         "level_3": []
@@ -77,7 +83,7 @@
           "used": 0
         },
         "level_1": {
-          "max": 0,
+          "max": 2,
           "used": 0
         },
         "level_2": {
@@ -98,7 +104,7 @@
         }
       },
       "channel_divinity": {
-        "max": 1,
+        "max": 0,
         "used": 0
       },
       "inventory": [
@@ -283,6 +289,14 @@
     {
       "timestamp": "2026-06-18T22:28:50.744Z",
       "event": "Awarded 250 XP — Escaping the collapsing cultist lair and learning the location of the Silent Keep.. Total: 250 XP."
+    },
+    {
+      "timestamp": "2026-06-18T23:06:16.965Z",
+      "event": "CHARACTER PATCHED: Leveled to 2, AC set to 16 (chain mail), correct L2 paladin features and spell slots applied."
+    },
+    {
+      "timestamp": "2026-06-18T23:14:16.792Z",
+      "event": "Stealth check DC14: rolled 19 — SUCCESS."
     }
   ]
 }
