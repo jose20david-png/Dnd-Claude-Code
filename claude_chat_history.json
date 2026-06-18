@@ -99,9 +99,25 @@
     {
       "role": "assistant",
       "content": "The morning sun struggles to pierce the heavy, grey mist hanging over the frontier town of Oakhaven. The air here tastes of damp pine and woodsmoke, a bitter, biting cold that clings to your cloak. \n\nYou stand at the edge of the town square, a cluster of timber-framed buildings huddled together as if seeking warmth from one another. A few locals pass by, their heads bowed against the chill, eyes averted from the stranger in polished chain mail. The rhythmic *clack-thud* of your boots on the muddy cobblestones is the only sound you make, save for the occasional, distant lowing of cattle from the nearby pens.\n\nA weathered wooden sign hangs precariously over the door of a nearby structure: *The Broken Anvil*. It is the only place in town showing signs of life, with a thin ribbon of grey smoke curling from its chimney.\n\nHow do you proceed?"
+    },
+    {
+      "role": "user",
+      "content": "I approach the door of the broken anvil, I fear no one as Tyr is watching over me."
+    },
+    {
+      "role": "assistant",
+      "content": "You step onto the threshold of *The Broken Anvil*, your hand momentarily brushing the holy symbol of Tyr resting against your chest. The wood of the door is rough, scarred by years of neglect and the harsh northern weather. As you push, the hinges groan in protest, a sharp, dissonant sound that cuts through the morning quiet.\n\nThe interior is a stark contrast to the biting cold outside. The air is thick with the scent of roasted root vegetables, stale ale, and the sharp, metallic tang of an extinguished hearth. It is dim inside, lit only by a few guttering tallow candles that cast long, dancing shadows against the soot-stained walls. \n\nA handful of patrons sit hunched over scarred wooden tables, their faces obscured by the gloom. They go silent the moment you cross the threshold, their eyes—some wary, some merely curious—tracking the polished links of your mail. Behind the bar, a stout man with a beard like tangled wire and an apron stained with grease wipes a mug with a rag that has seen better decades. He pauses, his heavy brow furrowing as he looks you up and down, his gaze lingering just a second too long on the jagged, silvered scar at your throat.\n\n\"We don't get much in the way of steel-clad types in Oakhaven,\" the barkeep rumbles, his voice like grinding stones. He sets the mug down with a deliberate *thud*. \"Whatever business brought you to this gods-forsaken corner of the world, I hope it’s worth the frostbite. What’ll it be?\""
+    },
+    {
+      "role": "user",
+      "content": "1 pint of ale and some mutton please. Kel doesn't offer much explanation as to what he's doing here."
+    },
+    {
+      "role": "assistant",
+      "content": "The barkeep grunts, a sound that might pass for an acknowledgment, and turns to the iron spit slowly rotating over the hearth. He carves a thick, steaming slab of mutton with a notched blade, sliding it onto a wooden trencher along with a hunk of dark, crusty bread. He then fills a tankard from a barrel behind the bar; the ale is dark, murky, and topped with a foam that smells faintly of yeast and damp earth.\n\nHe thumps the meal down onto the scarred counter before you, his gaze still lingering on that silvered scar on your neck. He doesn't press for conversation, though his eyes remain narrowed—the look of a man who has seen enough travelers pass through Oakhaven to know that those who don't talk usually have the heaviest stories.\n\nYou take your place at the end of the bar. The heat from the hearth begins to thaw the chill from your bones, but the atmosphere in the room remains heavy. In the corner, a pair of trappers are whispering urgently, their eyes flicking toward the door every time a gust of wind rattles the frame. A lone figure hooded in a thick, moth-eaten cloak sits at a table near the back, staring intently into an empty glass. \n\nThe silence of the room is punctuated only by the crackle of the fire and the distant, mournful howl of the wind outside. You are here, the meal is warm, and the eyes of the room are still measuring you. \n\nDo you choose to occupy your time with your meal, or do you let your gaze drift toward the others in the tavern?"
     }
   ],
   "created_at": "2026-06-18T19:55:22.831Z",
-  "token_count": 1491,
+  "token_count": 7185,
   "model": "gemini-3.1-flash-lite"
 }

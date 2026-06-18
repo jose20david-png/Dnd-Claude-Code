@@ -2,9 +2,9 @@
   "campaign_id": "kel-stormblessed-campaign",
   "world": {
     "name": "Classic High Fantasy",
-    "lore_summary": "A new adventure begins.",
-    "current_location": "A small frontier town",
-    "time": "Day 1 — Morning",
+    "lore_summary": "The Broken Anvil is the local tavern and inn, a sanctuary of warmth and ale against the biting cold of the frontier. It smells of stale beer, roasting meat, and wet wool.",
+    "current_location": "The Broken Anvil, Oakhaven",
+    "time": "Morning",
     "seal_integrity": 100,
     "seal_status": "N/A",
     "map_id": null,
@@ -159,6 +159,18 @@
     {
       "timestamp": "2026-06-18T20:05:30.863Z",
       "event": "Kel Stormblessed created. Paladin Level 1. Adventure begins."
+    },
+    {
+      "timestamp": "2026-06-18T20:21:58.756Z",
+      "event": "Moved to The Broken Anvil, Oakhaven."
+    },
+    {
+      "timestamp": "2026-06-18T20:23:14.181Z",
+      "event": "Moved to The Broken Anvil, Oakhaven — Morning."
+    },
+    {
+      "timestamp": "2026-06-18T20:23:14.182Z",
+      "event": "Kel entered The Broken Anvil and ordered a meal, keeping his motives to himself."
     }
   ]
 }
