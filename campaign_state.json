@@ -57,7 +57,9 @@
       "traits": [
         "Paladin features"
       ],
-      "conditions": [],
+      "conditions": [
+        "Concentrating on Protection from Evil and Good"
+      ],
       "description": "Kel Stormblessed is a man in his early thirties of average height, possessing the fair skin and sharp, discerning grey eyes of his elven heritage. A jagged, silvered scar slices across his neck—a brutal souvenir from the day his village was razed and his younger sister, Syl, was stolen away. He carries himself with the quiet, rigid discipline of a soldier, his chain mail always polished and his gaze constantly scanning the horizon for any sign of disorder. Devoted to Tyr, the God of Justice, Kel operates with an uncompromising moral compass, viewing his paladinhood as a sacred duty to protect the vulnerable from the chaotic cruelty that claimed his family. Though he travels with the stoic resolve of a veteran, his heart is anchored by the persistent, unvoiced hope that he will one day track down the cultists who took Syl and finally secure the retribution she was denied.",
       "spells": {
         "cantrips": [],
@@ -212,6 +214,10 @@
     {
       "timestamp": "2026-06-18T20:31:03.439Z",
       "event": "Quest added: \"The Missing Brother\" (2 steps)."
+    },
+    {
+      "timestamp": "2026-06-18T20:44:48.422Z",
+      "event": "Concentrating on Protection from Evil and Good."
     }
   ]
 }
