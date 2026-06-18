@@ -1,88 +1,62 @@
 {
-  "campaign_id": "kel-campaign",
+  "campaign_id": "new-campaign",
+  "creation_step": 10,
+  "creation_data": {
+    "setting": "Classic High Fantasy",
+    "class": "Wizard",
+    "_subclass_pending": false,
+    "subclass": "School of Divination",
+    "race": "Half-Elf",
+    "background": "Sage",
+    "skills": [
+      "Insight",
+      "Investigation"
+    ],
+    "stats": {
+      "str": 10,
+      "con": 12,
+      "int": 17,
+      "dex": 12,
+      "wis": 11,
+      "cha": 12
+    },
+    "spells": {
+      "level_1": [
+        "Sleep",
+        "Detect magic",
+        "Find familiar",
+        "Shield",
+        "Thunderwave",
+        "Fog cloud"
+      ],
+      "cantrips": [
+        "Fire bolt",
+        "Mage hand",
+        "Minor illusion"
+      ]
+    }
+  },
   "world": {
-    "name": "Classic High Fantasy",
-    "lore_summary": "You have crossed the threshold into the ancient, silent heart of the Netheril. The air here is thin, cold, and tastes of ozone and ancient dust. The architecture is impossibly large, built for beings of great stature. The emerald light from the Mightstone within you now serves as your only illumination, casting long, dancing shadows against the basalt walls.",
-    "current_location": "The subterranean ruins of the Netheril, beyond the obsidian veil.",
-    "time": "Sunset, transitioning into night.",
+    "name": "Forgotten Realms",
+    "lore_summary": "New campaign — character creation in progress.",
+    "current_location": "Character Creation",
+    "time": "Day 1 — Morning",
     "seal_integrity": 100,
     "seal_status": "N/A",
-    "map_id": "town_map",
-    "story_notes": "fulfill his destiny. Kel has always been a bit of a loner, with no previous romantic partners, but he does have a certain interest in women. His family, while important, has never been overly involved in his life, allowing him to forge his own path. As he ventures into the unknown, Kel's charisma and magical prowess will be put to the test, but with his quick wit and innate charm, he's ready to face whatever challenges come his way.\n• Kel arrives in a small frontier town, marking the beginning of his journey to find the fabled 'Mightstone'\n• Kel arrives in a small frontier town, marking the beginning of his journey to find the fabled 'Mightstone'\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel meets Gorin, the town's innkeeper\n• Kel arrives in a small frontier town, beginning his journey to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, hidden somewhere in the ancient Netheril desert.\n• Kel is looking for the Netheril desert, specifically the ancient stone, and Gorin offers to help with a map\n• Kel is looking for the Netheril desert and meets Gorin, the town's innkeeper, who offers to help with information\n• Kel shares his family's legacy and the cryptic message from his family about 'making himself a dragon' as part of his come of age ceremony, which seems to be connected to finding the Mightstone in the Netheril desert.\n• Kel has reached Level 2. Current spells: Sleep, Thunderwave, Magic Missile. Cantrips: Fire Bolt, Mage Hand, Minor Illusion, Blade Ward. Currently searching for the hermit or a sign in the desert.\n• Kel is now Level 3 Sorcerer.\nHP: 21/21.\nSorcery Points: 3/3.\nMetamagic: Empowered Spell, Subtle Spell.\nLevel 2 Spell: Hold Person.\nThe Mightstone is now inside Kel, acting as a compass toward the Netheril ruins.",
-    "weather": {
-      "condition": "clear",
-      "description": "A gentle breeze carries the sweet scent of blooming wildflowers through the town."
-    },
-    "session_recap": "After a harrowing encounter with the Kruthiks in the cellar, Kel secured the support of the innkeeper, Gorin, who promised to seal the breach. Kel spent a restorative night in the inn's study, waking up to the vibrant, bustling atmosphere of the town's Harvest Festival. With his health recovered and a plan to seek out Sister Elara at the shrine of Lathander to address his lingering wound and potential recruitment, Kel stands at a crossroads between the festive revelry and his arduous journey ahead."
+    "map_id": null,
+    "story_notes": ""
   },
   "party": [
     {
-      "id": "kel",
-      "name": "Kel",
-      "race": "Tiefling",
-      "class": "Sorcerer",
-      "level": 3,
-      "hp": 9,
-      "hp_max": 9,
-      "hit_dice_total": 3,
-      "hit_dice_used": 0,
-      "xp": 900,
-      "death_saves": {
-        "successes": 0,
-        "failures": 0,
-        "stable": false
-      },
+      "id": "player",
+      "name": "New Character",
+      "class": "Unset",
+      "level": 1,
+      "hp": 10,
       "status": "active",
-      "background": "Charlatan",
-      "alignment": "Neutral Good",
-      "stats": {
-        "str": 13,
-        "dex": 15,
-        "con": 16,
-        "int": 13,
-        "wis": 13,
-        "cha": 17
-      },
-      "ac": 10,
-      "ac_notes": "",
-      "speed": 30,
-      "proficiency_bonus": 2,
-      "initiative_bonus": 2.5,
-      "passive_perception": 11.5,
-      "saving_throw_profs": [
-        "con",
-        "cha"
-      ],
-      "skill_profs": [
-        "Persuasion",
-        "Intimidation",
-        "Deception",
-        "Sleight of Hand"
-      ],
-      "traits": [
-        "Sorcerer features"
-      ],
-      "conditions": [],
-      "description": "Kel is a Tiefling Sorcerer with a mysterious past, hailing from a long line of draconic sorcerer tieflings. He stands at average height with dark brown hair and dark blue eyes, but what sets him apart is the absence of protruding horns, a rare trait among his kind. With a charming demeanor and a silver tongue, Kel has a way with people, often talking his way out of sticky situations. His current quest is to find the fabled 'Mightstone', an artifact rumored to contain the soul of an ancient powerful dragon, which is said to be hidden somewhere in the ancient Netheril desert. This perilous journey is part of his sorcerer ceremony, a rite of passage to fulfill his destiny. Kel has always been a bit of a loner, with no previous romantic partners, but he does have a certain interest in women. His family, while important, has never been overly involved in his life, allowing him to forge his own path. As he ventures into the unknown, Kel's charisma and magical prowess will be put to the test, but with his quick wit and innate charm, he's ready to face whatever challenges come his way.",
-      "spells": {
-        "cantrips": [
-          "Firebolt",
-          "Minor Illusion"
-        ],
-        "level_1": [
-          "Sleep",
-          "Thunderwave"
-        ],
-        "level_2": [],
-        "level_3": []
-      },
       "spell_slots": {
-        "1": {
-          "max": 2,
-          "used": 0
-        },
         "cantrip": {
-          "max": 3,
+          "max": 0,
           "used": 0
         },
         "level_1": {
@@ -110,369 +84,56 @@
         "max": 0,
         "used": 0
       },
-      "inventory": [
-        {
-          "name": "Light crossbow + 20 bolts",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Two daggers",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Dungeoneer's pack",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Arcane focus (crystal)",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Fine clothes",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Disguise kit",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Con tools",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Belt pouch (15 gp)",
-          "quantity": 1,
-          "rarity": "common"
-        },
-        {
-          "name": "Rations (5 days)",
-          "quantity": 5,
-          "rarity": "common"
-        }
-      ]
+      "inventory": []
     }
   ],
-  "npcs": [
-    {
-      "id": "gorin",
-      "name": "Gorin",
-      "role": "Innkeeper",
-      "disposition": "friendly",
-      "notes": "Offers to help Kel with a map to find the Netheril desert | Offers to help Kel with information about the Netheril desert",
-      "location": "Brindlemark"
-    },
-    {
-      "id": "sister-elara",
-      "name": "Sister Elara",
-      "role": "Cleric of Lathander",
-      "disposition": "neutral",
-      "notes": "A Lathanderian cleric, observant and intelligent. Looks after the local shrine.",
-      "location": "Shrine of Lathander"
-    }
-  ],
-  "quests": [
-    {
-      "id": "the-dragon-s-legacy",
-      "title": "The Dragon's Legacy",
-      "description": "Find the fabled Mightstone in the ancient Netheril desert and uncover the meaning behind the cryptic family trial: 'Make yourself a dragon'.",
-      "giver": "Kel's Family",
-      "status": "active",
-      "steps": [
-        {
-          "step_id": "the-dragon-s-legacy-1",
-          "description": "Gather information about the location of the Netheril desert from Gorin or other locals",
-          "completed": false
-        },
-        {
-          "step_id": "the-dragon-s-legacy-2",
-          "description": "Secure a map or guide to navigate the dangerous wastes",
-          "completed": false
-        },
-        {
-          "step_id": "the-dragon-s-legacy-3",
-          "description": "Locate the Mightstone within the desert ruins",
-          "completed": false
-        },
-        {
-          "step_id": "the-dragon-s-legacy-4",
-          "description": "Fulfill the trial to 'make yourself a dragon'",
-          "completed": false
-        }
-      ]
-    },
-    {
-      "id": "the-morninglord-s-relic",
-      "title": "The Morninglord's Relic",
-      "description": "Sister Elara has tasked you with retrieving a satchel marked with the seal of the Morninglord from a fallen guard near the 'Broken Anvil' in the western foothills. Successfully returning it will grant you a map and potentially a companion for your journey.",
-      "giver": "Sister Elara",
-      "status": "active",
-      "steps": [
-        {
-          "step_id": "the-morninglord-s-relic-1",
-          "description": "Travel to the 'Broken Anvil' in the western foothills.",
-          "completed": true
-        },
-        {
-          "step_id": "the-morninglord-s-relic-2",
-          "description": "Retrieve the satchel from the fallen guard.",
-          "completed": false
-        },
-        {
-          "step_id": "the-morninglord-s-relic-3",
-          "description": "Return the satchel to Sister Elara at the shrine.",
-          "completed": false
-        }
-      ]
-    }
-  ],
+  "npcs": [],
+  "quests": [],
   "encounters": [],
   "history_log": [
     {
-      "timestamp": "2026-05-28T23:13:17.726Z",
-      "event": "Kel created. Sorcerer Level 1. Adventure begins."
+      "timestamp": "2026-06-18T13:05:02.543Z",
+      "event": "New campaign started. Begin character creation."
     },
     {
-      "timestamp": "2026-05-28T23:18:28.707Z",
-      "event": "Kel's adventure begins in a small frontier town on Day 1 — Morning"
+      "timestamp": "2026-06-18T13:08:14.195Z",
+      "event": "Character creation step 1 complete. Moving to step 2."
     },
     {
-      "timestamp": "2026-05-28T23:18:28.709Z",
-      "event": "Moved to Small Frontier Town — Day 1 — Morning."
+      "timestamp": "2026-06-18T13:08:25.847Z",
+      "event": "Character creation step 2 complete. Moving to step 3."
     },
     {
-      "timestamp": "2026-05-28T23:18:28.718Z",
-      "event": "Story note saved: Kel arrives in a small frontier town, marking the beginning of his journey to fi"
+      "timestamp": "2026-06-18T13:08:25.848Z",
+      "event": "Character creation step 2 complete. Showing subclass options for Wizard."
     },
     {
-      "timestamp": "2026-05-28T23:19:29.596Z",
-      "event": "Story note saved: Kel arrives in a small frontier town, marking the beginning of his journey to fi"
+      "timestamp": "2026-06-18T13:08:31.737Z",
+      "event": "Character creation step 3 complete. Moving to step 4."
     },
     {
-      "timestamp": "2026-05-28T23:19:29.598Z",
-      "event": "Moved to a small frontier town — Day 1 — Morning."
+      "timestamp": "2026-06-18T13:08:36.326Z",
+      "event": "Character creation step 3 complete. Moving to step 4."
     },
     {
-      "timestamp": "2026-05-28T23:20:30.794Z",
-      "event": "Moved to a small frontier town — Day 1 — Morning."
+      "timestamp": "2026-06-18T13:08:45.077Z",
+      "event": "Character creation step 4 complete. Moving to step 5."
     },
     {
-      "timestamp": "2026-05-28T23:20:30.795Z",
-      "event": "Weather changed to clear — A gentle breeze carries the sweet scent of blooming wildflowers through the town."
+      "timestamp": "2026-06-18T13:08:53.326Z",
+      "event": "Character creation step 5 complete. Moving to step 6."
     },
     {
-      "timestamp": "2026-05-28T23:20:30.796Z",
-      "event": "Kel arrives in a small frontier town, marking the beginning of his adventure to find the fabled 'Mightstone'."
+      "timestamp": "2026-06-18T13:09:10.554Z",
+      "event": "Character creation step 7 complete. Moving to step 8."
     },
     {
-      "timestamp": "2026-06-04T12:56:32.179Z",
-      "event": "Moved to the town's central square — Day 1 — Morning."
+      "timestamp": "2026-06-18T13:10:19.254Z",
+      "event": "Character creation step 8 complete. Moving to step 9."
     },
     {
-      "timestamp": "2026-06-04T12:58:34.113Z",
-      "event": "Moved to small frontier town — Day 1 — Morning."
-    },
-    {
-      "timestamp": "2026-06-04T12:58:34.114Z",
-      "event": "Kel arrives in a small frontier town, marking the beginning of his journey to find the fabled 'Mightstone'"
-    },
-    {
-      "timestamp": "2026-06-04T12:58:34.115Z",
-      "event": "Story note saved: Kel arrives in a small frontier town, beginning his journey to find the fabled '"
-    },
-    {
-      "timestamp": "2026-06-04T13:04:23.887Z",
-      "event": "Weather changed to clear — A gentle breeze carries the sweet scent of blooming wildflowers through the town."
-    },
-    {
-      "timestamp": "2026-06-04T13:04:23.889Z",
-      "event": "Moved to small frontier town — Day 1 — Morning."
-    },
-    {
-      "timestamp": "2026-06-04T13:04:23.897Z",
-      "event": "Kel arrives in a small frontier town, marking the beginning of his journey to find the fabled 'Mightstone'."
-    },
-    {
-      "timestamp": "2026-06-04T13:11:28.080Z",
-      "event": "Moved to small frontier town — Day 1 — Morning."
-    },
-    {
-      "timestamp": "2026-06-04T13:11:28.082Z",
-      "event": "Kel arrives in the small frontier town, marking the beginning of his journey to find the fabled 'Mightstone'"
-    },
-    {
-      "timestamp": "2026-06-04T13:11:28.082Z",
-      "event": "Story note saved: Kel arrives in a small frontier town, beginning his journey to find the fabled '"
-    },
-    {
-      "timestamp": "2026-06-04T13:12:29.525Z",
-      "event": "Story note saved: Kel arrives in a small frontier town, beginning his journey to find the fabled '"
-    },
-    {
-      "timestamp": "2026-06-04T13:12:29.526Z",
-      "event": "Weather changed to clear — A gentle breeze carries the sweet scent of blooming wildflowers through the town."
-    },
-    {
-      "timestamp": "2026-06-04T13:12:29.527Z",
-      "event": "Kel arrives in a small frontier town, marking the beginning of his journey to find the fabled 'Mightstone'"
-    },
-    {
-      "timestamp": "2026-06-04T13:36:40.477Z",
-      "event": "Story note saved: Kel meets Gorin, the town's innkeeper"
-    },
-    {
-      "timestamp": "2026-06-04T13:36:40.479Z",
-      "event": "Kel arrives in Brindlemark and meets Gorin, the town's innkeeper"
-    },
-    {
-      "timestamp": "2026-06-04T13:37:41.965Z",
-      "event": "Weather changed to clear — A gentle breeze carries the sweet scent of blooming wildflowers through the town."
-    },
-    {
-      "timestamp": "2026-06-04T13:37:41.967Z",
-      "event": "Kel arrives in the small frontier town of Brindlemark, marking the beginning of his journey to find the fabled 'Mightstone'."
-    },
-    {
-      "timestamp": "2026-06-04T13:37:41.968Z",
-      "event": "Story note saved: Kel arrives in a small frontier town, beginning his journey to find the fabled '"
-    },
-    {
-      "timestamp": "2026-06-04T13:41:56.231Z",
-      "event": "Story note saved: Kel is looking for the Netheril desert, specifically the ancient stone, and Gori"
-    },
-    {
-      "timestamp": "2026-06-04T13:41:56.232Z",
-      "event": "Met Gorin (Innkeeper) — friendly."
-    },
-    {
-      "timestamp": "2026-06-04T14:05:34.219Z",
-      "event": "Story note saved: Kel is looking for the Netheril desert and meets Gorin, the town's innkeeper, wh"
-    },
-    {
-      "timestamp": "2026-06-04T14:05:34.222Z",
-      "event": "Updated existing NPC: Gorin."
-    },
-    {
-      "timestamp": "2026-06-04T14:09:53.940Z",
-      "event": "Story note saved: Kel shares his family's legacy and the cryptic message from his family about 'ma"
-    },
-    {
-      "timestamp": "2026-06-06T15:26:11.437Z",
-      "event": "Quest added: \"The Dragon's Legacy\" (4 steps)."
-    },
-    {
-      "timestamp": "2026-06-06T16:43:21.748Z",
-      "event": "Deception/Performance check DC12: rolled 15 — SUCCESS."
-    },
-    {
-      "timestamp": "2026-06-06T16:46:22.562Z",
-      "event": "Investigation check DC12: rolled 14 — SUCCESS."
-    },
-    {
-      "timestamp": "2026-06-06T17:00:29.074Z",
-      "event": "Long rest — all resources restored, HP full."
-    },
-    {
-      "timestamp": "2026-06-06T17:00:29.076Z",
-      "event": "Full recovery after long rest."
-    },
-    {
-      "timestamp": "2026-06-06T17:00:29.077Z",
-      "event": "Moved to Gorin's Inn, back study — Next Morning."
-    },
-    {
-      "timestamp": "2026-06-13T17:36:59.556Z",
-      "event": "Moved to Shrine of Lathander — Morning of the Festival."
-    },
-    {
-      "timestamp": "2026-06-13T17:38:59.913Z",
-      "event": "Met Sister Elara (Cleric of Lathander) — neutral."
-    },
-    {
-      "timestamp": "2026-06-13T17:59:51.563Z",
-      "event": "Quest added: \"The Morninglord's Relic\" (3 steps)."
-    },
-    {
-      "timestamp": "2026-06-13T17:59:51.564Z",
-      "event": "Moved to The town's western outskirts, beginning the journey to the 'Broken Anvil'.."
-    },
-    {
-      "timestamp": "2026-06-13T18:03:08.257Z",
-      "event": "Moved to The town's western outskirts, beginning the journey to the 'Broken Anvil'. — Morning of the Festival - Departure."
-    },
-    {
-      "timestamp": "2026-06-13T18:03:08.258Z",
-      "event": "Acquired: Rations (5 days) ×5"
-    },
-    {
-      "timestamp": "2026-06-13T18:03:08.268Z",
-      "event": "Quest step completed: \"Travel to the 'Broken Anvil' in the western foothills.\" (The Morninglord's Relic)"
-    },
-    {
-      "timestamp": "2026-06-13T18:03:08.276Z",
-      "event": "Kel accepted Sister Elara's quest, visited Gorin's Inn for supplies, and set out toward the 'Broken Anvil' to recover the missing satchel."
-    },
-    {
-      "timestamp": "2026-06-13T18:55:19.967Z",
-      "event": "Kel handed over the satchel to Sister Elara after being coerced, believing it was the only way to fulfill his destiny and perhaps gain power, despite his deep reservations and fear of the 'ritual'."
-    },
-    {
-      "timestamp": "2026-06-13T18:56:17.016Z",
-      "event": "Kel surrendered to Sister Elara's ritual, approaching the altar to potentially become the conduit for the power within the satchel."
-    },
-    {
-      "timestamp": "2026-06-13T19:14:41.831Z",
-      "event": "Level up HP increase (4 + 0 CON mod)"
-    },
-    {
-      "timestamp": "2026-06-13T19:17:05.218Z",
-      "event": "Story note saved: Kel has reached Level 2. Current spells: Sleep, Thunderwave, Magic Missile. Cant"
-    },
-    {
-      "timestamp": "2026-06-13T19:34:57.530Z",
-      "event": "Arcana check DC14: rolled 16 — SUCCESS."
-    },
-    {
-      "timestamp": "2026-06-13T20:18:52.692Z",
-      "event": "Awarded 500 XP — Absorbing the Mightstone and discovering his true heritage.. Total: 500 XP."
-    },
-    {
-      "timestamp": "2026-06-13T20:18:52.692Z",
-      "event": "LEVEL UP! Now Level 2. Proficiency bonus +2."
-    },
-    {
-      "timestamp": "2026-06-13T20:20:59.111Z",
-      "event": "Awarded 400 XP — Absorbing the Mightstone and completing the trial.. Total: 900 XP."
-    },
-    {
-      "timestamp": "2026-06-13T20:20:59.111Z",
-      "event": "LEVEL UP! Now Level 3. Proficiency bonus +2."
-    },
-    {
-      "timestamp": "2026-06-13T20:24:15.716Z",
-      "event": "Story note saved: Kel is now Level 3 Sorcerer.\nHP: 21/21.\nSorcery Points: 3/3.\nMetamagic: Empowere"
-    },
-    {
-      "timestamp": "2026-06-13T20:25:26.798Z",
-      "event": "Moved to The deep desert, following the Mightstone's pull toward the obsidian beacon. — Sunset, transitioning into night.."
-    },
-    {
-      "timestamp": "2026-06-13T20:37:18.198Z",
-      "event": "Kel approached the obsidian fissure, choosing to trust the masked stranger's warning while seeking further knowledge."
-    },
-    {
-      "timestamp": "2026-06-13T20:49:54.139Z",
-      "event": "Moved to The subterranean ruins of the Netheril, beyond the obsidian veil.."
-    },
-    {
-      "timestamp": "2026-06-13T21:02:16.350Z",
-      "event": "Intelligence (History/Arcana) check DC15: rolled 18 — SUCCESS."
+      "timestamp": "2026-06-18T13:10:33.847Z",
+      "event": "Character creation step 9 complete. Moving to step 10."
     }
   ]
 }
