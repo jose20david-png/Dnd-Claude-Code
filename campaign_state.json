@@ -193,6 +193,14 @@
     {
       "timestamp": "2026-06-18T13:19:35.147Z",
       "event": "Investigation check DC12: rolled 15 — SUCCESS."
+    },
+    {
+      "timestamp": "2026-06-18T13:45:50.734Z",
+      "event": "Perception check DC14: rolled 16 — SUCCESS."
+    },
+    {
+      "timestamp": "2026-06-18T13:48:09.467Z",
+      "event": "Nature check DC15: rolled 18 — SUCCESS."
     }
   ]
 }
