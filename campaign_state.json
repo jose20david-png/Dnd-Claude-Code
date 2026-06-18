@@ -8,7 +8,7 @@
     "seal_integrity": 100,
     "seal_status": "N/A",
     "map_id": null,
-    "story_notes": "CHARACTER BACKSTORY — Kel Stormblessed: Kel Stormblessed is a man in his early thirties of average height, possessing the fair skin and sharp, discerning grey eyes of his elven heritage. A jagged, silvered scar slices across his neck—a brutal souvenir from the day his village was razed and his younger sister, Syl, was stolen away. He carries himself with the quiet, rigid discipline of a soldier, his chain mail always polished and his gaze constantly scanning the horizon for any sign of disorder. Devoted to Tyr, the God of Justice, Kel operates with an uncompromising moral compass, viewing his paladinhood as a sacred duty to protect the vulnerable from the chaotic cruelty that claimed his family. Though he travels with the stoic resolve of a veteran, his heart is anchored by the persistent, unvoiced hope that he will one day track down the cultists who took Syl and finally secure the retribution she was denied."
+    "story_notes": "CHARACTER BACKSTORY — Kel Stormblessed: Kel Stormblessed is a man in his early thirties of average height, possessing the fair skin and sharp, discerning grey eyes of his elven heritage. A jagged, silvered scar slices across his neck—a brutal souvenir from the day his village was razed and his younger sister, Syl, was stolen away. He carries himself with the quiet, rigid discipline of a soldier, his chain mail always polished and his gaze constantly scanning the horizon for any sign of disorder. Devoted to Tyr, the God of Justice, Kel operates with an uncompromising moral compass, viewing his paladinhood as a sacred duty to protect the vulnerable from the chaotic cruelty that claimed his family. Though he travels with the stoic resolve of a veteran, his heart is anchored by the persistent, unvoiced hope that he will one day track down the cultists who took Syl and finally secure the retribution she was denied.\n• Character Sheet Update:\n- Divine Sense: Detect celestial, fiend, or undead within 60ft.\n- Lay on Hands: Pool of 5 HP; can spend 5 HP to cure disease/neutralize poison."
   },
   "party": [
     {
@@ -218,6 +218,10 @@
     {
       "timestamp": "2026-06-18T20:44:48.422Z",
       "event": "Concentrating on Protection from Evil and Good."
+    },
+    {
+      "timestamp": "2026-06-18T20:45:58.468Z",
+      "event": "Story note saved: Character Sheet Update:\n- Divine Sense: Detect celestial, fiend, or undead withi"
     }
   ]
 }
