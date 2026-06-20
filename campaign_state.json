@@ -18,7 +18,7 @@
       "race": "Half-elf",
       "class": "Paladin",
       "level": 2,
-      "hp": 16,
+      "hp": 18,
       "hp_max": 18,
       "hit_dice_total": 1,
       "hit_dice_used": 0,
@@ -311,8 +311,8 @@
       "event": "Moved to The path leading to the Silent Keep, deeper in the Blackwood.."
     },
     {
-      "timestamp": "2026-06-20T21:48:00.501Z",
-      "event": "Perception check DC14: rolled 16 — SUCCESS."
+      "timestamp": "2026-06-20T21:51:41.563Z",
+      "event": "Athletics check DC15: rolled 17 — SUCCESS."
     }
   ]
 }
