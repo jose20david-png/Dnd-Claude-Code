@@ -803,9 +803,17 @@
     {
       "role": "assistant",
       "content": "Elara doesn’t wait for a second invitation. She retrieves her bola with a quick, practiced flick of her wrist, her eyes darting toward the main hall’s heavy doors. The silence is absolute, a suffocating weight that presses against your eardrums, making the thumping of your own heart sound like a war drum in the narrow corridor.\n\nYou move together, your chain mail clinking softly—a sound that feels deafening in the stillness. You reach the gap in the masonry, a jagged hole where the stone has crumbled away over centuries. Through it, the main chamber of the Silent Keep unfolds beneath you.\n\nIt is a cavernous hall, lit by the flickering, sickly green glow of braziers mounted on the walls. In the center, two hulking, armored figures stand motionless, their heads bowed as if in prayer. They are draped in tattered, black funerary shrouds, their rusted plate mail caked with dried, dark stains. These are the undead you sensed—*Wight-guards*, judging by the grim weight of their presence. \n\nThey aren't alone. \n\nBeyond them, toward the far end of the hall, a figure stands before a massive, pulsating sigil etched into the floor—the same weeping eye you’ve seen in your dreams. The figure is draped in robes the color of dried blood, their back to you. They are chanting, a low, rhythmic vibration that makes the very air in the chamber ripple. \n\nElara presses her back against the wall, her face pale. She points to a series of iron chains hanging from the ceiling, positioned directly above the wights. \"If we cut those,\" she whispers, her lips barely moving, \"the chandelier falls. It might crush them, or at least pin them long enough for us to reach the robed one.\"\n\nShe looks at you, her hand trembling slightly. \"But if we miss, we're out in the open. What’s your call, Paladin?\""
+    },
+    {
+      "role": "user",
+      "content": "That might work, you take down the chandelier and I strike them with my holy energy. But, would you be able to strike at them from upper ground?"
+    },
+    {
+      "role": "assistant",
+      "content": "Elara studies the chains, then the dizzying height of the vaulted ceiling. She nods, a determined glint returning to her eyes. \"I can reach the release mechanism from this ledge, but it's a long shot. If I pull it, the iron will swing wide—it’ll crash right onto them.\"\n\nShe shifts her position, bracing a foot against a jagged protrusion in the masonry to get a better angle. \"I’ll aim for the main anchor. Once it drops, you have to move—fast. I won't be able to provide cover while I'm hanging off the ledge to reset my balance.\"\n\nShe looks toward the robed figure, who hasn't paused their chanting; the air near the weeping eye sigil is beginning to bleed a dark, viscous shadow. \"If you strike them while they're pinned, you might disrupt the ritual's anchor. If the wights aren't destroyed, they'll be furious and desperate.\"\n\nShe grips her climbing gear, her knuckles white. \"I'm ready when you are. On your mark, I drop the iron. You jump, you strike, and you pray to Tyr that this keeps them busy long enough for us to reach that summoner.\"\n\nShe waits, her gaze fixed on the heavy, dust-covered chandelier hanging precariously above the two motionless guardians. The chanting grows louder, a discordant hum that vibrates in your very teeth."
     }
   ],
   "created_at": "2026-06-18T19:55:22.831Z",
-  "token_count": 238959,
+  "token_count": 239292,
   "model": "gemini-3.1-flash-lite"
 }
