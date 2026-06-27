@@ -947,9 +947,25 @@
     {
       "role": "assistant",
       "content": "Elara nods, her expression hardening into a mask of cold resolve. She doesn't hesitate, dropping into a crouch and vanishing into the deeper shadows along the left wall of the cavern. She moves with a predatory fluidity, her boots making no sound against the damp, corrupted earth.\n\n\"I'll draw their eyes,\" she whispers, her voice barely audible over the growing drone of the ritual. \"You find your opening.\"\n\nShe slips away, and a moment later, you hear the distinct, sharp *clack* of a stone hitting the far wall of the chamber, followed by the hiss of a thrown dagger biting into wood.\n\nThe three fiends—grotesque, hunched shapes with skin like wet leather—snap their heads toward the sound, their glowing, hateful eyes scanning the darkness. The chanting falters, breaking into a discordant, jagged screech. The dark smoke coiling toward the prisoner pauses, swirling in confusion. \n\nIn that moment of distraction, the chamber is briefly illuminated by the flickering, sickly light of the ritual altar. You see them clearly now: the three fiends are circling the center, and the prisoner—a gaunt, young woman in tattered rags—is slumped against a massive, pulsating root that seems to be acting as a binding post. She is alive, but barely.\n\nThe fiends are turning, ready to pounce toward the source of the noise, their claws scraping against the cavern floor.\n\n**The room is in chaos, the fiends are distracted, and the prisoner is exposed. You are currently positioned at the tunnel entrance. Do you charge the center to engage the fiends, or do you make a dash for the prisoner to cut her loose?**"
+    },
+    {
+      "role": "user",
+      "content": "I charge to the center and engage the cultists. Not the fiends. I strike at them with my long sword."
+    },
+    {
+      "role": "assistant",
+      "content": "The chamber erupts into violence. You burst from the tunnel, the heavy thud of your boots against the root-floor cutting through the dissonant chanting. You bypass the snarling, wet-skinned fiends, your eyes locked on the robed figures standing behind the altar, clutching ritual daggers that drip with shadow.\n\n\"For Tyr!\" you bellow, the shout echoing off the pulsating walls of the cavern.\n\nYou lunge at the nearest cultist, your longsword singing as it leaves its scabbard. The blade arcs through the humid air, catching the sickly light of the ritual fires.\n\n*Roll your attack roll against the first cultist, Kel.*"
+    },
+    {
+      "role": "user",
+      "content": "Use my longsword to attack"
+    },
+    {
+      "role": "assistant",
+      "content": "The blade bites deep. Your longsword, glowing with the faint, cold light of your conviction, shears through the cultist’s coarse robes and into their shoulder. The cultist lets out a strangled, wet gasp as they are thrown backward against the pulsating root-wall, their ritual dagger clattering to the ground. They slide down the wall, leaving a dark, viscous smear in their wake—they are incapacitated, their focus on the ritual shattered.\n\nThe other two cultists recoil, their eyes wide with sudden, frantic terror as they realize they have been breached. Behind them, the three fiends—realizing they’ve been duped by Elara’s distraction—howl in a chorus of dissonant, grating static and pivot toward you, their claws digging into the soft, rotten earth.\n\nYou stand in the center of the chamber, your blade still humming with the force of the strike. The prisoner, just a few feet away, lifts her head, her eyes wide and unfocused, catching sight of the silvered symbol of Tyr on your chest.\n\nThe fiends are closing in, their movements unnaturally fast, and the two remaining cultists are scrambling to reclaim their weapons.\n\n**Your blade is still slick with the cultist's blood. The fiends are lunging toward you. Do you hold your ground to protect the prisoner, or do you press the attack on the remaining cultists before they can recover?**"
     }
   ],
   "created_at": "2026-06-18T19:55:22.831Z",
-  "token_count": 275407,
+  "token_count": 278661,
   "model": "gemini-3.1-flash-lite"
 }

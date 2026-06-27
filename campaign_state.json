@@ -343,6 +343,10 @@
     {
       "timestamp": "2026-06-27T16:20:34.109Z",
       "event": "Trait added: Divine Sense: As an action, until the end of your next turn,"
+    },
+    {
+      "timestamp": "2026-06-27T16:24:50.432Z",
+      "event": "Combat started with Cultist 1, Cultist 2, Cultist 3, Fiend 1, Fiend 2, Fiend 3"
     }
   ]
 }
