@@ -771,9 +771,25 @@
     {
       "role": "assistant",
       "content": "Elara freezes instantly at your touch, her body going rigid as she interprets your silent command. She doesn't pull away; she simply stops, her breath hitching in her throat as she turns her gaze to you, her eyes wide and searching. \n\nWhen you whisper the warning, she doesn't look toward the ceiling immediately—she knows better than to betray her awareness. Instead, she lowers her center of gravity, her hand shifting from her dagger to a small, weighted bola at her hip. She leans closer, her lips barely moving.\n\n\"Fey?\" she breathes, her voice a ghost of a sound. \"In a place like this? That’s not right.\"\n\nShe glances up toward the ceiling, her eyes narrowing as they adjust to the gloom. Above, the shadows seem to pulse and shift against the stonework. Then, you see it—a flash of iridescent, moth-like wings, jagged and translucent, flitting through a cobweb-draped corner. It is a creature of nightmare, distorted and sickly, its limbs spindly and elongated. It pauses, clinging to the vaulted stone, its head—a hollow, mask-like thing—swiveling toward your position with unnatural fluidity.\n\nThe creature lets out a sound like a wet, clicking laugh. It knows it has been spotted. \n\nElara’s grip on the bola tightens. \"It's preparing to spring,\" she whispers, her eyes darting to the floor, then back to you. \"If it screams, it’ll bring those undead from the main hall down on us in seconds. We have to take it down before it makes a sound. Can you reach it, or do I need to pull it down?\""
+    },
+    {
+      "role": "user",
+      "content": "pull it down and I'll strike it inmediately."
+    },
+    {
+      "role": "assistant",
+      "content": "⚠️ **DM connection issue**\n\n`HTTP 503 — This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.`\n\n*Your message was kept. Try sending it again — if this is a rate limit or \"overloaded\" error, wait 10–20 seconds first.*"
+    },
+    {
+      "role": "user",
+      "content": "pull it down and I'll strike it inmediately."
+    },
+    {
+      "role": "assistant",
+      "content": "Elara doesn't hesitate. With a fluid, practiced motion, she whips her arm upward, the weighted bola spinning through the air with a soft *whir* that barely disturbs the dust. The cords wrap perfectly around the creature's spindly, jagged limbs, and with a sharp, violent yank, she drags the thing down from the ceiling.\n\nIt hits the stone floor with a sickening, wet thud, hissing like steam escaping a pressurized pipe. It’s smaller than you expected, its skin a mottled, bruised purple, and its wings twitch spasmodically. It scrambles to right itself, its hollow, mask-like face turning toward you with predatory intent.\n\nBecause you are protected by the *Protection from Evil and Good* spell, the creature’s movements seem sluggish and clumsy to your eyes—it struggles to find purchase on the uneven floor, its strike thwarted by the divine aura you radiate.\n\nYou are within reach. The creature is exposed, tangled in the bola, and struggling to regain its footing. \n\n**Make your attack roll.**"
     }
   ],
   "created_at": "2026-06-18T19:55:22.831Z",
-  "token_count": 231843,
+  "token_count": 232084,
   "model": "gemini-3.1-flash-lite"
 }
