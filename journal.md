@@ -284,3 +284,10 @@ You escaped the collapsing cultist lair beneath the old mill, but not without a 
 *The path leading to the Silent Keep, deeper in the Blackwood.*
 
 You and Elara successfully bypassed the cultist ritual in the Blackwood, using the dense briars for cover while the cultists were distracted by their dark summoning. You reached the path toward the Silent Keep, now deeper within the forest where the atmosphere is even more oppressive and twisted. Elara has signaled that the Keep is only a few miles away, and you have paused to consider your approach before entering their den.
+
+---
+
+## Moments after the ritual was broken | 2026-06-27
+*Deep in the Blackwood, fleeing the Silent Keep area*
+
+After breaking the ritual and rescuing your sister, Syl, from the collapsing Silent Keep, you and Elara fled deep into the Blackwood. Despite your exhaustion and the dwindling resources, you managed to secure a small, hidden cave. Syl is alive but fragile, speaking of being hunted by something that can track the 'light' of your faith. You are currently holed up in the cave, facing the choice of risking a fire for warmth or staying in the dark to avoid detection.

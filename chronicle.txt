@@ -557,3 +557,327 @@ The cultist’s gaze, hollow and predatory, sweeps ove
 You signal to Elara with a sharp, silent nod. She exhales a breath she seems to have been holding for an age, her shoulders dropping from their rigid, defensive hunch. With the grace of a forest creature, she begins to back away, and you follow, retreating inch by agonizing inch through the briars.
 
 The thorns seem less aggressive now, or perhaps you are simply moving with the desperate focus of a man who knows he has skirted the edge of the abyss. You don't look back until you have put a thick curtain of gnarled oak and hanging moss between you and the clearing. Even then, the air remains hea
+
+---
+[06:29 PM] end session
+The forest seems to hold its breath as you tuck your gear away, the oppressive weight of the Blackwood pressing down on your shoulders even as you prepare to rest. The path ahead remains shrouded in that sickly, pale fog, and the Silent Keep waits—a dark, jagged tooth on the horizon of your journey. 
+
+Your progress has been measured in sweat, blood, and narrow escapes, but the path to your sister, Syl, is finally clear. 
+
+The session is now officially concluded. Your story is etched into the annals of the Blackwood, and when you return to the trail, the world will remember exactly where you le
+
+---
+[04:44 PM] where did we left?
+You and Elara have successfully slipped past the cultist ritual in the Blackwood. You are currently standing at the entrance of a narrow, overgrown trail that leads deeper into the forest, toward the Silent Keep.
+
+You are located in a shallow, fog-filled ravine, approximately a few miles away from the Keep itself. The atmosphere is oppressive and deathly silent, the trees twisted into unnatural shapes. You have just finished a narrow escape, and you are taking a moment to catch your breath and consider your next steps before pushing forward into the heart of the enemy's territory.
+
+---
+[04:45 PM] I tell Elara: Lets keep going, we're not far off. Be careful
+Elara gives a sharp, affirmative nod, her hand settling instinctively on the hilt of her blade. She doesn't need to be told twice; her posture shifts, shedding the momentary relief of your escape and replacing it with the predatory alertness of a scout in hostile territory.
+
+"Careful is the only way to breathe in this place," she murmurs, her voice thin and brittle in the unnatural stillness. 
+
+She takes the lead, moving with a practiced, silent gait that barely disturbs the carpet of dead, grey leaves beneath your feet. As you push deeper into the ravine, the fog thickens—a cold, clinging mis
+
+---
+[04:48 PM] we got in quiet, look around and see if you can spot something at the gates or the battlements. Its quiet... too quiet.
+Elara nods, her eyes narrowing as she scans the dark, jagged silhouette of the Keep. She moves with the fluid, soundless grace of a predator, slipping from one patch of shadow to the next until she reaches the base of the outer wall, just shy of the gate. She presses herself flat against the cold, weeping stone, then turns back to beckon you forward with a subtle flick of her hand.
+
+You join her in the shadow of the gatehouse. Up close, the stone feels wrong—cold enough to burn the skin, and slick with a thin, oily residue that smells of ozone and decay.
+
+You take a moment to study the archite
+
+---
+[04:49 PM] maybe its the same creatures we saw hunting us before. They must be near
+Elara shudders, a visible tremor running through her frame as she grips her dagger tighter. "If those things are inside, the cultists are likely just the bait," she murmurs, her gaze darting to the dark windows above. "Or worse—they're the ones being hunted."
+
+You scan the perimeter. The wall to the left of the gate has crumbled significantly, leaving a jagged breach about six feet off the ground, obscured by a dense growth of withered, black ivy. It would be a tight squeeze, but it would bypass the threshold and that lethal-looking tripwire entirely. However, climbing the loose, slick stone w
+
+---
+[04:51 PM] the breach, lets go
+You signal Elara to hold her position, and with a measured breath, you reach for the slick, weeping stone. Your fingers find purchase in the cracks between the masonry, the cold stone biting into your palms like ice. You haul yourself upward, your chain mail clinking softly—a sound that seems to echo like a thunderclap in the oppressive silence. You freeze, muscles coiled, waiting for a response from the dark interior, but only the rhythmic, pulsing thrum of the Keep greets you.
+
+With a final, straining pull, you scramble through the jagged breach, your boots finding purchase on a pile of debr
+
+---
+[10:24 AM] where did we last left off
+We just moved through the breach in the outer wall and dropped into the vaulted entryway of the Silent Keep. 
+
+You and Elara are currently crouched in the shadows of this corridor, surrounded by alcoves holding statues of hooded figures. The air is cold, thick with the smell of decay, and the floor is illuminated by a pulsing, rhythmic violet light coming from a grate in the center of the room. 
+
+You are currently observing a heavy, arched doorway at the end of the hall that is slightly ajar. You can hear the sounds of heavy, labored breathing and something wet being dragged across the stone f
+
+---
+[10:26 AM] Elara, this sound, could it be what was hunting us before? I use my divine sense
+Elara’s expression tightens, the pale violet light of the hallway casting long, skeletal shadows across her features. She keeps her voice to a mere vibration of air, barely audible over the rhythmic pulse of the Keep. "If those things are what I think they are," she whispers, her gaze fixed on the cracked door, "then they aren't just hunting. They're feeding."
+
+You close your eyes, shutting out the oppressive gloom of the stone hall, and reach into the core of your faith. You focus on the presence of Tyr, letting the cold, unwavering light of justice wash through your senses. You reach out, pr
+
+---
+[10:28 AM] If we strike now, me may alert the whole stronghold. Can you find a way through?
+Elara studies the room, her eyes tracing the vaulted ceiling and the shadowed gaps between the stone alcoves. She looks back at the arched door, then at the heavy, iron-bound door set into the wall to your right, which appears to lead into a side gallery.
+
+"If we go through that main door, we're right on top of them," she whispers, her voice barely a breath. "But if we slip through this side door, we might be able to circle around or find an overlook. It’s risky—we don't know what’s behind it—but it keeps us out of their direct line of sight for the moment."
+
+She gestures toward the side door.
+
+---
+[10:29 AM] I cant sneak by in my chain mail. We can circle through the side door as you said. My divine sense will alert me if ther
+Elara nods sharply, her movements precise and efficient. She doesn't waste time on words, merely offering a grim, affirming squeeze to your forearm before turning toward the side door. 
+
+She approaches the heavy iron-bound wood with the caution of someone walking on thin ice, her eyes scanning the floor and the doorframe for any sign of a mechanism or tripwire. She pauses, reaching out to trace the edge of the door with her fingertips, feeling for tension or resistance. After a tense moment, she exhales, the sound barely a puff of air, and carefully pushes the door open. It swings inward on si
+
+---
+[10:34 AM] I grab Elara by the arm, without saying a word and signal her to stop. I whisper: "something ahead, fey, small, watch ou
+Elara freezes instantly at your touch, her body going rigid as she interprets your silent command. She doesn't pull away; she simply stops, her breath hitching in her throat as she turns her gaze to you, her eyes wide and searching. 
+
+When you whisper the warning, she doesn't look toward the ceiling immediately—she knows better than to betray her awareness. Instead, she lowers her center of gravity, her hand shifting from her dagger to a small, weighted bola at her hip. She leans closer, her lips barely moving.
+
+"Fey?" she breathes, her voice a ghost of a sound. "In a place like this? That’s n
+
+---
+[10:39 AM] pull it down and I'll strike it inmediately.
+Elara doesn't hesitate. With a fluid, practiced motion, she whips her arm upward, the weighted bola spinning through the air with a soft *whir* that barely disturbs the dust. The cords wrap perfectly around the creature's spindly, jagged limbs, and with a sharp, violent yank, she drags the thing down from the ceiling.
+
+It hits the stone floor with a sickening, wet thud, hissing like steam escaping a pressurized pipe. It’s smaller than you expected, its skin a mottled, bruised purple, and its wings twitch spasmodically. It scrambles to right itself, its hollow, mask-like face turning toward you
+
+---
+[10:40 AM] I swing at it with my longsword
+The steel of your longsword sings a sharp, clean note in the stale air of the gallery. Your strike is precise, fueled by the cold resolve that has carried you across the Blackwood. The blade bites deep into the creature's mottled, purple hide, severing one of its twitching wings and pinning it to the stone floor with a final, wet crunch. 
+
+The fey creature lets out a high-pitched, discordant shriek that is cut short as it dissolves into a foul-smelling, greyish mist, leaving behind only the weighted bola and the lingering scent of ozone and rot. 
+
+Elara exhales, a long, shaky breath, and moves
+
+---
+[10:41 AM] lets move, I dont like the silence that developed right now
+Elara doesn’t wait for a second invitation. She retrieves her bola with a quick, practiced flick of her wrist, her eyes darting toward the main hall’s heavy doors. The silence is absolute, a suffocating weight that presses against your eardrums, making the thumping of your own heart sound like a war drum in the narrow corridor.
+
+You move together, your chain mail clinking softly—a sound that feels deafening in the stillness. You reach the gap in the masonry, a jagged hole where the stone has crumbled away over centuries. Through it, the main chamber of the Silent Keep unfolds beneath you.
+
+It 
+
+---
+[10:47 AM] That might work, you take down the chandelier and I strike them with my holy energy. But, would you be able to strike at
+Elara studies the chains, then the dizzying height of the vaulted ceiling. She nods, a determined glint returning to her eyes. "I can reach the release mechanism from this ledge, but it's a long shot. If I pull it, the iron will swing wide—it’ll crash right onto them."
+
+She shifts her position, bracing a foot against a jagged protrusion in the masonry to get a better angle. "I’ll aim for the main anchor. Once it drops, you have to move—fast. I won't be able to provide cover while I'm hanging off the ledge to reset my balance."
+
+She looks toward the robed figure, who hasn't paused their chantin
+
+---
+[10:50 AM] Alright, lets go. I signal Elara to go, and I proceed with the plan. I want to go ahead and run towards the figure that 
+Elara lets out a sharp, guttural cry, and the sound of straining metal screams through the chamber as she hacks at the anchor chain with her heavy-duty knife. The massive, iron-wrought chandelier—an ornate cage of rusted spikes and cold metal—tears free from the ceiling. It plummets with the speed of a falling star, crashing into the stone floor with a thunderous *BOOM* that shakes the very foundations of the Keep. 
+
+The two wights are caught entirely off-guard; one is pulverized instantly beneath the weight, its armor folding like parchment, while the other is slammed against the base of a pi
+
+---
+[10:51 AM] I strike at it with my longsword, but I dont want to kill it. I want to hurt it so it is inmobile to then interrogate it
+The blade whistles through the thick, stagnant air, biting deep into the summoner’s shoulder with a sickening crunch of collarbone. You pull the blow just enough to avoid a lethal strike, but the force is absolute; the figure collapses backward, the necrotic energy they were channeling dissipating into a harmless wisp of grey smoke.
+
+The summoner hits the floor with a heavy thud, their robes tangling around them. They let out a jagged, wheezing gasp, clutching at the wound where your longsword has pinned them effectively against the cold, unyielding stone of the Keep. The weeping eye sigil ben
+
+---
+[10:54 AM] Where, is my sister? I grab the hooded figure from its robe with my both arm, making it unable for it to look for someth
+You haul the cultist up by their robes, your gauntlets bunching the coarse fabric until their feet barely scrape the floor. You press them against the cold, damp masonry of the pillar, pinning their arms to their sides with the sheer force of your grip. They struggle, their body writhing with a desperate, unnatural strength, but the injury to their shoulder leaves them gasping in pain, their movements jerking and ineffective.
+
+"Sister?" The cultist wheezes, a distorted, bubbling laugh erupting from their throat. Their eyes—feverish and rimmed with black—lock onto yours, unblinking. "You speak 
+
+---
+[10:56 AM] I switch my hand to its neck, I start choking it as I SHOUT AT IT again: WHERE IS SHE? WHERE IS THIS SHADOW REACH, WHAT 
+Your gauntlets tighten around the cultist’s throat, the metal cold against their skin. The sound of their breathing turns to a frantic, wet clicking. You shove them harder into the stone, your own frustration boiling over—the same rage that has simmered since the day your village burned.
+
+"Speak!" you roar, the word echoing off the vaulted ceiling. "The Shadow-Reach! Where is it?"
+
+The cultist’s face purples, their eyes bulging as they claw uselessly at your iron-clad wrists. They aren't laughing anymore. Panic—raw and animalistic—has replaced their hollow devotion. When you loosen your grip j
+
+---
+[10:58 AM] Kel thinks, memorizes the things the cultist says, and I break the cultist neck, killing it. I toss the body at a side a
+With a singular, brutal twist, you snap the cultist’s neck. The body goes slack instantly, a heavy sack of meat and broken bone that you cast aside into the darkness. You don't look back to see where it lands. Your hand finds Elara’s forearm, your grip firm and urgent, pulling her from the path of the wight’s grasping, necrotic fingers.
+
+"Move!" you bark, and you don't need to say it twice.
+
+You sprint toward the arched exit of the gallery. Behind you, the room erupts in a cacophony of destruction. The chandelier, fully liberated from the ceiling, collapses entirely, crushing the remaining wig
+
+---
+[10:59 AM] KEEP GOING ELARA, WE'RE ALMOST OUT. (Aim for speed)
+"Keep going!" you roar, your voice cutting through the cacophony of grinding stone. You don't slow down, trusting your instincts and the heavy plating of your armor to see you through the gauntlet.
+
+You push your legs to their limit, driving forward as the floor ahead begins to pitch and roll like the deck of a ship in a storm. Debris rains down from the vaulted ceiling—chunks of carved masonry, shards of stained glass, and heavy iron sconces—but you weave through them with a desperate, frantic precision. Every time a slab of stone threatens to block your path, you shoulder through the dust, y
+
+---
+[11:02 AM] Kel drops to his knees, tired, apaled, he starts punching at the floor and says: GOD DAMMINT!!!!.... He then looks at th
+The forest floor is soft beneath your knees, damp with the decay of a thousand years, but you strike it anyway—once, twice, your gauntleted fist sinking into the loam and roots with a dull, wet thud. The sound of your own rage is a jagged tear in the oppressive silence of the Blackwood.
+
+"GOD DAMMIT!" 
+
+The cry isn't just for the cultists, or for the Keep, or for the exhaustion burning in your lungs. It is a challenge thrown into the uncaring canopy above. You jerk your head toward the grey, overcast sky, the metal of your gorget rasping against your skin. 
+
+"WHAT DO YOU WANT FROM ME, TYR?" Yo
+
+---
+[11:05 AM] Kel, starts silently crying. Tears dropping from his face as he pulls himself up. He grabs his gear, adjust it and then 
+The tears are hot against your face, a stinging contrast to the damp, biting chill of the Blackwood. You don't wipe them away; you let them fall, marking the dust on your cheeks with dark, jagged streaks. Your movements are mechanical, stripped of all pride—you tighten the straps of your pauldrons, check the weight of your longsword, and settle your shield into place. Each action is a silent prayer to a god who feels miles away.
+
+You stand, your knees popping, and turn toward the heart of the grove without a glance back at Elara. You expect nothing—no comfort, no reassurance. You are a weapon 
+
+---
+[11:07 AM] Is there an entrance?
+You approach the bone-white trunk, your boots crunching on dead, brittle leaves that haven't seen sunlight in an age. The weeping eye sigil at the base pulses like a fresh wound, the crimson light casting long, distorted shadows across your armor.
+
+As you draw closer, the "fissure" you saw from the distance reveals itself to be more than just a rot-split in the bark. The wood itself has been carved and twisted outward, the edges of the opening smoothed and hardened into a jagged, organic archway. It doesn't look like a natural break; it looks like a mouth that has been forced open.
+
+The darkne
+
+---
+[11:09 AM] I tell Elara: "If they're holding her here, I will bring the whole "root of the world" down If I need to in order to fin
+You turn to look at Elara. Your voice is gravel, stripped of its usual measured cadence, replaced by the hollow, dangerous resolve of a man who has nothing left to lose. "If they're holding her here, I will bring the whole 'root of the world' down if I need to in order to find her."
+
+The threat isn't directed at her, but the intensity in your gaze makes even the hardened scout flinch. She looks at the gaping, organic maw of the tree, then back at you. She wipes a smear of grime from her forehead, her jaw setting in a firm line.
+
+"I’m still standing, Kel," she replies, though her voice lacks it
+
+---
+[11:12 AM] I go down on my knees, plunge my longsword into the ground. I will pray as kneel into one knee and pray to TYR, I need c
+You drive the steel of your blade into the soft, rotting loam until it bites into something hard beneath—a root, perhaps, or stone. You kneel, your greaves sinking into the mulch, and rest your forehead against the cold crossguard of your sword. The metal is biting, grounding.
+
+You close your eyes, shutting out the pulsating, hypnotic red of the sigil. You reach inward, past the exhaustion, past the jagged grief that threatens to tear you apart, and call out to the Maimed God. *Tyr.* 
+
+The silence of the Blackwood deepens, turning from an oppressive weight into something vast and hollow. You w
+
+---
+[11:17 AM] I give my hand to Elara and I say: "I'm sorry Elara, I lost myself for a moment. Back inside the keep, a while ago, I...
+You reach out, your gauntleted hand steady now, and take Elara’s. She looks at your outstretched palm for a moment, surprised, before she grips it firmly, pulling herself to her feet. Her hand is cold, and her knuckles are white from the strain of the last few hours, but she meets your gaze with a weary, knowing nod.
+
+"Don't," she says, her voice low and raspy. "If I were the one whose sister was taken, Kel... I think I would have burned this entire forest to the ground by now. You're human. Even a paladin of Tyr has to bleed sometimes."
+
+She releases your hand, brushing dirt from her leather 
+
+---
+[11:18 AM] yes, lets keep going. Am I good on level up or still level 3?
+You are currently a **Level 2 Paladin**. You have not yet reached the 900 XP threshold required to advance to Level 3. You are standing at 325 XP, so there is still a ways to go before you reach that next milestone.
+
+With your mind clear and your resolve set, you turn your attention to the descent. The air from the tunnel is thick and tastes of copper. You can see the faint, rhythmic pulse of the crimson light deeper down, illuminating the slick, root-choked walls of the gullet.
+
+Elara draws her blade, the steel rasping softly against the scabbard, and stands just behind your left shoulder. Sh
+
+---
+[11:19 AM] lets proceed
+You take the first step into the throat of the tree, your boots finding purchase on the gnarled, slick roots that form a natural staircase into the dark. The air here is heavy, humid, and smells of wet loam and something metallic—the scent of blood, old or fresh, it is hard to tell.
+
+As you descend, the light from the forest entrance fades, swallowed by the twisting walls of the hollow oak. The crimson pulse from the sigil behind you becomes a distant, dying heartbeat, and you are left in near-total darkness. 
+
+You reach out and touch the wall of the tunnel. It feels wrong—warm to the touch, a
+
+---
+[11:20 AM] I use my divine sense, what does it show me?
+You close your eyes for a heartbeat, letting the teachings of Tyr focus your perception. You push your awareness outward, not with your eyes, but with the spark of divine conviction that burns in your chest.
+
+The world shifts. The physical darkness of the chamber falls away, replaced by the spiritual resonance of the entities within.
+
+Three distinct, burning flickers of malice flare in your mind's eye. They are **fiends**—lesser creatures, likely bound by the cultists, their presence radiating a cold, oily corruption that clings to the very roots of this place. They are clustered around the al
+
+---
+[11:22 AM] Fiends, maybe bound by cultist. I see something, a prisoner, bound, tethered. I dont know if they're waiting for us but.
+Elara’s grip on your sleeve tightens, her knuckles turning white in the gloom. "Fiends," she breathes, the word sounding like a curse in the cramped, humid space. "If they're tethered here, they're the guard dogs. And if there's a prisoner... we don't have the luxury of waiting for a better opening."
+
+She draws a short, serrated blade, her posture shifting from weary traveler to predator. "I can try to flank around the left, through the rot-shadows, and draw their attention. You hit them hard, right from the center. But Kel—if that prisoner is the one we're looking for, or even if they aren't.
+
+---
+[11:23 AM] I need a clear view of the cultists, the fiennds and the prisoner. Elara can you do that?
+Elara nods, her expression hardening into a mask of cold resolve. She doesn't hesitate, dropping into a crouch and vanishing into the deeper shadows along the left wall of the cavern. She moves with a predatory fluidity, her boots making no sound against the damp, corrupted earth.
+
+"I'll draw their eyes," she whispers, her voice barely audible over the growing drone of the ritual. "You find your opening."
+
+She slips away, and a moment later, you hear the distinct, sharp *clack* of a stone hitting the far wall of the chamber, followed by the hiss of a thrown dagger biting into wood.
+
+The three 
+
+---
+[11:24 AM] I charge to the center and engage the cultists. Not the fiends. I strike at them with my long sword.
+The chamber erupts into violence. You burst from the tunnel, the heavy thud of your boots against the root-floor cutting through the dissonant chanting. You bypass the snarling, wet-skinned fiends, your eyes locked on the robed figures standing behind the altar, clutching ritual daggers that drip with shadow.
+
+"For Tyr!" you bellow, the shout echoing off the pulsating walls of the cavern.
+
+You lunge at the nearest cultist, your longsword singing as it leaves its scabbard. The blade arcs through the humid air, catching the sickly light of the ritual fires.
+
+*Roll your attack roll against the fi
+
+---
+[11:25 AM] Use my longsword to attack
+The blade bites deep. Your longsword, glowing with the faint, cold light of your conviction, shears through the cultist’s coarse robes and into their shoulder. The cultist lets out a strangled, wet gasp as they are thrown backward against the pulsating root-wall, their ritual dagger clattering to the ground. They slide down the wall, leaving a dark, viscous smear in their wake—they are incapacitated, their focus on the ritual shattered.
+
+The other two cultists recoil, their eyes wide with sudden, frantic terror as they realize they have been breached. Behind them, the three fiends—realizing th
+
+---
+[11:30 AM] I keep my protection from evil and good. I stand my ground to protect the prisoner. As the first fiend approached, I str
+The first fiend lunges, its limbs elongating like snapping twigs, a low, guttural chittering vibrating in its throat. You swing your longsword in a wide, defensive arc, putting your weight into a strike meant to cleave the creature in two. However, the ground beneath your boots—slick with the ritual’s foul residue—shifts just as you commit to the swing. Your boot slides, and the blade whistles harmlessly through the air, inches above the creature's jagged, hunched spine.
+
+The fiend scuttles past you, its claws raking across your chain mail with a screech of metal on metal, though it finds no p
+
+---
+[11:31 AM] I put my back towards her, and I strike again with advantage towards one of the fiends, with holy smite
+The fiend, emboldened by your previous slip, hisses and drops to all fours, preparing to scramble over your guard. But as it lunges, you pivot on your heel, planting your boots firmly into the rot-slicked earth. Your movement is precise, disciplined—the practiced instinct of a veteran.
+
+Your blade hums with the searing, incandescent light of Tyr’s justice. As the creature enters your reach, you bring the longsword down in a brutal, vertical strike. The steel bites deep into the creature's neck, and as the blade sinks in, you release the divine energy held within your oath.
+
+*Call `use_spell_sl
+
+---
+[11:32 AM] "Elara! Strike at the cultists from a distance, I will down the fiends". I strike at the remaining fiends
+*Roll for Divine Smite damage: 2d8.*
+
+The fiend, blinded by the lingering golden static of your previous strike, moves sluggishly. You capitalize on that hesitation, stepping into its reach with the cold, calculated precision of a soldier. Your blade catches the creature mid-lunge, the steel sinking into its chest with a sickening crunch of cartilage. 
+
+As you channel the power of Tyr, the blade erupts in a blinding, white-hot flare of divine retribution. The fiend doesn't even have time to shriek; the holy energy tears through its wretched, otherworldly form, turning the creature into a spray
+
+---
+[11:33 AM] I strike at the fiend. Killing it
+Your steel whistles through the stagnant, humid air, but the fiend is faster than it looks. As it descends, it contorts its unnatural frame in mid-air, a sickening snap of bone echoing as it twists out of the path of your blade. Your sword bites only into the thick, fibrous rot of the wall behind it, the jar of the impact vibrating up your arms and rattling your teeth.
+
+The fiend lands with a predatory crouch, its claws digging into the soft earth between you and the prisoner. Its eyes, burning with a malicious, abyssal red, lock onto yours. It knows you are overextended.
+
+Behind it, the final
+
+---
+[11:33 AM] STRIKE AT THE FIEND
+The blade shudders as you rip it free from the fibrous, pulsating wall—the wood groaning like a dying animal—and you don't even bother with a refined strike. You swing with the raw, desperate strength of a man who refuses to let the darkness take another soul. 
+
+Your longsword catches the fiend mid-leap, the steel shearing clean through its unnatural, leathery torso. The creature’s momentum carries it forward, but it falls apart in a shower of black, oily gore before it can reach you. It hits the ground as two twitching, disconnected halves that quickly dissolve into a foul-smelling mist.
+
+You
+
+---
+[11:37 AM] I leap at the prisoner, trying to take apart the rooth thats draining her. Is this Syl? Does Kel Recognize her? No matte
+The air in the chamber grows heavy, tasting of ozone and ancient stone. As you lunge toward the prisoner, your boots skidding across the slick, pulsating floor, you don't look at her face at first—only at the choking, wooden coils constricting her throat. But as your hands close around the jagged, fibrous vines, you catch a glimpse of a familiar birthmark behind her ear, a small, crescent-shaped smudge of ash-grey.
+
+It is her. It is Syl.
+
+The realization hits you like a physical blow, a sudden, sharp ache in your chest that threatens to unbalance your stride, but you channel that agony into yo
+
+---
+[11:38 AM] I carry Syl on my arms and I tell Elara: Elara! Lead the way, We need to get out of here. Forget the cultist!
+The wood beneath your boots screams, the very foundation of the Keep twisting and snapping like the spine of a titan. You scoop Syl into your arms—she is terrifyingly light, her skin as cold as the forest floor in mid-winter—and for a heartbeat, you feel the jagged scar on your own neck throb in sympathy with the one now marring hers. You don't look back at the cultist. You don't look at the altar. You focus only on the rhythmic, ragged rise and fall of her chest against your armor.
+
+"This way!" Elara cries, her voice shrill over the thunderous cracking of stone. She doesn't hesitate, diving i
+
+---
+[11:39 AM] I use lay on hands on Syl, trying to heal her as much as possible. Kel goes: "Syl... Syl! come back to me please! Its me
+You press your palms firmly against her shoulders, the cold of her skin biting through your gauntlets. You close your eyes, centering your focus on the flickering, dying spark of her life force. You channel every ounce of your remaining resolve—the years of searching, the nights spent staring into campfires, the relentless drive of your vow—into her fragile frame.
+
+A soft, golden radiance spills from your hands, bathing the damp ferns in a warm, amber glow. Syl’s body arches slightly, a sharp intake of breath rattling through her lungs as the necrotic chill is purged from her veins. Her skin l
+
+---
+[11:42 AM] Syl? Talk to me please... Kel goes onto his knees, still havin Syl in his arms he starts crying... he says: "Its my Syl,
+The golden light fades from your palms, leaving the forest air feeling colder than before. You have given her everything you could, but the pool of grace you draw from is dry, leaving you feeling hollow and brittle. 
+
+Syl’s grip on your tabard tightens, her knuckles white. She doesn't speak at first; she simply stares at the scar on your neck, then up to your eyes, as if trying to reconcile the ghost of the brother she remembers with the battle-hardened man kneeling in the mud before her. Her breath comes in broken, jagged sobs that shake her entire frame. 
+
+"Kel?" she whispers, the word barel
+
+---
+[11:43 AM] I still take Syl in my arms, I will carry her al the way. I tell Elara: "You're right, lets get the hell out of here"
+You haul yourself to your feet, the weight of your sister against your chest a heavy, precious anchor. She weighs next to nothing, her frame wasted by the cult's dark ministrations, but to you, she feels like the only thing of substance in this entire cursed forest. You adjust your grip, tucking her head against your shoulder, and she lets out a small, whimpering gasp, her hand instinctively clutching your pauldron.
+
+"Keep your eyes on the brush, Elara," you mutter, your voice raspy but steady. You turn your back on the smoldering, broken tomb of the Silent Keep and strike out into the dense, 

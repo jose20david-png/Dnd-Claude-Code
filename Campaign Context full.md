@@ -12,16 +12,16 @@
 
 ---
 
-## SESSION STATE — Morning, shortly after the collapse.
+## SESSION STATE — Moments after the ritual was broken
 
 | Field | Value |
 |---|---|
 | Character | Kel Stormblessed · Paladin · Level 2 |
-| Location | The path leading to the Silent Keep, deeper in the Blackwood. |
-| HP | 16 / 18 (lightly wounded) |
-| Spell Slots | 2× 1st (full) |
+| Location | Deep in the Blackwood, fleeing the Silent Keep area |
+| HP | 18 / 18 (full) |
+| Spell Slots | 1× 1st |
 
-*Last updated: 2026-06-18*
+*Last updated: 2026-06-27*
 
 ---
 
@@ -113,11 +113,11 @@ Opens a browser animation, closes after 5 seconds. Results also printed to termi
 
 ## SESSION NOTES (auto-generated)
 
-- Athletics check DC15: rolled 17 — SUCCESS.
-- Moved to The edge of the Blackwood, near the collapsed entrance to the cultist's lair. — Morning, shortly after the collapse..
-- Awarded 250 XP — Escaping the collapsing cultist lair and learning the location of the Silent Keep.. Total: 250 XP.
-- CHARACTER PATCHED: Leveled to 2, AC set to 16 (chain mail), correct L2 paladin features and spell slots applied.
-- Short rest — Channel Divinity restored.
-- Stealth check DC14: rolled 15 — SUCCESS.
-- Stealth check DC15: rolled 18 — SUCCESS.
-- Moved to The path leading to the Silent Keep, deeper in the Blackwood..
+- Trait added: Divine Sense: As an action, until the end of your next turn,
+- Combat started with Cultist 1, Cultist 2, Cultist 3, Fiend 1, Fiend 2, Fiend 3
+- Cast Divine Smite (Lv1). 1/2 remaining.
+- Athletics check DC15: rolled 18 — SUCCESS.
+- Kel rescued Syl from the roots, identifying her as his lost sister. The Silent Keep is collapsing. Kel chooses to carry Syl to safety with Elara's help rather than pursuing the fleeing cultist.
+- Moved to Fleeing the collapsing Silent Keep — Moments after the ritual was broken.
+- Lay on Hands: restored 10 HP to Syl. Pool: 0/10 remaining.
+- Moved to Deep in the Blackwood, fleeing the Silent Keep area — Moments after the ritual was broken.
