@@ -787,9 +787,25 @@
     {
       "role": "assistant",
       "content": "Elara doesn't hesitate. With a fluid, practiced motion, she whips her arm upward, the weighted bola spinning through the air with a soft *whir* that barely disturbs the dust. The cords wrap perfectly around the creature's spindly, jagged limbs, and with a sharp, violent yank, she drags the thing down from the ceiling.\n\nIt hits the stone floor with a sickening, wet thud, hissing like steam escaping a pressurized pipe. It’s smaller than you expected, its skin a mottled, bruised purple, and its wings twitch spasmodically. It scrambles to right itself, its hollow, mask-like face turning toward you with predatory intent.\n\nBecause you are protected by the *Protection from Evil and Good* spell, the creature’s movements seem sluggish and clumsy to your eyes—it struggles to find purchase on the uneven floor, its strike thwarted by the divine aura you radiate.\n\nYou are within reach. The creature is exposed, tangled in the bola, and struggling to regain its footing. \n\n**Make your attack roll.**"
+    },
+    {
+      "role": "user",
+      "content": "I swing at it with my longsword"
+    },
+    {
+      "role": "assistant",
+      "content": "The steel of your longsword sings a sharp, clean note in the stale air of the gallery. Your strike is precise, fueled by the cold resolve that has carried you across the Blackwood. The blade bites deep into the creature's mottled, purple hide, severing one of its twitching wings and pinning it to the stone floor with a final, wet crunch. \n\nThe fey creature lets out a high-pitched, discordant shriek that is cut short as it dissolves into a foul-smelling, greyish mist, leaving behind only the weighted bola and the lingering scent of ozone and rot. \n\nElara exhales, a long, shaky breath, and moves forward to retrieve her weapon. She looks at the dissipating mist, then up at you, her eyes reflecting a mixture of awe and grim concern. \"You move with the grace of a storm, Kel. But that... that wasn't just a stray fey. It was a watcher.\"\n\nShe gestures toward the far end of the gallery, where the light from the masonry gap grows brighter. \"If there's one, there's more. We need to move, and we need to move now, before the noise of that struggle draws anything else from the Keep.\"\n\nThe heavy, dragging sounds from the main chamber have stopped. The silence that follows is heavy, expectant, and far more dangerous than the noise.\n\naward_xp(25)\nupdate_location(\"The gallery of the Silent Keep\")"
+    },
+    {
+      "role": "user",
+      "content": "lets move, I dont like the silence that developed right now"
+    },
+    {
+      "role": "assistant",
+      "content": "Elara doesn’t wait for a second invitation. She retrieves her bola with a quick, practiced flick of her wrist, her eyes darting toward the main hall’s heavy doors. The silence is absolute, a suffocating weight that presses against your eardrums, making the thumping of your own heart sound like a war drum in the narrow corridor.\n\nYou move together, your chain mail clinking softly—a sound that feels deafening in the stillness. You reach the gap in the masonry, a jagged hole where the stone has crumbled away over centuries. Through it, the main chamber of the Silent Keep unfolds beneath you.\n\nIt is a cavernous hall, lit by the flickering, sickly green glow of braziers mounted on the walls. In the center, two hulking, armored figures stand motionless, their heads bowed as if in prayer. They are draped in tattered, black funerary shrouds, their rusted plate mail caked with dried, dark stains. These are the undead you sensed—*Wight-guards*, judging by the grim weight of their presence. \n\nThey aren't alone. \n\nBeyond them, toward the far end of the hall, a figure stands before a massive, pulsating sigil etched into the floor—the same weeping eye you’ve seen in your dreams. The figure is draped in robes the color of dried blood, their back to you. They are chanting, a low, rhythmic vibration that makes the very air in the chamber ripple. \n\nElara presses her back against the wall, her face pale. She points to a series of iron chains hanging from the ceiling, positioned directly above the wights. \"If we cut those,\" she whispers, her lips barely moving, \"the chandelier falls. It might crush them, or at least pin them long enough for us to reach the robed one.\"\n\nShe looks at you, her hand trembling slightly. \"But if we miss, we're out in the open. What’s your call, Paladin?\""
     }
   ],
   "created_at": "2026-06-18T19:55:22.831Z",
-  "token_count": 232084,
+  "token_count": 238959,
   "model": "gemini-3.1-flash-lite"
 }

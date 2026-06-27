@@ -3,7 +3,7 @@
   "world": {
     "name": "Classic High Fantasy",
     "lore_summary": "You have successfully bypassed the cultist ritual. The air is still thick with malice, but the immediate threat of detection has passed. The Silent Keep looms somewhere ahead, hidden by the ancient trees.",
-    "current_location": "The path leading to the Silent Keep, deeper in the Blackwood.",
+    "current_location": "The gallery of the Silent Keep, moving toward the overlook.",
     "time": "Morning, shortly after the collapse.",
     "seal_integrity": 100,
     "seal_status": "N/A",
@@ -22,7 +22,7 @@
       "hp_max": 18,
       "hit_dice_total": 1,
       "hit_dice_used": 0,
-      "xp": 300,
+      "xp": 325,
       "death_saves": {
         "successes": 0,
         "failures": 0,
@@ -318,6 +318,14 @@
     {
       "timestamp": "2026-06-27T15:26:12.038Z",
       "event": "Trait added: Divine Sense: As an action, until the end of your next turn,"
+    },
+    {
+      "timestamp": "2026-06-27T15:41:30.531Z",
+      "event": "Awarded 25 XP — Defeated the fey watcher in the gallery.. Total: 325 XP."
+    },
+    {
+      "timestamp": "2026-06-27T15:41:30.532Z",
+      "event": "Moved to The gallery of the Silent Keep, moving toward the overlook.."
     }
   ]
 }
