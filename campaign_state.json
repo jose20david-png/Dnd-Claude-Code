@@ -3,8 +3,8 @@
   "world": {
     "name": "Classic High Fantasy",
     "lore_summary": "You have successfully bypassed the cultist ritual. The air is still thick with malice, but the immediate threat of detection has passed. The Silent Keep looms somewhere ahead, hidden by the ancient trees.",
-    "current_location": "The gallery of the Silent Keep, moving toward the overlook.",
-    "time": "Morning, shortly after the collapse.",
+    "current_location": "Fleeing the collapsing Silent Keep",
+    "time": "Moments after the ritual was broken",
     "seal_integrity": 100,
     "seal_status": "N/A",
     "map_id": null,
@@ -351,6 +351,18 @@
     {
       "timestamp": "2026-06-27T16:32:46.403Z",
       "event": "Cast Divine Smite (Lv1). 1/2 remaining."
+    },
+    {
+      "timestamp": "2026-06-27T16:36:55.652Z",
+      "event": "Athletics check DC15: rolled 18 — SUCCESS."
+    },
+    {
+      "timestamp": "2026-06-27T16:38:38.734Z",
+      "event": "Kel rescued Syl from the roots, identifying her as his lost sister. The Silent Keep is collapsing. Kel chooses to carry Syl to safety with Elara's help rather than pursuing the fleeing cultist."
+    },
+    {
+      "timestamp": "2026-06-27T16:38:38.736Z",
+      "event": "Moved to Fleeing the collapsing Silent Keep — Moments after the ritual was broken."
     }
   ]
 }
