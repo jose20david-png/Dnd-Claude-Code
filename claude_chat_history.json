@@ -923,9 +923,33 @@
     {
       "role": "assistant",
       "content": "You take the first step into the throat of the tree, your boots finding purchase on the gnarled, slick roots that form a natural staircase into the dark. The air here is heavy, humid, and smells of wet loam and something metallic—the scent of blood, old or fresh, it is hard to tell.\n\nAs you descend, the light from the forest entrance fades, swallowed by the twisting walls of the hollow oak. The crimson pulse from the sigil behind you becomes a distant, dying heartbeat, and you are left in near-total darkness. \n\nYou reach out and touch the wall of the tunnel. It feels wrong—warm to the touch, and pulsing with a slow, rhythmic throb that matches the sound you heard earlier. It’s not just a tree; it feels like you are walking down the throat of some gargantuan, slumbering beast.\n\nElara follows close behind, her footsteps silent despite the treacherous footing. You can hear her shallow, controlled breathing. About thirty feet down, the tunnel levels out, opening into a wider, subterranean chamber. \n\nThe air here is thin and tastes of ozone. Ahead, the path splits around a massive, central pillar of roots. From beyond that pillar, you catch the flickering, unstable glow of torches and the low, droning chant of voices—a sound that makes your teeth ache and the air around you feel thick with malice.\n\nYou are at the edge of the chamber. You can see the faint shadows of three figures moving around a central altar-like structure built into the roots.\n\n**You are hidden in the darkness of the tunnel entrance, looking into the chamber. Do you attempt to move closer to get a better look, do you try to surprise them, or do you take a different approach?**"
+    },
+    {
+      "role": "user",
+      "content": "I use my divine sense, what does it show me?"
+    },
+    {
+      "role": "assistant",
+      "content": "You close your eyes for a heartbeat, letting the teachings of Tyr focus your perception. You push your awareness outward, not with your eyes, but with the spark of divine conviction that burns in your chest.\n\nThe world shifts. The physical darkness of the chamber falls away, replaced by the spiritual resonance of the entities within.\n\nThree distinct, burning flickers of malice flare in your mind's eye. They are **fiends**—lesser creatures, likely bound by the cultists, their presence radiating a cold, oily corruption that clings to the very roots of this place. They are clustered around the altar about forty feet ahead.\n\nBeyond them, deeper in the chamber, you detect a fourth presence. It is faint, flickering like a candle in a gale—a **humanoid** life force, weak and tethered. It is not one of the cultists. It feels like a prisoner, perhaps someone who has been here for a long time.\n\nFurthermore, the ground beneath your feet—the very roots forming this chamber—is heavily **desecrated**. The earth here has been poisoned by ritual bloodletting; it feels like walking on a grave that refuses to stay closed. The air itself is thick with the residue of dark magic.\n\nElara touches your elbow, her eyes searching your face in the gloom. She hasn't seen what you've seen, but she senses the shift in your posture. \"What do you see, Kel?\" she whispers. \"Are they waiting for us?\"\n\n**You have the tactical advantage of knowing exactly where the three fiends are and the location of the prisoner. Do you attempt to strike before they realize you are there, or do you have a different plan?**"
+    },
+    {
+      "role": "user",
+      "content": "Fiends, maybe bound by cultist. I see something, a prisoner, bound, tethered. I dont know if they're waiting for us but... the ground. Its unholy, desecrated..."
+    },
+    {
+      "role": "assistant",
+      "content": "Elara’s grip on your sleeve tightens, her knuckles turning white in the gloom. \"Fiends,\" she breathes, the word sounding like a curse in the cramped, humid space. \"If they're tethered here, they're the guard dogs. And if there's a prisoner... we don't have the luxury of waiting for a better opening.\"\n\nShe draws a short, serrated blade, her posture shifting from weary traveler to predator. \"I can try to flank around the left, through the rot-shadows, and draw their attention. You hit them hard, right from the center. But Kel—if that prisoner is the one we're looking for, or even if they aren't... don't let those things touch them.\"\n\nThe chamber vibrates again, a low, wet sound like a heartbeat skipping. The three flickers of malice you sensed are moving, their rhythmic chanting growing louder, more frantic. They are focused on the ritual, but the altar is beginning to bleed a dark, viscous smoke that is starting to coil toward the prisoner in the back.\n\nYou have seconds before the ritual completes. \n\n**Do you coordinate with Elara's plan to divide their attention, or do you have a different strategy to break their concentration before they can finish their work?**"
+    },
+    {
+      "role": "user",
+      "content": "I need a clear view of the cultists, the fiennds and the prisoner. Elara can you do that?"
+    },
+    {
+      "role": "assistant",
+      "content": "Elara nods, her expression hardening into a mask of cold resolve. She doesn't hesitate, dropping into a crouch and vanishing into the deeper shadows along the left wall of the cavern. She moves with a predatory fluidity, her boots making no sound against the damp, corrupted earth.\n\n\"I'll draw their eyes,\" she whispers, her voice barely audible over the growing drone of the ritual. \"You find your opening.\"\n\nShe slips away, and a moment later, you hear the distinct, sharp *clack* of a stone hitting the far wall of the chamber, followed by the hiss of a thrown dagger biting into wood.\n\nThe three fiends—grotesque, hunched shapes with skin like wet leather—snap their heads toward the sound, their glowing, hateful eyes scanning the darkness. The chanting falters, breaking into a discordant, jagged screech. The dark smoke coiling toward the prisoner pauses, swirling in confusion. \n\nIn that moment of distraction, the chamber is briefly illuminated by the flickering, sickly light of the ritual altar. You see them clearly now: the three fiends are circling the center, and the prisoner—a gaunt, young woman in tattered rags—is slumped against a massive, pulsating root that seems to be acting as a binding post. She is alive, but barely.\n\nThe fiends are turning, ready to pounce toward the source of the noise, their claws scraping against the cavern floor.\n\n**The room is in chaos, the fiends are distracted, and the prisoner is exposed. You are currently positioned at the tunnel entrance. Do you charge the center to engage the fiends, or do you make a dash for the prisoner to cut her loose?**"
     }
   ],
   "created_at": "2026-06-18T19:55:22.831Z",
-  "token_count": 271323,
+  "token_count": 275407,
   "model": "gemini-3.1-flash-lite"
 }

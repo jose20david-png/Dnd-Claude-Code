@@ -61,7 +61,8 @@
         "Fighting Style: Defense — +1 AC while wearing armor.",
         "Spellcasting — Paladin spellcasting using CHA. Spell attack +4, Spell Save DC 12. Spell slots refresh on long rest.",
         "Divine Smite — After a melee hit, expend a spell slot for extra radiant damage: 2d8 (L1 slot), +1d8 per slot level above 1st. +1d8 vs undead or fiends.",
-        "Divine Sense: As an action, until the end of your next turn, you know the location of any celestial, fiend, or undead within 60 feet of you that is not behind total cover."
+        "Divine Sense: As an action, until the end of your next turn, you know the location of any celestial, fiend, or undead within 60 feet of you that is not behind total cover.",
+        "Divine Sense: As an action, until the end of your next turn, you know the location of any celestial, fiend, or undead within 60 feet of you that is not behind total cover. You know the type (celestial, fiend, or undead) of any being whose presence you sense, but not its identity. Within the same radius, you also detect the presence of any place or object that has been consecrated or desecrated, as with the hallow spell."
       ],
       "conditions": [
         "Concentrating on Protection from Evil and Good"
@@ -338,6 +339,10 @@
     {
       "timestamp": "2026-06-27T16:12:03.877Z",
       "event": "Religion check DC15: rolled 19 — SUCCESS."
+    },
+    {
+      "timestamp": "2026-06-27T16:20:34.109Z",
+      "event": "Trait added: Divine Sense: As an action, until the end of your next turn,"
     }
   ]
 }
