@@ -60,7 +60,8 @@
         "Lay on Hands — Pool of 10 HP (5 × level). As an action, restore HP to a touched creature, or spend 5 HP to cure a disease or poison.",
         "Fighting Style: Defense — +1 AC while wearing armor.",
         "Spellcasting — Paladin spellcasting using CHA. Spell attack +4, Spell Save DC 12. Spell slots refresh on long rest.",
-        "Divine Smite — After a melee hit, expend a spell slot for extra radiant damage: 2d8 (L1 slot), +1d8 per slot level above 1st. +1d8 vs undead or fiends."
+        "Divine Smite — After a melee hit, expend a spell slot for extra radiant damage: 2d8 (L1 slot), +1d8 per slot level above 1st. +1d8 vs undead or fiends.",
+        "Divine Sense: As an action, until the end of your next turn, you know the location of any celestial, fiend, or undead within 60 feet of you that is not behind total cover."
       ],
       "conditions": [
         "Concentrating on Protection from Evil and Good"
@@ -313,6 +314,10 @@
     {
       "timestamp": "2026-06-20T21:51:41.563Z",
       "event": "Athletics check DC15: rolled 17 — SUCCESS."
+    },
+    {
+      "timestamp": "2026-06-27T15:26:12.038Z",
+      "event": "Trait added: Divine Sense: As an action, until the end of your next turn,"
     }
   ]
 }
