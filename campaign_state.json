@@ -3,7 +3,7 @@
   "world": {
     "name": "Classic High Fantasy",
     "lore_summary": "You have successfully bypassed the cultist ritual. The air is still thick with malice, but the immediate threat of detection has passed. The Silent Keep looms somewhere ahead, hidden by the ancient trees.",
-    "current_location": "Fleeing the collapsing Silent Keep",
+    "current_location": "Deep in the Blackwood, fleeing the Silent Keep area",
     "time": "Moments after the ritual was broken",
     "seal_integrity": 100,
     "seal_status": "N/A",
@@ -160,7 +160,8 @@
           "quantity": 1,
           "rarity": "common"
         }
-      ]
+      ],
+      "lay_on_hands_used": 10
     }
   ],
   "npcs": [
@@ -363,6 +364,14 @@
     {
       "timestamp": "2026-06-27T16:38:38.736Z",
       "event": "Moved to Fleeing the collapsing Silent Keep — Moments after the ritual was broken."
+    },
+    {
+      "timestamp": "2026-06-27T16:39:52.191Z",
+      "event": "Lay on Hands: restored 10 HP to Syl. Pool: 0/10 remaining."
+    },
+    {
+      "timestamp": "2026-06-27T16:43:34.838Z",
+      "event": "Moved to Deep in the Blackwood, fleeing the Silent Keep area — Moments after the ritual was broken."
     }
   ]
 }
